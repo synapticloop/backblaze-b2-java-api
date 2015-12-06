@@ -16,7 +16,7 @@ import synapticloop.b2.response.B2BucketResponse;
  */
 
 public class B2DeleteBucketRequest extends BaseB2Request {
-	private static final String B2_DELETE_BUCKET = "b2_delete_bucket";
+	private static final String B2_DELETE_BUCKET = BASE_API_VERSION + "b2_delete_bucket";
 
 	public B2DeleteBucketRequest(B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String bucketId) {
 		super(b2AuthorizeAccountResponse);
