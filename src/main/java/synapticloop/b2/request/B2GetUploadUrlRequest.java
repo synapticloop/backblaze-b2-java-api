@@ -1,8 +1,5 @@
 package synapticloop.b2.request;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import synapticloop.b2.exception.B2ApiException;
 import synapticloop.b2.response.B2AuthorizeAccountResponse;
 import synapticloop.b2.response.B2GetUploadUrlResponse;
@@ -22,20 +19,16 @@ import synapticloop.b2.response.B2GetUploadUrlResponse;
  */
 
 public class B2GetUploadUrlRequest extends BaseB2Request {
-	private static final String B2_GET_UPLOAD_URL = "/b2api/v1/b2_get_upload_url";
-	private B2AuthorizeAccountResponse b2AuthorizeAccountResponse = null;
-	private String bucketId = null;
+	private static final String B2_GET_UPLOAD_URL = BASE_API_VERSION + "b2_get_upload_url";
 
 	public B2GetUploadUrlRequest(B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String bucketId) {
 		super(b2AuthorizeAccountResponse);
-		this.b2AuthorizeAccountResponse = b2AuthorizeAccountResponse;
-		this.bucketId = bucketId;
+		url = b2AuthorizeAccountResponse.getApiUrl() + B2_GET_UPLOAD_URL;
+
+		data.put(KEY_BUCKET_ID, bucketId);
 	}
 
 	public B2GetUploadUrlResponse getResponse() throws B2ApiException {
-		Map<String, String> map = new HashMap<String, String>();
-		map.put(KEY_BUCKET_ID, bucketId);
-
-		return(new B2GetUploadUrlResponse(executePost(b2AuthorizeAccountResponse, B2_GET_UPLOAD_URL, map)));
+		return(new B2GetUploadUrlResponse(executePost()));
 	}
 }

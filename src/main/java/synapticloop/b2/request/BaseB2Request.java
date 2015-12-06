@@ -281,6 +281,5 @@ public class BaseB2Request {
 		if(null != connection) { 
 			connection.disconnect(); 
 		}
-
 	}
 }
