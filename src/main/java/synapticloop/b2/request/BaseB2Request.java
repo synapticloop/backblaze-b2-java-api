@@ -1,12 +1,7 @@
 package synapticloop.b2.request;
 
-import java.io.BufferedInputStream;
-import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -30,8 +25,6 @@ import synapticloop.b2.response.B2AuthorizeAccountResponse;
 public class BaseB2Request {
 	protected static final String BASE_API_VERSION = "/b2api/v1/";
 	protected static final String BASE_API_HOST = "https://api.backblaze.com" + BASE_API_VERSION;
-
-	private static final String REQUEST_METHOD_POST = "POST";
 
 	private static final String REQUEST_PROPERTY_CHARSET = "charset";
 	private static final String REQUEST_PROPERTY_AUTHORIZATION = "Authorization";
@@ -106,6 +99,7 @@ public class BaseB2Request {
 		CloseableHttpClient closeableHttpClient = HttpClients.createDefault();
 		String postData = getPostData(data);
 		HttpPost httpPost = new HttpPost(url);
+		headers.put(REQUEST_PROPERTY_CONTENT_LENGTH, String.valueOf(postData.length()));
 		setHeaders(httpPost);
 
 		try {
@@ -126,11 +120,12 @@ public class BaseB2Request {
 			throw new B2ApiException(ex);
 		}
 	}
-	
-	//writeBinaryPostData(connection, Files.readAllBytes(file.toPath()));
+
 	protected String executePost(File file) throws B2ApiException {
 		CloseableHttpClient closeableHttpClient = HttpClients.createDefault();
 		HttpPost httpPost = new HttpPost(url);
+		headers.put(REQUEST_PROPERTY_CONTENT_LENGTH, String.valueOf(file.length()));
+
 		setHeaders(httpPost);
 
 		try {
@@ -148,138 +143,12 @@ public class BaseB2Request {
 		}
 	}
 
-	@Deprecated
-	protected String executePost(B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String url, Map<String, String> headers, Map<String, String> data) throws B2ApiException {
-		String postData = getPostData(data);
-
-		CloseableHttpClient closeableHttpClient = HttpClients.createDefault();
-		HttpPost httpPost = new HttpPost(b2AuthorizeAccountResponse.getApiUrl() + url);
-
-		Set<String> headerKeys = headers.keySet();
-		for (String headerKey : headerKeys) {
-			httpPost.setHeader(headerKey, headers.get(headerKey));
-		}
-
-		setHeaderSafely(httpPost, REQUEST_PROPERTY_AUTHORIZATION, b2AuthorizeAccountResponse.getAuthorizationToken());
-		setHeaderSafely(httpPost, REQUEST_PROPERTY_CONTENT_TYPE, VALUE_APPLICATION_X_WWW_FORM_URLENCODED);
-		setHeaderSafely(httpPost, REQUEST_PROPERTY_CHARSET, VALUE_UTF_8);
-
-		try {
-			httpPost.setEntity(new StringEntity(postData));
-
-			CloseableHttpResponse httpResponse = closeableHttpClient.execute(httpPost);
-			int statusCode = httpResponse.getStatusLine().getStatusCode();
-			String response = EntityUtils.toString(httpResponse.getEntity());
-
-			if(statusCode != 200) {
-				throw new B2ApiException(response);
-			} else {
-				return(response);
-			}
-		} catch (IOException ex) {
-			throw new B2ApiException(ex);
-		}
-	}
-
-	private void setHeaderSafely(HttpRequestBase httpRequestBase, String key, String value) {
-		if(!httpRequestBase.containsHeader(key)) {
-			httpRequestBase.setHeader(key, value);
-		}
-	}
-
 	private void setHeaders(HttpRequestBase httpRequestBase) {
 		Set<String> headerKeySet = headers.keySet();
 		for (String headerKey : headerKeySet) {
 			if(!httpRequestBase.containsHeader(headerKey)) {
 				httpRequestBase.setHeader(headerKey, headers.get(headerKey));
 			}
-		}
-	}
-
-	protected String executePost(B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String url, Map<String, String> data) throws B2ApiException {
-		String postData = getPostData(data);
-
-		CloseableHttpClient closeableHttpClient = HttpClients.createDefault();
-		HttpPost httpPost = new HttpPost(b2AuthorizeAccountResponse.getApiUrl() + url);
-		httpPost.setHeader(REQUEST_PROPERTY_AUTHORIZATION, b2AuthorizeAccountResponse.getAuthorizationToken());
-		httpPost.setHeader(REQUEST_PROPERTY_CONTENT_TYPE, VALUE_APPLICATION_X_WWW_FORM_URLENCODED);
-		httpPost.setHeader(REQUEST_PROPERTY_CHARSET, VALUE_UTF_8);
-
-		try {
-			httpPost.setEntity(new StringEntity(postData));
-
-			CloseableHttpResponse httpResponse = closeableHttpClient.execute(httpPost);
-			int statusCode = httpResponse.getStatusLine().getStatusCode();
-			String response = EntityUtils.toString(httpResponse.getEntity());
-
-			if(statusCode != 200) {
-				throw new B2ApiException(response);
-			} else {
-				return(response);
-			}
-		} catch (IOException ex) {
-			throw new B2ApiException(ex);
-		}
-	}
-
-	protected InputStream writePostData(HttpURLConnection connection, Map<String, String> data) throws B2ApiException {
-		DataOutputStream dataOutputStream = null;
-		try {
-
-			String postData = getPostData(data);
-			connection.setRequestProperty(REQUEST_PROPERTY_CONTENT_LENGTH, Integer.toString(postData.length()));
-
-			connection.setDoOutput(true);
-			dataOutputStream = new DataOutputStream(connection.getOutputStream());
-			dataOutputStream.write(postData.getBytes(StandardCharsets.UTF_8));
-			dataOutputStream.flush();
-			return(new BufferedInputStream(connection.getInputStream()));
-		} catch(IOException ex) {
-			throw new B2ApiException(ex);
-		} finally {
-			if(null != dataOutputStream) {
-				try {
-					dataOutputStream.close();
-				} catch(IOException ex) {
-					// do nothing
-				}
-			}
-		}
-	}
-
-	protected InputStream writeBinaryPostData(HttpURLConnection connection, byte[] data) throws B2ApiException {
-		DataOutputStream dataOutputStream = null;
-		try {
-
-			connection.setRequestProperty(REQUEST_PROPERTY_CONTENT_LENGTH, Integer.toString(data.length));
-
-			connection.setDoOutput(true);
-			dataOutputStream = new DataOutputStream(connection.getOutputStream());
-			dataOutputStream.write(data);
-			dataOutputStream.flush();
-			return(new BufferedInputStream(connection.getInputStream()));
-		} catch(IOException ex) {
-			throw new B2ApiException(ex);
-		} finally {
-			if(null != dataOutputStream) {
-				try {
-					dataOutputStream.close();
-				} catch(IOException ex) {
-					// do nothing
-				}
-			}
-		}
-	}
-	protected void tidyUp(InputStream inputStream, HttpURLConnection connection) {
-		if(null != inputStream) {
-			try {
-				inputStream.close();
-			} catch (IOException ex) {
-				// do nothing
-			} }
-
-		if(null != connection) { 
-			connection.disconnect(); 
 		}
 	}
 }
