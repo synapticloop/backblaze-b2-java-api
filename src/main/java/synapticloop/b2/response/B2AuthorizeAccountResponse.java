@@ -1,7 +1,5 @@
 package synapticloop.b2.response;
 
-import java.io.InputStream;
-
 import org.json.JSONObject;
 
 import synapticloop.b2.exception.B2ApiException;
@@ -12,8 +10,8 @@ public class B2AuthorizeAccountResponse extends BaseB2Response {
 	private String authorizationToken = null;
 	private String downloadUrl = null;
 
-	public B2AuthorizeAccountResponse(InputStream inputStream) throws B2ApiException {
-		JSONObject jsonObject = getParsedResponse(inputStream);
+	public B2AuthorizeAccountResponse(String response) throws B2ApiException {
+		JSONObject jsonObject = getParsedResponse(response);
 
 		this.accountId = jsonObject.optString("accountId");
 		this.apiUrl = jsonObject.optString("apiUrl");

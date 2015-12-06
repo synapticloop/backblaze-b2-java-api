@@ -1,10 +1,5 @@
 package synapticloop.b2.request;
 
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.Base64;
 
 import synapticloop.b2.exception.B2ApiException;
@@ -22,31 +17,16 @@ import synapticloop.b2.response.B2AuthorizeAccountResponse;
  */
 
 public class B2AuthorizeAccountRequest extends BaseB2Request {
-	private static final String API_URL_BASE = "https://api.backblaze.com/b2api/v1/";
 
-	private String accountId = null;
-	private String applicationKey = null;
+	private static final String B2_AUTHORIZE_ACCOUNT = BASE_API_HOST + "b2_authorize_account";
 
 	public B2AuthorizeAccountRequest(String accountId, String applicationKey) {
-		this.accountId = accountId;
-		this.applicationKey = applicationKey;
+		super(null);
+		url = B2_AUTHORIZE_ACCOUNT;
+		headers.put("Authorization", "Basic " + Base64.getEncoder().encodeToString((accountId + ":" + applicationKey).getBytes()));
 	}
 
 	public B2AuthorizeAccountResponse getResponse() throws B2ApiException {
-		HttpURLConnection connection = null;
-		InputStream inputStream = null;
-		try {
-			URL url = new URL(API_URL_BASE + "b2_authorize_account");
-			connection = (HttpURLConnection)url.openConnection();
-			connection.setRequestMethod("GET");
-			connection.setRequestProperty("Authorization", "Basic " + Base64.getEncoder().encodeToString((accountId + ":" + applicationKey).getBytes()));
-			inputStream = new BufferedInputStream(connection.getInputStream());
-			return(new B2AuthorizeAccountResponse(inputStream));
-		} catch (IOException ex) {
-			throw new B2ApiException(ex);
-		} finally {
-			if(null != inputStream) { try { inputStream.close(); } catch (IOException ex) {} }
-			if(null != connection) { connection.disconnect(); }
-		}
+		return(new B2AuthorizeAccountResponse(executeGet()));
 	}
 }

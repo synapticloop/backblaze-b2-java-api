@@ -2,16 +2,21 @@ package synapticloop.b2.request;
 
 import java.io.BufferedInputStream;
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.entity.FileEntity;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
@@ -21,16 +26,17 @@ import org.json.JSONObject;
 
 import synapticloop.b2.exception.B2ApiException;
 import synapticloop.b2.response.B2AuthorizeAccountResponse;
-import synapticloop.b2.response.B2GetUploadUrlResponse;
 
 public class BaseB2Request {
-	private static final String UTF_8 = "utf-8";
-	private static final String REQUEST_PROPERTY_CHARSET = "charset";
+	protected static final String BASE_API_VERSION = "/b2api/v1/";
+	protected static final String BASE_API_HOST = "https://api.backblaze.com" + BASE_API_VERSION;
+
 	private static final String REQUEST_METHOD_POST = "POST";
+
+	private static final String REQUEST_PROPERTY_CHARSET = "charset";
 	private static final String REQUEST_PROPERTY_AUTHORIZATION = "Authorization";
 	private static final String REQUEST_PROPERTY_CONTENT_TYPE = "Content-Type";
 	private static final String REQUEST_PROPERTY_CONTENT_LENGTH = "Content-Length";
-	protected static final String APPLICATION_X_WWW_FORM_URLENCODED = "application/x-www-form-urlencoded";
 
 	protected static final String KEY_ACCOUNT_ID = "accountId";
 	protected static final String KEY_BUCKET_ID = "bucketId";
@@ -43,8 +49,21 @@ public class BaseB2Request {
 	protected static final String HEADER_X_BZ_FILE_NAME = "X-Bz-File-Name";
 	protected static final String HEADER_X_BZ_CONTENT_SHA1 = "X-Bz-Content-Sha1";
 
-	protected static final String VALUE_B2_X_AUTO = "b2/x-auto";
+	protected static final String VALUE_APPLICATION_X_WWW_FORM_URLENCODED = "application/x-www-form-urlencoded";
 	protected static final String VALUE_UTF_8 = "UTF-8";
+	protected static final String VALUE_B2_X_AUTO = "b2/x-auto";
+
+	protected String url = null;
+	protected Map<String, String> headers = new HashMap<String, String>();
+	protected Map<String, String> data = new HashMap<String, String>();
+
+	protected BaseB2Request(B2AuthorizeAccountResponse b2AuthorizeAccountResponse) {
+		if(null != b2AuthorizeAccountResponse) {
+			headers.put(REQUEST_PROPERTY_AUTHORIZATION, b2AuthorizeAccountResponse.getAuthorizationToken());
+		}
+		headers.put(REQUEST_PROPERTY_CONTENT_TYPE, VALUE_APPLICATION_X_WWW_FORM_URLENCODED);
+		headers.put(REQUEST_PROPERTY_CHARSET, VALUE_UTF_8);
+	}
 
 	protected String getPostData(Map<String, String> data) throws B2ApiException {
 		JSONObject jsonObject = new JSONObject();
@@ -62,35 +81,119 @@ public class BaseB2Request {
 		return(jsonObject.toString());
 	}
 
+	protected String executeGet() throws B2ApiException {
+		CloseableHttpClient closeableHttpClient = HttpClients.createDefault();
+		HttpGet httpGet = new HttpGet(url);
+		setHeaders(httpGet);
+		try {
 
-	protected HttpURLConnection getApiPostConnection(String urlSuffix, B2AuthorizeAccountResponse b2AuthorizeAccountResponse) throws IOException {
-		return(getPostConnection(b2AuthorizeAccountResponse.getApiUrl() + urlSuffix, b2AuthorizeAccountResponse));
+			CloseableHttpResponse httpResponse = closeableHttpClient.execute(httpGet);
+			int statusCode = httpResponse.getStatusLine().getStatusCode();
+			String response = EntityUtils.toString(httpResponse.getEntity());
+
+			if(statusCode != 200) {
+				throw new B2ApiException(response);
+			} else {
+				return(response);
+			}
+		} catch (IOException ex) {
+			throw new B2ApiException(ex);
+		}
+
 	}
 
-	protected HttpURLConnection getDownloadPostConnection(String urlSuffix, B2AuthorizeAccountResponse b2AuthorizeAccountResponse) throws IOException {
-		return(getPostConnection(b2AuthorizeAccountResponse.getDownloadUrl() + urlSuffix, b2AuthorizeAccountResponse));
+	protected String executePost() throws B2ApiException {
+		CloseableHttpClient closeableHttpClient = HttpClients.createDefault();
+		String postData = getPostData(data);
+		HttpPost httpPost = new HttpPost(url);
+		setHeaders(httpPost);
+
+		try {
+			httpPost.setEntity(new StringEntity(postData));
+			CloseableHttpResponse httpResponse = closeableHttpClient.execute(httpPost);
+			int statusCode = httpResponse.getStatusLine().getStatusCode();
+			String response = EntityUtils.toString(httpResponse.getEntity());
+			if(statusCode != 200) {
+				if(response.trim().length() == 0) {
+					throw new B2ApiException(httpResponse.getStatusLine().toString());
+				} else {
+					throw new B2ApiException(response);
+				}
+			} else {
+				return(response);
+			}
+		} catch (IOException ex) {
+			throw new B2ApiException(ex);
+		}
+	}
+	
+	//writeBinaryPostData(connection, Files.readAllBytes(file.toPath()));
+	protected String executePost(File file) throws B2ApiException {
+		CloseableHttpClient closeableHttpClient = HttpClients.createDefault();
+		HttpPost httpPost = new HttpPost(url);
+		setHeaders(httpPost);
+
+		try {
+			httpPost.setEntity(new FileEntity(file));
+			CloseableHttpResponse httpResponse = closeableHttpClient.execute(httpPost);
+			int statusCode = httpResponse.getStatusLine().getStatusCode();
+			String response = EntityUtils.toString(httpResponse.getEntity());
+			if(statusCode != 200) {
+				throw new B2ApiException(response);
+			} else {
+				return(response);
+			}
+		} catch (IOException ex) {
+			throw new B2ApiException(ex);
+		}
 	}
 
-	private HttpURLConnection getPostConnection(String fullUrl, B2AuthorizeAccountResponse b2AuthorizeAccountResponse) throws IOException {
-		HttpURLConnection connection = null;
-		URL url = new URL(fullUrl);
-		connection = (HttpURLConnection)url.openConnection();
-		connection.setRequestMethod(REQUEST_METHOD_POST);
-		connection.setRequestProperty(REQUEST_PROPERTY_AUTHORIZATION, b2AuthorizeAccountResponse.getAuthorizationToken());
-		connection.setRequestProperty(REQUEST_PROPERTY_CONTENT_TYPE, APPLICATION_X_WWW_FORM_URLENCODED);
-		connection.setRequestProperty(REQUEST_PROPERTY_CHARSET, UTF_8);
-		return(connection);
+	@Deprecated
+	protected String executePost(B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String url, Map<String, String> headers, Map<String, String> data) throws B2ApiException {
+		String postData = getPostData(data);
+
+		CloseableHttpClient closeableHttpClient = HttpClients.createDefault();
+		HttpPost httpPost = new HttpPost(b2AuthorizeAccountResponse.getApiUrl() + url);
+
+		Set<String> headerKeys = headers.keySet();
+		for (String headerKey : headerKeys) {
+			httpPost.setHeader(headerKey, headers.get(headerKey));
+		}
+
+		setHeaderSafely(httpPost, REQUEST_PROPERTY_AUTHORIZATION, b2AuthorizeAccountResponse.getAuthorizationToken());
+		setHeaderSafely(httpPost, REQUEST_PROPERTY_CONTENT_TYPE, VALUE_APPLICATION_X_WWW_FORM_URLENCODED);
+		setHeaderSafely(httpPost, REQUEST_PROPERTY_CHARSET, VALUE_UTF_8);
+
+		try {
+			httpPost.setEntity(new StringEntity(postData));
+
+			CloseableHttpResponse httpResponse = closeableHttpClient.execute(httpPost);
+			int statusCode = httpResponse.getStatusLine().getStatusCode();
+			String response = EntityUtils.toString(httpResponse.getEntity());
+
+			if(statusCode != 200) {
+				throw new B2ApiException(response);
+			} else {
+				return(response);
+			}
+		} catch (IOException ex) {
+			throw new B2ApiException(ex);
+		}
 	}
 
-	protected HttpURLConnection getPostConnection(B2GetUploadUrlResponse b2GetUploadUrlResponse) throws IOException {
-		HttpURLConnection connection = null;
-		URL url = new URL(b2GetUploadUrlResponse.getUploadUrl());
-		connection = (HttpURLConnection)url.openConnection();
-		connection.setRequestMethod(REQUEST_METHOD_POST);
-		connection.setRequestProperty(REQUEST_PROPERTY_AUTHORIZATION, b2GetUploadUrlResponse.getAuthorizationToken());
-		connection.setRequestProperty(REQUEST_PROPERTY_CONTENT_TYPE, APPLICATION_X_WWW_FORM_URLENCODED);
-		connection.setRequestProperty(REQUEST_PROPERTY_CHARSET, UTF_8);
-		return(connection);
+	private void setHeaderSafely(HttpRequestBase httpRequestBase, String key, String value) {
+		if(!httpRequestBase.containsHeader(key)) {
+			httpRequestBase.setHeader(key, value);
+		}
+	}
+
+	private void setHeaders(HttpRequestBase httpRequestBase) {
+		Set<String> headerKeySet = headers.keySet();
+		for (String headerKey : headerKeySet) {
+			if(!httpRequestBase.containsHeader(headerKey)) {
+				httpRequestBase.setHeader(headerKey, headers.get(headerKey));
+			}
+		}
 	}
 
 	protected String executePost(B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String url, Map<String, String> data) throws B2ApiException {
@@ -99,8 +202,8 @@ public class BaseB2Request {
 		CloseableHttpClient closeableHttpClient = HttpClients.createDefault();
 		HttpPost httpPost = new HttpPost(b2AuthorizeAccountResponse.getApiUrl() + url);
 		httpPost.setHeader(REQUEST_PROPERTY_AUTHORIZATION, b2AuthorizeAccountResponse.getAuthorizationToken());
-		httpPost.setHeader(REQUEST_PROPERTY_CONTENT_TYPE, APPLICATION_X_WWW_FORM_URLENCODED);
-		httpPost.setHeader(REQUEST_PROPERTY_CHARSET, UTF_8);
+		httpPost.setHeader(REQUEST_PROPERTY_CONTENT_TYPE, VALUE_APPLICATION_X_WWW_FORM_URLENCODED);
+		httpPost.setHeader(REQUEST_PROPERTY_CHARSET, VALUE_UTF_8);
 
 		try {
 			httpPost.setEntity(new StringEntity(postData));

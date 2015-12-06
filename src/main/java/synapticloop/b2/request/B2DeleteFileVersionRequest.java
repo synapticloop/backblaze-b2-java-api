@@ -29,6 +29,7 @@ public class B2DeleteFileVersionRequest extends BaseB2Request {
 	private String fileId = null;
 
 	public B2DeleteFileVersionRequest(B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String fileName, String fileId) {
+		super(b2AuthorizeAccountResponse);
 		this.b2AuthorizeAccountResponse = b2AuthorizeAccountResponse;
 		this.fileName = fileName;
 		this.fileId = fileId;

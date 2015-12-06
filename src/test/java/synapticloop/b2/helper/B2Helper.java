@@ -13,7 +13,7 @@ import synapticloop.b2.response.B2BucketResponse;
 import synapticloop.b2.response.B2GetUploadUrlResponse;
 
 public class B2Helper {
-	private static final String B2_BUCKET_PREFIX = "backblaze-b2-api-test-";
+	private static final String B2_BUCKET_PREFIX = "b2api-test-";
 	private static final String B2_ACCOUNT_ID = "B2_ACCOUNT_ID";
 	private static final String B2_APPLICATION_KEY = "B2_APPLICATION_KEY";
 

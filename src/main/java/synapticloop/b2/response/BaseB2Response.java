@@ -9,6 +9,10 @@ import org.json.JSONObject;
 import synapticloop.b2.exception.B2ApiException;
 
 public abstract class BaseB2Response {
+	protected static final String KEY_AUTHORIZATION_TOKEN = "authorizationToken";
+	protected static final String KEY_UPLOAD_URL = "uploadUrl";
+	protected static final String KEY_BUCKET_ID = "bucketId";
+
 	public static JSONObject getParsedResponse(InputStream inputStream) throws B2ApiException {
 		JSONObject jsonObject = null;
 		try {

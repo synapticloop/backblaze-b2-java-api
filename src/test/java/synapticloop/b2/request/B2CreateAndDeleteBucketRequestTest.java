@@ -25,7 +25,7 @@ public class B2CreateAndDeleteBucketRequestTest {
 
 	@Test
 	public void testBucketCreationAndDeletion() throws B2ApiException {
-		
+
 		b2CreateBucketRequest = new B2CreateBucketRequest(b2AuthorizeAccountResponse, bucketName, BucketType.ALL_PRIVATE);
 		B2BucketResponse b2BucketResponse = b2CreateBucketRequest.getResponse();
 		assertEquals(b2AuthorizeAccountResponse.getAccountId(), b2BucketResponse.getAccountId());

@@ -13,6 +13,15 @@ import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
 import synapticloop.b2.exception.B2ApiException;
 
 public class Helper {
+	/**
+	 * Calculate and return the sha1 sum of a file
+	 * 
+	 * @param file the file to calculate the sha1 sum on
+	 * 
+	 * @return the sha1 of the file
+	 * 
+	 * @throws B2ApiException if something went wrong with the calculation
+	 */
 	public static String calculateSha1(File file) throws B2ApiException {
 
 		MessageDigest messageDigest = null;
@@ -36,6 +45,5 @@ public class Helper {
 				try { inputStream.close(); } catch (IOException ex) { }
 			}
 		}
-
 	}
 }

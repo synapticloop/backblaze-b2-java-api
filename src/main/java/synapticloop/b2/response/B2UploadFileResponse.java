@@ -1,6 +1,5 @@
 package synapticloop.b2.response;
 
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -20,8 +19,8 @@ public class B2UploadFileResponse extends BaseB2Response {
 	private Map<String, Object> fileInfo = new HashMap<String, Object>();
 
 	@SuppressWarnings("rawtypes")
-	public B2UploadFileResponse(InputStream inputStream) throws B2ApiException {
-		JSONObject jsonObject = getParsedResponse(inputStream);
+	public B2UploadFileResponse(String response) throws B2ApiException {
+		JSONObject jsonObject = getParsedResponse(response);
 
 		this.fileId = jsonObject.optString("fileId");
 		this.fileName = jsonObject.optString("fileName");

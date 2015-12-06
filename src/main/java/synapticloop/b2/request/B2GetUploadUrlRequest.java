@@ -1,8 +1,5 @@
 package synapticloop.b2.request;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,25 +27,15 @@ public class B2GetUploadUrlRequest extends BaseB2Request {
 	private String bucketId = null;
 
 	public B2GetUploadUrlRequest(B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String bucketId) {
+		super(b2AuthorizeAccountResponse);
 		this.b2AuthorizeAccountResponse = b2AuthorizeAccountResponse;
 		this.bucketId = bucketId;
 	}
-	
+
 	public B2GetUploadUrlResponse getResponse() throws B2ApiException {
-		HttpURLConnection connection = null;
-		InputStream inputStream = null;
-		try {
-			Map<String, String> map = new HashMap<String, String>();
-			map.put("bucketId", bucketId);
+		Map<String, String> map = new HashMap<String, String>();
+		map.put(KEY_BUCKET_ID, bucketId);
 
-			connection = getApiPostConnection(B2_GET_UPLOAD_URL, b2AuthorizeAccountResponse);
-			inputStream = writePostData(connection, map);
-
-			return(new B2GetUploadUrlResponse(inputStream));
-		} catch (IOException ex) {
-			throw new B2ApiException(ex);
-		} finally {
-			tidyUp(inputStream, connection);
-		}
+		return(new B2GetUploadUrlResponse(executePost(b2AuthorizeAccountResponse, B2_GET_UPLOAD_URL, map)));
 	}
 }

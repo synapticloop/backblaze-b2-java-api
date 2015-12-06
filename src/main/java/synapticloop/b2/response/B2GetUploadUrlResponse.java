@@ -1,7 +1,5 @@
 package synapticloop.b2.response;
 
-import java.io.InputStream;
-
 import org.json.JSONObject;
 
 import synapticloop.b2.exception.B2ApiException;
@@ -11,12 +9,12 @@ public class B2GetUploadUrlResponse extends BaseB2Response {
 	private String uploadUrl = null;
 	private String authorizationToken = null;
 
-	public B2GetUploadUrlResponse(InputStream inputStream) throws B2ApiException {
-		JSONObject jsonObject = getParsedResponse(inputStream);
+	public B2GetUploadUrlResponse(String string) throws B2ApiException {
+		JSONObject jsonObject = getParsedResponse(string);
 
-		this.bucketId = jsonObject.optString("bucketId");
-		this.uploadUrl = jsonObject.optString("uploadUrl");
-		this.authorizationToken = jsonObject.optString("authorizationToken");
+		this.bucketId = jsonObject.optString(KEY_BUCKET_ID);
+		this.uploadUrl = jsonObject.optString(KEY_UPLOAD_URL);
+		this.authorizationToken = jsonObject.optString(KEY_AUTHORIZATION_TOKEN);
 	}
 
 	public String getBucketId() { return this.bucketId; }

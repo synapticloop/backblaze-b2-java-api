@@ -5,6 +5,7 @@ public enum BucketType {
 	ALL_PRIVATE("allPrivate");
 
 	private final String apiName;
+
 	BucketType(String apiName) {
 		this.apiName = apiName;
 	}
