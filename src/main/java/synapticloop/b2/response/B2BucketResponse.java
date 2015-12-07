@@ -1,7 +1,5 @@
 package synapticloop.b2.response;
 
-import java.io.InputStream;
-
 import org.json.JSONObject;
 
 import synapticloop.b2.exception.B2ApiException;
@@ -14,10 +12,6 @@ public class B2BucketResponse extends BaseB2Response {
 
 	public B2BucketResponse(String data) throws B2ApiException {
 		this(getParsedResponse(data));
-	}
-
-	public B2BucketResponse(InputStream inputStream) throws B2ApiException {
-		this(getParsedResponse(inputStream));
 	}
 
 	public B2BucketResponse(JSONObject jsonObject) {

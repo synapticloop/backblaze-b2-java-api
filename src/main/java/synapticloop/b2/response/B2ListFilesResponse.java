@@ -10,7 +10,7 @@ import synapticloop.b2.exception.B2ApiException;
 
 public class B2ListFilesResponse extends BaseB2Response {
 
-	private List<B2FileInfoResponse> files = new ArrayList<B2FileInfoResponse>();
+	private List<B2FileInfo> files = new ArrayList<B2FileInfo>();
 	private String nextFileName = null;
 	private String nextFileId = null;
 
@@ -25,11 +25,11 @@ public class B2ListFilesResponse extends BaseB2Response {
 		// now go through the filesArray
 		
 		for(int i = 0; i < filesArray.length(); i ++) {
-			files.add(new B2FileInfoResponse(filesArray.optJSONObject(i)));
+			files.add(new B2FileInfo(filesArray.optJSONObject(i)));
 		}
 	}
 
 	public String getNextFileName() { return this.nextFileName; }
 	public String getNextFileId() { return this.nextFileId; }
-	public List<B2FileInfoResponse> getFiles() { return this.files; }
+	public List<B2FileInfo> getFiles() { return this.files; }
 }

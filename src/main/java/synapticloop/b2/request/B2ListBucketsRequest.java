@@ -15,7 +15,7 @@ import synapticloop.b2.response.BaseB2Response;
  * <p>Lists buckets associated with an account, in alphabetical order by bucket ID.</p>
  * 
  * 
- * This is the interaction class for the <strong>b2_list_buckets</strong> api calls, this was automatically
+ * This is the interaction class for the <strong>b2_list_buckets</strong> api calls, this was
  * generated from the backblaze api documentation - which can be found here:
  * <a href="http://www.backblaze.com/b2/docs/b2_list_buckets.html">http://www.backblaze.com/b2/docs/b2_list_buckets.html</a>
  * 
