@@ -9,6 +9,7 @@ public class B2ApiException extends Exception {
 	private String code = null;
 	private String message = null;
 	private int status = -1;
+	private String originalMessage = null;
 
 	public B2ApiException() {
 		super();
@@ -29,6 +30,8 @@ public class B2ApiException extends Exception {
 	}
 
 	private void parseMessage(String message) {
+		this.originalMessage = message;
+
 		if(null == message) {
 			return;
 		}
@@ -52,5 +55,6 @@ public class B2ApiException extends Exception {
 
 	public String getCode() { return this.code; }
 	public String getMessage() { return this.message; }
+	public String getOriginalMessage() { return this.originalMessage; }
 	public int getStatus() { return this.status; }
 }

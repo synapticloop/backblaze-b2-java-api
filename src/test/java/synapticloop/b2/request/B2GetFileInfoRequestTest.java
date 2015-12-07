@@ -11,8 +11,9 @@ import synapticloop.b2.response.B2BucketResponse;
 import synapticloop.b2.response.B2FileResponse;
 
 public class B2GetFileInfoRequestTest {
+
 	@Test
-	public void testMethodName() throws B2ApiException {
+	public void testGetFileInfo() throws B2ApiException {
 		B2AuthorizeAccountResponse b2AuthorizeAccountResponse = B2Helper.getB2AuthorizeAccountResponse();
 		B2BucketResponse b2BucketResponse = B2Helper.createRandomPrivateBucket();
 		B2FileResponse b2FileResponseIn = B2Helper.uploadTemporaryFileToBucket(b2BucketResponse.getBucketId());

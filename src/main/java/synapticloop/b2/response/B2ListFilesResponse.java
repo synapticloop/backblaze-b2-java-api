@@ -8,13 +8,13 @@ import org.json.JSONObject;
 
 import synapticloop.b2.exception.B2ApiException;
 
-public class B2ListFileVersionsResponse extends BaseB2Response {
+public class B2ListFilesResponse extends BaseB2Response {
 
 	private List<B2FileInfoResponse> files = new ArrayList<B2FileInfoResponse>();
 	private String nextFileName = null;
 	private String nextFileId = null;
 
-	public B2ListFileVersionsResponse(String string) throws B2ApiException {
+	public B2ListFilesResponse(String string) throws B2ApiException {
 		JSONObject jsonObject = getParsedResponse(string);
 
 		this.nextFileName = jsonObject.optString("nextFileName");

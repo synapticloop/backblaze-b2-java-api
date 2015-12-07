@@ -23,8 +23,11 @@ import synapticloop.b2.exception.B2ApiException;
 import synapticloop.b2.response.B2AuthorizeAccountResponse;
 
 public class BaseB2Request {
+	protected static final String BASE_API_HOST = "https://api.backblaze.com";
 	protected static final String BASE_API_VERSION = "/b2api/v1/";
-	protected static final String BASE_API_HOST = "https://api.backblaze.com" + BASE_API_VERSION;
+
+	protected static final String BASE_API = BASE_API_HOST + BASE_API_VERSION;
+
 
 	private static final String REQUEST_PROPERTY_CHARSET = "charset";
 	private static final String REQUEST_PROPERTY_AUTHORIZATION = "Authorization";
@@ -40,6 +43,8 @@ public class BaseB2Request {
 	protected static final String KEY_START_FILE_ID = "startFileId";
 	protected static final String KEY_MAX_FILE_COUNT = "maxFileCount";
 
+	protected static final int MAX_FILE_COUNT_RETURN = 1000;
+
 	protected static final String HEADER_CONTENT_TYPE = "Content-Type";
 	protected static final String HEADER_X_BZ_FILE_NAME = "X-Bz-File-Name";
 	protected static final String HEADER_X_BZ_CONTENT_SHA1 = "X-Bz-Content-Sha1";
@@ -50,7 +55,7 @@ public class BaseB2Request {
 
 	protected String url = null;
 	protected Map<String, String> headers = new HashMap<String, String>();
-	protected Map<String, String> data = new HashMap<String, String>();
+	protected Map<String, Object> data = new HashMap<String, Object>();
 
 	protected BaseB2Request(B2AuthorizeAccountResponse b2AuthorizeAccountResponse) {
 		if(null != b2AuthorizeAccountResponse) {
@@ -60,14 +65,25 @@ public class BaseB2Request {
 		headers.put(REQUEST_PROPERTY_CHARSET, VALUE_UTF_8);
 	}
 
-	protected String getPostData(Map<String, String> data) throws B2ApiException {
+	protected String getPostData(Map<String, Object> data) throws B2ApiException {
 		JSONObject jsonObject = new JSONObject();
 		Iterator<String> iterator = data.keySet().iterator();
 
 		while (iterator.hasNext()) {
 			String key = (String) iterator.next();
 			try {
-				jsonObject.put(key, data.get(key));
+				Object dataObject = data.get(key);
+				if(dataObject instanceof String) {
+					jsonObject.put(key, (String)dataObject);
+				} else if(dataObject instanceof Integer) {
+					jsonObject.put(key, (Integer)dataObject);
+				} else if(dataObject instanceof Long) {
+					jsonObject.put(key, (Long)dataObject);
+				} else if(dataObject instanceof Boolean) {
+					jsonObject.put(key, (Boolean)dataObject);
+				} else if(dataObject instanceof Double) {
+					jsonObject.put(key, (Double)dataObject);
+				}
 			} catch (JSONException ex) {
 				throw new B2ApiException(ex);
 			}
@@ -103,6 +119,7 @@ public class BaseB2Request {
 		HttpPost httpPost = new HttpPost(url);
 
 		setHeaders(httpPost);
+		System.out.println(">>>>>" + postData);
 
 		try {
 			httpPost.setEntity(new StringEntity(postData));
