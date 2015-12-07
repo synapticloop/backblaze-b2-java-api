@@ -8,7 +8,7 @@ import org.json.JSONObject;
 
 import synapticloop.b2.exception.B2ApiException;
 
-public class B2UploadFileResponse extends BaseB2Response {
+public class B2FileResponse extends BaseB2Response {
 	private String fileId = null;
 	private String fileName = null;
 	private String accountId = null;
@@ -19,7 +19,7 @@ public class B2UploadFileResponse extends BaseB2Response {
 	private Map<String, Object> fileInfo = new HashMap<String, Object>();
 
 	@SuppressWarnings("rawtypes")
-	public B2UploadFileResponse(String response) throws B2ApiException {
+	public B2FileResponse(String response) throws B2ApiException {
 		JSONObject jsonObject = getParsedResponse(response);
 
 		this.fileId = jsonObject.optString("fileId");

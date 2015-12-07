@@ -29,7 +29,6 @@ public class BaseB2Request {
 	private static final String REQUEST_PROPERTY_CHARSET = "charset";
 	private static final String REQUEST_PROPERTY_AUTHORIZATION = "Authorization";
 	private static final String REQUEST_PROPERTY_CONTENT_TYPE = "Content-Type";
-	private static final String REQUEST_PROPERTY_CONTENT_LENGTH = "Content-Length";
 
 	protected static final String KEY_ACCOUNT_ID = "accountId";
 	protected static final String KEY_BUCKET_ID = "bucketId";
@@ -37,6 +36,9 @@ public class BaseB2Request {
 	protected static final String KEY_BUCKET_TYPE = "bucketType";
 	protected static final String KEY_FILE_NAME = "fileName";
 	protected static final String KEY_FILE_ID = "fileId";
+	protected static final String KEY_START_FILE_NAME = "startFileName";
+	protected static final String KEY_START_FILE_ID = "startFileId";
+	protected static final String KEY_MAX_FILE_COUNT = "maxFileCount";
 
 	protected static final String HEADER_CONTENT_TYPE = "Content-Type";
 	protected static final String HEADER_X_BZ_FILE_NAME = "X-Bz-File-Name";
@@ -99,7 +101,7 @@ public class BaseB2Request {
 		CloseableHttpClient closeableHttpClient = HttpClients.createDefault();
 		String postData = getPostData(data);
 		HttpPost httpPost = new HttpPost(url);
-		headers.put(REQUEST_PROPERTY_CONTENT_LENGTH, String.valueOf(postData.length()));
+
 		setHeaders(httpPost);
 
 		try {
@@ -124,7 +126,6 @@ public class BaseB2Request {
 	protected String executePost(File file) throws B2ApiException {
 		CloseableHttpClient closeableHttpClient = HttpClients.createDefault();
 		HttpPost httpPost = new HttpPost(url);
-		headers.put(REQUEST_PROPERTY_CONTENT_LENGTH, String.valueOf(file.length()));
 
 		setHeaders(httpPost);
 
@@ -143,6 +144,13 @@ public class BaseB2Request {
 		}
 	}
 
+	/**
+	 * Set the headers safely, go through the headers Map and add them to the http 
+	 * request.  If they already exist on the http request, it will be ignored.  
+	 * To over-ride what headers are set, this should be done in the constructor 
+	 * 
+	 * @param httpRequestBase The http request to set the headers on
+	 */
 	private void setHeaders(HttpRequestBase httpRequestBase) {
 		Set<String> headerKeySet = headers.keySet();
 		for (String headerKey : headerKeySet) {

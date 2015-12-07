@@ -1,5 +1,8 @@
 package synapticloop.b2.helper;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.UUID;
 
 import synapticloop.b2.exception.B2ApiException;
@@ -7,9 +10,11 @@ import synapticloop.b2.request.B2AuthorizeAccountRequest;
 import synapticloop.b2.request.B2CreateBucketRequest;
 import synapticloop.b2.request.B2DeleteBucketRequest;
 import synapticloop.b2.request.B2GetUploadUrlRequest;
+import synapticloop.b2.request.B2UploadFileRequest;
 import synapticloop.b2.request.BucketType;
 import synapticloop.b2.response.B2AuthorizeAccountResponse;
 import synapticloop.b2.response.B2BucketResponse;
+import synapticloop.b2.response.B2FileResponse;
 import synapticloop.b2.response.B2GetUploadUrlResponse;
 
 public class B2Helper {
@@ -72,6 +77,15 @@ public class B2Helper {
 		return(b2CreateBucketRequest.getResponse());
 	}
 
+	/**
+	 * Delete a bucker by its id
+	 * 
+	 * @param bucketId the bucket id to delete
+	 * 
+	 * @return the deleted bucket response
+	 * 
+	 * @throws B2ApiException if something went wrong
+	 */
 	public static B2BucketResponse deleteBucket(String bucketId) throws B2ApiException {
 		B2DeleteBucketRequest b2DeleteBucketRequest = new B2DeleteBucketRequest(getB2AuthorizeAccountResponse(), bucketId);
 		return(b2DeleteBucketRequest.getResponse());
@@ -79,5 +93,30 @@ public class B2Helper {
 
 	public static B2GetUploadUrlResponse getUploadUrl(String bucketId) throws B2ApiException {
 		return(new B2GetUploadUrlRequest(B2Helper.getB2AuthorizeAccountResponse(), bucketId).getResponse());
+	}
+
+	/**
+	 * Create a temporary file into a bucket
+	 * 
+	 * @param bucketId the bucket to create the file in
+	 * 
+	 * @return the file response
+	 * 
+	 * @throws B2ApiException if something went wrong
+	 */
+	public static B2FileResponse uploadTemporaryFileToBucket(String bucketId) throws B2ApiException {
+		B2GetUploadUrlResponse b2GetUploadUrlResponse = getUploadUrl(bucketId);
+		File file = null;
+		try {
+			file = File.createTempFile("backblaze-api-test", ".txt");
+			FileWriter fileWriter = new FileWriter(file);
+			fileWriter.write("hello world!");
+			fileWriter.flush();
+			fileWriter.close();
+			file.deleteOnExit();
+		} catch(IOException ioex) {
+			throw new B2ApiException("Could not create temporary file", ioex);
+		}
+		return(new B2UploadFileRequest(getB2AuthorizeAccountResponse(), b2GetUploadUrlResponse, file).getResponse());
 	}
 }

@@ -7,7 +7,7 @@ import java.net.URLEncoder;
 import synapticloop.b2.exception.B2ApiException;
 import synapticloop.b2.response.B2AuthorizeAccountResponse;
 import synapticloop.b2.response.B2GetUploadUrlResponse;
-import synapticloop.b2.response.B2UploadFileResponse;
+import synapticloop.b2.response.B2FileResponse;
 import synapticloop.b2.util.Helper;
 
 /**
@@ -40,7 +40,7 @@ public class B2UploadFileRequest extends BaseB2Request {
 		this.mimeType = mimeType;
 	}
 
-	public B2UploadFileResponse getResponse() throws B2ApiException {
+	public B2FileResponse getResponse() throws B2ApiException {
 		if(null == mimeType) {
 			headers.put(HEADER_CONTENT_TYPE, VALUE_B2_X_AUTO);
 		} else {
@@ -56,6 +56,6 @@ public class B2UploadFileRequest extends BaseB2Request {
 
 		headers.put("Authorization", authorizationToken);
 
-		return(new B2UploadFileResponse(executePost(file)));
+		return(new B2FileResponse(executePost(file)));
 	}
 }

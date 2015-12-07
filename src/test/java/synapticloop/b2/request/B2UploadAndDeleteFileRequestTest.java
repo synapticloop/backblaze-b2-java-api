@@ -12,7 +12,7 @@ import synapticloop.b2.helper.B2Helper;
 import synapticloop.b2.response.B2BucketResponse;
 import synapticloop.b2.response.B2DeleteFileVersionResponse;
 import synapticloop.b2.response.B2GetUploadUrlResponse;
-import synapticloop.b2.response.B2UploadFileResponse;
+import synapticloop.b2.response.B2FileResponse;
 
 
 public class B2UploadAndDeleteFileRequestTest {
@@ -30,7 +30,7 @@ public class B2UploadAndDeleteFileRequestTest {
 		fileWriter.write("hello world!");
 		fileWriter.flush();
 		fileWriter.close();
-		B2UploadFileResponse b2UploadFileResponse = new B2UploadFileRequest(B2Helper.getB2AuthorizeAccountResponse(), b2GetUploadUrlResponse, file).getResponse();
+		B2FileResponse b2UploadFileResponse = new B2UploadFileRequest(B2Helper.getB2AuthorizeAccountResponse(), b2GetUploadUrlResponse, file).getResponse();
 
 		String fileName = b2UploadFileResponse.getFileName();
 		String fileId = b2UploadFileResponse.getFileId();
