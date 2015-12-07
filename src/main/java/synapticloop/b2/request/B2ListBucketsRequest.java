@@ -30,7 +30,6 @@ public class B2ListBucketsRequest extends BaseB2Request {
 		url = b2AuthorizeAccountResponse.getApiUrl() + B2_LIST_BUCKETS;
 
 		data.put(KEY_ACCOUNT_ID, b2AuthorizeAccountResponse.getAccountId());
-
 	}
 
 	public List<B2BucketResponse> getResponse() throws B2ApiException {

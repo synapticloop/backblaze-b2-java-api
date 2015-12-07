@@ -13,10 +13,10 @@ public class B2AuthorizeAccountResponse extends BaseB2Response {
 	public B2AuthorizeAccountResponse(String response) throws B2ApiException {
 		JSONObject jsonObject = getParsedResponse(response);
 
-		this.accountId = jsonObject.optString("accountId");
-		this.apiUrl = jsonObject.optString("apiUrl");
-		this.authorizationToken = jsonObject.optString("authorizationToken");
-		this.downloadUrl = jsonObject.optString("downloadUrl");
+		this.accountId = jsonObject.optString(KEY_ACCOUNT_ID);
+		this.apiUrl = jsonObject.optString(KEY_API_URL);
+		this.authorizationToken = jsonObject.optString(KEY_AUTHORIZATION_TOKEN);
+		this.downloadUrl = jsonObject.optString(KEY_DOWNLOAD_URL);
 	}
 
 	public String getAccountId() { return this.accountId; }

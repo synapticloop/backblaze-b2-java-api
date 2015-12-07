@@ -12,7 +12,7 @@ import synapticloop.b2.exception.B2ApiException;
 import synapticloop.b2.helper.B2Helper;
 import synapticloop.b2.response.B2AuthorizeAccountResponse;
 import synapticloop.b2.response.B2BucketResponse;
-import synapticloop.b2.response.B2FileInfo;
+import synapticloop.b2.response.B2FileInfoResponse;
 import synapticloop.b2.response.B2FileResponse;
 import synapticloop.b2.response.B2ListFilesResponse;
 
@@ -38,37 +38,37 @@ public class B2ListFileVersionsRequestTest {
 	@Test
 	public void listFileVersions() throws B2ApiException {
 		B2ListFilesResponse b2ListFileVersionsResponse = new B2ListFileVersionsRequest(b2AuthorizeAccountResponse, bucketId).getResponse();
-		List<B2FileInfo> files = b2ListFileVersionsResponse.getFiles();
+		List<B2FileInfoResponse> files = b2ListFileVersionsResponse.getFiles();
 		assertEquals(4, files.size());
 	}
 
 	@Test
 	public void listFileVersionByName() throws B2ApiException {
 		B2ListFilesResponse b2ListFileVersionsResponse = new B2ListFileVersionsRequest(b2AuthorizeAccountResponse, bucketId, tempFileOne.getFileName(), null, 1).getResponse();
-		List<B2FileInfo> files = b2ListFileVersionsResponse.getFiles();
+		List<B2FileInfoResponse> files = b2ListFileVersionsResponse.getFiles();
 		assertEquals(1, files.size());
 
-		B2FileInfo b2FileInfoResponse = files.get(0);
+		B2FileInfoResponse b2FileInfoResponse = files.get(0);
 		assertEquals(b2FileInfoResponse.getFileName(), tempFileOne.getFileName());
 	}
 
 	@Test
 	public void listFileVersionByNameAndId() throws B2ApiException {
 		B2ListFilesResponse b2ListFileVersionsResponse = new B2ListFileVersionsRequest(b2AuthorizeAccountResponse, bucketId, tempFileTwo.getFileName(), tempFileTwo.getFileId(), 1).getResponse();
-		List<B2FileInfo> files = b2ListFileVersionsResponse.getFiles();
+		List<B2FileInfoResponse> files = b2ListFileVersionsResponse.getFiles();
 		assertEquals(1, files.size());
 
-		B2FileInfo b2FileInfoResponse = files.get(0);
+		B2FileInfoResponse b2FileInfoResponse = files.get(0);
 		assertEquals(b2FileInfoResponse.getFileId(), tempFileTwo.getFileId());
 	}
 
 	@Test(expected = B2ApiException.class)
 	public void listFileVersionIncorrect() throws B2ApiException {
 		B2ListFilesResponse b2ListFileVersionsResponse = new B2ListFileVersionsRequest(b2AuthorizeAccountResponse, bucketId, null, tempFileTwo.getFileId(), 1).getResponse();
-		List<B2FileInfo> files = b2ListFileVersionsResponse.getFiles();
+		List<B2FileInfoResponse> files = b2ListFileVersionsResponse.getFiles();
 		assertEquals(1, files.size());
 
-		B2FileInfo b2FileInfoResponse = files.get(0);
+		B2FileInfoResponse b2FileInfoResponse = files.get(0);
 		assertEquals(b2FileInfoResponse.getFileId(), tempFileTwo.getFileId());
 
 	}

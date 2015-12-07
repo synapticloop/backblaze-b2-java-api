@@ -11,8 +11,8 @@ public class B2DeleteFileVersionResponse extends BaseB2Response {
 	public B2DeleteFileVersionResponse(String response) throws B2ApiException {
 		JSONObject jsonObject = getParsedResponse(response);
 
-		this.fileId = jsonObject.optString("fileId");
-		this.fileName = jsonObject.optString("fileName");
+		this.fileId = jsonObject.optString(KEY_FILE_ID);
+		this.fileName = jsonObject.optString(KEY_FILE_NAME);
 	}
 
 	public String getFileId() { return this.fileId; }

@@ -22,15 +22,15 @@ public class B2FileResponse extends BaseB2Response {
 	public B2FileResponse(String response) throws B2ApiException {
 		JSONObject jsonObject = getParsedResponse(response);
 
-		this.fileId = jsonObject.optString("fileId");
-		this.fileName = jsonObject.optString("fileName");
-		this.accountId = jsonObject.optString("accountId");
-		this.bucketId = jsonObject.optString("bucketId");
-		this.contentLength = jsonObject.optLong("contentLength");
-		this.contentSha1 = jsonObject.optString("contentSha1");
-		this.contentType = jsonObject.optString("contentType");
+		this.fileId = jsonObject.optString(KEY_FILE_ID);
+		this.fileName = jsonObject.optString(KEY_FILE_NAME);
+		this.accountId = jsonObject.optString(KEY_ACCOUNT_ID);
+		this.bucketId = jsonObject.optString(KEY_BUCKET_ID);
+		this.contentLength = jsonObject.optLong(KEY_CONTENT_LENGTH);
+		this.contentSha1 = jsonObject.optString(KEY_CONTENT_SHA1);
+		this.contentType = jsonObject.optString(KEY_CONTENT_TYPE);
 
-		JSONObject fileInfoObject = jsonObject.optJSONObject("fileInfo");
+		JSONObject fileInfoObject = jsonObject.optJSONObject(KEY_FILE_INFO);
 		if(null != fileInfoObject) {
 			Iterator keys = fileInfoObject.keys();
 			while (keys.hasNext()) {

@@ -15,10 +15,10 @@ public class B2BucketResponse extends BaseB2Response {
 	}
 
 	public B2BucketResponse(JSONObject jsonObject) {
-		this.bucketId = jsonObject.optString("bucketId");
-		this.accountId = jsonObject.optString("accountId");
-		this.bucketName = jsonObject.optString("bucketName");
-		this.bucketType = jsonObject.optString("bucketType");
+		this.bucketId = jsonObject.optString(KEY_BUCKET_ID);
+		this.accountId = jsonObject.optString(KEY_ACCOUNT_ID);
+		this.bucketName = jsonObject.optString(KEY_BUCKET_NAME);
+		this.bucketType = jsonObject.optString(KEY_BUCKET_TYPE);
 	}
 
 	public String getBucketId() { return this.bucketId; }
