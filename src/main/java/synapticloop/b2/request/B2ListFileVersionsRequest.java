@@ -50,6 +50,10 @@ public class B2ListFileVersionsRequest extends BaseB2Request {
 			throw new B2ApiException("Maximum return file count is " + MAX_FILE_COUNT_RETURN);
 		}
 
+		if(null != data.get(KEY_START_FILE_ID) && null == data.get(KEY_START_FILE_NAME)) {
+			throw new B2ApiException("You __MUST__ include a '" + KEY_START_FILE_NAME + "', if you are also include a '" + KEY_START_FILE_ID + "'.");
+		}
+
 		return(new B2ListFilesResponse(executePost()));
 	}
 }

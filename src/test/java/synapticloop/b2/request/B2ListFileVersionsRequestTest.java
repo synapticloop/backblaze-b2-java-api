@@ -51,7 +51,7 @@ public class B2ListFileVersionsRequestTest {
 	@Test
 	public void listFileVersionById() {
 		try {
-			B2ListFilesResponse b2ListFileVersionsResponse = new B2ListFileVersionsRequest(b2AuthorizeAccountResponse, bucketId, null, tempFileTwo.getFileId(), 100).getResponse();
+			B2ListFilesResponse b2ListFileVersionsResponse = new B2ListFileVersionsRequest(b2AuthorizeAccountResponse, bucketId, tempFileTwo.getFileName(), tempFileTwo.getFileId(), 100).getResponse();
 			List<B2FileInfoResponse> files = b2ListFileVersionsResponse.getFiles();
 			assertEquals(1, files.size());
 	

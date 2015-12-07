@@ -11,6 +11,8 @@ import synapticloop.b2.request.B2DeleteFileVersionRequest;
 import synapticloop.b2.request.B2GetFileInfoRequest;
 import synapticloop.b2.request.B2GetUploadUrlRequest;
 import synapticloop.b2.request.B2ListBucketsRequest;
+import synapticloop.b2.request.B2ListFileNamesRequest;
+import synapticloop.b2.request.B2ListFileVersionsRequest;
 import synapticloop.b2.request.B2UpdateBucketRequest;
 import synapticloop.b2.request.B2UploadFileRequest;
 import synapticloop.b2.request.BucketType;
@@ -19,6 +21,7 @@ import synapticloop.b2.response.B2BucketResponse;
 import synapticloop.b2.response.B2DeleteFileVersionResponse;
 import synapticloop.b2.response.B2FileResponse;
 import synapticloop.b2.response.B2GetUploadUrlResponse;
+import synapticloop.b2.response.B2ListFilesResponse;
 
 public class B2ApiClient {
 	private String accountId = null;
@@ -79,6 +82,26 @@ public class B2ApiClient {
 
 	public B2BucketResponse updateBucket(String bucketId, BucketType bucketType) throws B2ApiException {
 		return(new B2UpdateBucketRequest(getB2AuthorizeAccountResponse(), bucketId, bucketType).getResponse());
+	}
+
+	public B2ListFilesResponse listFileNames(String bucketId) throws B2ApiException {
+		return(new B2ListFileNamesRequest(getB2AuthorizeAccountResponse(), bucketId).getResponse());
+	}
+
+	public B2ListFilesResponse listFileNames(String bucketId, String startFileName, Integer maxFileCount) throws B2ApiException {
+		return(new B2ListFileNamesRequest(getB2AuthorizeAccountResponse(), bucketId, startFileName, maxFileCount).getResponse());
+	}
+
+	public B2ListFilesResponse listFileVersions(String bucketId) throws B2ApiException {
+		return(new B2ListFileVersionsRequest(getB2AuthorizeAccountResponse(), bucketId).getResponse());
+	}
+
+	public B2ListFilesResponse listFileVersions(String bucketId, String startFileName) throws B2ApiException {
+		return(new B2ListFileVersionsRequest(getB2AuthorizeAccountResponse(), bucketId, startFileName, null, null).getResponse());
+	}
+
+	public B2ListFilesResponse listFileVersions(String bucketId, String startFileName, String startFileId, Integer maxFileCount) throws B2ApiException {
+		return(new B2ListFileVersionsRequest(getB2AuthorizeAccountResponse(), bucketId, startFileName, startFileId, maxFileCount).getResponse());
 	}
 
 	private synchronized B2AuthorizeAccountResponse getB2AuthorizeAccountResponse() throws B2ApiException {

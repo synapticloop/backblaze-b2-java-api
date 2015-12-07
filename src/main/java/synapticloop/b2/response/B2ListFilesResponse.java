@@ -32,5 +32,4 @@ public class B2ListFilesResponse extends BaseB2Response {
 	public String getNextFileName() { return this.nextFileName; }
 	public String getNextFileId() { return this.nextFileId; }
 	public List<B2FileInfoResponse> getFiles() { return this.files; }
-
 }

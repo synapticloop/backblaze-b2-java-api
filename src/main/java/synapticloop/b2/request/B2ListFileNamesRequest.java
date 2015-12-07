@@ -22,7 +22,7 @@ import synapticloop.b2.response.B2ListFilesResponse;
 public class B2ListFileNamesRequest extends BaseB2Request {
 	private static final String B2_LIST_FILE_NAMES = BASE_API_VERSION + "b2_list_file_versions";
 
-	private int maxFileCount = 100;
+	private Integer maxFileCount = 100;
 
 	public B2ListFileNamesRequest(B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String bucketId) {
 		super(b2AuthorizeAccountResponse);
