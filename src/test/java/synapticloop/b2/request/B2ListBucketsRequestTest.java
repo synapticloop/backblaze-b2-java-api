@@ -8,7 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import synapticloop.b2.exception.B2ApiException;
-import synapticloop.b2.helper.B2Helper;
+import synapticloop.b2.helper.B2TestHelper;
 import synapticloop.b2.response.B2AuthorizeAccountResponse;
 import synapticloop.b2.response.B2BucketResponse;
 
@@ -19,13 +19,13 @@ public class B2ListBucketsRequestTest {
 
 	@Before
 	public void setup() throws B2ApiException {
-		b2AuthorizeAccountResponse = B2Helper.getB2AuthorizeAccountResponse();
+		b2AuthorizeAccountResponse = B2TestHelper.getB2AuthorizeAccountResponse();
 	}
 
 	@Test
 	public void testListBuckets() throws B2ApiException {
 		// first we want to create a bucker
-		B2BucketResponse createRandomPrivateBucket = B2Helper.createRandomPrivateBucket();
+		B2BucketResponse createRandomPrivateBucket = B2TestHelper.createRandomPrivateBucket();
 		String bucketName = createRandomPrivateBucket.getBucketName();
 		String bucketId = createRandomPrivateBucket.getBucketId();
 
@@ -46,7 +46,7 @@ public class B2ListBucketsRequestTest {
 		assertTrue(hasFoundBucket);
 
 		// in any case - we want to delete it
-		B2Helper.deleteBucket(bucketId);
+		B2TestHelper.deleteBucket(bucketId);
 	}
 
 }

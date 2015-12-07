@@ -4,22 +4,22 @@ import static org.junit.Assert.*;
 
 import java.util.UUID;
 
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import synapticloop.b2.exception.B2ApiException;
-import synapticloop.b2.helper.B2Helper;
+import synapticloop.b2.helper.B2TestHelper;
 import synapticloop.b2.response.B2AuthorizeAccountResponse;
 import synapticloop.b2.response.B2BucketResponse;
 
 public class B2CreateAndDeleteBucketRequestTest {
 	private B2CreateBucketRequest b2CreateBucketRequest = null;
-	private B2AuthorizeAccountResponse b2AuthorizeAccountResponse = null;
-	private String bucketName = null;
+	private static B2AuthorizeAccountResponse b2AuthorizeAccountResponse = null;
+	private static String bucketName = null;
 
-	@Before
-	public void setup() throws B2ApiException {
-		b2AuthorizeAccountResponse = B2Helper.getB2AuthorizeAccountResponse();
+	@BeforeClass
+	public static void setupBeforClass() throws B2ApiException {
+		b2AuthorizeAccountResponse = B2TestHelper.getB2AuthorizeAccountResponse();
 		bucketName = UUID.randomUUID().toString();
 	}
 

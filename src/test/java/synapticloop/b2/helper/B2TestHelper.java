@@ -9,15 +9,17 @@ import synapticloop.b2.exception.B2ApiException;
 import synapticloop.b2.request.B2AuthorizeAccountRequest;
 import synapticloop.b2.request.B2CreateBucketRequest;
 import synapticloop.b2.request.B2DeleteBucketRequest;
+import synapticloop.b2.request.B2DeleteFileVersionRequest;
 import synapticloop.b2.request.B2GetUploadUrlRequest;
 import synapticloop.b2.request.B2UploadFileRequest;
 import synapticloop.b2.request.BucketType;
 import synapticloop.b2.response.B2AuthorizeAccountResponse;
 import synapticloop.b2.response.B2BucketResponse;
+import synapticloop.b2.response.B2DeleteFileVersionResponse;
 import synapticloop.b2.response.B2FileResponse;
 import synapticloop.b2.response.B2GetUploadUrlResponse;
 
-public class B2Helper {
+public class B2TestHelper {
 	private static final String B2_BUCKET_PREFIX = "b2api-test-";
 	private static final String B2_ACCOUNT_ID = "B2_ACCOUNT_ID";
 	private static final String B2_APPLICATION_KEY = "B2_APPLICATION_KEY";
@@ -92,7 +94,11 @@ public class B2Helper {
 	}
 
 	public static B2GetUploadUrlResponse getUploadUrl(String bucketId) throws B2ApiException {
-		return(new B2GetUploadUrlRequest(B2Helper.getB2AuthorizeAccountResponse(), bucketId).getResponse());
+		return(new B2GetUploadUrlRequest(B2TestHelper.getB2AuthorizeAccountResponse(), bucketId).getResponse());
+	}
+
+	public static B2DeleteFileVersionResponse deleteFile(String fileName, String fileId) throws B2ApiException {
+		return(new B2DeleteFileVersionRequest(getB2AuthorizeAccountResponse(), fileName, fileId).getResponse());
 	}
 
 	/**

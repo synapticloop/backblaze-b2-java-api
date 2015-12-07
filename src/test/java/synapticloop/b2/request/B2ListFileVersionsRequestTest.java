@@ -9,7 +9,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import synapticloop.b2.exception.B2ApiException;
-import synapticloop.b2.helper.B2Helper;
+import synapticloop.b2.helper.B2TestHelper;
 import synapticloop.b2.response.B2AuthorizeAccountResponse;
 import synapticloop.b2.response.B2BucketResponse;
 import synapticloop.b2.response.B2FileInfoResponse;
@@ -25,14 +25,14 @@ public class B2ListFileVersionsRequestTest {
 	private static String bucketId = null;
 
 	@BeforeClass
-	public static void setup() throws B2ApiException {
-		b2AuthorizeAccountResponse = B2Helper.getB2AuthorizeAccountResponse();
-		B2BucketResponse randomPrivateBucket = B2Helper.createRandomPrivateBucket();
+	public static void setupBeforeClass() throws B2ApiException {
+		b2AuthorizeAccountResponse = B2TestHelper.getB2AuthorizeAccountResponse();
+		B2BucketResponse randomPrivateBucket = B2TestHelper.createRandomPrivateBucket();
 		bucketId = randomPrivateBucket.getBucketId();
-		tempFileOne = B2Helper.uploadTemporaryFileToBucket(bucketId);
-		tempFileTwo = B2Helper.uploadTemporaryFileToBucket(bucketId);
-		tempFileThree = B2Helper.uploadTemporaryFileToBucket(bucketId);
-		tempFileFour = B2Helper.uploadTemporaryFileToBucket(bucketId);
+		tempFileOne = B2TestHelper.uploadTemporaryFileToBucket(bucketId);
+		tempFileTwo = B2TestHelper.uploadTemporaryFileToBucket(bucketId);
+		tempFileThree = B2TestHelper.uploadTemporaryFileToBucket(bucketId);
+		tempFileFour = B2TestHelper.uploadTemporaryFileToBucket(bucketId);
 	}
 
 	@Test
@@ -94,6 +94,6 @@ public class B2ListFileVersionsRequestTest {
 		new B2DeleteFileVersionRequest(b2AuthorizeAccountResponse, tempFileTwo.getFileName(), tempFileTwo.getFileId()).getResponse();
 		new B2DeleteFileVersionRequest(b2AuthorizeAccountResponse, tempFileThree.getFileName(), tempFileThree.getFileId()).getResponse();
 		new B2DeleteFileVersionRequest(b2AuthorizeAccountResponse, tempFileFour.getFileName(), tempFileFour.getFileId()).getResponse();
-		B2Helper.deleteBucket(bucketId);
+		B2TestHelper.deleteBucket(bucketId);
 	}
 }
