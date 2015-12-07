@@ -125,6 +125,6 @@ public class B2TestHelper {
 		} catch(IOException ioex) {
 			throw new B2ApiException("Could not create temporary file", ioex);
 		}
-		return(new B2UploadFileRequest(getB2AuthorizeAccountResponse(), b2GetUploadUrlResponse, file).getResponse());
+		return(new B2UploadFileRequest(getB2AuthorizeAccountResponse(), b2GetUploadUrlResponse, file.getName(), file).getResponse());
 	}
 }

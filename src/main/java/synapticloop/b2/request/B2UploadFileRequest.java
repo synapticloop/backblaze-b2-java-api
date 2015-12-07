@@ -25,18 +25,16 @@ import synapticloop.b2.util.Helper;
 
 public class B2UploadFileRequest extends BaseB2Request {
 	private File file = null;
-	private String fileName = null;
 	private String mimeType = null;
-	private String authorizationToken = null;
 	private Map<String, String> fileInfo = null;
+	private String fileName = null;
 
-	public B2UploadFileRequest(B2AuthorizeAccountResponse b2AuthorizeAccountResponse, B2GetUploadUrlResponse b2GetUploadUrlResponse, File file) {
+	public B2UploadFileRequest(B2AuthorizeAccountResponse b2AuthorizeAccountResponse, B2GetUploadUrlResponse b2GetUploadUrlResponse, String fileName, File file) {
 		super(b2AuthorizeAccountResponse);
+		this.fileName = fileName;
 		this.url = b2GetUploadUrlResponse.getUploadUrl();
-		this.authorizationToken  = b2GetUploadUrlResponse.getAuthorizationToken();
 		this.file = file;
-		this.fileName = file.getName();
-		
+
 		// now go through and add in the 'X-Bz-Info-*' headers
 		if(null != fileInfo) {
 			Iterator<String> iterator = fileInfo.keySet().iterator();
@@ -48,18 +46,18 @@ public class B2UploadFileRequest extends BaseB2Request {
 	}
 
 
-	public B2UploadFileRequest(B2AuthorizeAccountResponse b2AuthorizeAccountResponse, B2GetUploadUrlResponse b2GetUploadUrlResponse, File file, Map<String, String> fileInfo) {
+	public B2UploadFileRequest(B2AuthorizeAccountResponse b2AuthorizeAccountResponse, B2GetUploadUrlResponse b2GetUploadUrlResponse, String fileName, File file, Map<String, String> fileInfo) {
 		super(b2AuthorizeAccountResponse);
 		this.fileInfo = fileInfo;
 	}
 
-	public B2UploadFileRequest(B2AuthorizeAccountResponse b2AuthorizeAccountResponse, B2GetUploadUrlResponse b2GetUploadUrlResponse, File file, String mimeType) {
-		this(b2AuthorizeAccountResponse, b2GetUploadUrlResponse, file);
+	public B2UploadFileRequest(B2AuthorizeAccountResponse b2AuthorizeAccountResponse, B2GetUploadUrlResponse b2GetUploadUrlResponse, String fileName, File file, String mimeType) {
+		this(b2AuthorizeAccountResponse, b2GetUploadUrlResponse, fileName, file);
 		this.mimeType = mimeType;
 	}
 
-	public B2UploadFileRequest(B2AuthorizeAccountResponse b2AuthorizeAccountResponse, B2GetUploadUrlResponse b2GetUploadUrlResponse, File file, String mimeType, Map<String, String> fileInfo) {
-		this(b2AuthorizeAccountResponse, b2GetUploadUrlResponse, file, fileInfo);
+	public B2UploadFileRequest(B2AuthorizeAccountResponse b2AuthorizeAccountResponse, B2GetUploadUrlResponse b2GetUploadUrlResponse, String fileName, File file, String mimeType, Map<String, String> fileInfo) {
+		this(b2AuthorizeAccountResponse, b2GetUploadUrlResponse, fileName, file, fileInfo);
 	}
 
 	public B2FileResponse getResponse() throws B2ApiException {
@@ -74,9 +72,8 @@ public class B2UploadFileRequest extends BaseB2Request {
 		} catch (UnsupportedEncodingException ex) {
 			// should never happen
 		}
-		headers.put(HEADER_X_BZ_CONTENT_SHA1, Helper.calculateSha1(file));
 
-		headers.put("Authorization", authorizationToken);
+		headers.put(HEADER_X_BZ_CONTENT_SHA1, Helper.calculateSha1(file));
 
 		return(new B2FileResponse(executePost(file)));
 	}

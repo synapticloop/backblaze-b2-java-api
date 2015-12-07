@@ -53,10 +53,26 @@ public class B2ApiClient {
 		return(new B2CreateBucketRequest(getB2AuthorizeAccountResponse(), bucketName, bucketType).getResponse());
 	}
 
+	/**
+	 * Delete a bucket by the bucket identifier
+	 * 
+	 * @param bucketId the id of the bucket to delete
+	 * 
+	 * @return the delete bucket response
+	 * 
+	 * @throws B2ApiException if something went wrong with the call, or the bucket was not empty
+	 */
 	public B2BucketResponse deleteBucket(String bucketId) throws B2ApiException {
 		return(new B2DeleteBucketRequest(getB2AuthorizeAccountResponse(), bucketId).getResponse());
 	}
 
+	/**
+	 * List all of the buckets in the account
+	 * 
+	 * @return the list of buckets for the account
+	 * 
+	 * @throws B2ApiException if something went wrong
+	 */
 	public List<B2BucketResponse> listBuckets() throws B2ApiException {
 		return(new B2ListBucketsRequest(getB2AuthorizeAccountResponse()).getResponse());
 	}
@@ -65,14 +81,14 @@ public class B2ApiClient {
 		return(new B2GetFileInfoRequest(getB2AuthorizeAccountResponse(), fileId).getResponse());
 	}
 
-	public B2UploadFileRequest uploadFile(String bucketId, File file) throws B2ApiException {
+	public B2UploadFileRequest uploadFile(String bucketId, String fileName, File file) throws B2ApiException {
 		B2GetUploadUrlResponse b2GetUploadUrlResponse = new B2GetUploadUrlRequest(getB2AuthorizeAccountResponse(), bucketId).getResponse();
-		return(new B2UploadFileRequest(getB2AuthorizeAccountResponse(), b2GetUploadUrlResponse, file));
+		return(new B2UploadFileRequest(getB2AuthorizeAccountResponse(), b2GetUploadUrlResponse, fileName, file));
 	}
 
-	public B2UploadFileRequest uploadFile(String bucketId, File file, String mimeType) throws B2ApiException {
+	public B2UploadFileRequest uploadFile(String bucketId, String fileName, File file, String mimeType) throws B2ApiException {
 		B2GetUploadUrlResponse b2GetUploadUrlResponse = new B2GetUploadUrlRequest(getB2AuthorizeAccountResponse(), bucketId).getResponse();
-		return(new B2UploadFileRequest(getB2AuthorizeAccountResponse(), b2GetUploadUrlResponse, file, mimeType));
+		return(new B2UploadFileRequest(getB2AuthorizeAccountResponse(), b2GetUploadUrlResponse, fileName, file, mimeType));
 	}
 
 	public B2DeleteFileVersionResponse deleteFileVersion(String fileName, String fileId) throws B2ApiException {

@@ -11,8 +11,8 @@ import org.junit.Test;
 import synapticloop.b2.helper.B2TestHelper;
 import synapticloop.b2.response.B2BucketResponse;
 import synapticloop.b2.response.B2DeleteFileVersionResponse;
-import synapticloop.b2.response.B2GetUploadUrlResponse;
 import synapticloop.b2.response.B2FileResponse;
+import synapticloop.b2.response.B2GetUploadUrlResponse;
 
 
 public class B2UploadAndDeleteFileRequestTest {
@@ -30,7 +30,7 @@ public class B2UploadAndDeleteFileRequestTest {
 		fileWriter.write("hello world!");
 		fileWriter.flush();
 		fileWriter.close();
-		B2FileResponse b2UploadFileResponse = new B2UploadFileRequest(B2TestHelper.getB2AuthorizeAccountResponse(), b2GetUploadUrlResponse, file).getResponse();
+		B2FileResponse b2UploadFileResponse = new B2UploadFileRequest(B2TestHelper.getB2AuthorizeAccountResponse(), b2GetUploadUrlResponse, file.getName(), file).getResponse();
 
 		String fileName = b2UploadFileResponse.getFileName();
 		String fileId = b2UploadFileResponse.getFileId();
