@@ -146,12 +146,11 @@ public class BaseB2Request {
 
 			CloseableHttpResponse httpResponse = closeableHttpClient.execute(httpGet);
 			int statusCode = httpResponse.getStatusLine().getStatusCode();
-			String response = EntityUtils.toString(httpResponse.getEntity());
 
 			LOG.debug("Received status code of:{}, for GET request to url '{}'", statusCode, url);
 
 			if(statusCode != 200) {
-				throw new B2ApiException(response);
+				throw new B2ApiException("Received status code of " + statusCode + " for request.");
 			} else {
 				return(httpResponse);
 			}
