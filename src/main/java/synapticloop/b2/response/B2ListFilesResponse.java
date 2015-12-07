@@ -9,7 +9,6 @@ import org.json.JSONObject;
 import synapticloop.b2.exception.B2ApiException;
 
 public class B2ListFilesResponse extends BaseB2Response {
-
 	private List<B2FileInfoResponse> files = new ArrayList<B2FileInfoResponse>();
 	private String nextFileName = null;
 	private String nextFileId = null;
