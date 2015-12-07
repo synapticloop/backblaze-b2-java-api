@@ -3,11 +3,13 @@ package synapticloop.b2.request;
 import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.Iterator;
+import java.util.Map;
 
 import synapticloop.b2.exception.B2ApiException;
 import synapticloop.b2.response.B2AuthorizeAccountResponse;
-import synapticloop.b2.response.B2GetUploadUrlResponse;
 import synapticloop.b2.response.B2FileResponse;
+import synapticloop.b2.response.B2GetUploadUrlResponse;
 import synapticloop.b2.util.Helper;
 
 /**
@@ -26,6 +28,7 @@ public class B2UploadFileRequest extends BaseB2Request {
 	private String fileName = null;
 	private String mimeType = null;
 	private String authorizationToken = null;
+	private Map<String, String> fileInfo = null;
 
 	public B2UploadFileRequest(B2AuthorizeAccountResponse b2AuthorizeAccountResponse, B2GetUploadUrlResponse b2GetUploadUrlResponse, File file) {
 		super(b2AuthorizeAccountResponse);
@@ -33,11 +36,30 @@ public class B2UploadFileRequest extends BaseB2Request {
 		this.authorizationToken  = b2GetUploadUrlResponse.getAuthorizationToken();
 		this.file = file;
 		this.fileName = file.getName();
+		
+		// now go through and add in the 'X-Bz-Info-*' headers
+		if(null != fileInfo) {
+			Iterator<String> iterator = fileInfo.keySet().iterator();
+			while (iterator.hasNext()) {
+				String key = (String) iterator.next();
+				headers.put("X-Bz-Info-" + key, fileInfo.get(key));
+			}
+		}
+	}
+
+
+	public B2UploadFileRequest(B2AuthorizeAccountResponse b2AuthorizeAccountResponse, B2GetUploadUrlResponse b2GetUploadUrlResponse, File file, Map<String, String> fileInfo) {
+		super(b2AuthorizeAccountResponse);
+		this.fileInfo = fileInfo;
 	}
 
 	public B2UploadFileRequest(B2AuthorizeAccountResponse b2AuthorizeAccountResponse, B2GetUploadUrlResponse b2GetUploadUrlResponse, File file, String mimeType) {
 		this(b2AuthorizeAccountResponse, b2GetUploadUrlResponse, file);
 		this.mimeType = mimeType;
+	}
+
+	public B2UploadFileRequest(B2AuthorizeAccountResponse b2AuthorizeAccountResponse, B2GetUploadUrlResponse b2GetUploadUrlResponse, File file, String mimeType, Map<String, String> fileInfo) {
+		this(b2AuthorizeAccountResponse, b2GetUploadUrlResponse, file, fileInfo);
 	}
 
 	public B2FileResponse getResponse() throws B2ApiException {

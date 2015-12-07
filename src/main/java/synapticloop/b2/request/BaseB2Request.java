@@ -182,6 +182,32 @@ public class BaseB2Request {
 		}
 	}
 
+	protected CloseableHttpResponse executePostWithData() throws B2ApiException {
+		CloseableHttpClient closeableHttpClient = HttpClients.createDefault();
+		HttpPost httpPost = new HttpPost(url);
+		setHeaders(httpPost);
+
+		String postData = getPostData();
+		LOG.debug("POST request to URL '{}', with data of '{}'", url, postData);
+
+		try {
+			httpPost.setEntity(new StringEntity(postData));
+			CloseableHttpResponse httpResponse = closeableHttpClient.execute(httpPost);
+			int statusCode = httpResponse.getStatusLine().getStatusCode();
+			String response = EntityUtils.toString(httpResponse.getEntity());
+
+			LOG.debug("Received status code of:{}, for POST request to url '{}'", statusCode, url);
+
+			if(statusCode != 200) {
+				throw new B2ApiException(response);
+			} else {
+				return(httpResponse);
+			}
+		} catch (IOException ex) {
+			throw new B2ApiException(ex);
+		}
+	}
+
 	/**
 	 * Set the headers safely, go through the headers Map and add them to the http 
 	 * request.  If they already exist on the http request, it will be ignored.  
