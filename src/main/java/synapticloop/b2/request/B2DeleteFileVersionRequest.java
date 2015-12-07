@@ -24,8 +24,8 @@ public class B2DeleteFileVersionRequest extends BaseB2Request {
 		super(b2AuthorizeAccountResponse);
 		url = b2AuthorizeAccountResponse.getApiUrl() + B2_DELETE_FILE_VERSION;
 
-		data.put(KEY_FILE_NAME, fileName);
-		data.put(KEY_FILE_ID, fileId);
+		stringData.put(KEY_FILE_NAME, fileName);
+		stringData.put(KEY_FILE_ID, fileId);
 	}
 
 	public B2DeleteFileVersionResponse getResponse() throws B2ApiException {

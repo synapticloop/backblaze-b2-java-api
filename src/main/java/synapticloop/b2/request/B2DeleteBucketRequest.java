@@ -22,8 +22,8 @@ public class B2DeleteBucketRequest extends BaseB2Request {
 		super(b2AuthorizeAccountResponse);
 		url = b2AuthorizeAccountResponse.getApiUrl() + B2_DELETE_BUCKET;
 
-		data.put(KEY_ACCOUNT_ID, b2AuthorizeAccountResponse.getAccountId());
-		data.put(KEY_BUCKET_ID, bucketId);
+		stringData.put(KEY_ACCOUNT_ID, b2AuthorizeAccountResponse.getAccountId());
+		stringData.put(KEY_BUCKET_ID, bucketId);
 	}
 
 	public B2BucketResponse getResponse() throws B2ApiException {

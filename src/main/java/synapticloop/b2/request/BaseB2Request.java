@@ -59,7 +59,9 @@ public class BaseB2Request {
 
 	protected String url = null;
 	protected Map<String, String> headers = new HashMap<String, String>();
-	protected Map<String, Object> data = new HashMap<String, Object>();
+
+	protected Map<String, String> stringData = new HashMap<String, String>();
+	protected Map<String, Integer> integerData = new HashMap<String, Integer>();
 
 	protected BaseB2Request(B2AuthorizeAccountResponse b2AuthorizeAccountResponse) {
 		if(null != b2AuthorizeAccountResponse) {
@@ -69,25 +71,24 @@ public class BaseB2Request {
 		headers.put(REQUEST_PROPERTY_CHARSET, VALUE_UTF_8);
 	}
 
-	protected String getPostData(Map<String, Object> data) throws B2ApiException {
+	protected String getPostData() throws B2ApiException {
 		JSONObject jsonObject = new JSONObject();
-		Iterator<String> iterator = data.keySet().iterator();
+		Iterator<String> iterator = stringData.keySet().iterator();
 
 		while (iterator.hasNext()) {
 			String key = (String) iterator.next();
 			try {
-				Object dataObject = data.get(key);
-				if(dataObject instanceof String) {
-					jsonObject.put(key, (String)dataObject);
-				} else if(dataObject instanceof Integer) {
-					jsonObject.put(key, (Integer)dataObject);
-				} else if(dataObject instanceof Long) {
-					jsonObject.put(key, (Long)dataObject);
-				} else if(dataObject instanceof Boolean) {
-					jsonObject.put(key, (Boolean)dataObject);
-				} else if(dataObject instanceof Double) {
-					jsonObject.put(key, (Double)dataObject);
-				}
+				jsonObject.put(key, stringData.get(key));
+			} catch (JSONException ex) {
+				throw new B2ApiException(ex);
+			}
+		}
+
+		iterator = integerData.keySet().iterator();
+		while (iterator.hasNext()) {
+			String key = (String) iterator.next();
+			try {
+				jsonObject.put(key, integerData.get(key));
 			} catch (JSONException ex) {
 				throw new B2ApiException(ex);
 			}
@@ -124,7 +125,7 @@ public class BaseB2Request {
 
 	protected String executePost() throws B2ApiException {
 		CloseableHttpClient closeableHttpClient = HttpClients.createDefault();
-		String postData = getPostData(data);
+		String postData = getPostData();
 		HttpPost httpPost = new HttpPost(url);
 
 		setHeaders(httpPost);
@@ -140,7 +141,7 @@ public class BaseB2Request {
 
 			String response = EntityUtils.toString(httpResponse.getEntity());
 
-			
+
 			if(statusCode != 200) {
 				if(response.trim().length() == 0) {
 					throw new B2ApiException(httpResponse.getStatusLine().toString());

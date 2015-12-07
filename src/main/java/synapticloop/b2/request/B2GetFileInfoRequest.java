@@ -24,7 +24,7 @@ public class B2GetFileInfoRequest extends BaseB2Request {
 
 		url = b2AuthorizeAccountResponse.getApiUrl() + B2_GET_FILE_INFO;
 
-		data.put(KEY_FILE_ID, fileId);
+		stringData.put(KEY_FILE_ID, fileId);
 	}
 
 	public B2FileResponse getResponse() throws B2ApiException {

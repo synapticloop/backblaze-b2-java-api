@@ -24,9 +24,9 @@ public class B2CreateBucketRequest extends BaseB2Request {
 		super(b2AuthorizeAccountResponse);
 		url = b2AuthorizeAccountResponse.getApiUrl() + B2_CREATE_BUCKET;
 
-		data.put(KEY_ACCOUNT_ID, b2AuthorizeAccountResponse.getAccountId());
-		data.put(KEY_BUCKET_NAME, bucketName);
-		data.put(KEY_BUCKET_TYPE, bucketType.toString());
+		stringData.put(KEY_ACCOUNT_ID, b2AuthorizeAccountResponse.getAccountId());
+		stringData.put(KEY_BUCKET_NAME, bucketName);
+		stringData.put(KEY_BUCKET_TYPE, bucketType.toString());
 	}
 
 	public B2BucketResponse getResponse() throws B2ApiException {

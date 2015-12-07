@@ -28,20 +28,20 @@ public class B2ListFileNamesRequest extends BaseB2Request {
 		super(b2AuthorizeAccountResponse);
 		url = b2AuthorizeAccountResponse.getApiUrl() + B2_LIST_FILE_NAMES;
 
-		data.put(KEY_BUCKET_ID, bucketId);
-		data.put(KEY_MAX_FILE_COUNT, maxFileCount);
+		stringData.put(KEY_BUCKET_ID, bucketId);
+		integerData.put(KEY_MAX_FILE_COUNT, maxFileCount);
 	}
 
 	public B2ListFileNamesRequest(B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String bucketId, String startFileName, Integer maxFileCount) {
 		this(b2AuthorizeAccountResponse, bucketId);
 
-		data.put(KEY_BUCKET_ID, bucketId);
+		stringData.put(KEY_BUCKET_ID, bucketId);
 		if(null != startFileName) {
-			data.put(KEY_START_FILE_NAME, startFileName);
+			stringData.put(KEY_START_FILE_NAME, startFileName);
 		}
 
 		if(null != maxFileCount) {
-			data.put(KEY_MAX_FILE_COUNT, maxFileCount);
+			integerData.put(KEY_MAX_FILE_COUNT, maxFileCount);
 		}
 	}
 
