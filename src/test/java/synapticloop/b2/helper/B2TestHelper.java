@@ -20,9 +20,9 @@ import synapticloop.b2.response.B2FileResponse;
 import synapticloop.b2.response.B2GetUploadUrlResponse;
 
 public class B2TestHelper {
-	private static final String B2_BUCKET_PREFIX = "b2api-test-";
-	private static final String B2_ACCOUNT_ID = "B2_ACCOUNT_ID";
-	private static final String B2_APPLICATION_KEY = "B2_APPLICATION_KEY";
+	public static final String B2_BUCKET_PREFIX = "b2api-test-";
+	public static final String B2_ACCOUNT_ID = "B2_ACCOUNT_ID";
+	public static final String B2_APPLICATION_KEY = "B2_APPLICATION_KEY";
 
 	private static B2AuthorizeAccountResponse response = null;
 

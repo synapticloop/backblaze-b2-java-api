@@ -18,11 +18,15 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import synapticloop.b2.exception.B2ApiException;
 import synapticloop.b2.response.B2AuthorizeAccountResponse;
 
 public class BaseB2Request {
+	private static final Logger LOG = LoggerFactory.getLogger(BaseB2Request.class);
+
 	protected static final String BASE_API_HOST = "https://api.backblaze.com";
 	protected static final String BASE_API_VERSION = "/b2api/v1/";
 
@@ -96,11 +100,16 @@ public class BaseB2Request {
 		CloseableHttpClient closeableHttpClient = HttpClients.createDefault();
 		HttpGet httpGet = new HttpGet(url);
 		setHeaders(httpGet);
+
+		LOG.debug("GET request to URL '{}'", url);
+
 		try {
 
 			CloseableHttpResponse httpResponse = closeableHttpClient.execute(httpGet);
 			int statusCode = httpResponse.getStatusLine().getStatusCode();
 			String response = EntityUtils.toString(httpResponse.getEntity());
+
+			LOG.debug("Received status code of:{}, for GET request to url '{}'", statusCode, url);
 
 			if(statusCode != 200) {
 				throw new B2ApiException(response);
@@ -119,13 +128,19 @@ public class BaseB2Request {
 		HttpPost httpPost = new HttpPost(url);
 
 		setHeaders(httpPost);
-		System.out.println(">>>>>" + postData);
+
+		LOG.debug("POST request to URL '{}', with data of '{}'", url, postData);
 
 		try {
 			httpPost.setEntity(new StringEntity(postData));
 			CloseableHttpResponse httpResponse = closeableHttpClient.execute(httpPost);
 			int statusCode = httpResponse.getStatusLine().getStatusCode();
+
+			LOG.debug("Received status code of:{}, for POST request to url '{}'", statusCode, url);
+
 			String response = EntityUtils.toString(httpResponse.getEntity());
+
+			
 			if(statusCode != 200) {
 				if(response.trim().length() == 0) {
 					throw new B2ApiException(httpResponse.getStatusLine().toString());
@@ -146,11 +161,16 @@ public class BaseB2Request {
 
 		setHeaders(httpPost);
 
+		LOG.debug("POST request to URL '{}', with file", url);
+
 		try {
 			httpPost.setEntity(new FileEntity(file));
 			CloseableHttpResponse httpResponse = closeableHttpClient.execute(httpPost);
 			int statusCode = httpResponse.getStatusLine().getStatusCode();
 			String response = EntityUtils.toString(httpResponse.getEntity());
+
+			LOG.debug("Received status code of:{}, for POST request to url '{}'", statusCode, url);
+
 			if(statusCode != 200) {
 				throw new B2ApiException(response);
 			} else {
