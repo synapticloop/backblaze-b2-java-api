@@ -24,9 +24,9 @@ public class B2ApiException extends Exception {
 	 * and the following information extracted:
 	 * 
 	 * <ul>
-	 *   <li>status - the HTTP status code</li>
-	 *   <li>code - the backblaze error code</li>
-	 *   <li>message - the backblaze message</li>
+	 *   <li>status - The numeric HTTP status code. Always matches the status in the HTTP response.</li>
+	 *   <li>code - A single-identifier code that identifies the error.</li>
+	 *   <li>message - A human-readable message, in English, saying what went wrong.</li>
 	 * </ul>
 	 * 
 	 * @param message The message of the exception
@@ -42,9 +42,9 @@ public class B2ApiException extends Exception {
 	 * be parsed and the following information extracted:
 	 * 
 	 * <ul>
-	 *   <li>status - the HTTP status code</li>
-	 *   <li>code - the backblaze error code</li>
-	 *   <li>message - the backblaze message</li>
+	 *   <li>status - The numeric HTTP status code. Always matches the status in the HTTP response.</li>
+	 *   <li>code - A single-identifier code that identifies the error.</li>
+	 *   <li>message - A human-readable message, in English, saying what went wrong.</li>
 	 * </ul>
 	 * 
 	 * @param message The message of the exception
