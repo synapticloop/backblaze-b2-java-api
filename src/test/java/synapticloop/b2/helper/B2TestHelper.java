@@ -5,6 +5,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.UUID;
 
+import synapticloop.b2.BucketType;
 import synapticloop.b2.exception.B2ApiException;
 import synapticloop.b2.request.B2AuthorizeAccountRequest;
 import synapticloop.b2.request.B2CreateBucketRequest;
@@ -12,7 +13,6 @@ import synapticloop.b2.request.B2DeleteBucketRequest;
 import synapticloop.b2.request.B2DeleteFileVersionRequest;
 import synapticloop.b2.request.B2GetUploadUrlRequest;
 import synapticloop.b2.request.B2UploadFileRequest;
-import synapticloop.b2.request.BucketType;
 import synapticloop.b2.response.B2AuthorizeAccountResponse;
 import synapticloop.b2.response.B2BucketResponse;
 import synapticloop.b2.response.B2DeleteFileVersionResponse;
@@ -23,6 +23,8 @@ public class B2TestHelper {
 	public static final String B2_BUCKET_PREFIX = "b2api-test-";
 	public static final String B2_ACCOUNT_ID = "B2_ACCOUNT_ID";
 	public static final String B2_APPLICATION_KEY = "B2_APPLICATION_KEY";
+
+	public static final String DUMMY_FILE_CONTENT = "hello world!";
 
 	private static B2AuthorizeAccountResponse response = null;
 
@@ -116,7 +118,7 @@ public class B2TestHelper {
 		try {
 			file = File.createTempFile("backblaze-api-test", ".txt");
 			FileWriter fileWriter = new FileWriter(file);
-			fileWriter.write("hello world!");
+			fileWriter.write(DUMMY_FILE_CONTENT);
 			fileWriter.flush();
 			fileWriter.close();
 			file.deleteOnExit();

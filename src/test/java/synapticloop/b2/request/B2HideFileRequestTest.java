@@ -33,7 +33,7 @@ public class B2HideFileRequestTest {
 		assertEquals(1, b2ListFilesResponse.getFiles().size());
 
 		b2HideFileResponse  = new B2HideFileRequest(B2TestHelper.getB2AuthorizeAccountResponse(), bucketId, b2FileResponse.getFileName()).getResponse();
-		assertEquals("hide", b2HideFileResponse .getAction());
+		assertEquals("hide", b2HideFileResponse.getAction().toString());
 
 		// we now have two versions...
 		b2ListFilesResponse = new B2ListFileNamesRequest(B2TestHelper.getB2AuthorizeAccountResponse(), bucketId).getResponse();

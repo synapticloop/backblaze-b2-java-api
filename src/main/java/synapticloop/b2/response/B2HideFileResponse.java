@@ -2,13 +2,14 @@ package synapticloop.b2.response;
 
 import org.json.JSONObject;
 
+import synapticloop.b2.ActionType;
 import synapticloop.b2.exception.B2ApiException;
 
 public class B2HideFileResponse extends BaseB2Response {
 
 	private String fileId = null;
 	private String fileName = null;
-	private String action = null;
+	private ActionType action = null;
 	private long size = -1;
 
 	public B2HideFileResponse(String string) throws B2ApiException {
@@ -16,7 +17,12 @@ public class B2HideFileResponse extends BaseB2Response {
 
 		this.fileId = jsonObject.optString(KEY_FILE_ID);
 		this.fileName = jsonObject.optString(KEY_FILE_NAME);
-		this.action = jsonObject.optString(KEY_ACTION);
+		String actionTemp = jsonObject.optString(KEY_ACTION);
+		if(null != actionTemp && actionTemp.compareTo("hide") == 0) {
+			this.action = ActionType.HIDE;
+		} else {
+			this.action = ActionType.UPLOAD;
+		}
 		this.size = jsonObject.optLong(KEY_SIZE);
 	}
 
@@ -28,7 +34,7 @@ public class B2HideFileResponse extends BaseB2Response {
 		return this.fileName;
 	}
 
-	public String getAction() {
+	public ActionType getAction() {
 		return this.action;
 	}
 

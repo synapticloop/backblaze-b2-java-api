@@ -15,7 +15,6 @@ import synapticloop.b2.request.B2ListFileNamesRequest;
 import synapticloop.b2.request.B2ListFileVersionsRequest;
 import synapticloop.b2.request.B2UpdateBucketRequest;
 import synapticloop.b2.request.B2UploadFileRequest;
-import synapticloop.b2.request.BucketType;
 import synapticloop.b2.response.B2AuthorizeAccountResponse;
 import synapticloop.b2.response.B2BucketResponse;
 import synapticloop.b2.response.B2DeleteFileVersionResponse;

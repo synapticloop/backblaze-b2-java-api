@@ -2,6 +2,8 @@ package synapticloop.b2.request;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -11,6 +13,7 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.entity.FileEntity;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -59,6 +62,7 @@ public class BaseB2Request {
 
 	protected String url = null;
 	protected Map<String, String> headers = new HashMap<String, String>();
+	protected Map<String, String> parameters = new HashMap<String, String>();
 
 	protected Map<String, String> stringData = new HashMap<String, String>();
 	protected Map<String, Integer> integerData = new HashMap<String, Integer>();
@@ -120,7 +124,40 @@ public class BaseB2Request {
 		} catch (IOException ex) {
 			throw new B2ApiException(ex);
 		}
+	}
 
+	protected CloseableHttpResponse executeGetWithData() throws B2ApiException {
+		CloseableHttpClient closeableHttpClient = HttpClients.createDefault();
+
+
+		try {
+			URI uri = new URIBuilder(url).build();
+			LOG.debug("GET request to URL '{}'", url);
+
+			Iterator<String> iterator = parameters.keySet().iterator();
+			while (iterator.hasNext()) {
+				String key = (String) iterator.next();
+				// @TODO - this is kind of wasteful - refactor
+				uri = new URIBuilder(uri).addParameter(key,parameters.get(key)).build();
+			}
+
+			HttpGet httpGet = new HttpGet(uri);
+			setHeaders(httpGet);
+
+			CloseableHttpResponse httpResponse = closeableHttpClient.execute(httpGet);
+			int statusCode = httpResponse.getStatusLine().getStatusCode();
+			String response = EntityUtils.toString(httpResponse.getEntity());
+
+			LOG.debug("Received status code of:{}, for GET request to url '{}'", statusCode, url);
+
+			if(statusCode != 200) {
+				throw new B2ApiException(response);
+			} else {
+				return(httpResponse);
+			}
+		} catch (IOException | URISyntaxException ex) {
+			throw new B2ApiException(ex);
+		}
 	}
 
 	protected String executePost() throws B2ApiException {
@@ -182,32 +219,6 @@ public class BaseB2Request {
 		}
 	}
 
-	protected CloseableHttpResponse executePostWithData() throws B2ApiException {
-		CloseableHttpClient closeableHttpClient = HttpClients.createDefault();
-		HttpPost httpPost = new HttpPost(url);
-		setHeaders(httpPost);
-
-		String postData = getPostData();
-		LOG.debug("POST request to URL '{}', with data of '{}'", url, postData);
-
-		try {
-			httpPost.setEntity(new StringEntity(postData));
-			CloseableHttpResponse httpResponse = closeableHttpClient.execute(httpPost);
-			int statusCode = httpResponse.getStatusLine().getStatusCode();
-			String response = EntityUtils.toString(httpResponse.getEntity());
-
-			LOG.debug("Received status code of:{}, for POST request to url '{}'", statusCode, url);
-
-			if(statusCode != 200) {
-				throw new B2ApiException(response);
-			} else {
-				return(httpResponse);
-			}
-		} catch (IOException ex) {
-			throw new B2ApiException(ex);
-		}
-	}
-
 	/**
 	 * Set the headers safely, go through the headers Map and add them to the http 
 	 * request.  If they already exist on the http request, it will be ignored.  
@@ -219,6 +230,7 @@ public class BaseB2Request {
 		Set<String> headerKeySet = headers.keySet();
 		for (String headerKey : headerKeySet) {
 			if(!httpRequestBase.containsHeader(headerKey)) {
+				LOG.trace("Setting header '" + headerKey + "'.");
 				httpRequestBase.setHeader(headerKey, headers.get(headerKey));
 			}
 		}

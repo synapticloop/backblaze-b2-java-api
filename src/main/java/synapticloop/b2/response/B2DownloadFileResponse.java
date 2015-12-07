@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.http.Header;
 import org.apache.http.client.methods.CloseableHttpResponse;
 
@@ -29,7 +30,7 @@ public class B2DownloadFileResponse extends BaseB2Response {
 		headerLookup.put("X-Bz-Content-Sha1", HEADER_X_BZ_CONTENT_SHA1);
 	}
 
-	private InputStream content = null;
+	private byte[] content = null;
 	private File fileTo = null;
 	private Integer contentLength = null;
 	private String contentType = null;
@@ -42,18 +43,21 @@ public class B2DownloadFileResponse extends BaseB2Response {
 	public B2DownloadFileResponse(CloseableHttpResponse closeableHttpResponse, File fileTo) throws B2ApiException {
 		this.fileTo = fileTo;
 
+		InputStream inputStream = null;
 		try {
-			this.content = closeableHttpResponse.getEntity().getContent();
+			inputStream = closeableHttpResponse.getEntity().getContent();
 			parseHeaders(closeableHttpResponse);
 
 			if(null != fileTo) {
 				// write the contents to the file
-				FileUtils.copyInputStreamToFile(content, fileTo);
-				content.close();
-				content = null;
+				FileUtils.copyInputStreamToFile(inputStream, fileTo);
+			} else {
+				content = IOUtils.toByteArray(inputStream);
 			}
 		} catch (IllegalStateException | IOException ex) {
 			throw new B2ApiException("Could not retrieve response", ex);
+		} finally {
+			IOUtils.closeQuietly(inputStream);
 		}
 	}
 
@@ -92,7 +96,7 @@ public class B2DownloadFileResponse extends BaseB2Response {
 		}
 	}
 
-	public InputStream getContent() {
+	public byte[] getContent() {
 		return this.content;
 	}
 

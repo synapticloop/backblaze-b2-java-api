@@ -26,7 +26,7 @@ public class B2DownloadFileByIdRequest extends BaseB2Request {
 	public B2DownloadFileByIdRequest(B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String fileId) {
 		super(b2AuthorizeAccountResponse);
 		url = b2AuthorizeAccountResponse.getDownloadUrl() + B2_DOWNLOAD_FILE_BY_ID;
-		stringData.put(KEY_FILE_ID, fileId);
+		parameters.put(KEY_FILE_ID, fileId);
 	}
 
 	public B2DownloadFileByIdRequest(B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String fileId, File fileTo) {
@@ -35,6 +35,6 @@ public class B2DownloadFileByIdRequest extends BaseB2Request {
 	}
 
 	public B2DownloadFileResponse getResponse() throws B2ApiException {
-		return(new B2DownloadFileResponse(executePostWithData(), fileTo));
+		return(new B2DownloadFileResponse(executeGetWithData(), fileTo));
 	}
 }

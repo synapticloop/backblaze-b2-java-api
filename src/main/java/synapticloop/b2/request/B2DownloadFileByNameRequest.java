@@ -20,23 +20,20 @@ import synapticloop.b2.response.B2DownloadFileResponse;
  * @author synapticloop
  */
 
-public class B2DownloadFileByName extends BaseB2Request {
-
-	private static final String B2_DOWNLOAD_FILE_BY_ID = BASE_API_VERSION + "b2_download_file_by_id";
+public class B2DownloadFileByNameRequest extends BaseB2Request {
 	private File fileTo = null;
 
-	public B2DownloadFileByName(B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String fileName) {
+	public B2DownloadFileByNameRequest(B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String bucketName, String fileName) {
 		super(b2AuthorizeAccountResponse);
-		url = b2AuthorizeAccountResponse.getDownloadUrl() + B2_DOWNLOAD_FILE_BY_ID;
-		stringData.put(KEY_FILE_ID, fileName);
+		url = b2AuthorizeAccountResponse.getDownloadUrl() + "/file/" + bucketName + "/" + fileName;
 	}
 
-	public B2DownloadFileByName(B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String fileName, File fileTo) {
-		this(b2AuthorizeAccountResponse, fileName);
+	public B2DownloadFileByNameRequest(B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String bucketName, String fileName, File fileTo) {
+		this(b2AuthorizeAccountResponse, bucketName, fileName);
 		this.fileTo = fileTo;
 	}
 
 	public B2DownloadFileResponse getResponse() throws B2ApiException {
-		return(new B2DownloadFileResponse(executePostWithData(), fileTo));
+		return(new B2DownloadFileResponse(executeGetWithData(), fileTo));
 	}
 }
