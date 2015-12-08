@@ -1,13 +1,10 @@
 package synapticloop.b2.response;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 import org.apache.http.Header;
 import org.apache.http.client.methods.CloseableHttpResponse;
 
@@ -30,8 +27,7 @@ public class B2DownloadFileResponse extends BaseB2Response {
 		headerLookup.put("X-Bz-Content-Sha1", HEADER_X_BZ_CONTENT_SHA1);
 	}
 
-	private byte[] content = null;
-	private File fileTo = null;
+	private InputStream content = null;
 	private Integer contentLength = null;
 	private String contentType = null;
 	private String fileId = null;
@@ -40,24 +36,14 @@ public class B2DownloadFileResponse extends BaseB2Response {
 	
 	private Map<String, String> fileInfo = new HashMap<String, String>();
 
-	public B2DownloadFileResponse(CloseableHttpResponse closeableHttpResponse, File fileTo) throws B2ApiException {
-		this.fileTo = fileTo;
-
-		InputStream inputStream = null;
+	public B2DownloadFileResponse(CloseableHttpResponse closeableHttpResponse) throws B2ApiException {
 		try {
-			inputStream = closeableHttpResponse.getEntity().getContent();
+			content = closeableHttpResponse.getEntity().getContent();
 			parseHeaders(closeableHttpResponse);
 
-			if(null != fileTo) {
-				// write the contents to the file
-				FileUtils.copyInputStreamToFile(inputStream, fileTo);
-			} else {
-				content = IOUtils.toByteArray(inputStream);
-			}
 		} catch (IllegalStateException | IOException ex) {
 			throw new B2ApiException("Could not retrieve response", ex);
 		} finally {
-			IOUtils.closeQuietly(inputStream);
 		}
 	}
 
@@ -96,18 +82,29 @@ public class B2DownloadFileResponse extends BaseB2Response {
 		}
 	}
 
-	public byte[] getContent() {
+	/**
+	 * Get the content of the downloaded file
+	 * 
+	 * @return the downloaded file
+	 */
+	public InputStream getContent() {
 		return this.content;
 	}
 
-	public File getFileTo() {
-		return this.fileTo;
-	}
-
+	/**
+	 * Get the content length of the downloaded file
+	 * 
+	 * @return the length of the content
+	 */
 	public Integer getContentLength() {
 		return this.contentLength;
 	}
 
+	/**
+	 * Get the content type of the downloaded file
+	 * 
+	 * @return the content type of the downloaded file
+	 */
 	public String getContentType() {
 		return this.contentType;
 	}

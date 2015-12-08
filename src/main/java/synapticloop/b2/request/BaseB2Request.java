@@ -37,7 +37,7 @@ public class BaseB2Request {
 
 
 	private static final String REQUEST_PROPERTY_CHARSET = "charset";
-	private static final String REQUEST_PROPERTY_AUTHORIZATION = "Authorization";
+	protected static final String REQUEST_PROPERTY_AUTHORIZATION = "Authorization";
 	private static final String REQUEST_PROPERTY_CONTENT_TYPE = "Content-Type";
 
 	protected static final String KEY_ACCOUNT_ID = "accountId";
@@ -128,7 +128,6 @@ public class BaseB2Request {
 
 	protected CloseableHttpResponse executeGetWithData() throws B2ApiException {
 		CloseableHttpClient closeableHttpClient = HttpClients.createDefault();
-
 
 		try {
 			URI uri = new URIBuilder(url).build();

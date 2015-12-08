@@ -1,7 +1,5 @@
 package synapticloop.b2.request;
 
-import java.io.File;
-
 import synapticloop.b2.exception.B2ApiException;
 import synapticloop.b2.response.B2AuthorizeAccountResponse;
 import synapticloop.b2.response.B2DownloadFileResponse;
@@ -21,19 +19,13 @@ import synapticloop.b2.response.B2DownloadFileResponse;
  */
 
 public class B2DownloadFileByNameRequest extends BaseB2Request {
-	private File fileTo = null;
 
 	public B2DownloadFileByNameRequest(B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String bucketName, String fileName) {
 		super(b2AuthorizeAccountResponse);
 		url = b2AuthorizeAccountResponse.getDownloadUrl() + "/file/" + bucketName + "/" + fileName;
 	}
 
-	public B2DownloadFileByNameRequest(B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String bucketName, String fileName, File fileTo) {
-		this(b2AuthorizeAccountResponse, bucketName, fileName);
-		this.fileTo = fileTo;
-	}
-
 	public B2DownloadFileResponse getResponse() throws B2ApiException {
-		return(new B2DownloadFileResponse(executeGetWithData(), fileTo));
+		return(new B2DownloadFileResponse(executeGetWithData()));
 	}
 }

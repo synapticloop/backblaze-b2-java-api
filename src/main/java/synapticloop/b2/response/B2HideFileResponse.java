@@ -18,7 +18,7 @@ public class B2HideFileResponse extends BaseB2Response {
 		this.fileId = jsonObject.optString(KEY_FILE_ID);
 		this.fileName = jsonObject.optString(KEY_FILE_NAME);
 		String actionTemp = jsonObject.optString(KEY_ACTION);
-		if(null != actionTemp && actionTemp.compareTo("hide") == 0) {
+		if(null != actionTemp && actionTemp.compareTo(ActionType.HIDE.toString()) == 0) {
 			this.action = ActionType.HIDE;
 		} else {
 			this.action = ActionType.UPLOAD;

@@ -17,13 +17,12 @@ import synapticloop.b2.response.B2AuthorizeAccountResponse;
  */
 
 public class B2AuthorizeAccountRequest extends BaseB2Request {
-
 	private static final String B2_AUTHORIZE_ACCOUNT = BASE_API + "b2_authorize_account";
 
 	public B2AuthorizeAccountRequest(String accountId, String applicationKey) {
 		super(null);
 		url = B2_AUTHORIZE_ACCOUNT;
-		headers.put("Authorization", "Basic " + Base64.getEncoder().encodeToString((accountId + ":" + applicationKey).getBytes()));
+		headers.put(REQUEST_PROPERTY_AUTHORIZATION, "Basic " + Base64.getEncoder().encodeToString((accountId + ":" + applicationKey).getBytes()));
 	}
 
 	public B2AuthorizeAccountResponse getResponse() throws B2ApiException {

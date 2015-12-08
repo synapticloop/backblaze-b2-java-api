@@ -1,7 +1,5 @@
 package synapticloop.b2.request;
 
-import java.io.File;
-
 import synapticloop.b2.exception.B2ApiException;
 import synapticloop.b2.response.B2AuthorizeAccountResponse;
 import synapticloop.b2.response.B2DownloadFileResponse;
@@ -21,7 +19,6 @@ import synapticloop.b2.response.B2DownloadFileResponse;
 
 public class B2DownloadFileByIdRequest extends BaseB2Request {
 	private static final String B2_DOWNLOAD_FILE_BY_ID = BASE_API_VERSION + "b2_download_file_by_id";
-	private File fileTo = null;
 
 	public B2DownloadFileByIdRequest(B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String fileId) {
 		super(b2AuthorizeAccountResponse);
@@ -29,12 +26,7 @@ public class B2DownloadFileByIdRequest extends BaseB2Request {
 		parameters.put(KEY_FILE_ID, fileId);
 	}
 
-	public B2DownloadFileByIdRequest(B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String fileId, File fileTo) {
-		this(b2AuthorizeAccountResponse, fileId);
-		this.fileTo = fileTo;
-	}
-
 	public B2DownloadFileResponse getResponse() throws B2ApiException {
-		return(new B2DownloadFileResponse(executeGetWithData(), fileTo));
+		return(new B2DownloadFileResponse(executeGetWithData()));
 	}
 }

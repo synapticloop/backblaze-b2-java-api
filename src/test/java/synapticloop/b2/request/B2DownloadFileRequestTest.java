@@ -3,6 +3,7 @@ import static org.junit.Assert.*;
 
 import java.io.IOException;
 
+import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 
 import synapticloop.b2.exception.B2ApiException;
@@ -21,10 +22,10 @@ public class B2DownloadFileRequestTest {
 		b2FileResponse = B2TestHelper.uploadTemporaryFileToBucket(randomPrivateBucket.getBucketId());
 
 		B2DownloadFileResponse b2DownloadFileResponse = new B2DownloadFileByNameRequest(B2TestHelper.getB2AuthorizeAccountResponse(), randomPrivateBucket.getBucketName(), b2FileResponse.getFileName()).getResponse();
-		assertEquals(B2TestHelper.DUMMY_FILE_CONTENT, new String(b2DownloadFileResponse.getContent()));
+		assertEquals(B2TestHelper.DUMMY_FILE_CONTENT, IOUtils.toString(b2DownloadFileResponse.getContent()));
 
 		b2DownloadFileResponse = new B2DownloadFileByIdRequest(B2TestHelper.getB2AuthorizeAccountResponse(), b2FileResponse.getFileId()).getResponse();
-		assertEquals(B2TestHelper.DUMMY_FILE_CONTENT, new String(b2DownloadFileResponse.getContent()));
+		assertEquals(B2TestHelper.DUMMY_FILE_CONTENT, IOUtils.toString(b2DownloadFileResponse.getContent()));
 	}
 
 }
