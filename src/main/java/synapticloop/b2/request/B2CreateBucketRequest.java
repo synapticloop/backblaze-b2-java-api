@@ -12,9 +12,10 @@ import synapticloop.b2.response.B2BucketResponse;
  * use a bucket with the same name. Buckets are assigned a unique bucketId 
  * which is used when uploading, downloading, or deleting files.</p>
  * 
+ * This is the interaction class for the <strong>b2_create_bucket</strong> api 
+ * calls, this was generated from the backblaze api documentation - which can 
+ * be found here:
  * 
- * This is the interaction class for the <strong>b2_create_bucket</strong> api calls, this was
- * generated from the backblaze api documentation - which can be found here:
  * <a href="http://www.backblaze.com/b2/docs/b2_create_bucket.html">http://www.backblaze.com/b2/docs/b2_create_bucket.html</a>
  * 
  * @author synapticloop
@@ -27,8 +28,14 @@ public class B2CreateBucketRequest extends BaseB2Request {
 	 * Instantiate a new create bucket request
 	 * 
 	 * @param b2AuthorizeAccountResponse the authorize account response
-	 * @param bucketName the name of the bucket to craete
-	 * @param bucketType the type of bucket to create
+	 * @param bucketName The name to give the new bucket.  Bucket names must be 
+	 *     a minimum of 6 and a maximum of 50 characters long, and must be globally 
+	 *     unique; two different B2 accounts cannot have buckets with the same name. 
+	 *     Bucket names can consist of: letters, digits, and "-". Bucket names cannot 
+	 *     start with "b2-"; these are reserved for internal Backblaze use.
+	 * @param bucketType the type of bucket to create.  Either "allPublic", meaning 
+	 *     that files in this bucket can be downloaded by anybody, or "allPrivate", 
+	 *     meaning that you need a bucket authorization token to download the files.
 	 */
 	public B2CreateBucketRequest(B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String bucketName, BucketType bucketType) {
 		super(b2AuthorizeAccountResponse);

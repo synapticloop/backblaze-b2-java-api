@@ -3,27 +3,44 @@ package synapticloop.b2.response;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.http.Header;
 import org.apache.http.client.methods.CloseableHttpResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import synapticloop.b2.exception.B2ApiException;
 
 public class B2DownloadFileResponse extends BaseB2Response {
+	private static final Logger LOG = LoggerFactory.getLogger(B2DownloadFileResponse.class);
+
 	private static final int HEADER_CONTENT_LENGTH = 0;
 	private static final int HEADER_CONTENT_TYPE = 1;
 	private static final int HEADER_X_BZ_FILE_ID = 2;
 	private static final int HEADER_X_BZ_FILE_NAME = 3;
 	private static final int HEADER_X_BZ_CONTENT_SHA1 = 4;
 
+	// headers are all lowercase for lookup
 	private static final Map<String, Integer> headerLookup = new HashMap<String, Integer>();
 	static {
-		headerLookup.put("Content-Length", HEADER_CONTENT_LENGTH);
-		headerLookup.put("Content-Type", HEADER_CONTENT_TYPE);
-		headerLookup.put("X-Bz-File-Id", HEADER_X_BZ_FILE_ID);
-		headerLookup.put("X-Bz-File-Name", HEADER_X_BZ_FILE_NAME);
-		headerLookup.put("X-Bz-Content-Sha1", HEADER_X_BZ_CONTENT_SHA1);
+		headerLookup.put("content-length", HEADER_CONTENT_LENGTH);
+		headerLookup.put("content-type", HEADER_CONTENT_TYPE);
+		headerLookup.put("x-bz-file-id", HEADER_X_BZ_FILE_ID);
+		headerLookup.put("x-bz-file-name", HEADER_X_BZ_FILE_NAME);
+		headerLookup.put("x-bz-content-sha1", HEADER_X_BZ_CONTENT_SHA1);
+	}
+
+	private static final Set<String> ignoredHeaders = new HashSet<String>();
+	static {
+		ignoredHeaders.add("server");
+		ignoredHeaders.add("x-content-type-options");
+		ignoredHeaders.add("x-xss-protection");
+		ignoredHeaders.add("x-frame-options");
+		ignoredHeaders.add("cache-control");
+		ignoredHeaders.add("date");
 	}
 
 	private InputStream content = null;
@@ -37,7 +54,10 @@ public class B2DownloadFileResponse extends BaseB2Response {
 
 	public B2DownloadFileResponse(CloseableHttpResponse closeableHttpResponse) throws B2ApiException {
 		try {
-			content = closeableHttpResponse.getEntity().getContent();
+			// HEAD responses do not have an entity
+			if(null != closeableHttpResponse.getEntity()) {
+				content = closeableHttpResponse.getEntity().getContent();
+			}
 			parseHeaders(closeableHttpResponse);
 
 		} catch (IllegalStateException | IOException ex) {
@@ -51,8 +71,8 @@ public class B2DownloadFileResponse extends BaseB2Response {
 		for (Header header : allHeaders) {
 			String headerName = header.getName();
 			String headerValue = header.getValue();
-			if(headerLookup.containsKey(headerName)) {
-				switch (headerLookup.get(headerName)) {
+			if(headerLookup.containsKey(headerName.toLowerCase())) {
+				switch (headerLookup.get(headerName.toLowerCase())) {
 				case HEADER_CONTENT_LENGTH:
 					contentLength = Integer.parseInt(headerValue);
 					break;
@@ -76,13 +96,18 @@ public class B2DownloadFileResponse extends BaseB2Response {
 				// headers
 				if(headerName.startsWith(HEADER_X_BZ_INFO_PREFIX)) {
 					fileInfo.put(headerName.substring(HEADER_X_BZ_INFO_PREFIX.length()), headerValue);
+				} else {
+					if(!ignoredHeaders.contains(headerName.toLowerCase())) {
+						LOG.warn("Found a header named '{}' with value '{}', that was not mapped", headerName, headerValue);
+					}
 				}
 			}
 		}
 	}
 
 	/**
-	 * Get the content of the downloaded file
+	 * Get the content of the downloaded file, if this was a HEAD request, then 
+	 * this will return null.
 	 * 
 	 * @return the downloaded file
 	 */

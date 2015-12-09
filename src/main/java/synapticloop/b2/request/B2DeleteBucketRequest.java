@@ -7,9 +7,10 @@ import synapticloop.b2.response.B2BucketResponse;
 /**
  * <p>Deletes the bucket specified. Only buckets that contain no version of any files can be deleted.</p>
  * 
+ * This is the interaction class for the <strong>b2_delete_bucket</strong> api 
+ * calls, this was generated from the backblaze api documentation - which can 
+ * be found here:
  * 
- * This is the interaction class for the <strong>b2_delete_bucket</strong> api calls, this was
- * generated from the backblaze api documentation - which can be found here:
  * <a href="http://www.backblaze.com/b2/docs/b2_delete_bucket.html">http://www.backblaze.com/b2/docs/b2_delete_bucket.html</a>
  * 
  * @author synapticloop

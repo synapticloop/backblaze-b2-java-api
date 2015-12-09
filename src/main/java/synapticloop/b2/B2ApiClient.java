@@ -18,6 +18,7 @@ import synapticloop.b2.request.B2DownloadFileByIdRequest;
 import synapticloop.b2.request.B2DownloadFileByNameRequest;
 import synapticloop.b2.request.B2GetFileInfoRequest;
 import synapticloop.b2.request.B2GetUploadUrlRequest;
+import synapticloop.b2.request.B2HeadFileByIdRequest;
 import synapticloop.b2.request.B2ListBucketsRequest;
 import synapticloop.b2.request.B2ListFileNamesRequest;
 import synapticloop.b2.request.B2ListFileVersionsRequest;
@@ -380,6 +381,10 @@ public class B2ApiClient {
 
 	public B2DownloadFileResponse downloadFileById(String fileId) throws B2ApiException {
 		return(new B2DownloadFileByIdRequest(getB2AuthorizeAccountResponse(), fileId).getResponse());
+	}
+
+	public B2DownloadFileResponse headFileById(String fileId) throws B2ApiException {
+		return(new B2HeadFileByIdRequest(getB2AuthorizeAccountResponse(), fileId).getResponse());
 	}
 
 	private synchronized B2AuthorizeAccountResponse getB2AuthorizeAccountResponse() throws B2ApiException {

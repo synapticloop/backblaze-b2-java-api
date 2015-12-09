@@ -10,9 +10,10 @@ import synapticloop.b2.response.B2AuthorizeAccountResponse;
  * used for account-level operations, and a URL that should be used as the base 
  * URL for subsequent API calls.</p>
  * 
+ * This is the interaction class for the <strong>b2_authorize_account</strong> api 
+ * calls, this was generated from the backblaze api documentation - which can be 
+ * found here:
  * 
- * This is the interaction class for the <strong>b2_authorize_account</strong> api calls, this was
- * generated from the backblaze api documentation - which can be found here:
  * <a href="http://www.backblaze.com/b2/docs/b2_authorize_account.html">http://www.backblaze.com/b2/docs/b2_authorize_account.html</a>
  * 
  * @author synapticloop

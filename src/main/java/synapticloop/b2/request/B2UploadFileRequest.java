@@ -45,6 +45,7 @@ public class B2UploadFileRequest extends BaseB2Request {
 		super(b2AuthorizeAccountResponse);
 		this.fileName = fileName;
 		this.url = b2GetUploadUrlResponse.getUploadUrl();
+		headers.put(REQUEST_PROPERTY_AUTHORIZATION, b2GetUploadUrlResponse.getAuthorizationToken());
 		this.file = file;
 		this.mimeType = mimeType;
 

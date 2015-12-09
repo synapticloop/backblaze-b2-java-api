@@ -25,7 +25,8 @@ public class B2DeleteFileVersionRequest extends BaseB2Request {
 	 * 
 	 * @param b2AuthorizeAccountResponse the authorize account response
 	 * @param fileName the name of the file to delete
-	 * @param fileId the id of the file to delete
+	 * @param fileId The ID of the file, as returned by {@link B2UploadFileRequest}, 
+	 *     {@link B2ListFileNamesRequest}, or {@link B2ListFileVersionsRequest}..
 	 */
 	public B2DeleteFileVersionRequest(B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String fileName, String fileId) {
 		super(b2AuthorizeAccountResponse);
@@ -35,6 +36,13 @@ public class B2DeleteFileVersionRequest extends BaseB2Request {
 		stringData.put(KEY_FILE_ID, fileId);
 	}
 
+	/**
+	 * Return the http response for the call
+	 * 
+	 * @return the delete file version response
+	 * 
+	 * @throws B2ApiException if there was an error with the call
+	 */
 	public B2DeleteFileVersionResponse getResponse() throws B2ApiException {
 		return(new B2DeleteFileVersionResponse(executePost()));
 	}

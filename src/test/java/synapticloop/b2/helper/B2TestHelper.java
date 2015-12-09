@@ -3,6 +3,7 @@ package synapticloop.b2.helper;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Map;
 import java.util.UUID;
 
 import synapticloop.b2.BucketType;
@@ -29,25 +30,26 @@ public class B2TestHelper {
 	private static B2AuthorizeAccountResponse response = null;
 
 	public static B2AuthorizeAccountResponse getB2AuthorizeAccountResponse() throws B2ApiException {
-		boolean isOK = true;
-		String b2AccountId = System.getenv(B2_ACCOUNT_ID);
-		String b2ApplicationKey = System.getenv(B2_APPLICATION_KEY);
-
-		if(null == b2AccountId) {
-			System.err.println("Could not find the environment variable '" + B2_ACCOUNT_ID + "', cannot continue with tests, exiting...");
-			isOK = false;
-		}
-
-		if(null == b2ApplicationKey) {
-			System.err.println("Could not find the environment variable '" + B2_APPLICATION_KEY + "', cannot continue with tests, exiting...");
-			isOK = false;
-		}
-
-		if(!isOK) {
-			System.exit(-1);
-		}
 
 		if(null == response) {
+			boolean isOK = true;
+			String b2AccountId = System.getenv(B2_ACCOUNT_ID);
+			String b2ApplicationKey = System.getenv(B2_APPLICATION_KEY);
+
+			if(null == b2AccountId) {
+				System.err.println("Could not find the environment variable '" + B2_ACCOUNT_ID + "', cannot continue with tests, exiting...");
+				isOK = false;
+			}
+
+			if(null == b2ApplicationKey) {
+				System.err.println("Could not find the environment variable '" + B2_APPLICATION_KEY + "', cannot continue with tests, exiting...");
+				isOK = false;
+			}
+
+			if(!isOK) {
+				System.exit(-1);
+			}
+
 			B2AuthorizeAccountRequest b2AuthorizeAccountRequest = new B2AuthorizeAccountRequest(b2AccountId, b2ApplicationKey);
 			response = b2AuthorizeAccountRequest.getResponse();
 		}
@@ -127,4 +129,30 @@ public class B2TestHelper {
 		}
 		return(new B2UploadFileRequest(getB2AuthorizeAccountResponse(), b2GetUploadUrlResponse, file.getName(), file).getResponse());
 	}
+
+	/**
+	 * Create a temporary file into a bucket
+	 * 
+	 * @param bucketId the bucket to create the file in
+	 * 
+	 * @return the file response
+	 * 
+	 * @throws B2ApiException if something went wrong
+	 */
+	public static B2FileResponse uploadTemporaryFileToBucket(String bucketId, Map<String, String> fileInfo) throws B2ApiException {
+		B2GetUploadUrlResponse b2GetUploadUrlResponse = getUploadUrl(bucketId);
+		File file = null;
+		try {
+			file = File.createTempFile("backblaze-api-test", ".txt");
+			FileWriter fileWriter = new FileWriter(file);
+			fileWriter.write(DUMMY_FILE_CONTENT);
+			fileWriter.flush();
+			fileWriter.close();
+			file.deleteOnExit();
+		} catch(IOException ioex) {
+			throw new B2ApiException("Could not create temporary file", ioex);
+		}
+		return(new B2UploadFileRequest(getB2AuthorizeAccountResponse(), b2GetUploadUrlResponse, file.getName(), file, fileInfo).getResponse());
+	}
+
 }

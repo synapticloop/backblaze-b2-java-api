@@ -4,6 +4,8 @@ import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -35,7 +37,37 @@ public class B2UploadAndDeleteFileRequestTest {
 		String fileName = b2UploadFileResponse.getFileName();
 		String fileId = b2UploadFileResponse.getFileId();
 
-		// now we need t delete the file as well to clean up after ourselves
+		// now we need to delete the file as well to clean up after ourselves
+
+		B2DeleteFileVersionResponse b2DeleteFileVersionResponse = new B2DeleteFileVersionRequest(B2TestHelper.getB2AuthorizeAccountResponse(), fileName, fileId).getResponse();
+		assertEquals(fileName, b2DeleteFileVersionResponse.getFileName());
+		assertEquals(fileId, b2DeleteFileVersionResponse.getFileId());
+
+		B2TestHelper.deleteBucket(privateBucket.getBucketId());
+	}
+
+	@Test
+	public void testFileUploadWithInfo() throws Exception {
+		B2BucketResponse privateBucket = B2TestHelper.createRandomPrivateBucket();
+		B2GetUploadUrlResponse b2GetUploadUrlResponse = B2TestHelper.getUploadUrl(privateBucket.getBucketId());
+		Map<String, String> fileInfo = new HashMap<String, String>();
+		fileInfo.put("hello", "world");
+
+		File file = File.createTempFile("backblaze-api-test", ".txt");
+		FileWriter fileWriter = new FileWriter(file);
+		fileWriter.write("hello world!");
+		fileWriter.flush();
+		fileWriter.close();
+
+		B2FileResponse b2UploadFileResponse = new B2UploadFileRequest(B2TestHelper.getB2AuthorizeAccountResponse(), b2GetUploadUrlResponse, file.getName(), file, fileInfo).getResponse();
+
+		String fileName = b2UploadFileResponse.getFileName();
+		String fileId = b2UploadFileResponse.getFileId();
+
+		// try and get the info for the file
+		
+		B2FileResponse b2FileInfoResponse = new B2GetFileInfoRequest(B2TestHelper.getB2AuthorizeAccountResponse(), b2UploadFileResponse.getFileId()).getResponse();
+		// now we need to delete the file as well to clean up after ourselves
 
 		B2DeleteFileVersionResponse b2DeleteFileVersionResponse = new B2DeleteFileVersionRequest(B2TestHelper.getB2AuthorizeAccountResponse(), fileName, fileId).getResponse();
 		assertEquals(fileName, b2DeleteFileVersionResponse.getFileName());

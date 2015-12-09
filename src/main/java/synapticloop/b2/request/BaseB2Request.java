@@ -11,6 +11,7 @@ import java.util.Set;
 
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpHead;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.utils.URIBuilder;
@@ -42,7 +43,7 @@ public class BaseB2Request {
 	protected static final String HEADER_CONTENT_TYPE = "Content-Type";
 	protected static final String HEADER_X_BZ_CONTENT_SHA1 = "X-Bz-Content-Sha1";
 	protected static final String HEADER_X_BZ_FILE_NAME = "X-Bz-File-Name";
-	protected static final String HEADER_X_BZ_INFO_PREFIX = "X-Bz-Info-";
+	protected static final String HEADER_X_BZ_INFO_PREFIX = "x-bz-info-";
 
 	protected static final String KEY_ACCOUNT_ID = "accountId";
 	protected static final String KEY_BUCKET_ID = "bucketId";
@@ -116,6 +117,38 @@ public class BaseB2Request {
 		return(jsonObject.toString());
 	}
 
+	protected CloseableHttpResponse executeHead() throws B2ApiException {
+		CloseableHttpClient closeableHttpClient = HttpClients.createDefault();
+
+		try {
+			URI uri = new URIBuilder(url).build();
+			LOG.debug("HEAD request to URL '{}'", url);
+
+			Iterator<String> iterator = parameters.keySet().iterator();
+			while (iterator.hasNext()) {
+				String key = (String) iterator.next();
+				// @TODO - this is kind of wasteful - refactor
+				uri = new URIBuilder(uri).addParameter(key, parameters.get(key)).build();
+			}
+
+			HttpHead httpHead = new HttpHead(uri);
+			setHeaders(httpHead);
+
+			CloseableHttpResponse httpResponse = closeableHttpClient.execute(httpHead);
+			int statusCode = httpResponse.getStatusLine().getStatusCode();
+
+			LOG.debug("Received status code of:{}, for HEAD request to url '{}'", statusCode, uri);
+
+			if(statusCode != 200) {
+				throw new B2ApiException("Received status code of " + statusCode + " for request.");
+			} else {
+				return(httpResponse);
+			}
+		} catch (IOException | URISyntaxException ex) {
+			throw new B2ApiException(ex);
+		}
+	}
+
 	protected String executeGet() throws B2ApiException {
 		CloseableHttpClient closeableHttpClient = HttpClients.createDefault();
 		HttpGet httpGet = new HttpGet(url);
@@ -140,6 +173,7 @@ public class BaseB2Request {
 			throw new B2ApiException(ex);
 		}
 	}
+
 
 	protected CloseableHttpResponse executeGetWithData() throws B2ApiException {
 		CloseableHttpClient closeableHttpClient = HttpClients.createDefault();
