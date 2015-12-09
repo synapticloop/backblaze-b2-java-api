@@ -19,8 +19,39 @@ public class B2AuthorizeAccountResponse extends BaseB2Response {
 		this.downloadUrl = jsonObject.optString(KEY_DOWNLOAD_URL);
 	}
 
-	public String getAccountId() { return this.accountId; }
-	public String getApiUrl() { return this.apiUrl; }
-	public String getAuthorizationToken() { return this.authorizationToken; }
-	public String getDownloadUrl() { return this.downloadUrl; }
+	/**
+	 * Return the account ID used to authorize this account
+	 * 
+	 * @return the account ID
+	 */
+	public String getAccountId() {
+		return this.accountId;
+	}
+
+	/**
+	 * The API URL to be used for all subsequent calls to the API
+	 * 
+	 * @return the api url to use for all subsequent calls
+	 */
+	public String getApiUrl() {
+		return this.apiUrl;
+	}
+
+	/**
+	 * Return the authorization token to be used for all subsequent calls
+	 * 
+	 * @return the authorization token to be used for all subsequent calls
+	 */
+	public String getAuthorizationToken() {
+		return this.authorizationToken;
+	}
+
+	/**
+	 * Return the url top be used for downloading files
+	 * 
+	 * @return the url to be used for downloading files
+	 */
+	public String getDownloadUrl() {
+		return this.downloadUrl;
+	}
 }

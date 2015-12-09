@@ -43,6 +43,5 @@ public class B2ListBucketsRequest extends BaseB2Request {
 		}
 
 		return(responses);
-
 	}
 }

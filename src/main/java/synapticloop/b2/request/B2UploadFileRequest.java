@@ -26,38 +26,81 @@ import synapticloop.b2.util.Helper;
 public class B2UploadFileRequest extends BaseB2Request {
 	private File file = null;
 	private String mimeType = null;
-	private Map<String, String> fileInfo = null;
 	private String fileName = null;
 
-	public B2UploadFileRequest(B2AuthorizeAccountResponse b2AuthorizeAccountResponse, B2GetUploadUrlResponse b2GetUploadUrlResponse, String fileName, File file) {
+	/**
+	 * Instantiate a upload file request in order to place a file on the B2 bucket,
+	 * the sha1 sum will be automatically generated.
+	 * 
+	 * @param b2AuthorizeAccountResponse The authorize account response
+	 * @param b2GetUploadUrlResponse the upload URL for this request
+	 * @param fileName the name of the file
+	 * @param file the file to upload
+	 * @param mimeType the mimeTyp (optional, will default to 'b2/x-auto' which 
+	 *     backblaze will attempt to determine automatically)
+	 * @param fileInfo the file info map which are passed through as headers
+	 *     prefixed by "X-Bz-Info-"
+	 */
+	public B2UploadFileRequest(B2AuthorizeAccountResponse b2AuthorizeAccountResponse, B2GetUploadUrlResponse b2GetUploadUrlResponse, String fileName, File file, String mimeType, Map<String, String> fileInfo) {
 		super(b2AuthorizeAccountResponse);
 		this.fileName = fileName;
 		this.url = b2GetUploadUrlResponse.getUploadUrl();
 		this.file = file;
+		this.mimeType = mimeType;
 
 		// now go through and add in the 'X-Bz-Info-*' headers
 		if(null != fileInfo) {
 			Iterator<String> iterator = fileInfo.keySet().iterator();
 			while (iterator.hasNext()) {
 				String key = (String) iterator.next();
-				headers.put("X-Bz-Info-" + key, fileInfo.get(key));
+				headers.put(HEADER_X_BZ_INFO_PREFIX + key, fileInfo.get(key));
 			}
 		}
 	}
 
-
+	/**
+	 * Instantiate a upload file request in order to place a file on the B2 bucket,
+	 * the sha1 sum will be automatically generated
+	 * 
+	 * @param b2AuthorizeAccountResponse The authorize account response
+	 * @param b2GetUploadUrlResponse the upload URL for this request
+	 * @param fileName the name of the file
+	 * @param file the file to upload
+	 * @param mimeType the mimeTyp (optional, will default to 'b2/x-auto' which 
+	 *     backblaze will attempt to determine automatically)
+	 * @param fileInfo the file info map which are passed through as headers
+	 *     prefixed by "X-Bz-Info-"
+	 */
 	public B2UploadFileRequest(B2AuthorizeAccountResponse b2AuthorizeAccountResponse, B2GetUploadUrlResponse b2GetUploadUrlResponse, String fileName, File file, Map<String, String> fileInfo) {
-		super(b2AuthorizeAccountResponse);
-		this.fileInfo = fileInfo;
+		this(b2AuthorizeAccountResponse, b2GetUploadUrlResponse, fileName, file, null, fileInfo);
 	}
 
+	/**
+	 * Instantiate a upload file request in order to place a file on the B2 bucket,
+	 * the sha1 sum will be automatically generated.
+	 * 
+	 * @param b2AuthorizeAccountResponse The authorize account response
+	 * @param b2GetUploadUrlResponse the upload URL for this request
+	 * @param fileName the name of the file
+	 * @param file the file to upload
+	 * @param fileInfo the file info map which are passed through as headers
+	 *     prefixed by "X-Bz-Info-"
+	 */
 	public B2UploadFileRequest(B2AuthorizeAccountResponse b2AuthorizeAccountResponse, B2GetUploadUrlResponse b2GetUploadUrlResponse, String fileName, File file, String mimeType) {
-		this(b2AuthorizeAccountResponse, b2GetUploadUrlResponse, fileName, file);
-		this.mimeType = mimeType;
+		this(b2AuthorizeAccountResponse, b2GetUploadUrlResponse, fileName, file, mimeType, null);
 	}
 
-	public B2UploadFileRequest(B2AuthorizeAccountResponse b2AuthorizeAccountResponse, B2GetUploadUrlResponse b2GetUploadUrlResponse, String fileName, File file, String mimeType, Map<String, String> fileInfo) {
-		this(b2AuthorizeAccountResponse, b2GetUploadUrlResponse, fileName, file, fileInfo);
+	/**
+	 * Instantiate a upload file request in order to place a file on the B2 bucket,
+	 * the sha1 sum will be automatically generated.
+	 * 
+	 * @param b2AuthorizeAccountResponse The authorize account response
+	 * @param b2GetUploadUrlResponse the upload URL for this request
+	 * @param fileName the name of the file
+	 * @param file the file to upload
+	 */
+	public B2UploadFileRequest(B2AuthorizeAccountResponse b2AuthorizeAccountResponse, B2GetUploadUrlResponse b2GetUploadUrlResponse, String fileName, File file) {
+		this(b2AuthorizeAccountResponse, b2GetUploadUrlResponse, fileName, file, null, null);
 	}
 
 	public B2FileResponse getResponse() throws B2ApiException {

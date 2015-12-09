@@ -20,6 +20,14 @@ public class B2ListFileVersionsRequest extends BaseB2Request {
 
 	private int maxFileCount = 100;
 
+	public B2ListFileVersionsRequest(B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String bucketId, Integer maxFileCount) {
+		super(b2AuthorizeAccountResponse);
+		url = b2AuthorizeAccountResponse.getApiUrl() + B2_LIST_FILE_VERSIONS;
+
+		stringData.put(KEY_BUCKET_ID, bucketId);
+		integerData.put(KEY_MAX_FILE_COUNT, maxFileCount);
+	}
+
 	public B2ListFileVersionsRequest(B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String bucketId) {
 		super(b2AuthorizeAccountResponse);
 		url = b2AuthorizeAccountResponse.getApiUrl() + B2_LIST_FILE_VERSIONS;

@@ -1,5 +1,8 @@
 package synapticloop.b2.request;
 
+import java.util.Iterator;
+import java.util.Map;
+
 import synapticloop.b2.exception.B2ApiException;
 import synapticloop.b2.response.B2AuthorizeAccountResponse;
 import synapticloop.b2.response.B2GetUploadUrlResponse;
@@ -26,6 +29,21 @@ public class B2GetUploadUrlRequest extends BaseB2Request {
 		url = b2AuthorizeAccountResponse.getApiUrl() + B2_GET_UPLOAD_URL;
 
 		stringData.put(KEY_BUCKET_ID, bucketId);
+	}
+
+	public B2GetUploadUrlRequest(B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String bucketId, Map<String, String> fileInfo) {
+		super(b2AuthorizeAccountResponse);
+		url = b2AuthorizeAccountResponse.getApiUrl() + B2_GET_UPLOAD_URL;
+
+		stringData.put(KEY_BUCKET_ID, bucketId);
+
+		// TODO - need to do different
+		// now go through the fileInfo Object and add the headers
+		Iterator<String> iterator = fileInfo.keySet().iterator();
+		while (iterator.hasNext()) {
+			String headerKey = (String) iterator.next();
+			headers.put(HEADER_X_BZ_INFO_PREFIX + headerKey, fileInfo.get(headerKey));
+		}
 	}
 
 	public B2GetUploadUrlResponse getResponse() throws B2ApiException {

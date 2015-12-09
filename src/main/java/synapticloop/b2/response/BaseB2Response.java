@@ -6,6 +6,8 @@ import org.json.JSONObject;
 import synapticloop.b2.exception.B2ApiException;
 
 public abstract class BaseB2Response {
+	protected static final String HEADER_X_BZ_INFO_PREFIX = "X-Bz-Info-";
+
 	protected static final String KEY_ACCOUNT_ID = "accountId";
 	protected static final String KEY_ACTION = "action";
 	protected static final String KEY_API_URL = "apiUrl";

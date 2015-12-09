@@ -20,9 +20,8 @@ public class B2ListFilesResponse extends BaseB2Response {
 		this.nextFileId = jsonObject.optString(KEY_NEXT_FILE_ID);
 
 		JSONArray filesArray = jsonObject.optJSONArray(KEY_FILES);
-		
+
 		// now go through the filesArray
-		
 		for(int i = 0; i < filesArray.length(); i ++) {
 			files.add(new B2FileInfoResponse(filesArray.optJSONObject(i)));
 		}

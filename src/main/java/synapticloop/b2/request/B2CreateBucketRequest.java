@@ -8,7 +8,9 @@ import synapticloop.b2.response.B2BucketResponse;
 /**
  * <p>Creates a new bucket. A bucket belongs to the account used to create it.</p>
  * 
- * <p>Buckets can be named. The name must be globally unique. No account can use a bucket with the same name. Buckets are assigned a unique bucketId which is used when uploading, downloading, or deleting files.</p>
+ * <p>Buckets can be named. The name must be globally unique. No account can 
+ * use a bucket with the same name. Buckets are assigned a unique bucketId 
+ * which is used when uploading, downloading, or deleting files.</p>
  * 
  * 
  * This is the interaction class for the <strong>b2_create_bucket</strong> api calls, this was
@@ -21,6 +23,13 @@ import synapticloop.b2.response.B2BucketResponse;
 public class B2CreateBucketRequest extends BaseB2Request {
 	private static final String B2_CREATE_BUCKET = BASE_API_VERSION + "b2_create_bucket";
 
+	/**
+	 * Instantiate a new create bucket request
+	 * 
+	 * @param b2AuthorizeAccountResponse the authorize account response
+	 * @param bucketName the name of the bucket to craete
+	 * @param bucketType the type of bucket to create
+	 */
 	public B2CreateBucketRequest(B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String bucketName, BucketType bucketType) {
 		super(b2AuthorizeAccountResponse);
 		url = b2AuthorizeAccountResponse.getApiUrl() + B2_CREATE_BUCKET;
@@ -30,6 +39,13 @@ public class B2CreateBucketRequest extends BaseB2Request {
 		stringData.put(KEY_BUCKET_TYPE, bucketType.toString());
 	}
 
+	/**
+	 * Get the create bucket response
+	 * 
+	 * @return the created bucket response
+	 * 
+	 * @throws B2ApiException if there was an error with the call
+	 */
 	public B2BucketResponse getResponse() throws B2ApiException {
 		return(new B2BucketResponse(executePost()));
 	}

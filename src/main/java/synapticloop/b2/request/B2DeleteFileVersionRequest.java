@@ -20,6 +20,13 @@ import synapticloop.b2.response.B2DeleteFileVersionResponse;
 public class B2DeleteFileVersionRequest extends BaseB2Request {
 	private static final String B2_DELETE_FILE_VERSION = BASE_API_VERSION + "b2_delete_file_version";
 
+	/**
+	 * Instantiate a delete file version request
+	 * 
+	 * @param b2AuthorizeAccountResponse the authorize account response
+	 * @param fileName the name of the file to delete
+	 * @param fileId the id of the file to delete
+	 */
 	public B2DeleteFileVersionRequest(B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String fileName, String fileId) {
 		super(b2AuthorizeAccountResponse);
 		url = b2AuthorizeAccountResponse.getApiUrl() + B2_DELETE_FILE_VERSION;

@@ -1,12 +1,17 @@
 package synapticloop.b2;
 
-public enum ActionType {
+/**
+ * The action for an associated file.
+ * 
+ * @author synapticloop
+ */
+public enum Action {
 	HIDE("hide"),
 	UPLOAD("upload");
 
 	private final String actionType;
 
-	ActionType(String actionType) {
+	Action(String actionType) {
 		this.actionType = actionType;
 	}
 

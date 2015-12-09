@@ -18,6 +18,13 @@ import synapticloop.b2.response.B2BucketResponse;
 public class B2DeleteBucketRequest extends BaseB2Request {
 	private static final String B2_DELETE_BUCKET = BASE_API_VERSION + "b2_delete_bucket";
 
+	/**
+	 * Instantiate a new delete bucket request
+	 * 
+	 * @param b2AuthorizeAccountResponse the authorize account response
+	 * 
+	 * @param bucketId the id of the bucket to delete
+	 */
 	public B2DeleteBucketRequest(B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String bucketId) {
 		super(b2AuthorizeAccountResponse);
 		url = b2AuthorizeAccountResponse.getApiUrl() + B2_DELETE_BUCKET;
@@ -26,6 +33,14 @@ public class B2DeleteBucketRequest extends BaseB2Request {
 		stringData.put(KEY_BUCKET_ID, bucketId);
 	}
 
+	/**
+	 * return the deleted bucket response
+	 * 
+	 * @return The deleted bucket response
+	 * 
+	 * @throws B2ApiException if there was an error with the call, or if you are 
+	 *     trying to delete a bucket which is not empty
+	 */
 	public B2BucketResponse getResponse() throws B2ApiException {
 		return(new B2BucketResponse(executePost()));
 	}

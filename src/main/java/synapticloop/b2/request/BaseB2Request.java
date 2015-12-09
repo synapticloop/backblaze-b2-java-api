@@ -35,30 +35,30 @@ public class BaseB2Request {
 
 	protected static final String BASE_API = BASE_API_HOST + BASE_API_VERSION;
 
-
-	private static final String REQUEST_PROPERTY_CHARSET = "charset";
+	protected static final String REQUEST_PROPERTY_CHARSET = "charset";
+	protected static final String REQUEST_PROPERTY_CONTENT_TYPE = "Content-Type";
 	protected static final String REQUEST_PROPERTY_AUTHORIZATION = "Authorization";
-	private static final String REQUEST_PROPERTY_CONTENT_TYPE = "Content-Type";
+
+	protected static final String HEADER_CONTENT_TYPE = "Content-Type";
+	protected static final String HEADER_X_BZ_CONTENT_SHA1 = "X-Bz-Content-Sha1";
+	protected static final String HEADER_X_BZ_FILE_NAME = "X-Bz-File-Name";
+	protected static final String HEADER_X_BZ_INFO_PREFIX = "X-Bz-Info-";
 
 	protected static final String KEY_ACCOUNT_ID = "accountId";
 	protected static final String KEY_BUCKET_ID = "bucketId";
 	protected static final String KEY_BUCKET_NAME = "bucketName";
 	protected static final String KEY_BUCKET_TYPE = "bucketType";
-	protected static final String KEY_FILE_NAME = "fileName";
 	protected static final String KEY_FILE_ID = "fileId";
-	protected static final String KEY_START_FILE_NAME = "startFileName";
-	protected static final String KEY_START_FILE_ID = "startFileId";
+	protected static final String KEY_FILE_NAME = "fileName";
 	protected static final String KEY_MAX_FILE_COUNT = "maxFileCount";
-
-	protected static final int MAX_FILE_COUNT_RETURN = 1000;
-
-	protected static final String HEADER_CONTENT_TYPE = "Content-Type";
-	protected static final String HEADER_X_BZ_FILE_NAME = "X-Bz-File-Name";
-	protected static final String HEADER_X_BZ_CONTENT_SHA1 = "X-Bz-Content-Sha1";
+	protected static final String KEY_START_FILE_ID = "startFileId";
+	protected static final String KEY_START_FILE_NAME = "startFileName";
 
 	protected static final String VALUE_APPLICATION_X_WWW_FORM_URLENCODED = "application/x-www-form-urlencoded";
-	protected static final String VALUE_UTF_8 = "UTF-8";
 	protected static final String VALUE_B2_X_AUTO = "b2/x-auto";
+	protected static final String VALUE_UTF_8 = "UTF-8";
+
+	protected static final int MAX_FILE_COUNT_RETURN = 1000;
 
 	protected String url = null;
 	protected Map<String, String> headers = new HashMap<String, String>();
@@ -67,6 +67,13 @@ public class BaseB2Request {
 	protected Map<String, String> stringData = new HashMap<String, String>();
 	protected Map<String, Integer> integerData = new HashMap<String, Integer>();
 
+	/**
+	 * Instantiate the base B2 request which adds headers with the authorization 
+	 * token.  The only exception to the adding of the authorization token is the
+	 * initial call to the authorize account.
+	 * 
+	 * @param b2AuthorizeAccountResponse the authorize account response
+	 */
 	protected BaseB2Request(B2AuthorizeAccountResponse b2AuthorizeAccountResponse) {
 		if(null != b2AuthorizeAccountResponse) {
 			headers.put(REQUEST_PROPERTY_AUTHORIZATION, b2AuthorizeAccountResponse.getAuthorizationToken());
@@ -75,7 +82,15 @@ public class BaseB2Request {
 		headers.put(REQUEST_PROPERTY_CHARSET, VALUE_UTF_8);
 	}
 
-	protected String getPostData() throws B2ApiException {
+	/**
+	 * Convert the stringData and integerData Maps to JSON format, to be included
+	 * in the POST body of the request.
+	 * 
+	 * @return the JSON string of the data
+	 * 
+	 * @throws B2ApiException if there was an error converting the data.
+	 */
+	protected String convertPostData() throws B2ApiException {
 		JSONObject jsonObject = new JSONObject();
 		Iterator<String> iterator = stringData.keySet().iterator();
 
@@ -160,7 +175,7 @@ public class BaseB2Request {
 
 	protected String executePost() throws B2ApiException {
 		CloseableHttpClient closeableHttpClient = HttpClients.createDefault();
-		String postData = getPostData();
+		String postData = convertPostData();
 		HttpPost httpPost = new HttpPost(url);
 
 		setHeaders(httpPost);

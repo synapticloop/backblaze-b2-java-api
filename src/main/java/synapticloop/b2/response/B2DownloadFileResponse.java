@@ -11,7 +11,6 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import synapticloop.b2.exception.B2ApiException;
 
 public class B2DownloadFileResponse extends BaseB2Response {
-	private static final String HEADER_X_BZ_INFO_PREFIX = "X-Bz-Info-";
 	private static final int HEADER_CONTENT_LENGTH = 0;
 	private static final int HEADER_CONTENT_TYPE = 1;
 	private static final int HEADER_X_BZ_FILE_ID = 2;
