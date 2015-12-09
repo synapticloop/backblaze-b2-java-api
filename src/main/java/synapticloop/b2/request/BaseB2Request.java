@@ -121,15 +121,9 @@ public class BaseB2Request {
 		CloseableHttpClient closeableHttpClient = HttpClients.createDefault();
 
 		try {
-			URI uri = new URIBuilder(url).build();
-			LOG.debug("HEAD request to URL '{}'", url);
+			URI uri = getUri();
 
-			Iterator<String> iterator = parameters.keySet().iterator();
-			while (iterator.hasNext()) {
-				String key = (String) iterator.next();
-				// @TODO - this is kind of wasteful - refactor
-				uri = new URIBuilder(uri).addParameter(key, parameters.get(key)).build();
-			}
+			LOG.debug("HEAD request to URL '{}'", uri.toString());
 
 			HttpHead httpHead = new HttpHead(uri);
 			setHeaders(httpHead);
@@ -151,12 +145,15 @@ public class BaseB2Request {
 
 	protected String executeGet() throws B2ApiException {
 		CloseableHttpClient closeableHttpClient = HttpClients.createDefault();
-		HttpGet httpGet = new HttpGet(url);
-		setHeaders(httpGet);
-
-		LOG.debug("GET request to URL '{}'", url);
 
 		try {
+			URI uri = getUri();
+
+			HttpGet httpGet = new HttpGet(uri);
+			setHeaders(httpGet);
+
+			LOG.debug("GET request to URL '{}'", url);
+
 
 			CloseableHttpResponse httpResponse = closeableHttpClient.execute(httpGet);
 			int statusCode = httpResponse.getStatusLine().getStatusCode();
@@ -169,7 +166,7 @@ public class BaseB2Request {
 			} else {
 				return(response);
 			}
-		} catch (IOException ex) {
+		} catch (IOException | URISyntaxException ex) {
 			throw new B2ApiException(ex);
 		}
 	}
@@ -179,15 +176,9 @@ public class BaseB2Request {
 		CloseableHttpClient closeableHttpClient = HttpClients.createDefault();
 
 		try {
-			URI uri = new URIBuilder(url).build();
-			LOG.debug("GET request to URL '{}'", url);
+			URI uri = getUri();
 
-			Iterator<String> iterator = parameters.keySet().iterator();
-			while (iterator.hasNext()) {
-				String key = (String) iterator.next();
-				// @TODO - this is kind of wasteful - refactor
-				uri = new URIBuilder(uri).addParameter(key,parameters.get(key)).build();
-			}
+			LOG.debug("GET request to URL '{}'", uri.toString());
 
 			HttpGet httpGet = new HttpGet(uri);
 			setHeaders(httpGet);
@@ -266,7 +257,18 @@ public class BaseB2Request {
 		}
 	}
 
-	/**
+	private URI getUri() throws URISyntaxException {
+		URIBuilder uriBuilder = new URIBuilder(url);
+
+		Iterator<String> iterator = parameters.keySet().iterator();
+		while (iterator.hasNext()) {
+			String key = (String) iterator.next();
+			uriBuilder.addParameter(key, parameters.get(key));
+		}
+
+		return(uriBuilder.build());
+	}
+		/**
 	 * Set the headers safely, go through the headers Map and add them to the http 
 	 * request.  If they already exist on the http request, it will be ignored.  
 	 * To over-ride what headers are set, this should be done in the constructor 
