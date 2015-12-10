@@ -57,7 +57,8 @@ public class B2ApiException extends Exception {
 
 	/**
 	 * Create a new B2Api Exception with a root cause
-	 * @param cause
+	 * 
+	 * @param cause The root cause of the exception
 	 */
 	public B2ApiException(Throwable cause) {
 		super(cause);

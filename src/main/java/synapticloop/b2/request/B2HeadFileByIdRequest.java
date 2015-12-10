@@ -29,10 +29,11 @@ public class B2HeadFileByIdRequest extends BaseB2Request {
 	}
 
 	/**
-	 * R
+	 * Return the response for the HEAD request 
 	 * 
-	 * @return
-	 * @throws B2ApiException
+	 * @return the download file response - note that this does not contain any body content
+	 * 
+	 * @throws B2ApiException if something went wrong
 	 */
 	public B2DownloadFileResponse getResponse() throws B2ApiException {
 		return(new B2DownloadFileResponse(executeHead()));

@@ -137,8 +137,8 @@ public class B2ApiClient {
 	 * 
 	 * @param fileId the file ID to retrieve the information on
 	 * 
-	 * @return the File Response
-	 * @throws B2ApiException
+	 * @return the File Response 
+	 * @throws B2ApiException if something went wrong
 	 */
 	public B2FileResponse getFileInfo(String fileId) throws B2ApiException {
 		return(new B2GetFileInfoRequest(getB2AuthorizeAccountResponse(), fileId).getResponse());
