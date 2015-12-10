@@ -2,6 +2,25 @@ A Java API for the truly excellent backblaze B2 storage
 
 Usable, however still a work in progress... (YMMV)
 
+# Usage
+
+```
+String b2AccountId = ""; // your b2 account ID
+String b2ApplicationKey = ""; // your b2 application Key
+
+B2ApiClient b2ApiClient = new B2ApiClient(b2AccountId, b2ApplicationKey);
+
+// now create a private bucket
+B2BucketResponse createPrivateBucket = b2ApiClient.createBucket("super-secret-bucket" , BucketType.ALL_PRIVATE);
+
+// or a public one
+B2BucketResponse createPublicBucket = b2ApiClient.createBucket("everyone-has-access" , BucketType.ALL_PUBLIC);
+
+// upload a file
+b2ApiClient.uploadFile(createPrivateBucket.getBucketId(), "myfile.txt", new File("/tmp/temporary-file.txt"));
+```
+
+see [B2ApiClient.java](https://github.com/synapticloop/backblaze-b2-java-api/blob/master/src/main/java/synapticloop/b2/B2ApiClient.java) for a complete list of relatively self-explanatory methods.
 
 # Dependency Management
 

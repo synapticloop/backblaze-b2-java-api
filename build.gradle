@@ -11,7 +11,7 @@ group = 'synapticloop'
 archivesBaseName = 'backblaze-b2-java-api'
 description = """An api for backblaze b2 storage in java"""
 
-version = 'v1.0.0'
+version = 'v1.0.1'
 
 description = """backblaze-b2-java-api"""
 
