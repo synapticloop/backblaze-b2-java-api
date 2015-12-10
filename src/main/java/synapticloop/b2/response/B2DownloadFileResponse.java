@@ -71,6 +71,8 @@ public class B2DownloadFileResponse extends BaseB2Response {
 		for (Header header : allHeaders) {
 			String headerName = header.getName();
 			String headerValue = header.getValue();
+			// we need to lowercase the headers, as they do not match the normal 
+			// camel-case of the input headers
 			if(headerLookup.containsKey(headerName.toLowerCase())) {
 				switch (headerLookup.get(headerName.toLowerCase())) {
 				case HEADER_CONTENT_LENGTH:
