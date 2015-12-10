@@ -37,6 +37,7 @@ public class B2CreateAndDeleteBucketRequestTest {
 
 		B2DeleteBucketRequest b2DeleteBucketRequest = new B2DeleteBucketRequest(b2AuthorizeAccountResponse, bucketId);
 		B2BucketResponse response = b2DeleteBucketRequest.getResponse();
+
 		assertNotNull(response.getBucketId());
 		assertEquals(bucketId, response.getBucketId());
 		assertEquals(bucketName, b2BucketResponse.getBucketName());

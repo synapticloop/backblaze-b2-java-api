@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 
 import synapticloop.b2.exception.B2ApiException;
 import synapticloop.b2.response.B2AuthorizeAccountResponse;
+import synapticloop.b2.util.Helper;
 
 public class BaseB2Request {
 	private static final Logger LOG = LoggerFactory.getLogger(BaseB2Request.class);
@@ -62,6 +63,9 @@ public class BaseB2Request {
 	protected static final int MAX_FILE_COUNT_RETURN = 1000;
 
 	protected String url = null;
+
+	// for headers that __MUST__ not be encoded
+	protected Map<String, String> unencodedHeaders = new HashMap<String, String>();
 	protected Map<String, String> headers = new HashMap<String, String>();
 	protected Map<String, String> parameters = new HashMap<String, String>();
 
@@ -84,39 +88,12 @@ public class BaseB2Request {
 	}
 
 	/**
-	 * Convert the stringData and integerData Maps to JSON format, to be included
-	 * in the POST body of the request.
+	 * Execute an HTTP HEAD request and return the response for further parsing
 	 * 
-	 * @return the JSON string of the data
+	 * @return the response object
 	 * 
-	 * @throws B2ApiException if there was an error converting the data.
+	 * @throws B2ApiException if something went wrong with the call
 	 */
-	protected String convertPostData() throws B2ApiException {
-		JSONObject jsonObject = new JSONObject();
-		Iterator<String> iterator = stringData.keySet().iterator();
-
-		while (iterator.hasNext()) {
-			String key = (String) iterator.next();
-			try {
-				jsonObject.put(key, stringData.get(key));
-			} catch (JSONException ex) {
-				throw new B2ApiException(ex);
-			}
-		}
-
-		iterator = integerData.keySet().iterator();
-		while (iterator.hasNext()) {
-			String key = (String) iterator.next();
-			try {
-				jsonObject.put(key, integerData.get(key));
-			} catch (JSONException ex) {
-				throw new B2ApiException(ex);
-			}
-		}
-
-		return(jsonObject.toString());
-	}
-
 	protected CloseableHttpResponse executeHead() throws B2ApiException {
 		CloseableHttpClient closeableHttpClient = HttpClients.createDefault();
 
@@ -257,21 +234,67 @@ public class BaseB2Request {
 		}
 	}
 
+	/**
+	 * Convert the stringData and integerData Maps to JSON format, to be included
+	 * in the POST body of the request.
+	 * 
+	 * @return the JSON string of the data
+	 * 
+	 * @throws B2ApiException if there was an error converting the data.
+	 */
+	protected String convertPostData() throws B2ApiException {
+		JSONObject jsonObject = new JSONObject();
+		Iterator<String> iterator = stringData.keySet().iterator();
+
+		while (iterator.hasNext()) {
+			String key = (String) iterator.next();
+			try {
+				jsonObject.put(key, Helper.urlEncode(stringData.get(key)));
+			} catch (JSONException ex) {
+				throw new B2ApiException(ex);
+			}
+		}
+
+		iterator = integerData.keySet().iterator();
+		while (iterator.hasNext()) {
+			String key = (String) iterator.next();
+			try {
+				jsonObject.put(key, integerData.get(key));
+			} catch (JSONException ex) {
+				throw new B2ApiException(ex);
+			}
+		}
+
+		return(jsonObject.toString());
+	}
+
+	/**
+	 * Return the URI for this request, which adds any parameters found in the 
+	 * 'parameters' data structure
+	 * 
+	 * @return The URI for this request, with properly encoded parameters
+	 * 
+	 * @throws URISyntaxException If there was an error building the URI
+	 */
 	private URI getUri() throws URISyntaxException {
 		URIBuilder uriBuilder = new URIBuilder(url);
 
 		Iterator<String> iterator = parameters.keySet().iterator();
 		while (iterator.hasNext()) {
 			String key = (String) iterator.next();
-			uriBuilder.addParameter(key, parameters.get(key));
+			uriBuilder.addParameter(key, Helper.urlEncode(parameters.get(key)));
 		}
 
 		return(uriBuilder.build());
 	}
-		/**
+
+	/**
 	 * Set the headers safely, go through the headers Map and add them to the http 
-	 * request.  If they already exist on the http request, it will be ignored.  
+	 * request with properly encode values.  If they already exist on the http 
+	 * request, it will be ignored.
+	 * 
 	 * To over-ride what headers are set, this should be done in the constructor 
+	 * of the base request object.
 	 * 
 	 * @param httpRequestBase The http request to set the headers on
 	 */
@@ -280,8 +303,16 @@ public class BaseB2Request {
 		for (String headerKey : headerKeySet) {
 			if(!httpRequestBase.containsHeader(headerKey)) {
 				LOG.trace("Setting header '" + headerKey + "'.");
-				httpRequestBase.setHeader(headerKey, headers.get(headerKey));
+				httpRequestBase.setHeader(headerKey, Helper.urlEncode(headers.get(headerKey)));
 			}
 		}
+		headerKeySet = unencodedHeaders.keySet();
+		for (String headerKey : headerKeySet) {
+			if(!httpRequestBase.containsHeader(headerKey)) {
+				LOG.trace("Setting unencoded header '" + headerKey + "'.");
+				httpRequestBase.setHeader(headerKey, unencodedHeaders.get(headerKey));
+			}
+		}
+
 	}
 }

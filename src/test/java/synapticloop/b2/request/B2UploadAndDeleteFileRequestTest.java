@@ -65,8 +65,9 @@ public class B2UploadAndDeleteFileRequestTest {
 		String fileId = b2UploadFileResponse.getFileId();
 
 		// try and get the info for the file
-		
 		B2FileResponse b2FileInfoResponse = new B2GetFileInfoRequest(B2TestHelper.getB2AuthorizeAccountResponse(), b2UploadFileResponse.getFileId()).getResponse();
+		assertEquals("world", b2FileInfoResponse.getFileInfo().get("hello"));
+
 		// now we need to delete the file as well to clean up after ourselves
 
 		B2DeleteFileVersionResponse b2DeleteFileVersionResponse = new B2DeleteFileVersionRequest(B2TestHelper.getB2AuthorizeAccountResponse(), fileName, fileId).getResponse();

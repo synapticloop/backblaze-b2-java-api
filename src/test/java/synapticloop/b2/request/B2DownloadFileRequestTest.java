@@ -26,6 +26,9 @@ public class B2DownloadFileRequestTest {
 
 		b2DownloadFileResponse = new B2DownloadFileByIdRequest(B2TestHelper.getB2AuthorizeAccountResponse(), b2FileResponse.getFileId()).getResponse();
 		assertEquals(B2TestHelper.DUMMY_FILE_CONTENT, IOUtils.toString(b2DownloadFileResponse.getContent()));
+
+		B2TestHelper.deleteFile(b2FileResponse.getFileName(), b2FileResponse.getFileId());
+		B2TestHelper.deleteBucket(randomPrivateBucket.getBucketId());
 	}
 
 }

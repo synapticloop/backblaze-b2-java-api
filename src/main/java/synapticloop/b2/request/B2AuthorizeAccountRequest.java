@@ -31,7 +31,7 @@ public class B2AuthorizeAccountRequest extends BaseB2Request {
 	public B2AuthorizeAccountRequest(String accountId, String applicationKey) {
 		super(null);
 		url = B2_AUTHORIZE_ACCOUNT;
-		headers.put(REQUEST_PROPERTY_AUTHORIZATION, "Basic " + Base64.getEncoder().encodeToString((accountId + ":" + applicationKey).getBytes()));
+		unencodedHeaders.put(REQUEST_PROPERTY_AUTHORIZATION, "Basic " + Base64.getEncoder().encodeToString((accountId + ":" + applicationKey).getBytes()));
 	}
 
 	/**

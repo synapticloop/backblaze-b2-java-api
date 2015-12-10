@@ -3,6 +3,7 @@ package synapticloop.b2.request;
 import synapticloop.b2.exception.B2ApiException;
 import synapticloop.b2.response.B2AuthorizeAccountResponse;
 import synapticloop.b2.response.B2DownloadFileResponse;
+import synapticloop.b2.util.Helper;
 
 /**
  * <p>Downloads one file by providing the name of the bucket and the name of the file.</p>
@@ -22,7 +23,7 @@ public class B2DownloadFileByNameRequest extends BaseB2Request {
 
 	public B2DownloadFileByNameRequest(B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String bucketName, String fileName) {
 		super(b2AuthorizeAccountResponse);
-		url = b2AuthorizeAccountResponse.getDownloadUrl() + "/file/" + bucketName + "/" + fileName;
+		url = b2AuthorizeAccountResponse.getDownloadUrl() + "/file/" + Helper.urlEncode(bucketName) + "/" + Helper.urlEncode(fileName);
 	}
 
 	public B2DownloadFileResponse getResponse() throws B2ApiException {

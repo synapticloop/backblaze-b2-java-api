@@ -54,7 +54,7 @@ public class B2UploadFileRequest extends BaseB2Request {
 			Iterator<String> iterator = fileInfo.keySet().iterator();
 			while (iterator.hasNext()) {
 				String key = (String) iterator.next();
-				headers.put(HEADER_X_BZ_INFO_PREFIX + key, fileInfo.get(key));
+				headers.put(HEADER_X_BZ_INFO_PREFIX + Helper.urlEncode(key), Helper.urlEncode(fileInfo.get(key)));
 			}
 		}
 	}

@@ -40,6 +40,7 @@ import synapticloop.b2.response.B2ListFilesResponse;
  * @author synapticloop
  */
 public class B2ApiClient {
+
 	private String accountId = null;
 	private String applicationKey = null;
 

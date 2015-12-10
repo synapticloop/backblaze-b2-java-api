@@ -30,6 +30,9 @@ public class B2HeadFileRequestTest {
 		assertEquals("world", b2DownloadFileResponse.getFileInfo().get("hello"));
 
 		assertNull(b2DownloadFileResponse.getContent());
+
+		B2TestHelper.deleteFile(b2FileResponse.getFileName(), b2FileResponse.getFileId());
+		B2TestHelper.deleteBucket(randomPrivateBucket.getBucketId());
 	}
 
 }

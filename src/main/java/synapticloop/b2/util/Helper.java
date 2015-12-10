@@ -48,12 +48,22 @@ public class Helper {
 		}
 	}
 
-	public static String urlEncode(String s) throws UnsupportedEncodingException {
-		return java.net.URLEncoder.encode(s, "UTF-8");
+	public static String urlEncode(String s) {
+		try {
+			return java.net.URLEncoder.encode(s, "UTF-8");
+		} catch (UnsupportedEncodingException ex) {
+			// highly unlikely
+			return(s);
+		}
 	}
 
-	public static String urlDecode(String s) throws UnsupportedEncodingException {
-		return java.net.URLDecoder.decode(s, "UTF-8");
+	public static String urlDecode(String s) {
+		try {
+			return java.net.URLDecoder.decode(s, "UTF-8");
+		} catch (UnsupportedEncodingException ex) {
+			// highly unlikey
+			return(s);
+		}
 	}
 
 }
