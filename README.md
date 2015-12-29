@@ -1,7 +1,5 @@
 A Java API for the truly excellent backblaze B2 storage
 
-Usable, however still a work in progress... (YMMV)
-
 # Usage
 
 ```
