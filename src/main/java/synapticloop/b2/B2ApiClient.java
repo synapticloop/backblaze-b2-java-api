@@ -388,6 +388,12 @@ public class B2ApiClient {
 		return(new B2HeadFileByIdRequest(getB2AuthorizeAccountResponse(), fileId).getResponse());
 	}
 
+	/**
+	 * Return an authorize account response and cache it, or create a new one
+	 * 
+	 * @return the authorize account response
+	 * @throws B2ApiException if there was an error authenticating
+	 */
 	private synchronized B2AuthorizeAccountResponse getB2AuthorizeAccountResponse() throws B2ApiException {
 		if(null == b2AuthorizeAccountResponse) {
 			b2AuthorizeAccountResponse = new B2AuthorizeAccountRequest(accountId, applicationKey).getResponse();
