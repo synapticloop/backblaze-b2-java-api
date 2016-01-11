@@ -14,6 +14,8 @@ import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
 import synapticloop.b2.exception.B2ApiException;
 
 public class Helper {
+	private static final String UTF_8 = "UTF-8";
+
 	/**
 	 * Calculate and return the sha1 sum of a file
 	 * 
@@ -48,21 +50,38 @@ public class Helper {
 		}
 	}
 
-	public static String urlEncode(String s) {
+	/**
+	 * UTF-8 url encoding wrapper method.  If there was an unsupported encoding 
+	 * exception, return the un-encoded url
+	 * 
+	 * @param url the URL to encode
+	 * 
+	 * @return the encoded URL
+	 */
+	public static String urlEncode(String url) {
 		try {
-			return java.net.URLEncoder.encode(s, "UTF-8");
+			return java.net.URLEncoder.encode(url, UTF_8);
 		} catch (UnsupportedEncodingException ex) {
 			// highly unlikely
-			return(s);
+			return(url);
 		}
 	}
 
-	public static String urlDecode(String s) {
+	/**
+	 * UTF-8 url decoding wrapper method.  If there was an unsupported encoding 
+	 * exception, return the encoded url
+	 * 
+	 * @param url the URL to decode
+	 * 
+	 * @return the decoded URL
+	 */
+
+	public static String urlDecode(String url) {
 		try {
-			return java.net.URLDecoder.decode(s, "UTF-8");
+			return java.net.URLDecoder.decode(url, UTF_8);
 		} catch (UnsupportedEncodingException ex) {
 			// highly unlikey
-			return(s);
+			return(url);
 		}
 	}
 

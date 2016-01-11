@@ -1,7 +1,7 @@
 package synapticloop.b2;
 
 /**
- * The action for an associated file.
+ * The action for an associated file, either 'hide' or 'upload'
  * 
  * @author synapticloop
  */

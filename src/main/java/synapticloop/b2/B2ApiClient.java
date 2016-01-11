@@ -44,7 +44,7 @@ public class B2ApiClient {
 	private String accountId = null;
 	private String applicationKey = null;
 
-	B2AuthorizeAccountResponse b2AuthorizeAccountResponse = null;
+	private B2AuthorizeAccountResponse b2AuthorizeAccountResponse = null;
 
 	/**
 	 * Instantiate a new B2ApiClient object
@@ -225,12 +225,22 @@ public class B2ApiClient {
 		return(new B2UploadFileRequest(getB2AuthorizeAccountResponse(), b2GetUploadUrlResponse, fileName, file));
 	}
 
+	/**
+	 * Delete a version of a file
+	 * 
+	 * @param fileName The name of the file to delete
+	 * @param fileId The version of the file to delete
+	 * 
+	 * @return the deleted file response
+	 * 
+	 * @throws B2ApiException if there was an error deleting the file
+	 */
 	public B2DeleteFileVersionResponse deleteFileVersion(String fileName, String fileId) throws B2ApiException {
 		return(new B2DeleteFileVersionRequest(getB2AuthorizeAccountResponse(), fileName, fileId).getResponse());
 	}
 
 	/**
-	 * Update a busket to be a specified type
+	 * Update a bucket to be a specified type
 	 * 
 	 * @param bucketId the id of the bucket to set
 	 * @param bucketType the type of the bucket
@@ -274,14 +284,46 @@ public class B2ApiClient {
 		return(new B2ListFileNamesRequest(getB2AuthorizeAccountResponse(), bucketId, startFileName, maxFileCount).getResponse());
 	}
 
+	/**
+	 * List the files and versions for a specific bucket
+	 * 
+	 * @param bucketId the id of the bucket to list
+	 * 
+	 * @return the list file response
+	 * 
+	 * @throws B2ApiException if there was an error with the call
+	 */
 	public B2ListFilesResponse listFileVersions(String bucketId) throws B2ApiException {
 		return(new B2ListFileVersionsRequest(getB2AuthorizeAccountResponse(), bucketId).getResponse());
 	}
 
+	/**
+	 * List the file versions in a bucket starting at a specific file name
+	 * 
+	 * @param bucketId the id of the bucket
+	 * @param startFileName the file name to start with
+	 * 
+	 * @return the list file response
+	 * 
+	 * @throws B2ApiException if there was an error with the call
+	 */
 	public B2ListFilesResponse listFileVersions(String bucketId, String startFileName) throws B2ApiException {
 		return(new B2ListFileVersionsRequest(getB2AuthorizeAccountResponse(), bucketId, startFileName, null, null).getResponse());
 	}
 
+	/**
+	 * List the file versions in a bucket starting at a specific file name and file id
+	 * 
+	 * @param bucketId the id of the bucket
+	 * @param startFileName the file name to start with
+	 * @param startFileId the id of the file to start with
+	 * @param maxFileCount the maximum number of files to return (must be less 
+	 *     than or equal to 1000, else an error is thrown)
+	 * 
+	 * @return the list files response
+	 * 
+	 * @throws B2ApiException if there was an error with the call
+	 */
 	public B2ListFilesResponse listFileVersions(String bucketId, String startFileName, String startFileId, Integer maxFileCount) throws B2ApiException {
 		return(new B2ListFileVersionsRequest(getB2AuthorizeAccountResponse(), bucketId, startFileName, startFileId, maxFileCount).getResponse());
 	}
@@ -369,27 +411,83 @@ public class B2ApiClient {
 		return(new B2DownloadFileByNameRequest(getB2AuthorizeAccountResponse(), bucketName, fileName).getResponse());
 	}
 
-	public void downloadFileByIdToFile(String bucketId, String FileId, File file) {
+	public void downloadFileByIdToFile(String bucketId, String fileId, File file) throws B2ApiException {
+		try {
+			FileUtils.copyInputStreamToFile(new B2DownloadFileByIdRequest(getB2AuthorizeAccountResponse(), fileId).getResponse().getContent(), file);
+		} catch (IOException ex) {
+			throw new B2ApiException("Could not download to file", ex);
+		}
 	}
 
-	public byte[] downloadByFileIdToBytes(String bucketId, String fileId) {
-		return(new byte[] {});
+	/**
+	 * Download a file to a byte[]
+	 * 
+	 * Note: This will not return any of the headers that accompanied the download.  
+	 * See downloadFileByName to retrieve the complete response including sha1, 
+	 * content length, content type and all headers.
+	 * 
+	 * @param fileId the id of the file to download
+	 * 
+	 * @return the array of bytes for the file
+	 * 
+	 * @throws B2ApiException if there was an error with the call
+	 */
+	public byte[] downloadByFileIdToBytes(String fileId) throws B2ApiException {
+		try {
+			return(IOUtils.toByteArray(new B2DownloadFileByIdRequest(getB2AuthorizeAccountResponse(), fileId).getResponse().getContent()));
+		} catch (IOException ex) {
+			throw new B2ApiException("Could not download to bytes", ex);
+		}
 	}
 
+	/**
+	 * Download a file to an input stream
+	 * 
+	 * Note: This will not return any of the headers that accompanied the download.  
+	 * See downloadFileByName to retrieve the complete response including sha1, 
+	 * content length, content type and all headers.
+	 * 
+	 * @param fileId the id of the file to download
+	 * 
+	 * @return the input stream for the file
+	 * 
+	 * @throws B2ApiException if there was an error with the call
+	 */
 	public InputStream downloadFileByIdToStream(String fileId) throws B2ApiException {
 		return(new B2DownloadFileByIdRequest(getB2AuthorizeAccountResponse(), fileId).getResponse().getContent());
 	}
 
+	/**
+	 * Download a file 
+	 * 
+	 * @param fileId the id of the file to download
+	 * 
+	 * @return the download file response
+	 * 
+	 * @throws B2ApiException if there was an error with the call
+	 */
 	public B2DownloadFileResponse downloadFileById(String fileId) throws B2ApiException {
 		return(new B2DownloadFileByIdRequest(getB2AuthorizeAccountResponse(), fileId).getResponse());
 	}
+
+	/**
+	 * Perform a HEAD request on a file which will return the information 
+	 * associated with it. 
+	 * 
+	 * @param fileId the id of the file to retrieve the information for
+	 * 
+	 * @return the download file response
+	 * 
+	 * @throws B2ApiException if there was an error with the call
+	 */
 
 	public B2DownloadFileResponse headFileById(String fileId) throws B2ApiException {
 		return(new B2HeadFileByIdRequest(getB2AuthorizeAccountResponse(), fileId).getResponse());
 	}
 
 	/**
-	 * Return an authorize account response and cache it, or create a new one
+	 * return the authorize account response.  This is only done once and is
+	 * cached for further use.
 	 * 
 	 * @return the authorize account response
 	 * @throws B2ApiException if there was an error authenticating

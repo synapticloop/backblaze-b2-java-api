@@ -1,3 +1,5 @@
+<img src="https://travis-ci.org/synapticloop/backblaze-b2-java-api.svg?branch=master" />
+
 A Java API for the truly excellent backblaze B2 storage
 
 # Usage
@@ -67,7 +69,7 @@ And now for the dependency
     <dependency>
       <groupId>synapticloop</groupId>
       <artifactId>backblaze-b2-java-api</artifactId>
-      <version>v1.0.0</version>
+      <version>v1.0.2</version>
       <type>jar</type>
     </dependency>
  
@@ -90,15 +92,15 @@ Repository
 
 and then include the dependency:
 
-    runtime(group: 'synapticloop', name: 'backblaze-b2-java-api', version: 'v1.0.0', ext: 'jar')
+    runtime(group: 'synapticloop', name: 'backblaze-b2-java-api', version: 'v1.0.2', ext: 'jar')
 
-    compile(group: 'synapticloop', name: 'backblaze-b2-java-api', version: 'v1.0.0', ext: 'jar')
+    compile(group: 'synapticloop', name: 'backblaze-b2-java-api', version: 'v1.0.2', ext: 'jar')
  
 or 
 
-    runtime 'synapticloop:backblaze-b2-java-api:v1.0.0'
+    runtime 'synapticloop:backblaze-b2-java-api:v1.0.2'
 
-    compile 'synapticloop:backblaze-b2-java-api:v1.0.0'
+    compile 'synapticloop:backblaze-b2-java-api:v1.0.2'
     
 ## Other
 
@@ -115,7 +117,15 @@ which can be found by searching here: [http://mvnrepository.com/](http://mvnrepo
 
 # Running the Tests
 
-`gradled --info test`
+`gradlew build`
+
+this will output the artefacts into the `build/libs/` directory.
+
+Note that this will also run all of the tests (see notes below)
+
+# Running the Tests
+
+`gradlew --info test`
 
 Which will also print out the logging
 
@@ -133,3 +143,4 @@ export B2_APPLICATION_KEY="your-application-key"
 ```
 
 **WARNING:** These tests make API calls against your account which contribute to your call limits, which may lead to a cost.
+

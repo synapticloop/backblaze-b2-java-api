@@ -1,5 +1,5 @@
 /**
- * This package contains the B2Api Client and enums
+ * This package contains the B2 API Client and enums
  * 
  * @author synapticloop
  *

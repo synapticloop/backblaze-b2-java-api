@@ -108,10 +108,10 @@ public class BaseB2Request {
 			CloseableHttpResponse httpResponse = closeableHttpClient.execute(httpHead);
 			int statusCode = httpResponse.getStatusLine().getStatusCode();
 
-			LOG.debug("Received status code of:{}, for HEAD request to url '{}'", statusCode, uri);
+			LOG.debug("Received status code of: {}, for HEAD request to url '{}'", statusCode, uri);
 
 			if(statusCode != 200) {
-				throw new B2ApiException("Received status code of " + statusCode + " for request.");
+				throw new B2ApiException("Received non 'OK' status code of " + statusCode + " for request.");
 			} else {
 				return(httpResponse);
 			}
@@ -120,6 +120,13 @@ public class BaseB2Request {
 		}
 	}
 
+	/**
+	 * Execute a GET request
+	 * 
+	 * @return The response from the GET request
+	 * 
+	 * @throws B2ApiException if there was an error with the request
+	 */
 	protected String executeGet() throws B2ApiException {
 		CloseableHttpClient closeableHttpClient = HttpClients.createDefault();
 
@@ -136,7 +143,7 @@ public class BaseB2Request {
 			int statusCode = httpResponse.getStatusLine().getStatusCode();
 			String response = EntityUtils.toString(httpResponse.getEntity());
 
-			LOG.debug("Received status code of:{}, for GET request to url '{}'", statusCode, url);
+			LOG.debug("Received status code of: {}, for GET request to url '{}'", statusCode, url);
 
 			if(statusCode != 200) {
 				throw new B2ApiException(response);
@@ -163,10 +170,10 @@ public class BaseB2Request {
 			CloseableHttpResponse httpResponse = closeableHttpClient.execute(httpGet);
 			int statusCode = httpResponse.getStatusLine().getStatusCode();
 
-			LOG.debug("Received status code of:{}, for GET request to url '{}'", statusCode, url);
+			LOG.debug("Received status code of: {}, for GET request to url '{}'", statusCode, url);
 
 			if(statusCode != 200) {
-				throw new B2ApiException("Received status code of " + statusCode + " for request.");
+				throw new B2ApiException("Received non 'OK' status code of " + statusCode + " for request.");
 			} else {
 				return(httpResponse);
 			}
@@ -189,7 +196,7 @@ public class BaseB2Request {
 			CloseableHttpResponse httpResponse = closeableHttpClient.execute(httpPost);
 			int statusCode = httpResponse.getStatusLine().getStatusCode();
 
-			LOG.debug("Received status code of:{}, for POST request to url '{}'", statusCode, url);
+			LOG.debug("Received status code of: {}, for POST request to url '{}'", statusCode, url);
 
 			String response = EntityUtils.toString(httpResponse.getEntity());
 
@@ -222,7 +229,7 @@ public class BaseB2Request {
 			int statusCode = httpResponse.getStatusLine().getStatusCode();
 			String response = EntityUtils.toString(httpResponse.getEntity());
 
-			LOG.debug("Received status code of:{}, for POST request to url '{}'", statusCode, url);
+			LOG.debug("Received status code of: {}, for POST request to url '{}'", statusCode, url);
 
 			if(statusCode != 200) {
 				throw new B2ApiException(response);

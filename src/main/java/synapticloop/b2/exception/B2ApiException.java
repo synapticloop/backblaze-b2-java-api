@@ -98,8 +98,8 @@ public class B2ApiException extends Exception {
 	}
 
 	/**
-	 * If the original message was in valid JSON format, return the 'message' part,
-	 * else the message for the exception.
+	 * If the original message was in valid JSON format, return the 'message' 
+	 * part, else the message for the exception.
 	 * 
 	 * @return the message
 	 */
@@ -108,7 +108,8 @@ public class B2ApiException extends Exception {
 	}
 
 	/**
-	 * Return the original message for the exception.
+	 * Return the original message for the exception, which is a JSON formatted 
+	 * string
 	 * 
 	 * @return the original message text
 	 */
