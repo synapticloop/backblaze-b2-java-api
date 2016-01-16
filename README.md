@@ -69,7 +69,7 @@ And now for the dependency
     <dependency>
       <groupId>synapticloop</groupId>
       <artifactId>backblaze-b2-java-api</artifactId>
-      <version>v1.0.2</version>
+      <version>v1.1.0</version>
       <type>jar</type>
     </dependency>
  
@@ -92,15 +92,15 @@ Repository
 
 and then include the dependency:
 
-    runtime(group: 'synapticloop', name: 'backblaze-b2-java-api', version: 'v1.0.2', ext: 'jar')
+    runtime(group: 'synapticloop', name: 'backblaze-b2-java-api', version: 'v1.1.0', ext: 'jar')
 
-    compile(group: 'synapticloop', name: 'backblaze-b2-java-api', version: 'v1.0.2', ext: 'jar')
+    compile(group: 'synapticloop', name: 'backblaze-b2-java-api', version: 'v1.1.0', ext: 'jar')
  
 or 
 
-    runtime 'synapticloop:backblaze-b2-java-api:v1.0.2'
+    runtime 'synapticloop:backblaze-b2-java-api:v1.1.0'
 
-    compile 'synapticloop:backblaze-b2-java-api:v1.0.2'
+    compile 'synapticloop:backblaze-b2-java-api:v1.1.0'
     
 ## Other
 
