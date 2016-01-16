@@ -10,6 +10,15 @@ public class B2AuthorizeAccountResponse extends BaseB2Response {
 	private String authorizationToken = null;
 	private String downloadUrl = null;
 
+	/**
+	 * Instantiate an authorize account response with the JSON response as a 
+	 * string from the API call.  This response is then parsed into the 
+	 * relevant fields.
+	 * 
+	 * @param response the response (in JSON format)
+	 * 
+	 * @throws B2ApiException if there was an error parsing the response
+	 */
 	public B2AuthorizeAccountResponse(String response) throws B2ApiException {
 		JSONObject jsonObject = getParsedResponse(response);
 
@@ -24,34 +33,26 @@ public class B2AuthorizeAccountResponse extends BaseB2Response {
 	 * 
 	 * @return the account ID
 	 */
-	public String getAccountId() {
-		return this.accountId;
-	}
+	public String getAccountId() { return this.accountId; }
 
 	/**
 	 * The API URL to be used for all subsequent calls to the API
 	 * 
 	 * @return the api url to use for all subsequent calls
 	 */
-	public String getApiUrl() {
-		return this.apiUrl;
-	}
+	public String getApiUrl() { return this.apiUrl; }
 
 	/**
 	 * Return the authorization token to be used for all subsequent calls
 	 * 
 	 * @return the authorization token to be used for all subsequent calls
 	 */
-	public String getAuthorizationToken() {
-		return this.authorizationToken;
-	}
+	public String getAuthorizationToken() { return this.authorizationToken; }
 
 	/**
-	 * Return the url top be used for downloading files
+	 * Return the url to be used for downloading files
 	 * 
 	 * @return the url to be used for downloading files
 	 */
-	public String getDownloadUrl() {
-		return this.downloadUrl;
-	}
+	public String getDownloadUrl() { return this.downloadUrl; }
 }

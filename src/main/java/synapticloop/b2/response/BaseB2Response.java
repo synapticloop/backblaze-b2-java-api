@@ -29,6 +29,15 @@ public abstract class BaseB2Response {
 	protected static final String KEY_UPLOAD_TIMESTAMP = "uploadTimestamp";
 	protected static final String KEY_UPLOAD_URL = "uploadUrl";
 
+	/**
+	 * Parse a string into a JSON object 
+	 * 
+	 * @param data the data to parse to an object
+	 * 
+	 * @return the parsed JSON object
+	 * 
+	 * @throws B2ApiException if there was an error parsing the object
+	 */
 	public static JSONObject getParsedResponse(String data) throws B2ApiException {
 		JSONObject jsonObject = null;
 		try {
