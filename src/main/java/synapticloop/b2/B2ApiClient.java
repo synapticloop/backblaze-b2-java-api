@@ -97,7 +97,7 @@ public class B2ApiClient {
 	/**
 	 * Delete a bucket including all of the files that reside within the bucket.
 	 * 
-	 * <strong>WARNING:</strong< this is a destructive action and will delete 
+	 * <strong>WARNING:</strong> this is a destructive action and will delete 
 	 * everything within the bucket and the bucket itself
 	 * 
 	 * @param bucketId the id of the bucket to delete
