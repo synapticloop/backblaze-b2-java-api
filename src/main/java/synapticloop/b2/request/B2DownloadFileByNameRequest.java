@@ -26,6 +26,11 @@ public class B2DownloadFileByNameRequest extends BaseB2Request {
 		url = b2AuthorizeAccountResponse.getDownloadUrl() + "/file/" + Helper.urlEncode(bucketName) + "/" + Helper.urlEncode(fileName);
 	}
 
+	public B2DownloadFileByNameRequest(B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String bucketName, String fileName, long rangeStart, long rangeEnd) {
+		this(b2AuthorizeAccountResponse, bucketName, fileName);
+		unencodedHeaders.put(KEY_RANGE, "bytes=" + rangeStart + "-" + rangeEnd);
+	}
+
 	public B2DownloadFileResponse getResponse() throws B2ApiException {
 		return(new B2DownloadFileResponse(executeGetWithData()));
 	}

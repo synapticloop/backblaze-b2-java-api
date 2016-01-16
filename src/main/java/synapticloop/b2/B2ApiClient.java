@@ -47,7 +47,9 @@ public class B2ApiClient {
 	private B2AuthorizeAccountResponse b2AuthorizeAccountResponse = null;
 
 	/**
-	 * Instantiate a new B2ApiClient object
+	 * Instantiate a new B2ApiClient object, on first call of any method this 
+	 * will attempt to authorize itself against the B2 API with teh account id
+	 * and the application key.
 	 * 
 	 * @param accountId The account id
 	 * @param applicationKey the application key
@@ -57,8 +59,15 @@ public class B2ApiClient {
 		this.applicationKey = applicationKey;
 	}
 
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	 * 
+	 *   BUCKET RELATED API ACTIONS
+	 * 
+	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
 	/**
-	 * Create a bucket with a specified name and bucket type
+	 * Create a bucket with the specified name and bucket type (either private 
+	 * or public)
 	 * 
 	 * @param bucketName the name of the bucket
 	 * @param bucketType the type of the bucket
@@ -86,9 +95,12 @@ public class B2ApiClient {
 	}
 
 	/**
-	 * Delete a bucket including all of the files that reside within the bucket
+	 * Delete a bucket including all of the files that reside within the bucket.
 	 * 
-	 * @param bucketId the id of the bucker to delete
+	 * <strong>WARNING:</strong< this is a destructive action and will delete 
+	 * everything within the bucket and the bucket itself
+	 * 
+	 * @param bucketId the id of the bucket to delete
 	 * 
 	 * @return the deleted bucket response
 	 * 
@@ -119,6 +131,20 @@ public class B2ApiClient {
 	}
 
 	/**
+	 * Update a bucket to be a specified type
+	 * 
+	 * @param bucketId the id of the bucket to set
+	 * @param bucketType the type of the bucket
+	 * 
+	 * @return the bucket response
+	 * 
+	 * @throws B2ApiException if there was an error updating the bucket
+	 */
+	public B2BucketResponse updateBucket(String bucketId, BucketType bucketType) throws B2ApiException {
+		return(new B2UpdateBucketRequest(getB2AuthorizeAccountResponse(), bucketId, bucketType).getResponse());
+	}
+
+	/**
 	 * List all of the buckets in the account
 	 * 
 	 * @return the list of buckets for the account
@@ -128,6 +154,12 @@ public class B2ApiClient {
 	public List<B2BucketResponse> listBuckets() throws B2ApiException {
 		return(new B2ListBucketsRequest(getB2AuthorizeAccountResponse()).getResponse());
 	}
+
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	 * 
+	 *   FILE INFORMATION API ACTIONS
+	 * 
+	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 	/**
 	 * Retrieve the file information for a particular fileId, this includes all 
@@ -144,6 +176,28 @@ public class B2ApiClient {
 	public B2FileResponse getFileInfo(String fileId) throws B2ApiException {
 		return(new B2GetFileInfoRequest(getB2AuthorizeAccountResponse(), fileId).getResponse());
 	}
+
+	/**
+	 * Perform a HEAD request on a file which will return the information 
+	 * associated with it. 
+	 * 
+	 * @param fileId the id of the file to retrieve the information for
+	 * 
+	 * @return the download file response
+	 * 
+	 * @throws B2ApiException if there was an error with the call
+	 */
+
+	public B2DownloadFileResponse headFileById(String fileId) throws B2ApiException {
+		return(new B2HeadFileByIdRequest(getB2AuthorizeAccountResponse(), fileId).getResponse());
+	}
+
+	
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	 * 
+	 *   FILE UPLOAD API ACTIONS
+	 * 
+	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 	/**
 	 * Upload a file to a bucket
@@ -225,6 +279,12 @@ public class B2ApiClient {
 		return(new B2UploadFileRequest(getB2AuthorizeAccountResponse(), b2GetUploadUrlResponse, fileName, file));
 	}
 
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	 * 
+	 *   DELETE FILE API ACTIONS
+	 * 
+	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
 	/**
 	 * Delete a version of a file
 	 * 
@@ -239,19 +299,11 @@ public class B2ApiClient {
 		return(new B2DeleteFileVersionRequest(getB2AuthorizeAccountResponse(), fileName, fileId).getResponse());
 	}
 
-	/**
-	 * Update a bucket to be a specified type
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 	 * 
-	 * @param bucketId the id of the bucket to set
-	 * @param bucketType the type of the bucket
+	 *   FILE LISTING API ACTIONS
 	 * 
-	 * @return the bucket response
-	 * 
-	 * @throws B2ApiException if there was an error updating the bucket
-	 */
-	public B2BucketResponse updateBucket(String bucketId, BucketType bucketType) throws B2ApiException {
-		return(new B2UpdateBucketRequest(getB2AuthorizeAccountResponse(), bucketId, bucketType).getResponse());
-	}
+	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 	/**
 	 * Return a list of all of the files within a bucket with the specified ID,
@@ -328,6 +380,12 @@ public class B2ApiClient {
 		return(new B2ListFileVersionsRequest(getB2AuthorizeAccountResponse(), bucketId, startFileName, startFileId, maxFileCount).getResponse());
 	}
 
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	 * 
+	 *   DOWNLOAD FILE API ACTIONS
+	 * 
+	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
 	/**
 	 * Download a named file from a named bucket to an output file.  This is a 
 	 * utility method which will automatically write the content to the file.
@@ -345,6 +403,35 @@ public class B2ApiClient {
 	public void downloadFileByNameToFile(String bucketName, String fileName, File file) throws B2ApiException {
 		try {
 			FileUtils.copyInputStreamToFile(new B2DownloadFileByNameRequest(getB2AuthorizeAccountResponse(), bucketName, fileName).getResponse().getContent(), file);
+		} catch (IOException ex) {
+			throw new B2ApiException("Could not download to file", ex);
+		}
+	}
+
+	/**
+	 * Download a range of bytes from a named file from a named bucket to an 
+	 * output file.  This is a utility method which will automatically write 
+	 * the content to the file.  This is a utility method which will 
+	 * automatically return the response stream.  The range starts at 0 
+	 * (zero) and goes up to the end.  Both are inclusive - e.g. a range of 
+	 * 0-5 will return 6 (six) bytes.   If the range values are not correct, 
+	 * the complete file will be downloaded
+	 * 
+	 * Note: This will not return any of the headers that accompanied the download.  
+	 * See downloadFileByName to retrieve the complete response including sha1, 
+	 * content length, content type and all headers.
+	 * 
+	 * @param bucketName The name of the bucket to download the file from
+	 * @param fileName the name of the file to download
+	 * @param file the file to write out the data to
+	 * @param rangeStart the start range (byte) offset for the content (inclusive)
+	 * @param rangeEnd the end range (byte) offset for the content (inclusive)
+	 * 
+	 * @throws B2ApiException if there was an error with the call
+	 */
+	public void downloadFileRangeByNameToFile(String bucketName, String fileName, File file, long rangeStart, long rangeEnd) throws B2ApiException {
+		try {
+			FileUtils.copyInputStreamToFile(new B2DownloadFileByNameRequest(getB2AuthorizeAccountResponse(), bucketName, fileName, rangeStart, rangeEnd).getResponse().getContent(), file);
 		} catch (IOException ex) {
 			throw new B2ApiException("Could not download to file", ex);
 		}
@@ -375,6 +462,35 @@ public class B2ApiClient {
 	}
 
 	/**
+	 * Download a range of bytes from a named file from a named bucket to an 
+	 * byte[].  This is a utility method which will automatically convert the 
+	 * response stream to a byte[].The range starts at 0 (zero) and  goes up 
+	 * to the end.  Both are inclusive - e.g. a range of 0-5 will return 6 
+	 * (six) bytes.   If the range values are not correct, the complete file 
+	 * will be downloaded
+	 * 
+	 * Note: This will not return any of the headers that accompanied the download.  
+	 * See downloadFileByName to retrieve the complete response including sha1, 
+	 * content length, content type and all headers.
+	 * 
+	 * @param bucketName The name of the bucket to download the file from
+	 * @param fileName the name of the file to download
+	 * @param rangeStart the start range (byte) offset for the content (inclusive)
+	 * @param rangeEnd the end range (byte) offset for the content (inclusive)
+	 * 
+	 * @return the array of bytes from the download
+	 * 
+	 * @throws B2ApiException if there was an error with the call
+	 */
+	public byte[] downloadFileRangeByNameToBytes(String bucketName, String fileName, long rangeStart, long rangeEnd) throws B2ApiException {
+		try {
+			return(IOUtils.toByteArray(new B2DownloadFileByNameRequest(getB2AuthorizeAccountResponse(), bucketName, fileName, rangeStart, rangeEnd).getResponse().getContent()));
+		} catch (IOException ex) {
+			throw new B2ApiException("Could not download to bytes", ex);
+		}
+	}
+
+	/**
 	 * Download a named file from a named bucket and return the input stream from
 	 * the HTTP response.  This is a utility method which will automatically return 
 	 * the response stream.
@@ -395,6 +511,31 @@ public class B2ApiClient {
 	}
 
 	/**
+	 * Download a range of bytes from a named file from a named bucket to an 
+	 * input stream from the HTTP response.  This is a utility method which 
+	 * will automatically return the response stream.  The range starts at 0 
+	 * (zero) and goes up to the end.  Both are inclusive - e.g. a range of 
+	 * 0-5 will return 6 (six) bytes.   If the range values are not correct, 
+	 * the complete file will be downloaded
+	 * 
+	 * Note: This will not return any of the headers that accompanied the download.  
+	 * See downloadFileByName to retrieve the complete response including sha1, 
+	 * content length, content type and all headers.
+	 * 
+	 * @param bucketName The name of the bucket to download the file from
+	 * @param fileName the name of the file to download
+	 * @param rangeStart the start range (byte) offset for the content (inclusive)
+	 * @param rangeEnd the end range (byte) offset for the content (inclusive)
+	 * 
+	 * @return the input stream
+	 * 
+	 * @throws B2ApiException if there was an error with the call
+	 */
+	public InputStream downloadFileRangeByNameToStream(String bucketName, String fileName, long rangeStart, long rangeEnd) throws B2ApiException {
+		return(new B2DownloadFileByNameRequest(getB2AuthorizeAccountResponse(), bucketName, fileName).getResponse().getContent());
+	}
+
+	/**
 	 * Download a named file from a named bucket and return the download file 
 	 * response, which includes the headers, the file info and the response
 	 * stream.
@@ -411,12 +552,55 @@ public class B2ApiClient {
 		return(new B2DownloadFileByNameRequest(getB2AuthorizeAccountResponse(), bucketName, fileName).getResponse());
 	}
 
-	public void downloadFileByIdToFile(String bucketId, String fileId, File file) throws B2ApiException {
-		try {
-			FileUtils.copyInputStreamToFile(new B2DownloadFileByIdRequest(getB2AuthorizeAccountResponse(), fileId).getResponse().getContent(), file);
-		} catch (IOException ex) {
-			throw new B2ApiException("Could not download to file", ex);
-		}
+	/**
+	 * Download a range of bytes from named file from a named bucket and return 
+	 * the download file response, which includes the headers, the file info and 
+	 * the response stream.  The range starts at 0 (zero) and  goes up to the 
+	 * end.  Both are inclusive - e.g. a range of 0-5 will return 6 (six) bytes.  
+	 * If the range values are not correct, the complete file will be downloaded
+	 * 
+	 * @param bucketName The name of the bucket to download the file from
+	 * @param fileName the name of the file to download
+	 * @param rangeStart the start range (byte) offset for the content (inclusive)
+	 * @param rangeEnd the end range (byte) offset for the content (inclusive)
+	 * 
+	 * @return the download file response
+	 * 
+	 * @throws B2ApiException if there was an error with the call
+	 */
+	public B2DownloadFileResponse downloadFileRangeByName(String bucketName, String fileName, long rangeStart, long rangeEnd) throws B2ApiException {
+		return(new B2DownloadFileByNameRequest(getB2AuthorizeAccountResponse(), bucketName, fileName, rangeStart, rangeEnd).getResponse());
+	}
+
+	/**
+	 * Download a file 
+	 * 
+	 * @param fileId the id of the file to download
+	 * 
+	 * @return the download file response
+	 * 
+	 * @throws B2ApiException if there was an error with the call
+	 */
+	public B2DownloadFileResponse downloadFileById(String fileId) throws B2ApiException {
+		return(new B2DownloadFileByIdRequest(getB2AuthorizeAccountResponse(), fileId).getResponse());
+	}
+
+	/**
+	 * Download a partial range of file data, the range starts at 0 (zero) and 
+	 * goes up to the end.  Both are inclusive - e.g. a range of 0-5 will return
+	 * 6 (six) bytes.  If the range values are not correct, the 
+	 * complete file will be downloaded
+	 * 
+	 * @param fileId the id of the file to download
+	 * @param rangeStart the start range (byte) offset for the content (inclusive)
+	 * @param rangeEnd the end range (byte) offset for the content (inclusive)
+	 * 
+	 * @return the download file response
+	 * 
+	 * @throws B2ApiException if there was an error with the call
+	 */
+	public B2DownloadFileResponse downloadFileRangeById(String fileId, long rangeStart, long rangeEnd) throws B2ApiException {
+		return(new B2DownloadFileByIdRequest(getB2AuthorizeAccountResponse(), fileId, rangeStart, rangeEnd).getResponse());
 	}
 
 	/**
@@ -432,11 +616,74 @@ public class B2ApiClient {
 	 * 
 	 * @throws B2ApiException if there was an error with the call
 	 */
-	public byte[] downloadByFileIdToBytes(String fileId) throws B2ApiException {
+	public byte[] downloadFileByIdToBytes(String fileId) throws B2ApiException {
 		try {
 			return(IOUtils.toByteArray(new B2DownloadFileByIdRequest(getB2AuthorizeAccountResponse(), fileId).getResponse().getContent()));
 		} catch (IOException ex) {
 			throw new B2ApiException("Could not download to bytes", ex);
+		}
+	}
+
+	/**
+	 * Download a partial range of file data to a byte[], the range starts at 0 
+	 * (zero) and goes up to the end.  Both are inclusive - e.g. a range of 0-5 
+	 * will return 6 (six) bytes.  If the range values are not correct, the 
+	 * complete file will be downloaded
+	 * 
+	 * Note: This will not return any of the headers that accompanied the download.  
+	 * See downloadFileByName to retrieve the complete response including sha1, 
+	 * content length, content type and all headers.  
+	 * 
+	 * @param fileId the id of the file to download
+	 * @param rangeStart the start range (byte) offset for the content (inclusive)
+	 * @param rangeEnd the end range (byte) offset for the content (inclusive)
+	 * 
+	 * @return the array of bytes for the file
+	 * 
+	 * @throws B2ApiException if there was an error with the call
+	 */
+	public byte[] downloadFileRangeByIdToBytes(String fileId, long rangeStart, long rangeEnd) throws B2ApiException {
+		try {
+			return(IOUtils.toByteArray(new B2DownloadFileByIdRequest(getB2AuthorizeAccountResponse(), fileId, rangeStart, rangeEnd).getResponse().getContent()));
+		} catch (IOException ex) {
+			throw new B2ApiException("Could not download to bytes", ex);
+		}
+	}
+
+	/**
+	 * Download the file to a local file
+	 * 
+	 * @param fileId The ID of the file to download
+	 * @param file The file to download to 
+	 * 
+	 * @throws B2ApiException if there was an error downloading the file
+	 */
+	public void downloadFileByIdToFile(String fileId, File file) throws B2ApiException {
+		try {
+			FileUtils.copyInputStreamToFile(new B2DownloadFileByIdRequest(getB2AuthorizeAccountResponse(), fileId).getResponse().getContent(), file);
+		} catch (IOException ex) {
+			throw new B2ApiException("Could not download to file", ex);
+		}
+	}
+
+	/**
+	 * Download a partial range of file data to a local file, the range starts 
+	 * at 0 (zero) and goes up to the end.  Both are inclusive - e.g. a range of 
+	 * 0-5 will return 6 (six) bytes.  If the range values are not correct, the 
+	 * complete file will be downloaded
+	 * 
+	 * @param fileId The ID of the file to download
+	 * @param file The file to download to 
+	 * @param rangeStart the start range (byte) offset for the content (inclusive)
+	 * @param rangeEnd the end range (byte) offset for the content (inclusive)
+	 * 
+	 * @throws B2ApiException if there was an error downloading the file
+	 */
+	public void downloadFileRangeByIdToFile(String fileId, File file, long rangeStart, long rangeEnd) throws B2ApiException {
+		try {
+			FileUtils.copyInputStreamToFile(new B2DownloadFileByIdRequest(getB2AuthorizeAccountResponse(), fileId, rangeStart, rangeEnd).getResponse().getContent(), file);
+		} catch (IOException ex) {
+			throw new B2ApiException("Could not download to file", ex);
 		}
 	}
 
@@ -458,31 +705,25 @@ public class B2ApiClient {
 	}
 
 	/**
-	 * Download a file 
+	 * Download a partial range of file data to an input stream, the range starts 
+	 * at 0 (zero) and goes up to the end.  Both are inclusive - e.g. a range of 
+	 * 0-5 will return 6 (six) bytes.  If the range values are not correct, the 
+	 * complete file will be downloaded
+	 * 
+	 * Note: This will not return any of the headers that accompanied the download.  
+	 * See downloadFileByName to retrieve the complete response including sha1, 
+	 * content length, content type and all headers.
 	 * 
 	 * @param fileId the id of the file to download
+	 * @param rangeStart the start range (byte) offset for the content (inclusive)
+	 * @param rangeEnd the end range (byte) offset for the content (inclusive)
 	 * 
-	 * @return the download file response
-	 * 
-	 * @throws B2ApiException if there was an error with the call
-	 */
-	public B2DownloadFileResponse downloadFileById(String fileId) throws B2ApiException {
-		return(new B2DownloadFileByIdRequest(getB2AuthorizeAccountResponse(), fileId).getResponse());
-	}
-
-	/**
-	 * Perform a HEAD request on a file which will return the information 
-	 * associated with it. 
-	 * 
-	 * @param fileId the id of the file to retrieve the information for
-	 * 
-	 * @return the download file response
+	 * @return the input stream for the file
 	 * 
 	 * @throws B2ApiException if there was an error with the call
 	 */
-
-	public B2DownloadFileResponse headFileById(String fileId) throws B2ApiException {
-		return(new B2HeadFileByIdRequest(getB2AuthorizeAccountResponse(), fileId).getResponse());
+	public InputStream downloadFileRangeByIdToStream(String fileId, long rangeStart, long rangeEnd) throws B2ApiException {
+		return(new B2DownloadFileByIdRequest(getB2AuthorizeAccountResponse(), fileId, rangeStart, rangeEnd).getResponse().getContent());
 	}
 
 	/**
