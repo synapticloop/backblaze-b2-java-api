@@ -13,6 +13,15 @@ public class B2ListFilesResponse extends BaseB2Response {
 	private String nextFileName = null;
 	private String nextFileId = null;
 
+	/**
+	 * Instantiate a list files response with the JSON response as a 
+	 * string from the API call.  This response is then parsed into the 
+	 * relevant fields.
+	 * 
+	 * @param response the response (in JSON format)
+	 * 
+	 * @throws B2ApiException if there was an error parsing the response
+	 */
 	public B2ListFilesResponse(String string) throws B2ApiException {
 		JSONObject jsonObject = getParsedResponse(string);
 
@@ -27,7 +36,26 @@ public class B2ListFilesResponse extends BaseB2Response {
 		}
 	}
 
+	/**
+	 * get the next file name that is the next result to be returned after this 
+	 * result set - or null if there are no more files
+	 * 
+	 * @return the next file name to start the next iteration (or null if no next file)
+	 */
 	public String getNextFileName() { return this.nextFileName; }
+
+	/**
+	 * get the next file id that is the next result to be returned after this 
+	 * result set - or null if there are no more files
+	 * 
+	 * @return the next file id to start the next iteration (or null if no next file id)
+	 */
 	public String getNextFileId() { return this.nextFileId; }
+
+	/**
+	 * Return the list of files include file info
+	 * 
+	 * @return the list of files for this request
+	 */
 	public List<B2FileInfoResponse> getFiles() { return this.files; }
 }

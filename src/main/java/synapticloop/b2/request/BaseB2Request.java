@@ -208,7 +208,7 @@ public class BaseB2Request {
 
 		setHeaders(httpPost);
 
-		LOGGER.debug("POST request to URL '{}', with data of '{}'", url, postData);
+		LOGGER.debug("POST request to URL '{}', with data of '{}'", url, obfuscateData(postData));
 
 		try {
 			httpPost.setEntity(new StringEntity(postData));
@@ -351,6 +351,17 @@ public class BaseB2Request {
 				httpRequestBase.setHeader(headerKey, unencodedHeaders.get(headerKey));
 			}
 		}
+	}
 
+	/**
+	 * Obfuscate the data by removing the accountId and replacing it with the
+	 * string "[redacted]"
+	 * 
+	 * @param data the data to obfuscate
+	 * 
+	 * @return the obfuscated data
+	 */
+	private String obfuscateData(String data) {
+		return(data.replaceAll("\"accountId\":\".*\"", "\"accountId\":\"[redacted]\""));
 	}
 }

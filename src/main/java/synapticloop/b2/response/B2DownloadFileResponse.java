@@ -125,9 +125,7 @@ public class B2DownloadFileResponse extends BaseB2Response {
 	 * 
 	 * @return the downloaded file
 	 */
-	public InputStream getContent() {
-		return this.content;
-	}
+	public InputStream getContent() { return this.content; }
 
 	/**
 	 * Get the content length of the downloaded file

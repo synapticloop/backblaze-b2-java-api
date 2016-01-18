@@ -26,19 +26,11 @@ public class B2HideFileResponse extends BaseB2Response {
 		this.size = jsonObject.optLong(KEY_SIZE);
 	}
 
-	public String getFileId() {
-		return this.fileId;
-	}
+	public String getFileId() { return this.fileId; }
 
-	public String getFileName() {
-		return this.fileName;
-	}
+	public String getFileName() { return this.fileName; }
 
-	public Action getAction() {
-		return this.action;
-	}
+	public Action getAction() { return this.action; }
 
-	public long getSize() {
-		return this.size;
-	}
+	public long getSize() { return this.size; }
 }
