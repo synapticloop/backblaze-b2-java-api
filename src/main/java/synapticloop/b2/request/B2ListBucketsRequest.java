@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import synapticloop.b2.exception.B2ApiException;
 import synapticloop.b2.response.B2AuthorizeAccountResponse;
@@ -23,6 +25,7 @@ import synapticloop.b2.response.BaseB2Response;
  */
 
 public class B2ListBucketsRequest extends BaseB2Request {
+	private static final Logger LOGGER = LoggerFactory.getLogger(B2ListBucketsRequest.class);
 	private static final String B2_LIST_BUCKETS = BASE_API_VERSION + "b2_list_buckets";
 
 	public B2ListBucketsRequest(B2AuthorizeAccountResponse b2AuthorizeAccountResponse) {
@@ -35,7 +38,7 @@ public class B2ListBucketsRequest extends BaseB2Request {
 	public List<B2BucketResponse> getResponse() throws B2ApiException {
 		List<B2BucketResponse> responses = new ArrayList<B2BucketResponse>();
 
-		JSONObject jsonObject = BaseB2Response.getParsedResponse(executePost());
+		JSONObject jsonObject = BaseB2Response.getParsedResponse(executePost(LOGGER));
 
 		JSONArray optJSONArray = jsonObject.optJSONArray("buckets");
 		for(int i = 0; i < optJSONArray.length(); i++) {

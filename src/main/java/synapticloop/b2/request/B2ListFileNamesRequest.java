@@ -1,5 +1,8 @@
 package synapticloop.b2.request;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import synapticloop.b2.exception.B2ApiException;
 import synapticloop.b2.response.B2AuthorizeAccountResponse;
 import synapticloop.b2.response.B2ListFilesResponse;
@@ -20,6 +23,7 @@ import synapticloop.b2.response.B2ListFilesResponse;
  */
 
 public class B2ListFileNamesRequest extends BaseB2Request {
+	private static final Logger LOGGER = LoggerFactory.getLogger(B2ListFileNamesRequest.class);
 	private static final String B2_LIST_FILE_NAMES = BASE_API_VERSION + "b2_list_file_versions";
 
 	private Integer maxFileCount = 100;
@@ -50,6 +54,6 @@ public class B2ListFileNamesRequest extends BaseB2Request {
 			throw new B2ApiException("Maximum return file count is " + MAX_FILE_COUNT_RETURN);
 		}
 
-		return(new B2ListFilesResponse(executePost()));
+		return(new B2ListFilesResponse(executePost(LOGGER)));
 	}
 }

@@ -1,5 +1,8 @@
 package synapticloop.b2.request;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import synapticloop.b2.exception.B2ApiException;
 import synapticloop.b2.response.B2AuthorizeAccountResponse;
 import synapticloop.b2.response.B2FileResponse;
@@ -16,6 +19,7 @@ import synapticloop.b2.response.B2FileResponse;
  */
 
 public class B2GetFileInfoRequest extends BaseB2Request {
+	private static final Logger LOGGER = LoggerFactory.getLogger(B2GetFileInfoRequest.class);
 	private static final String B2_GET_FILE_INFO = BASE_API_VERSION + "b2_get_file_info";
 
 	/**
@@ -39,6 +43,6 @@ public class B2GetFileInfoRequest extends BaseB2Request {
 	 * @throws B2ApiException if there was an error with the call
 	 */
 	public B2FileResponse getResponse() throws B2ApiException {
-		return(new B2FileResponse(executePost()));
+		return(new B2FileResponse(executePost(LOGGER)));
 	}
 }

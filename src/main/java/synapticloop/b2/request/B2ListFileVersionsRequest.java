@@ -1,5 +1,8 @@
 package synapticloop.b2.request;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import synapticloop.b2.exception.B2ApiException;
 import synapticloop.b2.response.B2AuthorizeAccountResponse;
 import synapticloop.b2.response.B2ListFilesResponse;
@@ -16,6 +19,7 @@ import synapticloop.b2.response.B2ListFilesResponse;
  */
 
 public class B2ListFileVersionsRequest extends BaseB2Request {
+	private static final Logger LOGGER = LoggerFactory.getLogger(B2ListFileVersionsRequest.class);
 	private static final String B2_LIST_FILE_VERSIONS = BASE_API_VERSION + "b2_list_file_versions";
 
 	private int maxFileCount = 100;
@@ -62,6 +66,6 @@ public class B2ListFileVersionsRequest extends BaseB2Request {
 			throw new B2ApiException("You __MUST__ include a '" + KEY_START_FILE_NAME + "', if you are also include a '" + KEY_START_FILE_ID + "'.");
 		}
 
-		return(new B2ListFilesResponse(executePost()));
+		return(new B2ListFilesResponse(executePost(LOGGER)));
 	}
 }

@@ -1,10 +1,14 @@
 package synapticloop.b2.response;
 
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import synapticloop.b2.exception.B2ApiException;
 
 public class B2BucketResponse extends BaseB2Response {
+	private static final Logger LOGGER = LoggerFactory.getLogger(B2BucketResponse.class);
+
 	private String bucketId = null;
 	private String accountId = null;
 	private String bucketName = null;
@@ -19,8 +23,8 @@ public class B2BucketResponse extends BaseB2Response {
 	 * @throws B2ApiException if there was an error parsing the response
 	 */
 
-	public B2BucketResponse(String data) throws B2ApiException {
-		this(getParsedResponse(data));
+	public B2BucketResponse(String response) throws B2ApiException {
+		this(getParsedResponse(response));
 	}
 
 	/**
@@ -31,9 +35,18 @@ public class B2BucketResponse extends BaseB2Response {
 	 */
 	public B2BucketResponse(JSONObject jsonObject) {
 		this.bucketId = jsonObject.optString(KEY_BUCKET_ID);
+		jsonObject.remove(KEY_BUCKET_ID);
+
 		this.accountId = jsonObject.optString(KEY_ACCOUNT_ID);
+		jsonObject.remove(KEY_ACCOUNT_ID);
+
 		this.bucketName = jsonObject.optString(KEY_BUCKET_NAME);
+		jsonObject.remove(KEY_BUCKET_NAME);
+
 		this.bucketType = jsonObject.optString(KEY_BUCKET_TYPE);
+		jsonObject.remove(KEY_BUCKET_TYPE);
+
+		warnOnMissedKeys(LOGGER, jsonObject);
 	}
 
 	/**

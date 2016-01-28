@@ -1,10 +1,14 @@
 package synapticloop.b2.response;
 
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import synapticloop.b2.exception.B2ApiException;
 
 public class B2AuthorizeAccountResponse extends BaseB2Response {
+	private static final Logger LOGGER = LoggerFactory.getLogger(B2AuthorizeAccountResponse.class);
+
 	private String accountId = null;
 	private String apiUrl = null;
 	private String authorizationToken = null;
@@ -23,9 +27,18 @@ public class B2AuthorizeAccountResponse extends BaseB2Response {
 		JSONObject jsonObject = getParsedResponse(response);
 
 		this.accountId = jsonObject.optString(KEY_ACCOUNT_ID);
+		jsonObject.remove(KEY_ACCOUNT_ID);
+
 		this.apiUrl = jsonObject.optString(KEY_API_URL);
+		jsonObject.remove(KEY_API_URL);
+
 		this.authorizationToken = jsonObject.optString(KEY_AUTHORIZATION_TOKEN);
+		jsonObject.remove(KEY_AUTHORIZATION_TOKEN);
+
 		this.downloadUrl = jsonObject.optString(KEY_DOWNLOAD_URL);
+		jsonObject.remove(KEY_DOWNLOAD_URL);
+
+		warnOnMissedKeys(LOGGER, jsonObject);
 	}
 
 	/**

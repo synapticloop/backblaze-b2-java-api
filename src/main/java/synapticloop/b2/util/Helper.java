@@ -23,7 +23,9 @@ public class Helper {
 	 * 
 	 * @return the sha1 of the file
 	 * 
-	 * @throws B2ApiException if something went wrong with the calculation
+	 * @throws B2ApiException if something went wrong with the calculation, 
+	 *   either through a no such algorithm exception (unlikely) or an IO
+	 *   exception with the reading of the file
 	 */
 	public static String calculateSha1(File file) throws B2ApiException {
 

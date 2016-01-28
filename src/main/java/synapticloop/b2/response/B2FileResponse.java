@@ -5,10 +5,14 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import synapticloop.b2.exception.B2ApiException;
 
 public class B2FileResponse extends BaseB2Response {
+	private static final Logger LOGGER = LoggerFactory.getLogger(B2FileResponse.class);
+
 	private String fileId = null;
 	private String fileName = null;
 	private String accountId = null;
@@ -23,12 +27,26 @@ public class B2FileResponse extends BaseB2Response {
 		JSONObject jsonObject = getParsedResponse(response);
 
 		this.fileId = jsonObject.optString(KEY_FILE_ID);
+		jsonObject.remove(KEY_FILE_ID);
+
 		this.fileName = jsonObject.optString(KEY_FILE_NAME);
+		jsonObject.remove(KEY_FILE_NAME);
+
 		this.accountId = jsonObject.optString(KEY_ACCOUNT_ID);
+		jsonObject.remove(KEY_ACCOUNT_ID);
+
 		this.bucketId = jsonObject.optString(KEY_BUCKET_ID);
+		jsonObject.remove(KEY_BUCKET_ID);
+
 		this.contentLength = jsonObject.optLong(KEY_CONTENT_LENGTH);
+		jsonObject.remove(KEY_CONTENT_LENGTH);
+
 		this.contentSha1 = jsonObject.optString(KEY_CONTENT_SHA1);
+		jsonObject.remove(KEY_CONTENT_SHA1);
+
 		this.contentType = jsonObject.optString(KEY_CONTENT_TYPE);
+		jsonObject.remove(KEY_CONTENT_TYPE);
+
 
 		JSONObject fileInfoObject = jsonObject.optJSONObject(KEY_FILE_INFO);
 		if(null != fileInfoObject) {
@@ -38,6 +56,10 @@ public class B2FileResponse extends BaseB2Response {
 				fileInfo.put(key, fileInfoObject.opt(key));
 			}
 		}
+		jsonObject.remove(KEY_FILE_INFO);
+
+		warnOnMissedKeys(LOGGER, jsonObject);
+
 	}
 
 	public String getFileId() { return this.fileId; }

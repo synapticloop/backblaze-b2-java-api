@@ -1,5 +1,8 @@
 package synapticloop.b2.request;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import synapticloop.b2.BucketType;
 import synapticloop.b2.exception.B2ApiException;
 import synapticloop.b2.response.B2AuthorizeAccountResponse;
@@ -19,7 +22,7 @@ import synapticloop.b2.response.B2BucketResponse;
  */
 
 public class B2UpdateBucketRequest extends BaseB2Request {
-
+	private static final Logger LOGGER = LoggerFactory.getLogger(B2UpdateBucketRequest.class);
 	private static final String B2_UPDATE_BUCKET = BASE_API_VERSION + "b2_update_bucket";
 
 	public B2UpdateBucketRequest(B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String bucketId, BucketType bucketType) {
@@ -33,6 +36,6 @@ public class B2UpdateBucketRequest extends BaseB2Request {
 	}
 
 	public B2BucketResponse getResponse() throws B2ApiException {
-		return(new B2BucketResponse(executePost()));
+		return(new B2BucketResponse(executePost(LOGGER)));
 	}
 }

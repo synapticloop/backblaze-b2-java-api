@@ -3,6 +3,9 @@ package synapticloop.b2.request;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import synapticloop.b2.exception.B2ApiException;
 import synapticloop.b2.response.B2AuthorizeAccountResponse;
 import synapticloop.b2.response.B2GetUploadUrlResponse;
@@ -22,6 +25,7 @@ import synapticloop.b2.response.B2GetUploadUrlResponse;
  */
 
 public class B2GetUploadUrlRequest extends BaseB2Request {
+	private static final Logger LOGGER = LoggerFactory.getLogger(B2GetUploadUrlRequest.class);
 	private static final String B2_GET_UPLOAD_URL = BASE_API_VERSION + "b2_get_upload_url";
 
 	public B2GetUploadUrlRequest(B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String bucketId) {
@@ -47,6 +51,6 @@ public class B2GetUploadUrlRequest extends BaseB2Request {
 	}
 
 	public B2GetUploadUrlResponse getResponse() throws B2ApiException {
-		return(new B2GetUploadUrlResponse(executePost()));
+		return(new B2GetUploadUrlResponse(executePost(LOGGER)));
 	}
 }

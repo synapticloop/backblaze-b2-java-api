@@ -23,14 +23,12 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import synapticloop.b2.exception.B2ApiException;
 import synapticloop.b2.response.B2AuthorizeAccountResponse;
 import synapticloop.b2.util.Helper;
 
 public class BaseB2Request {
-	private static final Logger LOGGER = LoggerFactory.getLogger(BaseB2Request.class);
 
 	protected static final String BASE_API_HOST = "https://api.backblaze.com";
 	protected static final String BASE_API_VERSION = "/b2api/v1/";
@@ -67,10 +65,13 @@ public class BaseB2Request {
 
 	// for headers that __MUST__ not be encoded
 	protected Map<String, String> unencodedHeaders = new HashMap<String, String>();
+	// for headers that will be encoded
 	protected Map<String, String> headers = new HashMap<String, String>();
+	// for parameters - either GET or POST
 	protected Map<String, String> parameters = new HashMap<String, String>();
-
+	// String based data that is added to the JSON object as Strings
 	protected Map<String, String> stringData = new HashMap<String, String>();
+	// integer based data that is added to the JSON object as Integers
 	protected Map<String, Integer> integerData = new HashMap<String, Integer>();
 
 	/**
@@ -91,11 +92,13 @@ public class BaseB2Request {
 	/**
 	 * Execute an HTTP HEAD request and return the response for further parsing
 	 * 
+	 * @param LOGGER the logger to use for messages
+	 * 
 	 * @return the response object
 	 * 
 	 * @throws B2ApiException if something went wrong with the call
 	 */
-	protected CloseableHttpResponse executeHead() throws B2ApiException {
+	protected CloseableHttpResponse executeHead(Logger LOGGER) throws B2ApiException {
 		CloseableHttpClient closeableHttpClient = HttpClients.createDefault();
 
 		try {
@@ -104,12 +107,12 @@ public class BaseB2Request {
 			LOGGER.debug("HEAD request to URL '{}'", uri.toString());
 
 			HttpHead httpHead = new HttpHead(uri);
-			setHeaders(httpHead);
+			setHeaders(LOGGER, httpHead);
 
 			CloseableHttpResponse httpResponse = closeableHttpClient.execute(httpHead);
 			int statusCode = httpResponse.getStatusLine().getStatusCode();
 
-			LOGGER.debug("Received status code of: {}, for HEAD request to url '{}'", statusCode, uri);
+			LOGGER.debug("Received status code of: {} for HEAD request to url '{}'", statusCode, uri);
 
 			if(statusCode != 200) {
 				throw new B2ApiException("Received non 'OK' status code of " + statusCode + " for request.");
@@ -124,27 +127,30 @@ public class BaseB2Request {
 	/**
 	 * Execute a GET request, returning the string representation of the response
 	 * 
+	 * @param LOGGER the logger to use for messages
+	 * 
 	 * @return The response from the GET request
 	 * 
 	 * @throws B2ApiException if there was an error with the request
 	 */
-	protected String executeGet() throws B2ApiException {
+	protected String executeGet(Logger LOGGER) throws B2ApiException {
 		CloseableHttpClient closeableHttpClient = HttpClients.createDefault();
 
+		CloseableHttpResponse httpResponse = null;
 		try {
 			URI uri = getUri();
 
 			HttpGet httpGet = new HttpGet(uri);
-			setHeaders(httpGet);
+			setHeaders(LOGGER, httpGet);
 
 			LOGGER.debug("GET request to URL '{}'", url);
 
 
-			CloseableHttpResponse httpResponse = closeableHttpClient.execute(httpGet);
+			httpResponse = closeableHttpClient.execute(httpGet);
 			int statusCode = httpResponse.getStatusLine().getStatusCode();
 			String response = EntityUtils.toString(httpResponse.getEntity());
 
-			LOGGER.debug("Received status code of: {}, for GET request to url '{}'", statusCode, url);
+			LOGGER.debug("Received status code of: {} for GET request to url '{}'", statusCode, url);
 
 			// you will either get an OK or a partial content
 			if(statusCode != 200 && statusCode != 206) {
@@ -154,6 +160,10 @@ public class BaseB2Request {
 			}
 		} catch (IOException | URISyntaxException ex) {
 			throw new B2ApiException(ex);
+		} finally {
+			if(null != httpResponse) {
+				try { httpResponse.close(); } catch (IOException ex) { /* do nothing */ }
+			}
 		}
 	}
 
@@ -161,12 +171,14 @@ public class BaseB2Request {
 	/**
 	 * Execute a GET request, returning the data stream from the response.
 	 * 
+	 * @param LOGGER the logger to use for messages
+	 * 
 	 * @return the response from the get request
 	 * 
 	 * @throws B2ApiException if there was an error with the call, most notably
 	 *     a non OK status code (i.e. not 200)
 	 */
-	protected CloseableHttpResponse executeGetWithData() throws B2ApiException {
+	protected CloseableHttpResponse executeGetWithData(Logger LOGGER) throws B2ApiException {
 		CloseableHttpClient closeableHttpClient = HttpClients.createDefault();
 
 		try {
@@ -175,12 +187,12 @@ public class BaseB2Request {
 			LOGGER.debug("GET request to URL '{}'", uri.toString());
 
 			HttpGet httpGet = new HttpGet(uri);
-			setHeaders(httpGet);
+			setHeaders(LOGGER, httpGet);
 
 			CloseableHttpResponse httpResponse = closeableHttpClient.execute(httpGet);
 			int statusCode = httpResponse.getStatusLine().getStatusCode();
 
-			LOGGER.debug("Received status code of: {}, for GET request to url '{}'", statusCode, url);
+			LOGGER.debug("Received status code of: {} for GET request to url '{}'", statusCode, url);
 
 			// you will either get an OK or a partial content
 			if(statusCode != 200 && statusCode != 206) {
@@ -196,17 +208,19 @@ public class BaseB2Request {
 	/**
 	 * Execute a POST request returning the response data as a String
 	 * 
+	 * @param LOGGER the logger to use for messages
+	 * 
 	 * @return the response data as a string
 	 * 
 	 * @throws B2ApiException if there was an error with the call, most notably
 	 *     a non OK status code (i.e. not 200)
 	 */
-	protected String executePost() throws B2ApiException {
+	protected String executePost(Logger LOGGER) throws B2ApiException {
 		CloseableHttpClient closeableHttpClient = HttpClients.createDefault();
 		String postData = convertPostData();
 		HttpPost httpPost = new HttpPost(url);
 
-		setHeaders(httpPost);
+		setHeaders(LOGGER, httpPost);
 
 		LOGGER.debug("POST request to URL '{}', with data of '{}'", url, obfuscateData(postData));
 
@@ -215,7 +229,7 @@ public class BaseB2Request {
 			CloseableHttpResponse httpResponse = closeableHttpClient.execute(httpPost);
 			int statusCode = httpResponse.getStatusLine().getStatusCode();
 
-			LOGGER.debug("Received status code of: {}, for POST request to url '{}'", statusCode, url);
+			LOGGER.debug("Received status code of: {} for POST request to url '{}'", statusCode, url);
 
 			String response = EntityUtils.toString(httpResponse.getEntity());
 
@@ -237,6 +251,8 @@ public class BaseB2Request {
 	/**
 	 * Execute a POST request with the contents of a file.
 	 * 
+	 * @param LOGGER the logger to use for messages
+	 * 
 	 * @param file the file to post
 	 * 
 	 * @return the string representation of the response
@@ -244,13 +260,13 @@ public class BaseB2Request {
 	 * @throws B2ApiException if there was an error with the call, most notably
 	 *     a non OK status code (i.e. not 200)
 	 */
-	protected String executePost(File file) throws B2ApiException {
+	protected String executePost(Logger LOGGER, File file) throws B2ApiException {
 		CloseableHttpClient closeableHttpClient = HttpClients.createDefault();
 		HttpPost httpPost = new HttpPost(url);
 
-		setHeaders(httpPost);
+		setHeaders(LOGGER, httpPost);
 
-		LOGGER.debug("POST request to URL '{}', with file", url);
+		LOGGER.debug("POST request to URL '{}', with contents of file: '{}'", url, file.getAbsolutePath());
 
 		try {
 			httpPost.setEntity(new FileEntity(file));
@@ -258,7 +274,7 @@ public class BaseB2Request {
 			int statusCode = httpResponse.getStatusLine().getStatusCode();
 			String response = EntityUtils.toString(httpResponse.getEntity());
 
-			LOGGER.debug("Received status code of: {}, for POST request to url '{}'", statusCode, url);
+			LOGGER.debug("Received status code of: {} for POST request to url '{}'", statusCode, url);
 
 			if(statusCode != 200) {
 				throw new B2ApiException(response);
@@ -333,13 +349,14 @@ public class BaseB2Request {
 	 * To over-ride what headers are set, this should be done in the constructor 
 	 * of the base request object.
 	 * 
+	 * @param LOGGER the logger to use for messages
 	 * @param httpRequestBase The http request to set the headers on
 	 */
-	private void setHeaders(HttpRequestBase httpRequestBase) {
+	private void setHeaders(Logger LOGGER, HttpRequestBase httpRequestBase) {
 		Set<String> headerKeySet = headers.keySet();
 		for (String headerKey : headerKeySet) {
 			if(!httpRequestBase.containsHeader(headerKey)) {
-				LOGGER.trace("Setting header (encoded) '" + headerKey + "'.");
+				LOGGER.trace("Setting header (encoded) '{}'.", headerKey);
 				httpRequestBase.setHeader(headerKey, Helper.urlEncode(headers.get(headerKey)));
 			}
 		}
@@ -347,7 +364,7 @@ public class BaseB2Request {
 		headerKeySet = unencodedHeaders.keySet();
 		for (String headerKey : headerKeySet) {
 			if(!httpRequestBase.containsHeader(headerKey)) {
-				LOGGER.trace("Setting header (un-encoded) '" + headerKey + "'.");
+				LOGGER.trace("Setting header (un-encoded) '{}'.", headerKey);
 				httpRequestBase.setHeader(headerKey, unencodedHeaders.get(headerKey));
 			}
 		}

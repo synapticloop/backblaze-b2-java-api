@@ -6,6 +6,9 @@ import java.net.URLEncoder;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import synapticloop.b2.exception.B2ApiException;
 import synapticloop.b2.response.B2AuthorizeAccountResponse;
 import synapticloop.b2.response.B2FileResponse;
@@ -24,6 +27,8 @@ import synapticloop.b2.util.Helper;
  */
 
 public class B2UploadFileRequest extends BaseB2Request {
+	private static final Logger LOGGER = LoggerFactory.getLogger(B2UploadFileRequest.class);
+
 	private File file = null;
 	private String mimeType = null;
 	private String fileName = null;
@@ -117,6 +122,6 @@ public class B2UploadFileRequest extends BaseB2Request {
 
 		headers.put(HEADER_X_BZ_CONTENT_SHA1, Helper.calculateSha1(file));
 
-		return(new B2FileResponse(executePost(file)));
+		return(new B2FileResponse(executePost(LOGGER, file)));
 	}
 }
