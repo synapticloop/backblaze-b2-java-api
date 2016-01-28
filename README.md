@@ -137,7 +137,7 @@ And now for the dependency
     <dependency>
       <groupId>synapticloop</groupId>
       <artifactId>backblaze-b2-java-api</artifactId>
-      <version>v1.1.0</version>
+      <version>v1.1.1</version>
       <type>jar</type>
     </dependency>
  
@@ -160,15 +160,15 @@ Repository
 
 and then include the dependency:
 
-    runtime(group: 'synapticloop', name: 'backblaze-b2-java-api', version: 'v1.1.0', ext: 'jar')
+    runtime(group: 'synapticloop', name: 'backblaze-b2-java-api', version: 'v1.1.1', ext: 'jar')
 
-    compile(group: 'synapticloop', name: 'backblaze-b2-java-api', version: 'v1.1.0', ext: 'jar')
+    compile(group: 'synapticloop', name: 'backblaze-b2-java-api', version: 'v1.1.1', ext: 'jar')
  
-or 
+or, more simply for later versions of gradle
 
-    runtime 'synapticloop:backblaze-b2-java-api:v1.1.0'
+    runtime 'synapticloop:backblaze-b2-java-api:v1.1.1'
 
-    compile 'synapticloop:backblaze-b2-java-api:v1.1.0'
+    compile 'synapticloop:backblaze-b2-java-api:v1.1.1'
     
 ## Other
 
@@ -181,9 +181,9 @@ You will also need the dependencies:
  - runtime 'org.json:json:20090211'
  - runtime 'org.slf4j:slf4j-api:1.7.13'
 
-which can be found by searching here: [http://mvnrepository.com/](http://mvnrepository.com/)
+which can be found by searching here: [http://mvnrepository.com/](http://mvnrepository.com/) (and you may need to download their dependencies in turn)
 
-# Running the Tests
+# Building the Package
 
 `gradlew build`
 
@@ -193,7 +193,7 @@ Note that this will also run all of the tests (see notes below)
 
 # Running the Tests
 
-`gradlew --info test`
+`gradle --info test`
 
 Which will also print out the logging
 
