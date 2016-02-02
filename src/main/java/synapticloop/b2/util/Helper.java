@@ -14,6 +14,7 @@ import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
 import synapticloop.b2.exception.B2ApiException;
 
 public class Helper {
+	private static final String SHA_1 = "SHA-1";
 	private static final String UTF_8 = "UTF-8";
 
 	/**
@@ -32,7 +33,7 @@ public class Helper {
 		MessageDigest messageDigest = null;
 		InputStream inputStream = null;
 		try {
-			messageDigest = MessageDigest.getInstance("SHA-1");
+			messageDigest = MessageDigest.getInstance(SHA_1);
 			inputStream = new BufferedInputStream(new FileInputStream(file));
 			byte[] buffer = new byte[8192];
 			int len = inputStream.read(buffer);

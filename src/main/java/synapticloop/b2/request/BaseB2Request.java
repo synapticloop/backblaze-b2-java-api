@@ -358,6 +358,8 @@ public class BaseB2Request {
 			if(!httpRequestBase.containsHeader(headerKey)) {
 				LOGGER.trace("Setting header (encoded) '{}'.", headerKey);
 				httpRequestBase.setHeader(headerKey, Helper.urlEncode(headers.get(headerKey)));
+			} else {
+				LOGGER.warn("Attempting to set header (encoded) '{}', which already exists, ignoring...", headerKey);
 			}
 		}
 
@@ -366,6 +368,8 @@ public class BaseB2Request {
 			if(!httpRequestBase.containsHeader(headerKey)) {
 				LOGGER.trace("Setting header (un-encoded) '{}'.", headerKey);
 				httpRequestBase.setHeader(headerKey, unencodedHeaders.get(headerKey));
+			} else {
+				LOGGER.warn("Attempting to set header (un-encoded) '{}', which already exists, ignoring...", headerKey);
 			}
 		}
 	}
