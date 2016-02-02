@@ -43,7 +43,16 @@ dependencies {
 
 	testRuntime 'org.apache.logging.log4j:log4j-slf4j-impl:2.4.1'
 	testRuntime 'org.apache.logging.log4j:log4j-core:2.4.1'
-	
+}
+
+configurations.all {
+	resolutionStrategy {
+		failOnVersionConflict()
+		force 'org.slf4j:slf4j-api:1.7.13',
+					'xerces:xmlParserAPIs:2.6.2',
+					'xerces:xercesImpl:2.6.2',
+					'xml-apis:xml-apis:1.0.b2'
+	}
 }
 
 /*
