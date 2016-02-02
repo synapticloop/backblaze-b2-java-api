@@ -90,6 +90,25 @@ uploadFile(String, String, File, String)
 uploadFile(String, String, File, String, Map<String, String>)
 ```
 
+# Logging
+
+slf4j is the logging framework used, (with log4j for the tests, a sample `log4j2.xml` is below:
+
+```
+<Configuration status="WARN">
+	<Appenders>
+		<Console name="Console" target="SYSTEM_OUT">
+			<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+		</Console>
+	</Appenders>
+	<Loggers>
+		<Root level="trace">
+			<AppenderRef ref="Console"/>
+		</Root>
+	</Loggers>
+</Configuration>
+```
+
 # Dependency Management
 
 > Note that the latest version can be found [https://bintray.com/synapticloop/maven/backblaze-b2-java-api/view](https://bintray.com/synapticloop/maven/backblaze-b2-java-api/view)
@@ -170,7 +189,7 @@ or, more simply for later versions of gradle
 
     compile 'synapticloop:backblaze-b2-java-api:v1.1.1'
     
-## Other
+## Other packages
 
 You may either download the files from [https://bintray.com/synapticloop/maven/backblaze-b2-java-api/](https://bintray.com/synapticloop/maven/backblaze-b2-java-api/) or from [https://github.com/synapticloop/backblaze-b2-java-api/releases](https://github.com/synapticloop/backblaze-b2-java-api/releases)
 
