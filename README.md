@@ -156,7 +156,7 @@ And now for the dependency
     <dependency>
       <groupId>synapticloop</groupId>
       <artifactId>backblaze-b2-java-api</artifactId>
-      <version>v1.1.1</version>
+      <version>v1.1.2</version>
       <type>jar</type>
     </dependency>
  
@@ -179,15 +179,15 @@ Repository
 
 and then include the dependency:
 
-    runtime(group: 'synapticloop', name: 'backblaze-b2-java-api', version: 'v1.1.1', ext: 'jar')
+    runtime(group: 'synapticloop', name: 'backblaze-b2-java-api', version: 'v1.1.2', ext: 'jar')
 
-    compile(group: 'synapticloop', name: 'backblaze-b2-java-api', version: 'v1.1.1', ext: 'jar')
+    compile(group: 'synapticloop', name: 'backblaze-b2-java-api', version: 'v1.1.2', ext: 'jar')
  
 or, more simply for later versions of gradle
 
-    runtime 'synapticloop:backblaze-b2-java-api:v1.1.1'
+    runtime 'synapticloop:backblaze-b2-java-api:v1.1.2'
 
-    compile 'synapticloop:backblaze-b2-java-api:v1.1.1'
+    compile 'synapticloop:backblaze-b2-java-api:v1.1.2'
     
 ## Other packages
 
