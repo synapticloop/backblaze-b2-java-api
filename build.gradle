@@ -5,13 +5,14 @@ plugins {
 	id "maven-publish"
 	id 'net.saliman.cobertura' version '2.2.6'
 	id "com.jfrog.bintray" version "1.4"
+	id 'co.riiid.gradle' version '0.3.1'
 }
 
 group = 'synapticloop'
 archivesBaseName = 'backblaze-b2-java-api'
 description = """An api for backblaze b2 storage in java"""
 
-version = 'v1.1.1'
+version = 'v1.1.2'
 
 description = """backblaze-b2-java-api"""
 
@@ -129,4 +130,17 @@ bintray {
 		name = 'backblaze-b2-java-api'
 	}
 
+}
+
+github {
+	owner = group
+	repo = archivesBaseName
+	if(System.getenv('GITHUB_TOKEN')) {
+		token = System.getenv('GITHUB_TOKEN')
+	}
+	tagName = version
+	name = version
+	assets = [
+		'build/libs/' + archivesBaseName + '-' + version + '-all.jar'
+	]
 }

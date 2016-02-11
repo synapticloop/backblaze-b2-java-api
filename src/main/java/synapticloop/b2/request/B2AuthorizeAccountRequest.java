@@ -1,7 +1,7 @@
 package synapticloop.b2.request;
 
-import java.util.Base64;
 
+import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,7 +35,7 @@ public class B2AuthorizeAccountRequest extends BaseB2Request {
 	public B2AuthorizeAccountRequest(String accountId, String applicationKey) {
 		super(null);
 		url = B2_AUTHORIZE_ACCOUNT;
-		unencodedHeaders.put(REQUEST_PROPERTY_AUTHORIZATION, "Basic " + Base64.getEncoder().encodeToString((accountId + ":" + applicationKey).getBytes()));
+		unencodedHeaders.put(REQUEST_PROPERTY_AUTHORIZATION, "Basic " + Base64.encodeBase64String((accountId + ":" + applicationKey).getBytes()));
 	}
 
 	/**
