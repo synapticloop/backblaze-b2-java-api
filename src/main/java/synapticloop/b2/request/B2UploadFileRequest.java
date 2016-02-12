@@ -114,11 +114,7 @@ public class B2UploadFileRequest extends BaseB2Request {
 			headers.put(HEADER_CONTENT_TYPE, mimeType);
 		}
 
-		try {
-			headers.put(HEADER_X_BZ_FILE_NAME, URLEncoder.encode(fileName, VALUE_UTF_8));
-		} catch (UnsupportedEncodingException ex) {
-			// should never happen
-		}
+		headers.put(HEADER_X_BZ_FILE_NAME, Helper.urlEncode(fileName));
 
 		headers.put(HEADER_X_BZ_CONTENT_SHA1, Helper.calculateSha1(file));
 

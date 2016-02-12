@@ -63,7 +63,7 @@ public class Helper {
 	 */
 	public static String urlEncode(String url) {
 		try {
-			return java.net.URLEncoder.encode(url, UTF_8);
+			return java.net.URLEncoder.encode(url, UTF_8).replace("%2F", "/");
 		} catch (UnsupportedEncodingException ex) {
 			// highly unlikely
 			return(url);
