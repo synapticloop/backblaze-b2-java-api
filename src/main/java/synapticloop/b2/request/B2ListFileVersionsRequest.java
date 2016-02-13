@@ -28,32 +28,32 @@ public class B2ListFileVersionsRequest extends BaseB2Request {
 		super(b2AuthorizeAccountResponse);
 		url = b2AuthorizeAccountResponse.getApiUrl() + B2_LIST_FILE_VERSIONS;
 
-		stringData.put(KEY_BUCKET_ID, bucketId);
-		integerData.put(KEY_MAX_FILE_COUNT, maxFileCount);
+		requestBodyStringData.put(KEY_BUCKET_ID, bucketId);
+		requestBodyIntegerData.put(KEY_MAX_FILE_COUNT, maxFileCount);
 	}
 
 	public B2ListFileVersionsRequest(B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String bucketId) {
 		super(b2AuthorizeAccountResponse);
 		url = b2AuthorizeAccountResponse.getApiUrl() + B2_LIST_FILE_VERSIONS;
 
-		stringData.put(KEY_BUCKET_ID, bucketId);
-		integerData.put(KEY_MAX_FILE_COUNT, maxFileCount);
+		requestBodyStringData.put(KEY_BUCKET_ID, bucketId);
+		requestBodyIntegerData.put(KEY_MAX_FILE_COUNT, maxFileCount);
 	}
 
 	public B2ListFileVersionsRequest(B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String bucketId, String startFileName, String startFileId, Integer maxFileCount) {
 		this(b2AuthorizeAccountResponse, bucketId);
 
-		stringData.put(KEY_BUCKET_ID, bucketId);
+		requestBodyStringData.put(KEY_BUCKET_ID, bucketId);
 		if(null != startFileName) {
-			stringData.put(KEY_START_FILE_NAME, startFileName);
+			requestBodyStringData.put(KEY_START_FILE_NAME, startFileName);
 		}
 
 		if(null != startFileId) {
-			stringData.put(KEY_START_FILE_ID, startFileId);
+			requestBodyStringData.put(KEY_START_FILE_ID, startFileId);
 		}
 
 		if(null != maxFileCount) {
-			integerData.put(KEY_MAX_FILE_COUNT, maxFileCount);
+			requestBodyIntegerData.put(KEY_MAX_FILE_COUNT, maxFileCount);
 		}
 	}
 
@@ -62,7 +62,7 @@ public class B2ListFileVersionsRequest extends BaseB2Request {
 			throw new B2ApiException("Maximum return file count is " + MAX_FILE_COUNT_RETURN);
 		}
 
-		if(null != stringData.get(KEY_START_FILE_ID) && null == stringData.get(KEY_START_FILE_NAME)) {
+		if(null != requestBodyStringData.get(KEY_START_FILE_ID) && null == requestBodyStringData.get(KEY_START_FILE_NAME)) {
 			throw new B2ApiException("You __MUST__ include a '" + KEY_START_FILE_NAME + "', if you are also include a '" + KEY_START_FILE_ID + "'.");
 		}
 

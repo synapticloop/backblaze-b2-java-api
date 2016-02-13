@@ -1,8 +1,6 @@
 package synapticloop.b2.request;
 
 import java.io.File;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -87,7 +85,7 @@ public class B2UploadFileRequest extends BaseB2Request {
 	 * @param b2GetUploadUrlResponse the upload URL for this request
 	 * @param fileName the name of the file
 	 * @param file the file to upload
-	 * @param mimeType the mimeTyp (optional, will default to 'b2/x-auto' which 
+	 * @param mimeType the mimeType (optional, will default to 'b2/x-auto' which 
 	 *     backblaze will attempt to determine automatically)
 	 */
 	public B2UploadFileRequest(B2AuthorizeAccountResponse b2AuthorizeAccountResponse, B2GetUploadUrlResponse b2GetUploadUrlResponse, String fileName, File file, String mimeType) {

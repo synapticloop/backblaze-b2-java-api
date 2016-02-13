@@ -32,7 +32,7 @@ public class B2ListBucketsRequest extends BaseB2Request {
 		super(b2AuthorizeAccountResponse);
 		url = b2AuthorizeAccountResponse.getApiUrl() + B2_LIST_BUCKETS;
 
-		stringData.put(KEY_ACCOUNT_ID, b2AuthorizeAccountResponse.getAccountId());
+		requestBodyStringData.put(KEY_ACCOUNT_ID, b2AuthorizeAccountResponse.getAccountId());
 	}
 
 	public List<B2BucketResponse> getResponse() throws B2ApiException {

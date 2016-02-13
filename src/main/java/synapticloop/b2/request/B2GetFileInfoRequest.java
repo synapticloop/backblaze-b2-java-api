@@ -32,7 +32,7 @@ public class B2GetFileInfoRequest extends BaseB2Request {
 		super(b2AuthorizeAccountResponse);
 		url = b2AuthorizeAccountResponse.getApiUrl() + B2_GET_FILE_INFO;
 
-		stringData.put(KEY_FILE_ID, fileId);
+		requestBodyStringData.put(KEY_FILE_ID, fileId);
 	}
 
 	/**

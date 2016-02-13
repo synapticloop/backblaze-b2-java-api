@@ -45,9 +45,9 @@ public class B2CreateBucketRequest extends BaseB2Request {
 		super(b2AuthorizeAccountResponse);
 		url = b2AuthorizeAccountResponse.getApiUrl() + B2_CREATE_BUCKET;
 
-		stringData.put(KEY_ACCOUNT_ID, b2AuthorizeAccountResponse.getAccountId());
-		stringData.put(KEY_BUCKET_NAME, bucketName);
-		stringData.put(KEY_BUCKET_TYPE, bucketType.toString());
+		requestBodyStringData.put(KEY_ACCOUNT_ID, b2AuthorizeAccountResponse.getAccountId());
+		requestBodyStringData.put(KEY_BUCKET_NAME, bucketName);
+		requestBodyStringData.put(KEY_BUCKET_TYPE, bucketType.toString());
 	}
 
 	/**

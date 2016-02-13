@@ -26,8 +26,8 @@ public class B2HideFileRequest extends BaseB2Request {
 		super(b2AuthorizeAccountResponse);
 		url = b2AuthorizeAccountResponse.getApiUrl() + B2_HIDE_FILE;
 
-		stringData.put(KEY_BUCKET_ID, bucketId);
-		stringData.put(KEY_FILE_NAME, fileName);
+		requestBodyStringData.put(KEY_BUCKET_ID, bucketId);
+		requestBodyStringData.put(KEY_FILE_NAME, fileName);
 	}
 
 	public B2HideFileResponse getResponse() throws B2ApiException {

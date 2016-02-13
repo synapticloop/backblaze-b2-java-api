@@ -30,9 +30,9 @@ public class B2UpdateBucketRequest extends BaseB2Request {
 
 		url = b2AuthorizeAccountResponse.getApiUrl() + B2_UPDATE_BUCKET;
 
-		stringData.put(KEY_ACCOUNT_ID, b2AuthorizeAccountResponse.getAccountId());
-		stringData.put(KEY_BUCKET_ID, bucketId);
-		stringData.put(KEY_BUCKET_TYPE, bucketType.toString());
+		requestBodyStringData.put(KEY_ACCOUNT_ID, b2AuthorizeAccountResponse.getAccountId());
+		requestBodyStringData.put(KEY_BUCKET_ID, bucketId);
+		requestBodyStringData.put(KEY_BUCKET_TYPE, bucketType.toString());
 	}
 
 	public B2BucketResponse getResponse() throws B2ApiException {

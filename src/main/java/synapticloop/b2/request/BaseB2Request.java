@@ -51,6 +51,7 @@ public class BaseB2Request {
 	protected static final String KEY_FILE_ID = "fileId";
 	protected static final String KEY_FILE_NAME = "fileName";
 	protected static final String KEY_MAX_FILE_COUNT = "maxFileCount";
+	protected static final String KEY_MIME_TYPE = "mimeType";
 	protected static final String KEY_RANGE = "Range";
 	protected static final String KEY_START_FILE_ID = "startFileId";
 	protected static final String KEY_START_FILE_NAME = "startFileName";
@@ -69,10 +70,12 @@ public class BaseB2Request {
 	protected Map<String, String> headers = new HashMap<String, String>();
 	// for parameters - either GET or POST
 	protected Map<String, String> parameters = new HashMap<String, String>();
-	// String based data that is added to the JSON object as Strings
-	protected Map<String, String> stringData = new HashMap<String, String>();
-	// integer based data that is added to the JSON object as Integers
-	protected Map<String, Integer> integerData = new HashMap<String, Integer>();
+	// String based data that is added to the request body JSON object as Strings
+	protected Map<String, String> requestBodyStringData = new HashMap<String, String>();
+	// integer based data that is added to the request body JSON object as Integers
+	protected Map<String, Integer> requestBodyIntegerData = new HashMap<String, Integer>();
+	// string based data that is added to the request body JSON object as keyed on 'fileInfo'
+	protected Map<String, String> requestBodyFileInfoData = new HashMap<String, String>();
 
 	/**
 	 * Instantiate the base B2 request which adds headers with the authorization 
@@ -296,22 +299,42 @@ public class BaseB2Request {
 	 */
 	protected String convertPostData() throws B2ApiException {
 		JSONObject jsonObject = new JSONObject();
-		Iterator<String> iterator = stringData.keySet().iterator();
+		Iterator<String> iterator = requestBodyStringData.keySet().iterator();
 
 		while (iterator.hasNext()) {
 			String key = (String) iterator.next();
 			try {
-				jsonObject.put(key, Helper.urlEncode(stringData.get(key)));
+				jsonObject.put(key, Helper.urlEncode(requestBodyStringData.get(key)));
 			} catch (JSONException ex) {
 				throw new B2ApiException(ex);
 			}
 		}
 
-		iterator = integerData.keySet().iterator();
+		iterator = requestBodyIntegerData.keySet().iterator();
 		while (iterator.hasNext()) {
 			String key = (String) iterator.next();
 			try {
-				jsonObject.put(key, integerData.get(key));
+				jsonObject.put(key, requestBodyIntegerData.get(key));
+			} catch (JSONException ex) {
+				throw new B2ApiException(ex);
+			}
+		}
+
+		// now for the fileInfo (used for large files)
+		JSONObject fileInfoObject = new JSONObject();
+		iterator = requestBodyFileInfoData.keySet().iterator();
+		while (iterator.hasNext()) {
+			String key = (String) iterator.next();
+			try {
+				fileInfoObject.put(key, requestBodyFileInfoData.get(key));
+			} catch (JSONException ex) {
+				throw new B2ApiException(ex);
+			}
+		}
+
+		if(fileInfoObject.length() != 0) {
+			try {
+				jsonObject.put("fileInfo", fileInfoObject);
 			} catch (JSONException ex) {
 				throw new B2ApiException(ex);
 			}

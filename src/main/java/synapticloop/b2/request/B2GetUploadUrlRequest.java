@@ -32,14 +32,14 @@ public class B2GetUploadUrlRequest extends BaseB2Request {
 		super(b2AuthorizeAccountResponse);
 		url = b2AuthorizeAccountResponse.getApiUrl() + B2_GET_UPLOAD_URL;
 
-		stringData.put(KEY_BUCKET_ID, bucketId);
+		requestBodyStringData.put(KEY_BUCKET_ID, bucketId);
 	}
 
 	public B2GetUploadUrlRequest(B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String bucketId, Map<String, String> fileInfo) {
 		super(b2AuthorizeAccountResponse);
 		url = b2AuthorizeAccountResponse.getApiUrl() + B2_GET_UPLOAD_URL;
 
-		stringData.put(KEY_BUCKET_ID, bucketId);
+		requestBodyStringData.put(KEY_BUCKET_ID, bucketId);
 
 		// TODO - need to do different
 		// now go through the fileInfo Object and add the headers

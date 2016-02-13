@@ -33,7 +33,10 @@ public abstract class BaseB2Response {
 	protected static final String KEY_NEXT_FILE_NAME = "nextFileName";
 	protected static final String KEY_SIZE = "size";
 	protected static final String KEY_UPLOAD_TIMESTAMP = "uploadTimestamp";
+	protected static final String KEY_UPLOAD_AUTH_TOKEN = "uploadAuthToken";
 	protected static final String KEY_UPLOAD_URL = "uploadUrl";
+	protected static final String KEY_UPLOAD_URLS = "uploadUrls";
+
 
 	/**
 	 * Parse a string into a JSON object 
