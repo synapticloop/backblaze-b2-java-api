@@ -67,7 +67,7 @@ public class B2TestHelper {
 	 * @throws B2Exception if there was an error with the creation of the bucket
 	 */
 	public static B2BucketResponse createRandomPrivateBucket() throws B2Exception {
-		B2CreateBucketRequest b2CreateBucketRequest = new B2CreateBucketRequest(HttpClients.createDefault(), getB2AuthorizeAccountResponse(), B2_BUCKET_PREFIX + UUID.randomUUID().toString(), BucketType.ALL_PRIVATE);
+		B2CreateBucketRequest b2CreateBucketRequest = new B2CreateBucketRequest(HttpClients.createDefault(), getB2AuthorizeAccountResponse(), B2_BUCKET_PREFIX + UUID.randomUUID().toString(), BucketType.allPrivate);
 		return(b2CreateBucketRequest.getResponse());
 	}
 
@@ -81,7 +81,7 @@ public class B2TestHelper {
 	 * @throws B2Exception if there was an error with the creation of the bucket
 	 */
 	public static B2BucketResponse createRandomPublicBucket() throws B2Exception {
-		B2CreateBucketRequest b2CreateBucketRequest = new B2CreateBucketRequest(HttpClients.createDefault(), getB2AuthorizeAccountResponse(), B2_BUCKET_PREFIX + UUID.randomUUID().toString(), BucketType.ALL_PUBLIC);
+		B2CreateBucketRequest b2CreateBucketRequest = new B2CreateBucketRequest(HttpClients.createDefault(), getB2AuthorizeAccountResponse(), B2_BUCKET_PREFIX + UUID.randomUUID().toString(), BucketType.allPublic);
 		return(b2CreateBucketRequest.getResponse());
 	}
 

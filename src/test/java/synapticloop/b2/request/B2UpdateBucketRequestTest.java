@@ -21,16 +21,16 @@ public class B2UpdateBucketRequestTest {
 		B2BucketResponse privateBucket = B2TestHelper.createRandomPrivateBucket();
 
 		String privateBucketId = privateBucket.getBucketId();
-		B2BucketResponse privateToPublicResponse = new B2UpdateBucketRequest(HttpClients.createDefault(), b2AuthorizeAccountResponse, privateBucketId, BucketType.ALL_PUBLIC).getResponse();
-		assertEquals(BucketType.ALL_PUBLIC.toString(), privateToPublicResponse.getBucketType());
+		B2BucketResponse privateToPublicResponse = new B2UpdateBucketRequest(HttpClients.createDefault(), b2AuthorizeAccountResponse, privateBucketId, BucketType.allPublic).getResponse();
+		assertEquals(BucketType.allPublic.toString(), privateToPublicResponse.getBucketType());
 
 		B2TestHelper.deleteBucket(privateBucketId);
 
 		B2BucketResponse createRandomPublicBucket = B2TestHelper.createRandomPublicBucket();
 
 		String publicBucketId = createRandomPublicBucket.getBucketId();
-		B2BucketResponse publicToPrivateResponse = new B2UpdateBucketRequest(HttpClients.createDefault(), b2AuthorizeAccountResponse, publicBucketId, BucketType.ALL_PRIVATE).getResponse();
-		assertEquals(BucketType.ALL_PRIVATE.toString(), publicToPrivateResponse.getBucketType());
+		B2BucketResponse publicToPrivateResponse = new B2UpdateBucketRequest(HttpClients.createDefault(), b2AuthorizeAccountResponse, publicBucketId, BucketType.allPrivate).getResponse();
+		assertEquals(BucketType.allPrivate.toString(), publicToPrivateResponse.getBucketType());
 		B2TestHelper.deleteBucket(publicBucketId);
 	}
 

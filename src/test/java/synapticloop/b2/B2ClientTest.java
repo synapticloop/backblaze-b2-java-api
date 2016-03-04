@@ -42,17 +42,17 @@ public class B2ClientTest {
 
 	@Test
 	public void testPrivateBuckets() throws B2Exception {
-		B2BucketResponse createPrivateBucket = client.createBucket(B2TestHelper.B2_BUCKET_PREFIX + UUID.randomUUID().toString(), BucketType.ALL_PRIVATE);
+		B2BucketResponse createPrivateBucket = client.createBucket(B2TestHelper.B2_BUCKET_PREFIX + UUID.randomUUID().toString(), BucketType.allPrivate);
 
-		B2BucketResponse updateBucket = client.updateBucket(createPrivateBucket.getBucketId(), BucketType.ALL_PUBLIC);
-		assertEquals(updateBucket.getBucketType(), BucketType.ALL_PUBLIC.toString());
+		B2BucketResponse updateBucket = client.updateBucket(createPrivateBucket.getBucketId(), BucketType.allPublic);
+		assertEquals(updateBucket.getBucketType(), BucketType.allPublic.toString());
 
 		client.deleteBucket(createPrivateBucket.getBucketId());
 	}
 
 	@Test
 	public void testPublicBuckets() throws B2Exception {
-		B2BucketResponse createPublicBucket = client.createBucket(B2TestHelper.B2_BUCKET_PREFIX + UUID.randomUUID().toString(), BucketType.ALL_PUBLIC);
+		B2BucketResponse createPublicBucket = client.createBucket(B2TestHelper.B2_BUCKET_PREFIX + UUID.randomUUID().toString(), BucketType.allPublic);
 		client.deleteBucket(createPublicBucket.getBucketId());
 	}
 
