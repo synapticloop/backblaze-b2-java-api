@@ -15,11 +15,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import synapticloop.b2.exception.B2Exception;
+import synapticloop.b2.io.HttpMethodReleaseInputStream;
 
 public class B2DownloadFileResponse {
 	private static final Logger log = LoggerFactory.getLogger(B2DownloadFileResponse.class);
 
-	private final InputStream content;
+	private final InputStream stream;
 	private final Integer contentLength;
 	private final String contentType;
 	private final String fileId;
@@ -31,11 +32,11 @@ public class B2DownloadFileResponse {
 	public B2DownloadFileResponse(CloseableHttpResponse response) throws B2Exception {
 		try {
 			if(null != response.getEntity()) {
-				content = response.getEntity().getContent();
+				stream = new HttpMethodReleaseInputStream(response);
 			}
 			else {
 				// HEAD responses do not have an entity
-				content = new NullInputStream(0L);
+				stream = new NullInputStream(0L);
 				EntityUtils.consume(response.getEntity());
 			}
 			contentLength = Integer.parseInt(response.getFirstHeader(HttpHeaders.CONTENT_LENGTH).getValue());
@@ -64,7 +65,7 @@ public class B2DownloadFileResponse {
 	 * 
 	 * @return the downloaded file
 	 */
-	public InputStream getContent() { return this.content; }
+	public InputStream getContent() { return this.stream; }
 
 	/**
 	 * Get the content length of the downloaded file
@@ -115,7 +116,7 @@ public class B2DownloadFileResponse {
 	@Override
 	public String toString() {
 		final StringBuilder sb = new StringBuilder("B2DownloadFileResponse{");
-		sb.append("content=").append(content);
+		sb.append("content=").append(stream);
 		sb.append(", contentLength=").append(contentLength);
 		sb.append(", contentType='").append(contentType).append('\'');
 		sb.append(", fileId='").append(fileId).append('\'');
