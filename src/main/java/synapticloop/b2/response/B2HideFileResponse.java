@@ -12,13 +12,13 @@ public class B2HideFileResponse extends BaseB2Response {
 	public B2HideFileResponse(String json) throws B2Exception {
 		super(json);
 
-		this.fileId = response.optString(B2ResponseProperties.KEY_FILE_ID);
-		this.fileName = response.optString(B2ResponseProperties.KEY_FILE_NAME);
-		String actionTemp = response.optString(B2ResponseProperties.KEY_ACTION);
-		if(null != actionTemp && actionTemp.compareTo(Action.hide.toString()) == 0) {
-			this.action = Action.hide;
-		} else {
-			this.action = Action.upload;
+		this.fileId = response.optString(B2ResponseProperties.KEY_FILE_ID, null);
+		this.fileName = response.optString(B2ResponseProperties.KEY_FILE_NAME, null);
+		if(null != response.optString(B2ResponseProperties.KEY_ACTION, null)) {
+			this.action = Action.valueOf(response.optString(B2ResponseProperties.KEY_ACTION, null));
+		}
+		else {
+			this.action = null;
 		}
 		this.size = response.optLong(B2ResponseProperties.KEY_SIZE);
 	}

@@ -10,9 +10,9 @@ public class B2GetUploadUrlResponse extends BaseB2Response {
 	public B2GetUploadUrlResponse(String json) throws B2Exception {
 		super(json);
 
-		this.bucketId = response.optString(B2ResponseProperties.KEY_BUCKET_ID);
-		this.uploadUrl = response.optString(B2ResponseProperties.KEY_UPLOAD_URL);
-		this.authorizationToken = response.optString(B2ResponseProperties.KEY_AUTHORIZATION_TOKEN);
+		this.bucketId = response.optString(B2ResponseProperties.KEY_BUCKET_ID, null);
+		this.uploadUrl = response.optString(B2ResponseProperties.KEY_UPLOAD_URL, null);
+		this.authorizationToken = response.optString(B2ResponseProperties.KEY_AUTHORIZATION_TOKEN, null);
 	}
 
 	public String getBucketId() { return this.bucketId; }

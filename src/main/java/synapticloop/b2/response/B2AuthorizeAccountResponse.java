@@ -20,10 +20,10 @@ public class B2AuthorizeAccountResponse extends BaseB2Response {
 	public B2AuthorizeAccountResponse(String json) throws B2Exception {
 		super(json);
 
-		this.accountId = response.optString(B2ResponseProperties.KEY_ACCOUNT_ID);
-		this.apiUrl = response.optString(B2ResponseProperties.KEY_API_URL);
-		this.authorizationToken = response.optString(B2ResponseProperties.KEY_AUTHORIZATION_TOKEN);
-		this.downloadUrl = response.optString(B2ResponseProperties.KEY_DOWNLOAD_URL);
+		this.accountId = response.optString(B2ResponseProperties.KEY_ACCOUNT_ID, null);
+		this.apiUrl = response.optString(B2ResponseProperties.KEY_API_URL, null);
+		this.authorizationToken = response.optString(B2ResponseProperties.KEY_AUTHORIZATION_TOKEN, null);
+		this.downloadUrl = response.optString(B2ResponseProperties.KEY_DOWNLOAD_URL, null);
 	}
 
 	/**

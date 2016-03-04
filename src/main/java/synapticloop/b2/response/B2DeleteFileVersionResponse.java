@@ -9,8 +9,8 @@ public class B2DeleteFileVersionResponse extends BaseB2Response {
 	public B2DeleteFileVersionResponse(String json) throws B2Exception {
 		super(json);
 
-		this.fileId = response.optString(B2ResponseProperties.KEY_FILE_ID);
-		this.fileName = response.optString(B2ResponseProperties.KEY_FILE_NAME);
+		this.fileId = response.optString(B2ResponseProperties.KEY_FILE_ID, null);
+		this.fileName = response.optString(B2ResponseProperties.KEY_FILE_NAME, null);
 	}
 
 	public String getFileId() { return this.fileId; }

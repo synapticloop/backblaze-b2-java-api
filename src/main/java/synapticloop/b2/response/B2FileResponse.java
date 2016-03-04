@@ -21,13 +21,13 @@ public class B2FileResponse extends BaseB2Response {
 	public B2FileResponse(String json) throws B2Exception {
 		super(json);
 
-		this.fileId = response.optString(B2ResponseProperties.KEY_FILE_ID);
-		this.fileName = response.optString(B2ResponseProperties.KEY_FILE_NAME);
-		this.accountId = response.optString(B2ResponseProperties.KEY_ACCOUNT_ID);
-		this.bucketId = response.optString(B2ResponseProperties.KEY_BUCKET_ID);
+		this.fileId = response.optString(B2ResponseProperties.KEY_FILE_ID, null);
+		this.fileName = response.optString(B2ResponseProperties.KEY_FILE_NAME, null);
+		this.accountId = response.optString(B2ResponseProperties.KEY_ACCOUNT_ID, null);
+		this.bucketId = response.optString(B2ResponseProperties.KEY_BUCKET_ID, null);
 		this.contentLength = response.optLong(B2ResponseProperties.KEY_CONTENT_LENGTH);
-		this.contentSha1 = response.optString(B2ResponseProperties.KEY_CONTENT_SHA1);
-		this.contentType = response.optString(B2ResponseProperties.KEY_CONTENT_TYPE);
+		this.contentSha1 = response.optString(B2ResponseProperties.KEY_CONTENT_SHA1, null);
+		this.contentType = response.optString(B2ResponseProperties.KEY_CONTENT_TYPE, null);
 		this.fileInfo = new HashMap<>();
 		JSONObject fileInfoObject = response.optJSONObject(B2ResponseProperties.KEY_FILE_INFO);
 		if(null != fileInfoObject) {

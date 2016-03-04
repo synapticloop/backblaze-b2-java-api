@@ -80,7 +80,7 @@ public class B2Exception extends Exception {
 			}
 
 			this.status = jsonObject.optInt("status");
-			this.code = jsonObject.optString("code");
+			this.code = jsonObject.optString("code", null);
 
 		} catch (JSONException ex) {
 			this.code = "not_json";

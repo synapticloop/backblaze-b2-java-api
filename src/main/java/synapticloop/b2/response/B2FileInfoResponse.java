@@ -22,10 +22,10 @@ public class B2FileInfoResponse extends BaseB2Response {
     public B2FileInfoResponse(final JSONObject response) throws B2Exception {
         super(response);
 
-        this.fileId = response.optString(B2ResponseProperties.KEY_FILE_ID);
-		this.fileName = response.optString(B2ResponseProperties.KEY_FILE_NAME);
+        this.fileId = response.optString(B2ResponseProperties.KEY_FILE_ID, null);
+		this.fileName = response.optString(B2ResponseProperties.KEY_FILE_NAME, null);
 		this.contentLength = response.optLong(B2ResponseProperties.KEY_CONTENT_LENGTH);
-		this.contentSha1 = response.optString(B2ResponseProperties.KEY_CONTENT_SHA1);
+		this.contentSha1 = response.optString(B2ResponseProperties.KEY_CONTENT_SHA1, null);
 		this.fileInfo = new HashMap<>();
 		JSONObject fileInfoObject = response.optJSONObject(B2ResponseProperties.KEY_FILE_INFO);
 		if(null != fileInfoObject) {
@@ -36,7 +36,7 @@ public class B2FileInfoResponse extends BaseB2Response {
 			}
 		}
 
-		String action = response.optString(B2ResponseProperties.KEY_ACTION);
+		String action = response.optString(B2ResponseProperties.KEY_ACTION, null);
         if(null != action) {
             this.action = Action.valueOf(action);
         }

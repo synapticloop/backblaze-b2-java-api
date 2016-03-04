@@ -23,19 +23,19 @@ public class B2BucketResponse extends BaseB2Response {
 	public B2BucketResponse(String json) throws B2Exception {
 		super(json);
 
-		this.bucketId = response.optString(B2ResponseProperties.KEY_BUCKET_ID);
-		this.accountId = response.optString(B2ResponseProperties.KEY_ACCOUNT_ID);
-		this.bucketName = response.optString(B2ResponseProperties.KEY_BUCKET_NAME);
-		this.bucketType = response.optString(B2ResponseProperties.KEY_BUCKET_TYPE);
+		this.bucketId = response.optString(B2ResponseProperties.KEY_BUCKET_ID, null);
+		this.accountId = response.optString(B2ResponseProperties.KEY_ACCOUNT_ID, null);
+		this.bucketName = response.optString(B2ResponseProperties.KEY_BUCKET_NAME, null);
+		this.bucketType = response.optString(B2ResponseProperties.KEY_BUCKET_TYPE, null);
 	}
 
 	public B2BucketResponse(final JSONObject response) throws B2Exception {
 		super(response);
 
-		this.bucketId = response.optString(B2ResponseProperties.KEY_BUCKET_ID);
-		this.accountId = response.optString(B2ResponseProperties.KEY_ACCOUNT_ID);
-		this.bucketName = response.optString(B2ResponseProperties.KEY_BUCKET_NAME);
-		this.bucketType = response.optString(B2ResponseProperties.KEY_BUCKET_TYPE);
+		this.bucketId = response.optString(B2ResponseProperties.KEY_BUCKET_ID, null);
+		this.accountId = response.optString(B2ResponseProperties.KEY_ACCOUNT_ID, null);
+		this.bucketName = response.optString(B2ResponseProperties.KEY_BUCKET_NAME, null);
+		this.bucketType = response.optString(B2ResponseProperties.KEY_BUCKET_TYPE, null);
 	}
 
 	/**
