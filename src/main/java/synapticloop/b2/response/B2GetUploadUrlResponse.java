@@ -1,35 +1,31 @@
 package synapticloop.b2.response;
 
-import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import synapticloop.b2.exception.B2ApiException;
+import synapticloop.b2.exception.B2Exception;
 
 public class B2GetUploadUrlResponse extends BaseB2Response {
-	private static final Logger LOGGER = LoggerFactory.getLogger(B2GetUploadUrlResponse.class);
+	private final String bucketId;
+	private final String uploadUrl;
+	private final String authorizationToken;
 
-	private String bucketId = null;
-	private String uploadUrl = null;
-	private String authorizationToken = null;
+	public B2GetUploadUrlResponse(String json) throws B2Exception {
+		super(json);
 
-	public B2GetUploadUrlResponse(String string) throws B2ApiException {
-		JSONObject jsonObject = getParsedResponse(string);
-
-		this.bucketId = jsonObject.optString(KEY_BUCKET_ID);
-		jsonObject.remove(KEY_BUCKET_ID);
-
-		this.uploadUrl = jsonObject.optString(KEY_UPLOAD_URL);
-		jsonObject.remove(KEY_UPLOAD_URL);
-
-		this.authorizationToken = jsonObject.optString(KEY_AUTHORIZATION_TOKEN);
-		jsonObject.remove(KEY_AUTHORIZATION_TOKEN);
-
-		warnOnMissedKeys(LOGGER, jsonObject);
+		this.bucketId = response.optString(B2ResponseProperties.KEY_BUCKET_ID);
+		this.uploadUrl = response.optString(B2ResponseProperties.KEY_UPLOAD_URL);
+		this.authorizationToken = response.optString(B2ResponseProperties.KEY_AUTHORIZATION_TOKEN);
 	}
 
 	public String getBucketId() { return this.bucketId; }
 	public String getUploadUrl() { return this.uploadUrl; }
 	public String getAuthorizationToken() { return this.authorizationToken; }
 
+	@Override
+	public String toString() {
+		final StringBuilder sb = new StringBuilder("B2GetUploadUrlResponse{");
+		sb.append("bucketId='").append(bucketId).append('\'');
+		sb.append(", uploadUrl='").append(uploadUrl).append('\'');
+		sb.append(", authorizationToken='").append(authorizationToken).append('\'');
+		sb.append('}');
+		return sb.toString();
+	}
 }

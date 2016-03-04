@@ -1,0 +1,24 @@
+package synapticloop.b2.response;
+
+public final class B2ResponseProperties {
+    public static final String KEY_ACCOUNT_ID = "accountId";
+    public static final String KEY_ACTION = "action";
+    public static final String KEY_API_URL = "apiUrl";
+    public static final String KEY_AUTHORIZATION_TOKEN = "authorizationToken";
+    public static final String KEY_BUCKET_ID = "bucketId";
+    public static final String KEY_BUCKET_NAME = "bucketName";
+    public static final String KEY_BUCKET_TYPE = "bucketType";
+    public static final String KEY_CONTENT_LENGTH = "contentLength";
+    public static final String KEY_CONTENT_SHA1 = "contentSha1";
+    public static final String KEY_CONTENT_TYPE = "contentType";
+    public static final String KEY_DOWNLOAD_URL = "downloadUrl";
+    public static final String KEY_FILE_ID = "fileId";
+    public static final String KEY_FILE_INFO = "fileInfo";
+    public static final String KEY_FILE_NAME = "fileName";
+    public static final String KEY_FILES = "files";
+    public static final String KEY_NEXT_FILE_ID = "nextFileId";
+    public static final String KEY_NEXT_FILE_NAME = "nextFileName";
+    public static final String KEY_SIZE = "size";
+    public static final String KEY_UPLOAD_TIMESTAMP = "uploadTimestamp";
+    public static final String KEY_UPLOAD_URL = "uploadUrl";
+}

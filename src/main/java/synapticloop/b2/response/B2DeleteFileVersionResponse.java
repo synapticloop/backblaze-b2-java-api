@@ -1,29 +1,27 @@
 package synapticloop.b2.response;
 
-import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import synapticloop.b2.exception.B2ApiException;
+import synapticloop.b2.exception.B2Exception;
 
 public class B2DeleteFileVersionResponse extends BaseB2Response {
-	private static final Logger LOGGER = LoggerFactory.getLogger(B2DeleteFileVersionResponse.class);
+	private final String fileId;
+	private final String fileName;
 
-	private String fileId = null;
-	private String fileName = null;
+	public B2DeleteFileVersionResponse(String json) throws B2Exception {
+		super(json);
 
-	public B2DeleteFileVersionResponse(String response) throws B2ApiException {
-		JSONObject jsonObject = getParsedResponse(response);
-
-		this.fileId = jsonObject.optString(KEY_FILE_ID);
-		jsonObject.remove(KEY_FILE_ID);
-
-		this.fileName = jsonObject.optString(KEY_FILE_NAME);
-		jsonObject.remove(KEY_FILE_NAME);
-
-		warnOnMissedKeys(LOGGER, jsonObject);
+		this.fileId = response.optString(B2ResponseProperties.KEY_FILE_ID);
+		this.fileName = response.optString(B2ResponseProperties.KEY_FILE_NAME);
 	}
 
 	public String getFileId() { return this.fileId; }
 	public String getFileName() { return this.fileName; }
+
+	@Override
+	public String toString() {
+		final StringBuilder sb = new StringBuilder("B2DeleteFileVersionResponse{");
+		sb.append("fileId='").append(fileId).append('\'');
+		sb.append(", fileName='").append(fileName).append('\'');
+		sb.append('}');
+		return sb.toString();
+	}
 }

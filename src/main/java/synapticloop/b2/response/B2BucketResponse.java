@@ -1,52 +1,40 @@
 package synapticloop.b2.response;
 
 import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import synapticloop.b2.exception.B2ApiException;
+import synapticloop.b2.exception.B2Exception;
 
 public class B2BucketResponse extends BaseB2Response {
-	private static final Logger LOGGER = LoggerFactory.getLogger(B2BucketResponse.class);
-
-	private String bucketId = null;
-	private String accountId = null;
-	private String bucketName = null;
-	private String bucketType = null;
+	private final String bucketId;
+	private final String accountId;
+	private final String bucketName;
+	private final String bucketType;
 
 	/**
 	 * Instantiate an bucket response with the JSON response as a string from 
 	 * the API call.  This response is then parsed into the relevant fields.
 	 * 
-	 * @param response the response (in JSON format)
+	 * @param json The response (in JSON format)
 	 * 
-	 * @throws B2ApiException if there was an error parsing the response
+	 * @throws B2Exception if there was an error parsing the response
 	 */
 
-	public B2BucketResponse(String response) throws B2ApiException {
-		this(getParsedResponse(response));
+	public B2BucketResponse(String json) throws B2Exception {
+		super(json);
+
+		this.bucketId = response.optString(B2ResponseProperties.KEY_BUCKET_ID);
+		this.accountId = response.optString(B2ResponseProperties.KEY_ACCOUNT_ID);
+		this.bucketName = response.optString(B2ResponseProperties.KEY_BUCKET_NAME);
+		this.bucketType = response.optString(B2ResponseProperties.KEY_BUCKET_TYPE);
 	}
 
-	/**
-	 * Instantiate an bucket response with a pre-parsed JSON response from the 
-	 * API call.  This response is then parsed into the relevant fields.
-	 * 
-	 * @param jsonObject The pre-parsed json object
-	 */
-	public B2BucketResponse(JSONObject jsonObject) {
-		this.bucketId = jsonObject.optString(KEY_BUCKET_ID);
-		jsonObject.remove(KEY_BUCKET_ID);
+	public B2BucketResponse(final JSONObject response) throws B2Exception {
+		super(response);
 
-		this.accountId = jsonObject.optString(KEY_ACCOUNT_ID);
-		jsonObject.remove(KEY_ACCOUNT_ID);
-
-		this.bucketName = jsonObject.optString(KEY_BUCKET_NAME);
-		jsonObject.remove(KEY_BUCKET_NAME);
-
-		this.bucketType = jsonObject.optString(KEY_BUCKET_TYPE);
-		jsonObject.remove(KEY_BUCKET_TYPE);
-
-		warnOnMissedKeys(LOGGER, jsonObject);
+		this.bucketId = response.optString(B2ResponseProperties.KEY_BUCKET_ID);
+		this.accountId = response.optString(B2ResponseProperties.KEY_ACCOUNT_ID);
+		this.bucketName = response.optString(B2ResponseProperties.KEY_BUCKET_NAME);
+		this.bucketType = response.optString(B2ResponseProperties.KEY_BUCKET_TYPE);
 	}
 
 	/**
@@ -77,4 +65,14 @@ public class B2BucketResponse extends BaseB2Response {
 	 */
 	public String getBucketType() { return this.bucketType; }
 
+	@Override
+	public String toString() {
+		final StringBuilder sb = new StringBuilder("B2BucketResponse{");
+		sb.append("bucketId='").append(bucketId).append('\'');
+		sb.append(", accountId='").append(accountId).append('\'');
+		sb.append(", bucketName='").append(bucketName).append('\'');
+		sb.append(", bucketType='").append(bucketType).append('\'');
+		sb.append('}');
+		return sb.toString();
+	}
 }

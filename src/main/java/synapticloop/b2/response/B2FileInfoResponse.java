@@ -1,42 +1,33 @@
 package synapticloop.b2.response;
 
 import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import synapticloop.b2.Action;
+import synapticloop.b2.exception.B2Exception;
 
 public class B2FileInfoResponse extends BaseB2Response {
-	private static final Logger LOGGER = LoggerFactory.getLogger(B2FileInfoResponse.class);
+	private final String fileId;
+	private final String fileName;
+	private final Action action;
+	private final Integer size;
+	private final Long uploadTimestamp;
 
-	private String fileId = null;
-	private String fileName = null;
-	private Action action = null;
-	private int size = -1;
-	private long uploadTimestamp = -1;
+    public B2FileInfoResponse(final JSONObject response) throws B2Exception {
+        super(response);
 
-	public B2FileInfoResponse(JSONObject jsonObject) {
-		this.fileId = jsonObject.optString(KEY_FILE_ID);
-		jsonObject.remove(KEY_FILE_ID);
+        this.fileId = response.optString(B2ResponseProperties.KEY_FILE_ID);
+		this.fileName = response.optString(B2ResponseProperties.KEY_FILE_NAME);
 
-		this.fileName = jsonObject.optString(KEY_FILE_NAME);
-		jsonObject.remove(KEY_FILE_NAME);
-
-		String actionTemp = jsonObject.optString(KEY_ACTION);
-		if(null != actionTemp && actionTemp.compareTo("hide") == 0) {
-			this.action = Action.HIDE;
-		} else {
-			this.action = Action.UPLOAD;
-		}
-		jsonObject.remove(KEY_ACTION);
-
-		this.size = jsonObject.optInt(KEY_SIZE);
-		jsonObject.remove(KEY_SIZE);
-
-		this.uploadTimestamp = jsonObject.optLong(KEY_UPLOAD_TIMESTAMP);
-		jsonObject.remove(KEY_UPLOAD_TIMESTAMP);
-
-		warnOnMissedKeys(LOGGER, jsonObject);
+		String action = response.optString(B2ResponseProperties.KEY_ACTION);
+        if(null != action) {
+            this.action = Action.valueOf(action);
+        }
+        else {
+            // Default
+            this.action = Action.upload;
+        }
+		this.size = response.optInt(B2ResponseProperties.KEY_SIZE);
+		this.uploadTimestamp = response.optLong(B2ResponseProperties.KEY_UPLOAD_TIMESTAMP);
 	}
 
 	public String getFileId() { return this.fileId; }
@@ -44,4 +35,16 @@ public class B2FileInfoResponse extends BaseB2Response {
 	public Action getAction() { return this.action; }
 	public int getSize() { return this.size; }
 	public long getUploadTimestamp() { return this.uploadTimestamp; }
+
+	@Override
+	public String toString() {
+		final StringBuilder sb = new StringBuilder("B2FileInfoResponse{");
+		sb.append("fileId='").append(fileId).append('\'');
+		sb.append(", fileName='").append(fileName).append('\'');
+		sb.append(", action=").append(action);
+		sb.append(", size=").append(size);
+		sb.append(", uploadTimestamp=").append(uploadTimestamp);
+		sb.append('}');
+		return sb.toString();
+	}
 }
