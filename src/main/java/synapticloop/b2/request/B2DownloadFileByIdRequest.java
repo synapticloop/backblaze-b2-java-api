@@ -1,9 +1,9 @@
 package synapticloop.b2.request;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.http.HttpHeaders;
+import org.apache.http.impl.client.CloseableHttpClient;
 
-import synapticloop.b2.exception.B2ApiException;
+import synapticloop.b2.exception.B2Exception;
 import synapticloop.b2.response.B2AuthorizeAccountResponse;
 import synapticloop.b2.response.B2DownloadFileResponse;
 
@@ -19,21 +19,19 @@ import synapticloop.b2.response.B2DownloadFileResponse;
  * 
  * @author synapticloop
  */
-
 public class B2DownloadFileByIdRequest extends BaseB2Request {
-	private static final Logger LOGGER = LoggerFactory.getLogger(B2DownloadFileByIdRequest.class);
 	private static final String B2_DOWNLOAD_FILE_BY_ID = BASE_API_VERSION + "b2_download_file_by_id";
 
 	/**
 	 * Create a download file by ID request to download the complete file
-	 * 
+	 *
+	 * @param client Shared HTTP client instance
 	 * @param b2AuthorizeAccountResponse The authorize account response
 	 * @param fileId the unique id of the file
 	 */
-	public B2DownloadFileByIdRequest(B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String fileId) {
-		super(b2AuthorizeAccountResponse);
-		url = b2AuthorizeAccountResponse.getDownloadUrl() + B2_DOWNLOAD_FILE_BY_ID;
-		parameters.put(KEY_FILE_ID, fileId);
+	public B2DownloadFileByIdRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String fileId) {
+		super(client, b2AuthorizeAccountResponse, b2AuthorizeAccountResponse.getDownloadUrl() + B2_DOWNLOAD_FILE_BY_ID);
+		requestParameters.put(B2RequestProperties.KEY_FILE_ID, fileId);
 	}
 
 	/**
@@ -49,15 +47,16 @@ public class B2DownloadFileByIdRequest extends BaseB2Request {
 	 * 
 	 * Note that the SHA1 checksum returned is still the checksum for the entire 
 	 * file, so it cannot be used on the byte range.
-	 * 
+	 *
+	 * @param client Shared HTTP client instance
 	 * @param b2AuthorizeAccountResponse The authorize account response
 	 * @param fileId the unique id of the file
 	 * @param rangeStart the start of the range
 	 * @param rangeEnd the end of the range
 	 */
-	public B2DownloadFileByIdRequest(B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String fileId, long rangeStart, long rangeEnd) {
-		this(b2AuthorizeAccountResponse, fileId);
-		unencodedHeaders.put(KEY_RANGE, "bytes=" + rangeStart + "-" + rangeEnd);
+	public B2DownloadFileByIdRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String fileId, long rangeStart, long rangeEnd) {
+		this(client, b2AuthorizeAccountResponse, fileId);
+		requestHeaders.put(HttpHeaders.RANGE, String.format("bytes=%d-%d", rangeStart, rangeEnd));
 	}
 
 	/**
@@ -65,9 +64,9 @@ public class B2DownloadFileByIdRequest extends BaseB2Request {
 	 * 
 	 * @return The download file response
 	 * 
-	 * @throws B2ApiException If there was an error with the call
+	 * @throws B2Exception If there was an error with the call
 	 */
-	public B2DownloadFileResponse getResponse() throws B2ApiException {
-		return(new B2DownloadFileResponse(executeGetWithData(LOGGER)));
+	public B2DownloadFileResponse getResponse() throws B2Exception {
+		return(new B2DownloadFileResponse(executeGet()));
 	}
 }

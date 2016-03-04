@@ -3,18 +3,18 @@ package synapticloop.b2.exception;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class B2ApiException extends Exception {
+public class B2Exception extends Exception {
 	private static final long serialVersionUID = -7345341271403812967L;
 
-	private String code = null;
-	private String message = null;
+	private String code;
+	private String message;
 	private int status = -1;
-	private String originalMessage = null;
+	private String originalMessage;
 
 	/**
 	 * Create a new B2Api Exception
 	 */
-	public B2ApiException() {
+	public B2Exception() {
 		super();
 	}
 
@@ -31,7 +31,7 @@ public class B2ApiException extends Exception {
 	 * 
 	 * @param message The message of the exception
 	 */
-	public B2ApiException(String message) {
+	public B2Exception(String message) {
 		super(message);
 		parseMessage(message);
 	}
@@ -50,7 +50,7 @@ public class B2ApiException extends Exception {
 	 * @param message The message of the exception
 	 * @param cause the root cause of the exception
 	 */
-	public B2ApiException(String message, Throwable cause) {
+	public B2Exception(String message, Throwable cause) {
 		super(message, cause);
 		parseMessage(message);
 	}
@@ -60,19 +60,19 @@ public class B2ApiException extends Exception {
 	 * 
 	 * @param cause The root cause of the exception
 	 */
-	public B2ApiException(Throwable cause) {
+	public B2Exception(Throwable cause) {
 		super(cause);
 	}
 
-	private void parseMessage(String message) {
-		this.originalMessage = message;
+	private void parseMessage(String json) {
+		this.originalMessage = json;
 
-		if(null == message) {
+		if(null == json) {
 			return;
 		}
 
 		try {
-			JSONObject jsonObject = new JSONObject(message);
+			JSONObject jsonObject = new JSONObject(json);
 
 			String tempMessage = jsonObject.getString("message");
 			if(null != tempMessage) {
@@ -84,7 +84,7 @@ public class B2ApiException extends Exception {
 
 		} catch (JSONException ex) {
 			this.code = "not_json";
-			this.message = message;
+			this.message = json;
 		}
 	}
 

@@ -1,9 +1,11 @@
 package synapticloop.b2.request;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.util.EntityUtils;
 
-import synapticloop.b2.exception.B2ApiException;
+import java.io.IOException;
+
+import synapticloop.b2.exception.B2Exception;
 import synapticloop.b2.response.B2AuthorizeAccountResponse;
 import synapticloop.b2.response.B2FileResponse;
 
@@ -17,22 +19,20 @@ import synapticloop.b2.response.B2FileResponse;
  * 
  * @author synapticloop
  */
-
 public class B2GetFileInfoRequest extends BaseB2Request {
-	private static final Logger LOGGER = LoggerFactory.getLogger(B2GetFileInfoRequest.class);
 	private static final String B2_GET_FILE_INFO = BASE_API_VERSION + "b2_get_file_info";
 
 	/**
 	 * Create a new get file info request object
-	 * 
+	 *
+	 * @param client Shared HTTP client instance
 	 * @param b2AuthorizeAccountResponse the authorize account response
 	 * @param fileId the id for the file
 	 */
-	public B2GetFileInfoRequest(B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String fileId) {
-		super(b2AuthorizeAccountResponse);
-		url = b2AuthorizeAccountResponse.getApiUrl() + B2_GET_FILE_INFO;
+	public B2GetFileInfoRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String fileId) {
+		super(client, b2AuthorizeAccountResponse, b2AuthorizeAccountResponse.getApiUrl() + B2_GET_FILE_INFO);
 
-		stringData.put(KEY_FILE_ID, fileId);
+		requestBodyData.put(B2RequestProperties.KEY_FILE_ID, fileId);
 	}
 
 	/**
@@ -40,9 +40,14 @@ public class B2GetFileInfoRequest extends BaseB2Request {
 	 * 
 	 * @return The details for the file information
 	 * 
-	 * @throws B2ApiException if there was an error with the call
+	 * @throws B2Exception if there was an error with the call
 	 */
-	public B2FileResponse getResponse() throws B2ApiException {
-		return(new B2FileResponse(executePost(LOGGER)));
+	public B2FileResponse getResponse() throws B2Exception {
+		try {
+			return(new B2FileResponse(EntityUtils.toString(executePost().getEntity())));
+		}
+		catch(IOException e) {
+			throw new B2Exception(e);
+		}
 	}
 }

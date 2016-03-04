@@ -1,17 +1,13 @@
 package synapticloop.b2.request;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.util.EntityUtils;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.io.IOException;
 
-import synapticloop.b2.exception.B2ApiException;
+import synapticloop.b2.exception.B2Exception;
 import synapticloop.b2.response.B2AuthorizeAccountResponse;
-import synapticloop.b2.response.B2BucketResponse;
-import synapticloop.b2.response.BaseB2Response;
+import synapticloop.b2.response.B2ListBucketsResponse;
 
 /**
  * <p>Lists buckets associated with an account, in alphabetical order by bucket ID.</p>
@@ -23,28 +19,22 @@ import synapticloop.b2.response.BaseB2Response;
  * 
  * @author synapticloop
  */
-
 public class B2ListBucketsRequest extends BaseB2Request {
-	private static final Logger LOGGER = LoggerFactory.getLogger(B2ListBucketsRequest.class);
 	private static final String B2_LIST_BUCKETS = BASE_API_VERSION + "b2_list_buckets";
 
-	public B2ListBucketsRequest(B2AuthorizeAccountResponse b2AuthorizeAccountResponse) {
-		super(b2AuthorizeAccountResponse);
-		url = b2AuthorizeAccountResponse.getApiUrl() + B2_LIST_BUCKETS;
+	public B2ListBucketsRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse) {
+		super(client, b2AuthorizeAccountResponse, b2AuthorizeAccountResponse.getApiUrl() + B2_LIST_BUCKETS);
 
-		stringData.put(KEY_ACCOUNT_ID, b2AuthorizeAccountResponse.getAccountId());
+		requestBodyData.put(B2RequestProperties.KEY_ACCOUNT_ID, b2AuthorizeAccountResponse.getAccountId());
 	}
 
-	public List<B2BucketResponse> getResponse() throws B2ApiException {
-		List<B2BucketResponse> responses = new ArrayList<B2BucketResponse>();
-
-		JSONObject jsonObject = BaseB2Response.getParsedResponse(executePost(LOGGER));
-
-		JSONArray optJSONArray = jsonObject.optJSONArray("buckets");
-		for(int i = 0; i < optJSONArray.length(); i++) {
-			responses.add(new B2BucketResponse(optJSONArray.optJSONObject(i)));
+	public B2ListBucketsResponse getResponse() throws B2Exception {
+		try {
+			return new B2ListBucketsResponse(EntityUtils.toString(executePost().getEntity()));
 		}
-
-		return(responses);
+		catch(IOException e) {
+			throw new B2Exception(e);
+		}
 	}
+
 }

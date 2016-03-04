@@ -4,11 +4,12 @@ import static org.junit.Assert.*;
 
 import java.util.UUID;
 
+import org.apache.http.impl.client.HttpClients;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import synapticloop.b2.BucketType;
-import synapticloop.b2.exception.B2ApiException;
+import synapticloop.b2.exception.B2Exception;
 import synapticloop.b2.helper.B2TestHelper;
 import synapticloop.b2.response.B2AuthorizeAccountResponse;
 import synapticloop.b2.response.B2BucketResponse;
@@ -19,15 +20,15 @@ public class B2CreateAndDeleteBucketRequestTest {
 	private static String bucketName = null;
 
 	@BeforeClass
-	public static void setupBeforClass() throws B2ApiException {
+	public static void setupBeforClass() throws B2Exception {
 		b2AuthorizeAccountResponse = B2TestHelper.getB2AuthorizeAccountResponse();
 		bucketName = UUID.randomUUID().toString();
 	}
 
 	@Test
-	public void testBucketCreationAndDeletion() throws B2ApiException {
+	public void testBucketCreationAndDeletion() throws B2Exception {
 
-		b2CreateBucketRequest = new B2CreateBucketRequest(b2AuthorizeAccountResponse, bucketName, BucketType.ALL_PRIVATE);
+		b2CreateBucketRequest = new B2CreateBucketRequest(HttpClients.createDefault(), b2AuthorizeAccountResponse, bucketName, BucketType.ALL_PRIVATE);
 		B2BucketResponse b2BucketResponse = b2CreateBucketRequest.getResponse();
 		assertEquals(b2AuthorizeAccountResponse.getAccountId(), b2BucketResponse.getAccountId());
 		String bucketId = b2BucketResponse.getBucketId();
@@ -35,7 +36,7 @@ public class B2CreateAndDeleteBucketRequestTest {
 		assertEquals(bucketName, b2BucketResponse.getBucketName());
 		assertEquals(BucketType.ALL_PRIVATE.toString(), b2BucketResponse.getBucketType());
 
-		B2DeleteBucketRequest b2DeleteBucketRequest = new B2DeleteBucketRequest(b2AuthorizeAccountResponse, bucketId);
+		B2DeleteBucketRequest b2DeleteBucketRequest = new B2DeleteBucketRequest(HttpClients.createDefault(), b2AuthorizeAccountResponse, bucketId);
 		B2BucketResponse response = b2DeleteBucketRequest.getResponse();
 
 		assertNotNull(response.getBucketId());

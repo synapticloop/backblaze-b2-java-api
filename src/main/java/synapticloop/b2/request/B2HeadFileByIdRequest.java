@@ -1,9 +1,8 @@
 package synapticloop.b2.request;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.http.impl.client.CloseableHttpClient;
 
-import synapticloop.b2.exception.B2ApiException;
+import synapticloop.b2.exception.B2Exception;
 import synapticloop.b2.response.B2AuthorizeAccountResponse;
 import synapticloop.b2.response.B2DownloadFileResponse;
 
@@ -21,15 +20,12 @@ import synapticloop.b2.response.B2DownloadFileResponse;
  * 
  * @author synapticloop
  */
-
 public class B2HeadFileByIdRequest extends BaseB2Request {
-	private static final Logger LOGGER = LoggerFactory.getLogger(B2HeadFileByIdRequest.class);
 	private static final String B2_DOWNLOAD_FILE_BY_ID = BASE_API_VERSION + "b2_download_file_by_id";
 
-	public B2HeadFileByIdRequest(B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String fileId) {
-		super(b2AuthorizeAccountResponse);
-		url = b2AuthorizeAccountResponse.getDownloadUrl() + B2_DOWNLOAD_FILE_BY_ID;
-		parameters.put(KEY_FILE_ID, fileId);
+	public B2HeadFileByIdRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String fileId) {
+		super(client, b2AuthorizeAccountResponse, b2AuthorizeAccountResponse.getDownloadUrl() + B2_DOWNLOAD_FILE_BY_ID);
+		requestParameters.put(B2RequestProperties.KEY_FILE_ID, fileId);
 	}
 
 	/**
@@ -37,9 +33,9 @@ public class B2HeadFileByIdRequest extends BaseB2Request {
 	 * 
 	 * @return the download file response - note that this does not contain any body content
 	 * 
-	 * @throws B2ApiException if something went wrong
+	 * @throws B2Exception if something went wrong
 	 */
-	public B2DownloadFileResponse getResponse() throws B2ApiException {
-		return(new B2DownloadFileResponse(executeHead(LOGGER)));
+	public B2DownloadFileResponse getResponse() throws B2Exception {
+		return(new B2DownloadFileResponse(this.executeHead()));
 	}
 }

@@ -1,5 +1,7 @@
 package synapticloop.b2.helper;
 
+import org.apache.http.impl.client.HttpClients;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -7,7 +9,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import synapticloop.b2.BucketType;
-import synapticloop.b2.exception.B2ApiException;
+import synapticloop.b2.exception.B2Exception;
 import synapticloop.b2.request.B2AuthorizeAccountRequest;
 import synapticloop.b2.request.B2CreateBucketRequest;
 import synapticloop.b2.request.B2DeleteBucketRequest;
@@ -29,7 +31,7 @@ public class B2TestHelper {
 
 	private static B2AuthorizeAccountResponse response = null;
 
-	public static B2AuthorizeAccountResponse getB2AuthorizeAccountResponse() throws B2ApiException {
+	public static B2AuthorizeAccountResponse getB2AuthorizeAccountResponse() throws B2Exception {
 
 		if(null == response) {
 			boolean isOK = true;
@@ -50,10 +52,10 @@ public class B2TestHelper {
 				System.exit(-1);
 			}
 
-			B2AuthorizeAccountRequest b2AuthorizeAccountRequest = new B2AuthorizeAccountRequest(b2AccountId, b2ApplicationKey);
+			B2AuthorizeAccountRequest b2AuthorizeAccountRequest = new B2AuthorizeAccountRequest(HttpClients.createDefault(), b2AccountId, b2ApplicationKey);
 			response = b2AuthorizeAccountRequest.getResponse();
 		}
-		return(response);
+		return response;
 	}
 
 	/**
@@ -62,10 +64,10 @@ public class B2TestHelper {
 	 * 
 	 * @return the B2BucketResponse
 	 * 
-	 * @throws B2ApiException if there was an error with the creation of the bucket
+	 * @throws B2Exception if there was an error with the creation of the bucket
 	 */
-	public static B2BucketResponse createRandomPrivateBucket() throws B2ApiException {
-		B2CreateBucketRequest b2CreateBucketRequest = new B2CreateBucketRequest(getB2AuthorizeAccountResponse(), B2_BUCKET_PREFIX + UUID.randomUUID().toString(), BucketType.ALL_PRIVATE);
+	public static B2BucketResponse createRandomPrivateBucket() throws B2Exception {
+		B2CreateBucketRequest b2CreateBucketRequest = new B2CreateBucketRequest(HttpClients.createDefault(), getB2AuthorizeAccountResponse(), B2_BUCKET_PREFIX + UUID.randomUUID().toString(), BucketType.ALL_PRIVATE);
 		return(b2CreateBucketRequest.getResponse());
 	}
 
@@ -76,10 +78,10 @@ public class B2TestHelper {
 	 * 
 	 * @return the B2BucketResponse
 	 * 
-	 * @throws B2ApiException if there was an error with the creation of the bucket
+	 * @throws B2Exception if there was an error with the creation of the bucket
 	 */
-	public static B2BucketResponse createRandomPublicBucket() throws B2ApiException {
-		B2CreateBucketRequest b2CreateBucketRequest = new B2CreateBucketRequest(getB2AuthorizeAccountResponse(), B2_BUCKET_PREFIX + UUID.randomUUID().toString(), BucketType.ALL_PUBLIC);
+	public static B2BucketResponse createRandomPublicBucket() throws B2Exception {
+		B2CreateBucketRequest b2CreateBucketRequest = new B2CreateBucketRequest(HttpClients.createDefault(), getB2AuthorizeAccountResponse(), B2_BUCKET_PREFIX + UUID.randomUUID().toString(), BucketType.ALL_PUBLIC);
 		return(b2CreateBucketRequest.getResponse());
 	}
 
@@ -90,19 +92,19 @@ public class B2TestHelper {
 	 * 
 	 * @return the deleted bucket response
 	 * 
-	 * @throws B2ApiException if something went wrong
+	 * @throws B2Exception if something went wrong
 	 */
-	public static B2BucketResponse deleteBucket(String bucketId) throws B2ApiException {
-		B2DeleteBucketRequest b2DeleteBucketRequest = new B2DeleteBucketRequest(getB2AuthorizeAccountResponse(), bucketId);
+	public static B2BucketResponse deleteBucket(String bucketId) throws B2Exception {
+		B2DeleteBucketRequest b2DeleteBucketRequest = new B2DeleteBucketRequest(HttpClients.createDefault(), getB2AuthorizeAccountResponse(), bucketId);
 		return(b2DeleteBucketRequest.getResponse());
 	}
 
-	public static B2GetUploadUrlResponse getUploadUrl(String bucketId) throws B2ApiException {
-		return(new B2GetUploadUrlRequest(B2TestHelper.getB2AuthorizeAccountResponse(), bucketId).getResponse());
+	public static B2GetUploadUrlResponse getUploadUrl(String bucketId) throws B2Exception {
+		return(new B2GetUploadUrlRequest(HttpClients.createDefault(), B2TestHelper.getB2AuthorizeAccountResponse(), bucketId).getResponse());
 	}
 
-	public static B2DeleteFileVersionResponse deleteFile(String fileName, String fileId) throws B2ApiException {
-		return(new B2DeleteFileVersionRequest(getB2AuthorizeAccountResponse(), fileName, fileId).getResponse());
+	public static B2DeleteFileVersionResponse deleteFile(String fileName, String fileId) throws B2Exception {
+		return(new B2DeleteFileVersionRequest(HttpClients.createDefault(), getB2AuthorizeAccountResponse(), fileName, fileId).getResponse());
 	}
 
 	/**
@@ -112,9 +114,9 @@ public class B2TestHelper {
 	 * 
 	 * @return the file response
 	 * 
-	 * @throws B2ApiException if something went wrong
+	 * @throws B2Exception if something went wrong
 	 */
-	public static B2FileResponse uploadTemporaryFileToBucket(String bucketId) throws B2ApiException {
+	public static B2FileResponse uploadTemporaryFileToBucket(String bucketId) throws B2Exception {
 		B2GetUploadUrlResponse b2GetUploadUrlResponse = getUploadUrl(bucketId);
 		File file = null;
 		try {
@@ -125,9 +127,9 @@ public class B2TestHelper {
 			fileWriter.close();
 			file.deleteOnExit();
 		} catch(IOException ioex) {
-			throw new B2ApiException("Could not create temporary file", ioex);
+			throw new B2Exception("Could not create temporary file", ioex);
 		}
-		return(new B2UploadFileRequest(getB2AuthorizeAccountResponse(), b2GetUploadUrlResponse, file.getName(), file).getResponse());
+		return(new B2UploadFileRequest(HttpClients.createDefault(), getB2AuthorizeAccountResponse(), b2GetUploadUrlResponse, file.getName(), file).getResponse());
 	}
 
 	/**
@@ -137,9 +139,9 @@ public class B2TestHelper {
 	 * 
 	 * @return the file response
 	 * 
-	 * @throws B2ApiException if something went wrong
+	 * @throws B2Exception if something went wrong
 	 */
-	public static B2FileResponse uploadTemporaryFileToBucket(String bucketId, Map<String, String> fileInfo) throws B2ApiException {
+	public static B2FileResponse uploadTemporaryFileToBucket(String bucketId, Map<String, String> fileInfo) throws B2Exception {
 		B2GetUploadUrlResponse b2GetUploadUrlResponse = getUploadUrl(bucketId);
 		File file = null;
 		try {
@@ -150,9 +152,9 @@ public class B2TestHelper {
 			fileWriter.close();
 			file.deleteOnExit();
 		} catch(IOException ioex) {
-			throw new B2ApiException("Could not create temporary file", ioex);
+			throw new B2Exception("Could not create temporary file", ioex);
 		}
-		return(new B2UploadFileRequest(getB2AuthorizeAccountResponse(), b2GetUploadUrlResponse, file.getName(), file, fileInfo).getResponse());
+		return(new B2UploadFileRequest(HttpClients.createDefault(), getB2AuthorizeAccountResponse(), b2GetUploadUrlResponse, file.getName(), file, fileInfo).getResponse());
 	}
 
 }

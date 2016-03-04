@@ -1,11 +1,14 @@
 package synapticloop.b2.request;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.util.EntityUtils;
 
-import synapticloop.b2.exception.B2ApiException;
+import java.io.IOException;
+
+import synapticloop.b2.exception.B2Exception;
 import synapticloop.b2.response.B2AuthorizeAccountResponse;
 import synapticloop.b2.response.B2DeleteFileVersionResponse;
+import synapticloop.b2.util.Helper;
 
 /**
  * <p>Deletes one version of a file from B2.</p>
@@ -19,25 +22,23 @@ import synapticloop.b2.response.B2DeleteFileVersionResponse;
  * 
  * @author synapticloop
  */
-
 public class B2DeleteFileVersionRequest extends BaseB2Request {
-	private static final Logger LOGGER = LoggerFactory.getLogger(B2DeleteFileVersionRequest.class);
 	private static final String B2_DELETE_FILE_VERSION = BASE_API_VERSION + "b2_delete_file_version";
 
 	/**
 	 * Instantiate a delete file version request
-	 * 
+	 *
+	 * @param client Shared HTTP client instance
 	 * @param b2AuthorizeAccountResponse the authorize account response
 	 * @param fileName the name of the file to delete
-	 * @param fileId The ID of the file, as returned by {@link B2UploadFileRequest}, 
-	 *     {@link B2ListFileNamesRequest}, or {@link B2ListFileVersionsRequest}..
+	 * @param fileId The ID of the file, as returned by {@link B2UploadFileRequest},
+*     {@link B2ListFileNamesRequest}, or {@link B2ListFileVersionsRequest}..
 	 */
-	public B2DeleteFileVersionRequest(B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String fileName, String fileId) {
-		super(b2AuthorizeAccountResponse);
-		url = b2AuthorizeAccountResponse.getApiUrl() + B2_DELETE_FILE_VERSION;
+	public B2DeleteFileVersionRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String fileName, String fileId) {
+		super(client, b2AuthorizeAccountResponse, b2AuthorizeAccountResponse.getApiUrl() + B2_DELETE_FILE_VERSION);
 
-		stringData.put(KEY_FILE_NAME, fileName);
-		stringData.put(KEY_FILE_ID, fileId);
+		requestBodyData.put(B2RequestProperties.KEY_FILE_NAME, Helper.urlEncode(fileName));
+		requestBodyData.put(B2RequestProperties.KEY_FILE_ID, fileId);
 	}
 
 	/**
@@ -45,9 +46,14 @@ public class B2DeleteFileVersionRequest extends BaseB2Request {
 	 * 
 	 * @return the delete file version response
 	 * 
-	 * @throws B2ApiException if there was an error with the call
+	 * @throws B2Exception if there was an error with the call
 	 */
-	public B2DeleteFileVersionResponse getResponse() throws B2ApiException {
-		return(new B2DeleteFileVersionResponse(executePost(LOGGER)));
+	public B2DeleteFileVersionResponse getResponse() throws B2Exception {
+		try {
+			return(new B2DeleteFileVersionResponse(EntityUtils.toString(executePost().getEntity())));
+		}
+		catch(IOException e) {
+			throw new B2Exception(e);
+		}
 	}
 }

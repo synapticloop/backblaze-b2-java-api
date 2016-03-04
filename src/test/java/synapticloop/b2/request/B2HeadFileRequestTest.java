@@ -5,31 +5,30 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.http.impl.client.HttpClients;
 import org.junit.Test;
 
-import synapticloop.b2.exception.B2ApiException;
+import synapticloop.b2.exception.B2Exception;
 import synapticloop.b2.helper.B2TestHelper;
 import synapticloop.b2.response.B2BucketResponse;
 import synapticloop.b2.response.B2DownloadFileResponse;
 import synapticloop.b2.response.B2FileResponse;
 
 public class B2HeadFileRequestTest {
-	private B2BucketResponse randomPrivateBucket = null;
-	private B2FileResponse b2FileResponse = null;
-	private Map<String, String> fileInfo = new HashMap<String, String>();
 
 	@Test
-	public void testHeadFileById() throws B2ApiException, IOException {
-		randomPrivateBucket = B2TestHelper.createRandomPrivateBucket();
+	public void testHeadFileById() throws B2Exception, IOException {
+		final B2BucketResponse randomPrivateBucket = B2TestHelper.createRandomPrivateBucket();
 
+		Map<String, String> fileInfo = new HashMap<String, String>();
 		fileInfo.put("hello", "world");
 
-		b2FileResponse = B2TestHelper.uploadTemporaryFileToBucket(randomPrivateBucket.getBucketId(), fileInfo);
+		final B2FileResponse b2FileResponse = B2TestHelper.uploadTemporaryFileToBucket(randomPrivateBucket.getBucketId(), fileInfo);
 
-		B2DownloadFileResponse b2DownloadFileResponse = new B2HeadFileByIdRequest(B2TestHelper.getB2AuthorizeAccountResponse(), b2FileResponse.getFileId()).getResponse();
+		B2DownloadFileResponse b2DownloadFileResponse = new B2HeadFileByIdRequest(HttpClients.createDefault(), B2TestHelper.getB2AuthorizeAccountResponse(), b2FileResponse.getFileId()).getResponse();
 		assertEquals("world", b2DownloadFileResponse.getFileInfo().get("hello"));
 
-		assertNull(b2DownloadFileResponse.getContent());
+		assertEquals(0, b2DownloadFileResponse.getContent().available());
 
 		B2TestHelper.deleteFile(b2FileResponse.getFileName(), b2FileResponse.getFileId());
 		B2TestHelper.deleteBucket(randomPrivateBucket.getBucketId());
