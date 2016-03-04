@@ -2,12 +2,19 @@ package synapticloop.b2.response;
 
 import org.json.JSONObject;
 
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
 import synapticloop.b2.Action;
 import synapticloop.b2.exception.B2Exception;
 
 public class B2FileInfoResponse extends BaseB2Response {
 	private final String fileId;
 	private final String fileName;
+	private final Long contentLength;
+	private final String contentSha1;
+	private final Map<String, Object> fileInfo;
 	private final Action action;
 	private final Integer size;
 	private final Long uploadTimestamp;
@@ -17,6 +24,17 @@ public class B2FileInfoResponse extends BaseB2Response {
 
         this.fileId = response.optString(B2ResponseProperties.KEY_FILE_ID);
 		this.fileName = response.optString(B2ResponseProperties.KEY_FILE_NAME);
+		this.contentLength = response.optLong(B2ResponseProperties.KEY_CONTENT_LENGTH);
+		this.contentSha1 = response.optString(B2ResponseProperties.KEY_CONTENT_SHA1);
+		this.fileInfo = new HashMap<>();
+		JSONObject fileInfoObject = response.optJSONObject(B2ResponseProperties.KEY_FILE_INFO);
+		if(null != fileInfoObject) {
+			Iterator keys = fileInfoObject.keys();
+			while (keys.hasNext()) {
+				String key = (String) keys.next();
+				fileInfo.put(key, fileInfoObject.opt(key));
+			}
+		}
 
 		String action = response.optString(B2ResponseProperties.KEY_ACTION);
         if(null != action) {
@@ -32,6 +50,9 @@ public class B2FileInfoResponse extends BaseB2Response {
 
 	public String getFileId() { return this.fileId; }
 	public String getFileName() { return this.fileName; }
+	public long getContentLength() { return this.contentLength; }
+	public String getContentSha1() { return this.contentSha1; }
+	public Map<String, Object> getFileInfo() { return this.fileInfo; }
 	public Action getAction() { return this.action; }
 	public int getSize() { return this.size; }
 	public long getUploadTimestamp() { return this.uploadTimestamp; }
@@ -41,6 +62,9 @@ public class B2FileInfoResponse extends BaseB2Response {
 		final StringBuilder sb = new StringBuilder("B2FileInfoResponse{");
 		sb.append("fileId='").append(fileId).append('\'');
 		sb.append(", fileName='").append(fileName).append('\'');
+		sb.append(", contentLength=").append(contentLength);
+		sb.append(", contentSha1='").append(contentSha1).append('\'');
+		sb.append(", fileInfo=").append(fileInfo);
 		sb.append(", action=").append(action);
 		sb.append(", size=").append(size);
 		sb.append(", uploadTimestamp=").append(uploadTimestamp);
