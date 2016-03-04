@@ -22,7 +22,7 @@ public class B2UpdateBucketRequestTest {
 
 		String privateBucketId = privateBucket.getBucketId();
 		B2BucketResponse privateToPublicResponse = new B2UpdateBucketRequest(HttpClients.createDefault(), b2AuthorizeAccountResponse, privateBucketId, BucketType.allPublic).getResponse();
-		assertEquals(BucketType.allPublic.toString(), privateToPublicResponse.getBucketType());
+		assertEquals(BucketType.allPublic, privateToPublicResponse.getBucketType());
 
 		B2TestHelper.deleteBucket(privateBucketId);
 
@@ -30,7 +30,7 @@ public class B2UpdateBucketRequestTest {
 
 		String publicBucketId = createRandomPublicBucket.getBucketId();
 		B2BucketResponse publicToPrivateResponse = new B2UpdateBucketRequest(HttpClients.createDefault(), b2AuthorizeAccountResponse, publicBucketId, BucketType.allPrivate).getResponse();
-		assertEquals(BucketType.allPrivate.toString(), publicToPrivateResponse.getBucketType());
+		assertEquals(BucketType.allPrivate, publicToPrivateResponse.getBucketType());
 		B2TestHelper.deleteBucket(publicBucketId);
 	}
 

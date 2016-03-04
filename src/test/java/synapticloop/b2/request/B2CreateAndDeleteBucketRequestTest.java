@@ -34,7 +34,7 @@ public class B2CreateAndDeleteBucketRequestTest {
 		String bucketId = b2BucketResponse.getBucketId();
 		assertNotNull(bucketId);
 		assertEquals(bucketName, b2BucketResponse.getBucketName());
-		assertEquals(BucketType.allPrivate.toString(), b2BucketResponse.getBucketType());
+		assertEquals(BucketType.allPrivate, b2BucketResponse.getBucketType());
 
 		B2DeleteBucketRequest b2DeleteBucketRequest = new B2DeleteBucketRequest(HttpClients.createDefault(), b2AuthorizeAccountResponse, bucketId);
 		B2BucketResponse response = b2DeleteBucketRequest.getResponse();
@@ -42,6 +42,6 @@ public class B2CreateAndDeleteBucketRequestTest {
 		assertNotNull(response.getBucketId());
 		assertEquals(bucketId, response.getBucketId());
 		assertEquals(bucketName, b2BucketResponse.getBucketName());
-		assertEquals(BucketType.allPrivate.toString(), b2BucketResponse.getBucketType());
+		assertEquals(BucketType.allPrivate, b2BucketResponse.getBucketType());
 	}
 }

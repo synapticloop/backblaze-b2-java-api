@@ -2,6 +2,7 @@ package synapticloop.b2.response;
 
 import org.json.JSONObject;
 
+import synapticloop.b2.BucketType;
 import synapticloop.b2.exception.B2Exception;
 
 public class B2BucketResponse extends BaseB2Response {
@@ -63,7 +64,7 @@ public class B2BucketResponse extends BaseB2Response {
 	 * 
 	 * @return The bucket type
 	 */
-	public String getBucketType() { return this.bucketType; }
+	public BucketType getBucketType() { return BucketType.valueOf(this.bucketType); }
 
 	@Override
 	public String toString() {

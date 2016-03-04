@@ -45,7 +45,7 @@ public class B2ClientTest {
 		B2BucketResponse createPrivateBucket = client.createBucket(B2TestHelper.B2_BUCKET_PREFIX + UUID.randomUUID().toString(), BucketType.allPrivate);
 
 		B2BucketResponse updateBucket = client.updateBucket(createPrivateBucket.getBucketId(), BucketType.allPublic);
-		assertEquals(updateBucket.getBucketType(), BucketType.allPublic.toString());
+		assertEquals(updateBucket.getBucketType(), BucketType.allPublic);
 
 		client.deleteBucket(createPrivateBucket.getBucketId());
 	}
