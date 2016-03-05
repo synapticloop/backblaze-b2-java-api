@@ -1,5 +1,21 @@
 package synapticloop.b2;
 
+/*
+ * Copyright (c) 2016 synapticloop.
+ * 
+ * All rights reserved.
+ * 
+ * This code may contain contributions from other parties which, where 
+ * applicable, will be listed in the default build file for the project 
+ * ~and/or~ in a file named CONTRIBUTORS.txt in the root of the project.
+ * 
+ * This source code and any derived binaries are covered by the terms and 
+ * conditions of the Licence agreement ("the Licence").  You may not use this 
+ * source code or any derived binaries except in compliance with the Licence.  
+ * A copy of the Licence is available in the file named LICENSE.txt shipped with 
+ * this source code or binaries.
+ */
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,7 +29,22 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 
 import synapticloop.b2.exception.B2Exception;
-import synapticloop.b2.request.*;
+import synapticloop.b2.request.B2AuthorizeAccountRequest;
+import synapticloop.b2.request.B2CreateBucketRequest;
+import synapticloop.b2.request.B2DeleteBucketRequest;
+import synapticloop.b2.request.B2DeleteFileVersionRequest;
+import synapticloop.b2.request.B2DownloadFileByIdRequest;
+import synapticloop.b2.request.B2DownloadFileByNameRequest;
+import synapticloop.b2.request.B2GetFileInfoRequest;
+import synapticloop.b2.request.B2GetUploadUrlRequest;
+import synapticloop.b2.request.B2HeadFileByIdRequest;
+import synapticloop.b2.request.B2HideFileRequest;
+import synapticloop.b2.request.B2ListBucketsRequest;
+import synapticloop.b2.request.B2ListFileNamesRequest;
+import synapticloop.b2.request.B2ListFileVersionsRequest;
+import synapticloop.b2.request.B2UpdateBucketRequest;
+import synapticloop.b2.request.B2UploadFileRequest;
+import synapticloop.b2.request.BaseB2Request;
 import synapticloop.b2.response.B2AuthorizeAccountResponse;
 import synapticloop.b2.response.B2BucketResponse;
 import synapticloop.b2.response.B2DeleteFileVersionResponse;
