@@ -51,56 +51,12 @@ public abstract class BaseB2Request {
 	protected static final String BASE_API_VERSION = "/b2api/v1/";
 	protected static final String BASE_API = BASE_API_HOST + BASE_API_VERSION;
 
-<<<<<<< HEAD
-	protected static final String REQUEST_PROPERTY_CHARSET = "charset";
-	protected static final String REQUEST_PROPERTY_CONTENT_TYPE = "Content-Type";
-	protected static final String REQUEST_PROPERTY_AUTHORIZATION = "Authorization";
-
-	protected static final String HEADER_CONTENT_TYPE = "Content-Type";
-	protected static final String HEADER_X_BZ_CONTENT_SHA1 = "X-Bz-Content-Sha1";
-	protected static final String HEADER_X_BZ_FILE_NAME = "X-Bz-File-Name";
-	protected static final String HEADER_X_BZ_INFO_PREFIX = "x-bz-info-";
-
-	protected static final String KEY_ACCOUNT_ID = "accountId";
-	protected static final String KEY_BUCKET_ID = "bucketId";
-	protected static final String KEY_BUCKET_NAME = "bucketName";
-	protected static final String KEY_BUCKET_TYPE = "bucketType";
-	protected static final String KEY_FILE_ID = "fileId";
-	protected static final String KEY_FILE_NAME = "fileName";
-	protected static final String KEY_MAX_FILE_COUNT = "maxFileCount";
-	protected static final String KEY_MIME_TYPE = "mimeType";
-	protected static final String KEY_RANGE = "Range";
-	protected static final String KEY_START_FILE_ID = "startFileId";
-	protected static final String KEY_START_FILE_NAME = "startFileName";
-
-	protected static final String VALUE_APPLICATION_X_WWW_FORM_URLENCODED = "application/x-www-form-urlencoded";
-	protected static final String VALUE_B2_X_AUTO = "b2/x-auto";
-	protected static final String VALUE_UTF_8 = "UTF-8";
-
-	protected static final int MAX_FILE_COUNT_RETURN = 1000;
-
-	protected String url = null;
-
-	// for headers that __MUST__ not be encoded
-	protected Map<String, String> unencodedHeaders = new HashMap<String, String>();
-	// for headers that will be encoded
-	protected Map<String, String> headers = new HashMap<String, String>();
-	// for parameters - either GET or POST
-	protected Map<String, String> parameters = new HashMap<String, String>();
-	// String based data that is added to the request body JSON object as Strings
-	protected Map<String, String> requestBodyStringData = new HashMap<String, String>();
-	// integer based data that is added to the request body JSON object as Integers
-	protected Map<String, Integer> requestBodyIntegerData = new HashMap<String, Integer>();
-	// string based data that is added to the request body JSON object as keyed on 'fileInfo'
-	protected Map<String, String> requestBodyFileInfoData = new HashMap<String, String>();
-=======
 	public static final String VALUE_APPLICATION_X_WWW_FORM_URLENCODED = "application/x-www-form-urlencoded";
 	public static final String VALUE_UTF_8 = "UTF-8";
 
 	public static final int MAX_FILE_COUNT_RETURN = 1000;
 
 	protected final Map<String, String> requestHeaders = new HashMap<>();
->>>>>>> master
 
 	/**
 	 * Query parameters for request URI
@@ -281,51 +237,12 @@ public abstract class BaseB2Request {
 	 */
 	protected String convertPostData() throws B2ApiException {
 		JSONObject jsonObject = new JSONObject();
-<<<<<<< HEAD
-		Iterator<String> iterator = requestBodyStringData.keySet().iterator();
 
-		while (iterator.hasNext()) {
-			String key = (String) iterator.next();
-			try {
-				jsonObject.put(key, Helper.urlEncode(requestBodyStringData.get(key)));
-			} catch (JSONException ex) {
-				throw new B2ApiException(ex);
-			}
-		}
-
-		iterator = requestBodyIntegerData.keySet().iterator();
-		while (iterator.hasNext()) {
-			String key = (String) iterator.next();
-			try {
-				jsonObject.put(key, requestBodyIntegerData.get(key));
-			} catch (JSONException ex) {
-				throw new B2ApiException(ex);
-			}
-		}
-
-		// now for the fileInfo (used for large files)
-		JSONObject fileInfoObject = new JSONObject();
-		iterator = requestBodyFileInfoData.keySet().iterator();
-		while (iterator.hasNext()) {
-			String key = (String) iterator.next();
-			try {
-				fileInfoObject.put(key, requestBodyFileInfoData.get(key));
-			} catch (JSONException ex) {
-				throw new B2ApiException(ex);
-			}
-		}
-
-		if(fileInfoObject.length() != 0) {
-			try {
-				jsonObject.put("fileInfo", fileInfoObject);
-			} catch (JSONException ex) {
-=======
 		for(final String key : requestBodyData.keySet()) {
 			try {
 				LOGGER.debug("Setting key '{}' to value '{}'", key, obfuscateData(key, requestBodyData.get(key)));
 				jsonObject.put(key, requestBodyData.get(key));
 			} catch(JSONException ex) {
->>>>>>> master
 				throw new B2ApiException(ex);
 			}
 		}

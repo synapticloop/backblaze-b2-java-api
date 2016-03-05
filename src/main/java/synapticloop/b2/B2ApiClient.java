@@ -42,9 +42,9 @@ import synapticloop.b2.request.B2HideFileRequest;
 import synapticloop.b2.request.B2ListBucketsRequest;
 import synapticloop.b2.request.B2ListFileNamesRequest;
 import synapticloop.b2.request.B2ListFileVersionsRequest;
+import synapticloop.b2.request.B2RequestProperties;
 import synapticloop.b2.request.B2UpdateBucketRequest;
 import synapticloop.b2.request.B2UploadFileRequest;
-import synapticloop.b2.request.BaseB2Request;
 import synapticloop.b2.response.B2AuthorizeAccountResponse;
 import synapticloop.b2.response.B2BucketResponse;
 import synapticloop.b2.response.B2DeleteFileVersionResponse;
@@ -177,7 +177,7 @@ public class B2ApiClient {
 	 */
 	public B2BucketResponse deleteBucketFully(String bucketId) throws B2ApiException {
 		B2ListFilesResponse b2ListFilesResponse = new B2ListFileVersionsRequest(client, b2AuthorizeAccountResponse, bucketId,
-				BaseB2Request.MAX_FILE_COUNT_RETURN).getResponse();
+				B2RequestProperties.MAX_FILE_COUNT_RETURN).getResponse();
 		String nextFileName = b2ListFilesResponse.getNextFileName();
 		String nextFileId = b2ListFilesResponse.getNextFileId();
 		while(true) {
@@ -191,7 +191,7 @@ public class B2ApiClient {
 				break;
 			} else {
 				b2ListFilesResponse = new B2ListFileVersionsRequest(client, b2AuthorizeAccountResponse, bucketId,
-						BaseB2Request.MAX_FILE_COUNT_RETURN, nextFileName, nextFileId).getResponse();
+						B2RequestProperties.MAX_FILE_COUNT_RETURN, nextFileName, nextFileId).getResponse();
 				nextFileName = b2ListFilesResponse.getNextFileName();
 				nextFileId = b2ListFilesResponse.getNextFileId();
 			}

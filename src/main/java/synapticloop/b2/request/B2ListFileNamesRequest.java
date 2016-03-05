@@ -45,13 +45,8 @@ public class B2ListFileNamesRequest extends BaseB2Request {
 
 	private static final int DEFAULT_MAX_FILE_COUNT = 100;
 
-<<<<<<< HEAD
-		requestBodyStringData.put(KEY_BUCKET_ID, bucketId);
-		requestBodyIntegerData.put(KEY_MAX_FILE_COUNT, maxFileCount);
-=======
 	public B2ListFileNamesRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String bucketId) throws B2ApiException {
 		this(client, b2AuthorizeAccountResponse, bucketId, null, DEFAULT_MAX_FILE_COUNT);
->>>>>>> master
 	}
 
 	public B2ListFileNamesRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String bucketId, String startFileName, Integer maxFileCount) throws B2ApiException {
@@ -59,22 +54,12 @@ public class B2ListFileNamesRequest extends BaseB2Request {
 
 		requestBodyData.put(B2RequestProperties.KEY_BUCKET_ID, bucketId);
 
-<<<<<<< HEAD
-		requestBodyStringData.put(KEY_BUCKET_ID, bucketId);
-		if(null != startFileName) {
-			requestBodyStringData.put(KEY_START_FILE_NAME, startFileName);
-		}
-
-		if(null != maxFileCount) {
-			requestBodyIntegerData.put(KEY_MAX_FILE_COUNT, maxFileCount);
-=======
 		if(null != startFileName) {
 			requestBodyData.put(B2RequestProperties.KEY_START_FILE_NAME, Helper.urlEncode(startFileName));
 		}
 
 		if(maxFileCount > MAX_FILE_COUNT_RETURN) {
 			throw new B2ApiException("Maximum return file count is " + MAX_FILE_COUNT_RETURN);
->>>>>>> master
 		}
 
 		requestBodyData.put(B2RequestProperties.KEY_MAX_FILE_COUNT, maxFileCount);

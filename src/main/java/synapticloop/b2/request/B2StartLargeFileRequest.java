@@ -1,10 +1,11 @@
 package synapticloop.b2.request;
 
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.util.EntityUtils;
 
 import synapticloop.b2.exception.B2ApiException;
 import synapticloop.b2.response.B2AuthorizeAccountResponse;
@@ -27,7 +28,6 @@ import synapticloop.b2.response.B2FileResponse;
  */
 
 public class B2StartLargeFileRequest extends BaseB2Request {
-	private static final Logger LOGGER = LoggerFactory.getLogger(B2StartLargeFileRequest.class);
 	private static final String B2_START_LARGE_FILE = BASE_API + "b2_start_large_file";
 
 	/**
@@ -41,16 +41,16 @@ public class B2StartLargeFileRequest extends BaseB2Request {
 	 * @param fileInfo the file info map which are passed through as key value
 	 *     pairs in a jsonObject named 'fileInfo'
 	 */
-	protected B2StartLargeFileRequest(B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String bucketId, String fileName, String mimeType, Map<String, String> fileInfo) {
-		super(b2AuthorizeAccountResponse);
-		url = b2AuthorizeAccountResponse.getApiUrl() + B2_START_LARGE_FILE;
+	protected B2StartLargeFileRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String bucketId, String fileName, String mimeType, Map<String, String> fileInfo) {
+		super(client, b2AuthorizeAccountResponse, b2AuthorizeAccountResponse.getApiUrl() + B2_START_LARGE_FILE);
 
-		requestBodyStringData.put(KEY_BUCKET_ID, bucketId);
-		requestBodyStringData.put(KEY_FILE_NAME, fileName);
+		
+		requestBodyData.put(B2RequestProperties.KEY_BUCKET_ID, bucketId);
+		requestBodyData.put(B2RequestProperties.KEY_FILE_NAME, fileName);
 		if(null != mimeType) {
-			requestBodyStringData.put(KEY_MIME_TYPE, mimeType);
+			requestBodyData.put(B2RequestProperties.KEY_MIME_TYPE, mimeType);
 		} else {
-			requestBodyStringData.put(KEY_MIME_TYPE, VALUE_B2_X_AUTO);
+			requestBodyData.put(B2RequestProperties.KEY_MIME_TYPE, B2RequestProperties.VALUE_B2_X_AUTO);
 		}
 
 		// now go through and add in the 'X-Bz-Info-*' headers
@@ -58,12 +58,17 @@ public class B2StartLargeFileRequest extends BaseB2Request {
 			Iterator<String> iterator = fileInfo.keySet().iterator();
 			while (iterator.hasNext()) {
 				String key = (String) iterator.next();
-				requestBodyFileInfoData.put(key, fileInfo.get(key));
+				requestHeaders.put(key, fileInfo.get(key));
 			}
 		}
 	}
+
 	public B2FileResponse getResponse() throws B2ApiException {
-		return(new B2FileResponse(executePost(LOGGER)));
+		try {
+			return(new B2FileResponse(EntityUtils.toString(executePost().getEntity())));
+		} catch(IOException e) {
+			throw new B2ApiException(e);
+		}
 	}
 
 }

@@ -38,31 +38,6 @@ public abstract class BaseB2Response {
 		this(parse(json));
 	}
 
-<<<<<<< HEAD
-	protected static final String KEY_ACCOUNT_ID = "accountId";
-	protected static final String KEY_ACTION = "action";
-	protected static final String KEY_API_URL = "apiUrl";
-	protected static final String KEY_AUTHORIZATION_TOKEN = "authorizationToken";
-	protected static final String KEY_BUCKET_ID = "bucketId";
-	protected static final String KEY_BUCKET_NAME = "bucketName";
-	protected static final String KEY_BUCKET_TYPE = "bucketType";
-	protected static final String KEY_CONTENT_LENGTH = "contentLength";
-	protected static final String KEY_CONTENT_SHA1 = "contentSha1";
-	protected static final String KEY_CONTENT_TYPE = "contentType";
-	protected static final String KEY_DOWNLOAD_URL = "downloadUrl";
-	protected static final String KEY_FILE_ID = "fileId";
-	protected static final String KEY_FILE_INFO = "fileInfo";
-	protected static final String KEY_FILE_NAME = "fileName";
-	protected static final String KEY_FILES = "files";
-	protected static final String KEY_NEXT_FILE_ID = "nextFileId";
-	protected static final String KEY_NEXT_FILE_NAME = "nextFileName";
-	protected static final String KEY_SIZE = "size";
-	protected static final String KEY_UPLOAD_TIMESTAMP = "uploadTimestamp";
-	protected static final String KEY_UPLOAD_AUTH_TOKEN = "uploadAuthToken";
-	protected static final String KEY_UPLOAD_URL = "uploadUrl";
-	protected static final String KEY_UPLOAD_URLS = "uploadUrls";
-
-=======
 	/**
 	 * Create a new B2 Response with a pre parsed JSONObject response
 	 * 
@@ -74,7 +49,6 @@ public abstract class BaseB2Response {
 	public BaseB2Response(final JSONObject response) throws B2ApiException {
 		this.response = response;
 	}
->>>>>>> master
 
 	/**
 	 * Parse a string into a JSON object 

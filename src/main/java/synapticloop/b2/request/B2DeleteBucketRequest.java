@@ -50,13 +50,8 @@ public class B2DeleteBucketRequest extends BaseB2Request {
 
 		super(client, b2AuthorizeAccountResponse, b2AuthorizeAccountResponse.getApiUrl() + B2_DELETE_BUCKET);
 
-<<<<<<< HEAD
-		requestBodyStringData.put(KEY_ACCOUNT_ID, b2AuthorizeAccountResponse.getAccountId());
-		requestBodyStringData.put(KEY_BUCKET_ID, bucketId);
-=======
 		requestBodyData.put(B2RequestProperties.KEY_ACCOUNT_ID, b2AuthorizeAccountResponse.getAccountId());
 		requestBodyData.put(B2RequestProperties.KEY_BUCKET_ID, bucketId);
->>>>>>> master
 	}
 
 	/**

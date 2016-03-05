@@ -26,45 +26,48 @@ public class B2StartLargeFileResponse extends BaseB2Response {
 	private List<String> uploadUrls = new ArrayList<String>();
 
 	@SuppressWarnings("rawtypes")
-	public B2StartLargeFileResponse(String string) throws B2ApiException {
-		JSONObject jsonObject = getParsedResponse(string);
+	public B2StartLargeFileResponse(String json) throws B2ApiException {
+		super(json);
 
-		this.fileId = jsonObject.optString(KEY_FILE_ID);
-		jsonObject.remove(KEY_FILE_ID);
+		this.fileId = response.optString(B2ResponseProperties.KEY_FILE_ID);
 
-		this.fileName = jsonObject.optString(KEY_FILE_NAME);
-		jsonObject.remove(KEY_FILE_NAME);
+		this.fileName = response.optString(B2ResponseProperties.KEY_FILE_NAME);
 
-		this.accountId = jsonObject.optString(KEY_ACCOUNT_ID);
-		jsonObject.remove(KEY_ACCOUNT_ID);
+		this.accountId = response.optString(B2ResponseProperties.KEY_ACCOUNT_ID);
 
-		this.bucketId = jsonObject.optString(KEY_BUCKET_ID);
-		jsonObject.remove(KEY_BUCKET_ID);
+		this.bucketId = response.optString(B2ResponseProperties.KEY_BUCKET_ID);
 
-		this.contentType = jsonObject.optString(KEY_CONTENT_TYPE);
-		jsonObject.remove(KEY_CONTENT_TYPE);
+		this.contentType = response.optString(B2ResponseProperties.KEY_CONTENT_TYPE);
 
-		JSONObject fileInfoObject = jsonObject.optJSONObject(KEY_FILE_INFO);
+		JSONObject fileInfoObject = response.optJSONObject(B2ResponseProperties.KEY_FILE_INFO);
 		if(null != fileInfoObject) {
 			Iterator keys = fileInfoObject.keys();
 			while (keys.hasNext()) {
 				String key = (String) keys.next();
-				fileInfo.put(key, fileInfoObject.opt(key));
+				fileInfo.put(key, fileInfoObject.optString(key, null));
 			}
 		}
-		jsonObject.remove(KEY_FILE_INFO);
-
-		this.uploadAuthToken = jsonObject.optString(KEY_UPLOAD_AUTH_TOKEN);
-		jsonObject.remove(KEY_UPLOAD_AUTH_TOKEN);
+	
+		this.uploadAuthToken = response.optString(B2ResponseProperties.KEY_UPLOAD_AUTH_TOKEN);
 
 		// TODO - confirm whether this actually returns an array...
-		JSONArray uploadUrlsArray = jsonObject.optJSONArray(KEY_UPLOAD_URLS);
+		JSONArray uploadUrlsArray = response.optJSONArray(B2ResponseProperties.KEY_UPLOAD_URLS);
 		for(int i = 0; i < uploadUrlsArray.length(); i++) {
 			this.uploadUrls.add(uploadUrlsArray.optString(i));
 		}
-		jsonObject.remove(KEY_UPLOAD_URLS);
 
-		warnOnMissedKeys(LOGGER, jsonObject);
+		if(LOGGER.isDebugEnabled()) {
+			response.remove(B2ResponseProperties.KEY_FILE_ID);
+			response.remove(B2ResponseProperties.KEY_FILE_NAME);
+			response.remove(B2ResponseProperties.KEY_ACCOUNT_ID);
+			response.remove(B2ResponseProperties.KEY_BUCKET_ID);
+			response.remove(B2ResponseProperties.KEY_CONTENT_TYPE);
+			response.remove(B2ResponseProperties.KEY_FILE_INFO);
+			response.remove(B2ResponseProperties.KEY_UPLOAD_AUTH_TOKEN);
+			response.remove(B2ResponseProperties.KEY_UPLOAD_URLS);
+
+			warnOnMissedKeys(LOGGER, response);
+		}
 	}
 
 	public String getBucketId() { return this.bucketId; }

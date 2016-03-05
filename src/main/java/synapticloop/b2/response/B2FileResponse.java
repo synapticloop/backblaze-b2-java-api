@@ -126,7 +126,6 @@ public class B2FileResponse extends BaseB2Response {
 	 * @return the content type of the file that was operated on
 	 */
 	public String getContentType() { return this.contentType; }
-<<<<<<< HEAD
 
 	/**
 	 * Get the map of the file info for the file that was operated on, or an empty 
@@ -134,8 +133,6 @@ public class B2FileResponse extends BaseB2Response {
 	 * 
 	 * @return the map of the file info for the file that was operated on
 	 */
-	public Map<String, Object> getFileInfo() { return this.fileInfo; }
-=======
 	public Map<String, String> getFileInfo() { return this.fileInfo; }
 
 	@Override
@@ -152,5 +149,4 @@ public class B2FileResponse extends BaseB2Response {
 		sb.append('}');
 		return sb.toString();
 	}
->>>>>>> master
 }

@@ -17,11 +17,7 @@ package synapticloop.b2.request;
  */
 
 import java.io.File;
-<<<<<<< HEAD
-import java.util.Iterator;
-=======
 import java.io.IOException;
->>>>>>> master
 import java.util.Map;
 
 import org.apache.http.HttpEntity;
@@ -101,14 +97,8 @@ public class B2UploadFileRequest extends BaseB2Request {
 	 * @param b2AuthorizeAccountResponse The authorize account response
 	 * @param b2GetUploadUrlResponse the upload URL for this request
 	 * @param fileName the name of the file
-	 * @param file the file to upload
-<<<<<<< HEAD
-	 * @param mimeType the mimeType (optional, will default to 'b2/x-auto' which 
-	 *     backblaze will attempt to determine automatically)
-=======
 	 * 
 	 * @throws B2ApiException if there was an error in the request
->>>>>>> master
 	 */
 	public B2UploadFileRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse,
 			B2GetUploadUrlResponse b2GetUploadUrlResponse, String fileName, File file) throws B2ApiException {

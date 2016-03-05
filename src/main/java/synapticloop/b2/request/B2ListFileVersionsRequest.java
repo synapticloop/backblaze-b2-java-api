@@ -45,13 +45,8 @@ public class B2ListFileVersionsRequest extends BaseB2Request {
 		this(client, b2AuthorizeAccountResponse, bucketId, DEFAULT_MAX_FILE_COUNT);
 	}
 
-<<<<<<< HEAD
-		requestBodyStringData.put(KEY_BUCKET_ID, bucketId);
-		requestBodyIntegerData.put(KEY_MAX_FILE_COUNT, maxFileCount);
-=======
 	public B2ListFileVersionsRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String bucketId, Integer maxFileCount) throws B2ApiException {
 		this(client, b2AuthorizeAccountResponse, bucketId, maxFileCount, null, null);
->>>>>>> master
 	}
 
 	public B2ListFileVersionsRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String bucketId, Integer maxFileCount, String startFileName, String startFileId) throws B2ApiException {
@@ -62,41 +57,16 @@ public class B2ListFileVersionsRequest extends BaseB2Request {
 						B2RequestProperties.KEY_START_FILE_NAME, B2RequestProperties.KEY_START_FILE_ID));
 			}
 		}
-
 		requestBodyData.put(B2RequestProperties.KEY_BUCKET_ID, bucketId);
-
-<<<<<<< HEAD
-		requestBodyStringData.put(KEY_BUCKET_ID, bucketId);
-		requestBodyIntegerData.put(KEY_MAX_FILE_COUNT, maxFileCount);
-	}
-=======
 		if(maxFileCount > MAX_FILE_COUNT_RETURN) {
 			throw new B2ApiException(String.format("Maximum return file count is %d", MAX_FILE_COUNT_RETURN));
 		}
->>>>>>> master
-
 		requestBodyData.put(B2RequestProperties.KEY_MAX_FILE_COUNT, maxFileCount);
-
-<<<<<<< HEAD
-		requestBodyStringData.put(KEY_BUCKET_ID, bucketId);
-		if(null != startFileName) {
-			requestBodyStringData.put(KEY_START_FILE_NAME, startFileName);
-		}
-
-		if(null != startFileId) {
-			requestBodyStringData.put(KEY_START_FILE_ID, startFileId);
-		}
-
-		if(null != maxFileCount) {
-			requestBodyIntegerData.put(KEY_MAX_FILE_COUNT, maxFileCount);
-=======
 		if(null != startFileName) {
 			requestBodyData.put(B2RequestProperties.KEY_START_FILE_NAME, Helper.urlEncode(startFileName));
 		}
-
 		if(null != startFileId) {
 			requestBodyData.put(B2RequestProperties.KEY_START_FILE_ID, startFileId);
->>>>>>> master
 		}
 	}
 
@@ -108,19 +78,14 @@ public class B2ListFileVersionsRequest extends BaseB2Request {
 	 * @throws B2ApiException if something went wrong
 	 */
 	public B2ListFilesResponse getResponse() throws B2ApiException {
+		if(null != requestBodyData.get(B2RequestProperties.KEY_START_FILE_ID) && null == requestBodyData.get(B2RequestProperties.KEY_START_FILE_NAME)) {
+			throw new B2ApiException(String.format("You __MUST__ include a '%s', if you are also include a '%s'." + B2RequestProperties.KEY_START_FILE_NAME, B2RequestProperties.KEY_START_FILE_ID));
+		}
+
 		try {
 			return new B2ListFilesResponse(EntityUtils.toString(executePost().getEntity()));
 		} catch(IOException e) {
 			throw new B2ApiException(e);
 		}
-<<<<<<< HEAD
-
-		if(null != requestBodyStringData.get(KEY_START_FILE_ID) && null == requestBodyStringData.get(KEY_START_FILE_NAME)) {
-			throw new B2ApiException("You __MUST__ include a '" + KEY_START_FILE_NAME + "', if you are also include a '" + KEY_START_FILE_ID + "'.");
-		}
-
-		return(new B2ListFilesResponse(executePost(LOGGER)));
-=======
->>>>>>> master
 	}
 }

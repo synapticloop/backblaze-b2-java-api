@@ -48,11 +48,7 @@ public class B2GetFileInfoRequest extends BaseB2Request {
 	public B2GetFileInfoRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String fileId) {
 		super(client, b2AuthorizeAccountResponse, b2AuthorizeAccountResponse.getApiUrl() + B2_GET_FILE_INFO);
 
-<<<<<<< HEAD
-		requestBodyStringData.put(KEY_FILE_ID, fileId);
-=======
 		requestBodyData.put(B2RequestProperties.KEY_FILE_ID, fileId);
->>>>>>> master
 	}
 
 	/**

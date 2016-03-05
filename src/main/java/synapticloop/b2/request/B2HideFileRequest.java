@@ -42,13 +42,8 @@ public class B2HideFileRequest extends BaseB2Request {
 	public B2HideFileRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String bucketId, String fileName) {
 		super(client, b2AuthorizeAccountResponse, b2AuthorizeAccountResponse.getApiUrl() + B2_HIDE_FILE);
 
-<<<<<<< HEAD
-		requestBodyStringData.put(KEY_BUCKET_ID, bucketId);
-		requestBodyStringData.put(KEY_FILE_NAME, fileName);
-=======
 		requestBodyData.put(B2RequestProperties.KEY_BUCKET_ID, bucketId);
 		requestBodyData.put(B2RequestProperties.KEY_FILE_NAME, Helper.urlEncode(fileName));
->>>>>>> master
 	}
 
 	/**
