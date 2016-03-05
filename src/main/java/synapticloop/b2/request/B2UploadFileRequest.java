@@ -60,6 +60,8 @@ public class B2UploadFileRequest extends BaseB2Request {
 	 * @param fileName the name of the file
 	 * @param file the file to upload
 	 * @param fileInfo the file info map which are passed through as headers prefixed by "X-Bz-Info-"
+	 * 
+	 * @throws B2ApiException if there was an error in the request
 	 */
 	public B2UploadFileRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse, 
 			B2GetUploadUrlResponse b2GetUploadUrlResponse, String fileName, File file, Map<String, String> fileInfo) throws B2ApiException {
@@ -78,6 +80,8 @@ public class B2UploadFileRequest extends BaseB2Request {
 	 * @param file the file to upload
 	 * @param mimeType the mimeTyp (optional, will default to 'b2/x-auto' which
 	 *     backblaze will attempt to determine automatically)
+	 * 
+	 * @throws B2ApiException if there was an error in the request
 	 */
 	public B2UploadFileRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse, 
 			B2GetUploadUrlResponse b2GetUploadUrlResponse, String fileName, File file, String mimeType) throws B2ApiException {
@@ -94,12 +98,11 @@ public class B2UploadFileRequest extends BaseB2Request {
 	 * @param b2GetUploadUrlResponse the upload URL for this request
 	 * @param fileName the name of the file
 	 * @param file the file to upload
+	 * 
+	 * @throws B2ApiException if there was an error in the request
 	 */
-	public B2UploadFileRequest(CloseableHttpClient client, 
-			B2AuthorizeAccountResponse b2AuthorizeAccountResponse,
-			B2GetUploadUrlResponse b2GetUploadUrlResponse, 
-			String fileName, 
-			File file) throws B2ApiException {
+	public B2UploadFileRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse,
+			B2GetUploadUrlResponse b2GetUploadUrlResponse, String fileName, File file) throws B2ApiException {
 
 		this(client, b2AuthorizeAccountResponse, b2GetUploadUrlResponse, fileName, file, null, null);
 	}
@@ -117,13 +120,11 @@ public class B2UploadFileRequest extends BaseB2Request {
 	 *     backblaze will attempt to determine automatically)
 	 * @param fileInfo the file info map which are passed through as headers
 	 *     prefixed by "X-Bz-Info-"
+	 * 
+	 * @throws B2ApiException if there was an error in the request
 	 */
-	public B2UploadFileRequest(CloseableHttpClient client, 
-			B2AuthorizeAccountResponse b2AuthorizeAccountResponse, 
-			B2GetUploadUrlResponse b2GetUploadUrlResponse, 
-			String fileName, 
-			File file, 
-			String mimeType, 
+	public B2UploadFileRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse, 
+			B2GetUploadUrlResponse b2GetUploadUrlResponse, String fileName, File file, String mimeType, 
 			Map<String, String> fileInfo) throws B2ApiException {
 
 		this(client, 

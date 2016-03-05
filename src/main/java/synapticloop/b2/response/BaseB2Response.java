@@ -41,7 +41,7 @@ public abstract class BaseB2Response {
 	/**
 	 * Create a new B2 Response with a pre parsed JSONObject response
 	 * 
-	 * @param responsem the pre-parsed json object
+	 * @param response the pre-parsed json object
 	 * 
 	 * @throws B2ApiException if there was an error in the response
 	 */

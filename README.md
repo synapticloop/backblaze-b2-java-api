@@ -8,7 +8,8 @@ A Java API for the truly excellent backblaze B2 storage
 String b2AccountId = ""; // your b2 account ID
 String b2ApplicationKey = ""; // your b2 application Key
 
-B2ApiClient b2ApiClient = new B2ApiClient(b2AccountId, b2ApplicationKey);
+B2ApiClient b2ApiClient = new B2ApiClient();
+b2ApiClient.authorize(b2AccountId, b2ApplicationKey);
 
 // now create a private bucket
 B2BucketResponse createPrivateBucket = b2ApiClient.createBucket("super-secret-bucket" , BucketType.ALL_PRIVATE);
