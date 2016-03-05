@@ -55,7 +55,6 @@ public class B2DeleteFileVersionRequest extends BaseB2Request {
 	 *    {@link B2ListFileNamesRequest}, or {@link B2ListFileVersionsRequest}.
 	 */
 	public B2DeleteFileVersionRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String fileName, String fileId) {
-
 		super(client, b2AuthorizeAccountResponse, b2AuthorizeAccountResponse.getApiUrl() + B2_DELETE_FILE_VERSION);
 
 		requestBodyData.put(B2RequestProperties.KEY_FILE_NAME, Helper.urlEncodeFileName(fileName));
