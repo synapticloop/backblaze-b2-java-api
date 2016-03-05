@@ -38,4 +38,6 @@ public final class B2ResponseProperties {
 	public static final String KEY_UPLOAD_TIMESTAMP = "uploadTimestamp";
 	public static final String KEY_UPLOAD_URL = "uploadUrl";
 	public static final String KEY_BUCKETS = "buckets";
+	public static final String KEY_UPLOAD_AUTH_TOKEN = "uploadAuthToken";
+	public static final String KEY_UPLOAD_URLS = "uploadUrls";
 }

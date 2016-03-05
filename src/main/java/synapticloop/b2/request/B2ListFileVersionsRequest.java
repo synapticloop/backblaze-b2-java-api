@@ -27,11 +27,13 @@ import synapticloop.b2.response.B2ListFilesResponse;
 import synapticloop.b2.util.Helper;
 
 /**
- * <p>Lists all of the versions of all of the files contained in one bucket, in alphabetical order by file name, and by reverse of date/time uploaded for versions of files with the same name.</p>
- * 
+ * <p>Lists all of the versions of all of the files contained in one bucket, in 
+ * alphabetical order by file name, and by reverse of date/time uploaded for 
+ * versions of files with the same name.</p>
  * 
  * This is the interaction class for the <strong>b2_list_file_versions</strong> api calls, this was
  * generated from the backblaze api documentation - which can be found here:
+ * 
  * <a href="http://www.backblaze.com/b2/docs/b2_list_file_versions.html">http://www.backblaze.com/b2/docs/b2_list_file_versions.html</a>
  * 
  * @author synapticloop
@@ -41,31 +43,72 @@ public class B2ListFileVersionsRequest extends BaseB2Request {
 
 	private static final int DEFAULT_MAX_FILE_COUNT = 100;
 
+	/**
+	 * Create a list files request
+	 * 
+	 * 
+	 * @param client The HTTP client to use
+	 * @param b2AuthorizeAccountResponse the authorize account response
+	 * @param bucketId The id of the bucket to look for file names in.
+	 * 
+	 * @throws B2ApiException if there was a problem creating the request
+	 */
 	public B2ListFileVersionsRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String bucketId) throws B2ApiException {
 		this(client, b2AuthorizeAccountResponse, bucketId, DEFAULT_MAX_FILE_COUNT);
 	}
 
+	/**
+	 * Create a list files request
+	 * 
+	 * @param client The HTTP client to use
+	 * @param b2AuthorizeAccountResponse the authorize account response
+	 * @param bucketId The id of the bucket to look for file names in.
+	 * @param maxFileCount The maximum number of files to return from this call. 
+	 *     The default value is 100, and the maximum allowed is 1000.
+	 * 
+	 * @throws B2ApiException if there was a problem creating the request
+	 */
 	public B2ListFileVersionsRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String bucketId, Integer maxFileCount) throws B2ApiException {
 		this(client, b2AuthorizeAccountResponse, bucketId, maxFileCount, null, null);
 	}
 
+	/**
+	 * Create a list files request
+	 * 
+	 * @param client The HTTP client to use
+	 * @param b2AuthorizeAccountResponse the authorize account response
+	 * @param bucketId The id of the bucket to look for file names in.
+	 * @param maxFileCount The maximum number of files to return from this call. 
+	 *     The default value is 100, and the maximum allowed is 1000.
+	 * @param startFileName The first file name to return.  If there are no files 
+	 *     with this name, the first version of the file with the first name after 
+	 *     the given name will be the first in the list.  If startFileId is also 
+	 *     specified, the name-and-id pair is the starting point. If there is a 
+	 *     file with the given name and ID, it will be first in the list. 
+	 *     Otherwise, the first file version that comes after the given name and 
+	 *     ID will be first in the list.
+	 * @param startFileId The first file ID to return. startFileName must also 
+	 *     be provided if startFileId is specified. (See startFileName.)
+	 * 
+	 * @throws B2ApiException if there was an error creating the request
+	 */
 	public B2ListFileVersionsRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String bucketId, Integer maxFileCount, String startFileName, String startFileId) throws B2ApiException {
 		super(client, b2AuthorizeAccountResponse, b2AuthorizeAccountResponse.getApiUrl() + B2_LIST_FILE_VERSIONS);
+
 		if(null != startFileId) {
 			if(null == startFileName) {
 				throw new B2ApiException(String.format("Must include a '%s', if you are also include a '%s'.",
 						B2RequestProperties.KEY_START_FILE_NAME, B2RequestProperties.KEY_START_FILE_ID));
 			}
+
 		}
 
 		requestBodyData.put(B2RequestProperties.KEY_BUCKET_ID, bucketId);
-
 		if(maxFileCount > MAX_FILE_COUNT_RETURN) {
 			throw new B2ApiException(String.format("Maximum return file count is %d", MAX_FILE_COUNT_RETURN));
 		}
 
 		requestBodyData.put(B2RequestProperties.KEY_MAX_FILE_COUNT, maxFileCount);
-
 		if(null != startFileName) {
 			requestBodyData.put(B2RequestProperties.KEY_START_FILE_NAME, Helper.urlEncode(startFileName));
 		}
@@ -83,6 +126,10 @@ public class B2ListFileVersionsRequest extends BaseB2Request {
 	 * @throws B2ApiException if something went wrong
 	 */
 	public B2ListFilesResponse getResponse() throws B2ApiException {
+		if(null != requestBodyData.get(B2RequestProperties.KEY_START_FILE_ID) && null == requestBodyData.get(B2RequestProperties.KEY_START_FILE_NAME)) {
+			throw new B2ApiException(String.format("You __MUST__ include a '%s', if you are also include a '%s'." + B2RequestProperties.KEY_START_FILE_NAME, B2RequestProperties.KEY_START_FILE_ID));
+		}
+
 		try {
 			return new B2ListFilesResponse(EntityUtils.toString(executePost().getEntity()));
 		} catch(IOException e) {

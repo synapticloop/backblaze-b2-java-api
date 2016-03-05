@@ -42,6 +42,14 @@ public class B2UpdateBucketRequest extends BaseB2Request {
 
 	private static final String B2_UPDATE_BUCKET = BASE_API_VERSION + "b2_update_bucket";
 
+	/**
+	 * Create an update bucket request
+	 * 
+	 * @param client The http client to use
+	 * @param b2AuthorizeAccountResponse the authorize account response
+	 * @param bucketId the id of the bucket to change
+	 * @param bucketType the type of bucket to change to
+	 */
 	public B2UpdateBucketRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String bucketId, BucketType bucketType) {
 		super(client, b2AuthorizeAccountResponse, b2AuthorizeAccountResponse.getApiUrl() + B2_UPDATE_BUCKET);
 
@@ -53,7 +61,7 @@ public class B2UpdateBucketRequest extends BaseB2Request {
 	/**
 	 * Return the bucket response 
 	 * 
-	 * @return the bucketresponse
+	 * @return the bucket response
 	 * 
 	 * @throws B2ApiException if something went wrong
 	 */

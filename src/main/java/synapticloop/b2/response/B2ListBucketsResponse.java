@@ -30,6 +30,14 @@ public final class B2ListBucketsResponse extends BaseB2Response {
 
 	private final List<B2BucketResponse> buckets;
 
+	/**
+	 * Instantiate a list bucket response with the JSON response as a string from 
+	 * the API call.  This response is then parsed into the relevant fields.
+	 * 
+	 * @param json The response (in JSON format)
+	 * 
+	 * @throws B2ApiException if there was an error parsing the response
+	 */
 	public B2ListBucketsResponse(final String json) throws B2ApiException {
 		super(json);
 
@@ -47,6 +55,11 @@ public final class B2ListBucketsResponse extends BaseB2Response {
 
 	}
 
+	/**
+	 * Return a list of all of the buckets
+	 * 
+	 * @return the bucket list (but not the film version :))
+	 */
 	public List<B2BucketResponse> getBuckets() {
 		return buckets;
 	}

@@ -38,6 +38,12 @@ import synapticloop.b2.response.B2ListBucketsResponse;
 public class B2ListBucketsRequest extends BaseB2Request {
 	private static final String B2_LIST_BUCKETS = BASE_API_VERSION + "b2_list_buckets";
 
+	/**
+	 * Create a List buckets request
+	 * 
+	 * @param client the HTTP client to use
+	 * @param b2AuthorizeAccountResponse the authorize account response
+	 */
 	public B2ListBucketsRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse) {
 		super(client, b2AuthorizeAccountResponse, b2AuthorizeAccountResponse.getApiUrl() + B2_LIST_BUCKETS);
 

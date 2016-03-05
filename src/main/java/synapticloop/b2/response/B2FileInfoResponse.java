@@ -40,6 +40,14 @@ public class B2FileInfoResponse extends BaseB2Response {
 	private final int size;
 	private final long uploadTimestamp;
 
+	/**
+	 * Instantiate a file info response with the JSON response as a string from 
+	 * the API call.  This response is then parsed into the relevant fields.
+	 * 
+	 * @param response The pre-parsed response as a JSON object
+	 * 
+	 * @throws B2ApiException if there was an error parsing the response
+	 */
 	@SuppressWarnings("rawtypes")
 	public B2FileInfoResponse(final JSONObject response) throws B2ApiException {
 		super(response);
@@ -123,8 +131,18 @@ public class B2FileInfoResponse extends BaseB2Response {
 	
 	public Map<String, String> getFileInfo() { return this.fileInfo; }
 
+	/**
+	 * The action that was performed, this will be one of of 'hide', or 'upload'
+	 * 
+	 * @return The action that was performed
+	 */
 	public Action getAction() { return this.action; }
 
+	/**
+	 * Return the timestamp that the file was uploaded
+	 * 
+	 * @return the timestamp for when the file was uploaded
+	 */
 	public long getUploadTimestamp() { return this.uploadTimestamp; }
 
 	@Override

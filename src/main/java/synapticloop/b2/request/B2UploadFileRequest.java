@@ -36,8 +36,13 @@ import synapticloop.b2.util.Helper;
 /**
  * <p>Uploads one file to B2, returning its unique file ID.</p>
  *
- *
+ * <p>The file name and file info must fit, along with the other necessary 
+ * headers, within a 7,000 byte limit. This limit applies to the fully encoded 
+ * HTTP header line, including the carriage-return and newline. See Files 
+ * for further details about HTTP header size limit.</p>
+ * 
  * This is the interaction class for the <strong>b2_upload_file</strong> api calls, this was
+ * 
  * generated from the backblaze api documentation - which can be found here:
  * <a href="http://www.backblaze.com/b2/docs/b2_upload_file.html">http://www.backblaze.com/b2/docs/b2_upload_file.html</a>
  *
@@ -78,8 +83,13 @@ public class B2UploadFileRequest extends BaseB2Request {
 	 * @param b2GetUploadUrlResponse the upload URL for this request
 	 * @param fileName the name of the file
 	 * @param file the file to upload
-	 * @param mimeType the mimeTyp (optional, will default to 'b2/x-auto' which
-	 *     backblaze will attempt to determine automatically)
+	 * @param mimeType the mimeType (optional, will default to 'b2/x-auto' which
+	 *     backblaze will attempt to determine automatically).  The MIME type of 
+	 *     the content of the file, which will be returned in the Content-Type 
+	 *     header when downloading the file. Use the Content-Type b2/x-auto 
+	 *     to automatically set the stored Content-Type post upload. In the case 
+	 *     where a file extension is absent or the lookup fails, the Content-Type 
+	 *     is set to application/octet-stream.
 	 * 
 	 * @throws B2ApiException if there was an error in the request
 	 */
@@ -116,8 +126,13 @@ public class B2UploadFileRequest extends BaseB2Request {
 	 * @param b2GetUploadUrlResponse the upload URL for this request
 	 * @param fileName the name of the file
 	 * @param file the file to upload
-	 * @param mimeType the mimeTyp (optional, will default to 'b2/x-auto' which
-	 *     backblaze will attempt to determine automatically)
+	 * @param mimeType the mimeType (optional, will default to 'b2/x-auto' which
+	 *     backblaze will attempt to determine automatically).  The MIME type of 
+	 *     the content of the file, which will be returned in the Content-Type 
+	 *     header when downloading the file. Use the Content-Type b2/x-auto 
+	 *     to automatically set the stored Content-Type post upload. In the case 
+	 *     where a file extension is absent or the lookup fails, the Content-Type 
+	 *     is set to application/octet-stream.
 	 * @param fileInfo the file info map which are passed through as headers
 	 *     prefixed by "X-Bz-Info-"
 	 * 
@@ -136,6 +151,33 @@ public class B2UploadFileRequest extends BaseB2Request {
 				mimeType, fileInfo);
 	}
 
+	/**
+	 * Instantiate a upload file request in order to place a file on the B2 bucket,
+	 * with a pre-generated sha1 sum, along with the file information that will be
+	 * attached to the file.
+	 * 
+	 * @param client Shared HTTP client instance
+	 * @param b2AuthorizeAccountResponse The authorize account response
+	 * @param b2GetUploadUrlResponse the upload URL for this request
+	 * @param fileName the name of the file
+	 * @param entity the http entity to upload
+	 * @param sha1Checksum The SHA1 checksum of the content of the file. B2 will 
+	 *     check this when the file is uploaded, to make sure that the file arrived 
+	 *     correctly. It will be returned in the X-Bz-Content-Sha1 header when the 
+	 *     file is downloaded.
+	 * @param mimeType the mimeType (optional, will default to 'b2/x-auto' which
+	 *     backblaze will attempt to determine automatically).  The MIME type of 
+	 *     the content of the file, which will be returned in the Content-Type 
+	 *     header when downloading the file. Use the Content-Type b2/x-auto 
+	 *     to automatically set the stored Content-Type post upload. In the case 
+	 *     where a file extension is absent or the lookup fails, the Content-Type 
+	 *     is set to application/octet-stream.
+	 * @param fileInfo A map of information that will be stored with the file. Up
+	 *     to 10 of keys may be present.. The same file info headers sent with the 
+	 *     upload will be returned with the download. 
+	 *     
+	 * @throws B2ApiException If the number of file info headers is greater than the allowable
+	 */
 	public B2UploadFileRequest(CloseableHttpClient client, 
 			B2AuthorizeAccountResponse b2AuthorizeAccountResponse, 
 			B2GetUploadUrlResponse b2GetUploadUrlResponse, 
@@ -143,7 +185,7 @@ public class B2UploadFileRequest extends BaseB2Request {
 			HttpEntity entity, 
 			String sha1Checksum, 
 			String mimeType, 
-			Map<String, String> fileInfo) {
+			Map<String, String> fileInfo) throws B2ApiException {
 
 		super(client, b2AuthorizeAccountResponse, b2GetUploadUrlResponse.getUploadUrl());
 
@@ -153,10 +195,16 @@ public class B2UploadFileRequest extends BaseB2Request {
 
 		// now go through and add in the 'X-Bz-Info-*' headers
 		if(null != fileInfo) {
+			int fileInfoSize = fileInfo.size();
+			if(fileInfoSize > MAX_FILE_INFO_HEADERS) {
+				throw new B2ApiException(String.format("The maximum allowable file info size is '%d', you sent '%d'", MAX_FILE_INFO_HEADERS, fileInfoSize));
+			}
+
 			for(final String key : fileInfo.keySet()) {
 				requestHeaders.put(B2ResponseHeaders.HEADER_X_BZ_INFO_PREFIX + Helper.urlEncode(key), Helper.urlEncode(fileInfo.get(key)));
 			}
 		}
+
 		requestHeaders.put(B2ResponseHeaders.HEADER_X_BZ_CONTENT_SHA1, sha1Checksum);
 		// Override generic authorization header
 		requestHeaders.put(HttpHeaders.AUTHORIZATION, b2GetUploadUrlResponse.getAuthorizationToken());

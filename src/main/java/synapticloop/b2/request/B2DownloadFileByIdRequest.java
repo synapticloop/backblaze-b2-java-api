@@ -28,6 +28,25 @@ import synapticloop.b2.response.B2DownloadFileResponse;
  * 
  * <p>The response contains the following headers, which contain the same information they did when the file was uploaded:</p>
  * 
+ * <ul>
+ *   <li>Content-Length</li>
+ *   <li>Content-Type</li>
+ *   <li>X-Bz-File-Id</li>
+ *   <li>X-Bz-File-Name</li>
+ *   <li>X-Bz-Content-Sha1</li>
+ *   <li>X-Bz-Info-*</li>
+ * </ul>
+ * 
+ * <p>HEAD requests are also supported, and work just like a GET, except that the 
+ * body of the response is not included. All of the same headers, including 
+ * Content-Length are returned. See the B2HeadFileByIdRequest</p>
+ * 
+ * <p>If the bucket containing the file is set to require authorization, then you 
+ * must supply the bucket's auth token in the Authorzation header.</p>
+ * 
+ * <p>Because errors can happen in network transmission, you should check the 
+ * SHA1 of the data you receive against the SHA1 returned in the 
+ * X-Bz-Content-Sha1 header.</p>
  * 
  * This is the interaction class for the <strong>b2_download_file_by_id</strong> api calls, this was
  * generated from the backblaze api documentation - which can be found here:

@@ -28,6 +28,14 @@ public class B2GetUploadUrlResponse extends BaseB2Response {
 	private final String uploadUrl;
 	private final String authorizationToken;
 
+	/**
+	 * Instantiate a get upload URL response with the JSON response as a string from 
+	 * the API call.  This response is then parsed into the relevant fields.
+	 * 
+	 * @param json The response (in JSON format)
+	 * 
+	 * @throws B2ApiException if there was an error parsing the response
+	 */
 	public B2GetUploadUrlResponse(String json) throws B2ApiException {
 		super(json);
 
@@ -45,8 +53,25 @@ public class B2GetUploadUrlResponse extends BaseB2Response {
 
 	}
 
+	/**
+	 * Get the bucket id
+	 * 
+	 * @return the id of the bucket
+	 */
 	public String getBucketId() { return this.bucketId; }
+
+	/**
+	 * Get the URL to be used for uploading this file
+	 * 
+	 * @return the URL to be used to upload this file
+	 */
 	public String getUploadUrl() { return this.uploadUrl; }
+	
+	/**
+	 * Get the authorization token to be used with the file upload
+	 * 
+	 * @return the authorization token to be used with the file upload
+	 */
 	public String getAuthorizationToken() { return this.authorizationToken; }
 
 	@Override

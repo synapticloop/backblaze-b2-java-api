@@ -32,7 +32,7 @@ public class B2BucketResponse extends BaseB2Response {
 	private final String bucketType;
 
 	/**
-	 * Instantiate an bucket response with the JSON response as a string from 
+	 * Instantiate a bucket response with the JSON response as a string from 
 	 * the API call.  This response is then parsed into the relevant fields.
 	 * 
 	 * @param json The response (in JSON format)
@@ -106,7 +106,7 @@ public class B2BucketResponse extends BaseB2Response {
 	public String getBucketName() { return this.bucketName; }
 
 	/**
-	 * Get the type of the bucket, on of allPrivate or allPublic
+	 * Get the type of the bucket, one of 'allPrivate' or 'allPublic'
 	 * 
 	 * @return The bucket type
 	 */
