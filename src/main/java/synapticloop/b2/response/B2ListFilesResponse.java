@@ -20,10 +20,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONArray;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import synapticloop.b2.exception.B2Exception;
 
 public class B2ListFilesResponse extends BaseB2Response {
+	private static final Logger LOGGER = LoggerFactory.getLogger(B2ListFilesResponse.class);
+
 	private final List<B2FileInfoResponse> files;
 	private final String nextFileName;
 	private final String nextFileId;
@@ -49,6 +53,15 @@ public class B2ListFilesResponse extends BaseB2Response {
 		for(int i = 0; i < filesArray.length(); i ++) {
 			files.add(new B2FileInfoResponse(filesArray.optJSONObject(i)));
 		}
+
+		if(LOGGER.isWarnEnabled()) {
+			response.remove(B2ResponseProperties.KEY_NEXT_FILE_NAME);
+			response.remove(B2ResponseProperties.KEY_NEXT_FILE_ID);
+			response.remove(B2ResponseProperties.KEY_FILES);
+
+			warnOnMissedKeys(LOGGER, response);
+		}
+
 	}
 
 	/**

@@ -20,20 +20,31 @@ import java.util.List;
  */
 
 import org.json.JSONArray;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import synapticloop.b2.exception.B2Exception;
 
 public final class B2ListBucketsResponse extends BaseB2Response {
+	private static final Logger LOGGER = LoggerFactory.getLogger(B2ListBucketsResponse.class);
+
 	private final List<B2BucketResponse> buckets;
 
 	public B2ListBucketsResponse(final String json) throws B2Exception {
 		super(json);
 
 		buckets = new ArrayList<>();
-		JSONArray optJSONArray = response.optJSONArray("buckets");
+		JSONArray optJSONArray = response.optJSONArray(B2ResponseProperties.KEY_BUCKETS);
 		for(int i = 0; i < optJSONArray.length(); i++) {
 			buckets.add(new B2BucketResponse(optJSONArray.optJSONObject(i)));
 		}
+
+		if(LOGGER.isWarnEnabled()) {
+			response.remove(B2ResponseProperties.KEY_BUCKETS);
+
+			warnOnMissedKeys(LOGGER, response);
+		}
+
 	}
 
 	public List<B2BucketResponse> getBuckets() {

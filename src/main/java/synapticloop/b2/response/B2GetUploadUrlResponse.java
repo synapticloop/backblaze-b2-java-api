@@ -1,5 +1,8 @@
 package synapticloop.b2.response;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /*
  * Copyright (c) 2016 synapticloop.
  * 
@@ -19,6 +22,8 @@ package synapticloop.b2.response;
 import synapticloop.b2.exception.B2Exception;
 
 public class B2GetUploadUrlResponse extends BaseB2Response {
+	private static final Logger LOGGER = LoggerFactory.getLogger(B2GetUploadUrlResponse.class);
+
 	private final String bucketId;
 	private final String uploadUrl;
 	private final String authorizationToken;
@@ -29,6 +34,15 @@ public class B2GetUploadUrlResponse extends BaseB2Response {
 		this.bucketId = response.optString(B2ResponseProperties.KEY_BUCKET_ID, null);
 		this.uploadUrl = response.optString(B2ResponseProperties.KEY_UPLOAD_URL, null);
 		this.authorizationToken = response.optString(B2ResponseProperties.KEY_AUTHORIZATION_TOKEN, null);
+
+		if(LOGGER.isWarnEnabled()) {
+			response.remove(B2ResponseProperties.KEY_BUCKET_ID);
+			response.remove(B2ResponseProperties.KEY_UPLOAD_URL);
+			response.remove(B2ResponseProperties.KEY_AUTHORIZATION_TOKEN);
+
+			warnOnMissedKeys(LOGGER, response);
+		}
+
 	}
 
 	public String getBucketId() { return this.bucketId; }

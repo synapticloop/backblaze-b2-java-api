@@ -21,13 +21,10 @@ import java.util.Iterator;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import synapticloop.b2.exception.B2Exception;
 
 public abstract class BaseB2Response {
-	private static final Logger LOGGER = LoggerFactory.getLogger(BaseB2Response.class);
-
 	protected JSONObject response;
 
 	/**

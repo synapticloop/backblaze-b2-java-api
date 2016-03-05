@@ -75,6 +75,9 @@ public class B2FileInfoResponse extends BaseB2Response {
 			response.remove(B2ResponseProperties.KEY_FILE_NAME);
 			response.remove(B2ResponseProperties.KEY_CONTENT_LENGTH);
 			response.remove(B2ResponseProperties.KEY_CONTENT_SHA1);
+			response.remove(B2ResponseProperties.KEY_FILE_INFO);
+			response.remove(B2ResponseProperties.KEY_SIZE);
+			response.remove(B2ResponseProperties.KEY_UPLOAD_TIMESTAMP);
 
 			warnOnMissedKeys(LOGGER, response);
 		}
@@ -118,6 +121,8 @@ public class B2FileInfoResponse extends BaseB2Response {
 	 */
 	
 	public Map<String, String> getFileInfo() { return this.fileInfo; }
+
+	public Action getAction() { return this.action; }
 
 	@Override
 	public String toString() {
