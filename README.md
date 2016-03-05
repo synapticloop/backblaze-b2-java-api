@@ -25,7 +25,10 @@ see [B2ApiClient.java](https://github.com/synapticloop/backblaze-b2-java-api/blo
 
 ```
 // create a new B2ApiClient
-B2ApiClient(String, String)
+B2ApiClient()
+
+// authorize the client
+authorize(String, String)
 
 // create a bucket
 createBucket(String, BucketType)
