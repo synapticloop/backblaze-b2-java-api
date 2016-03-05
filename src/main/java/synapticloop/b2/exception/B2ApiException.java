@@ -1,15 +1,31 @@
 package synapticloop.b2.exception;
 
+/*
+ * Copyright (c) 2016 synapticloop.
+ * 
+ * All rights reserved.
+ * 
+ * This code may contain contributions from other parties which, where 
+ * applicable, will be listed in the default build file for the project 
+ * ~and/or~ in a file named CONTRIBUTORS.txt in the root of the project.
+ * 
+ * This source code and any derived binaries are covered by the terms and 
+ * conditions of the Licence agreement ("the Licence").  You may not use this 
+ * source code or any derived binaries except in compliance with the Licence.  
+ * A copy of the Licence is available in the file named LICENSE.txt shipped with 
+ * this source code or binaries.
+ */
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class B2ApiException extends Exception {
 	private static final long serialVersionUID = -7345341271403812967L;
 
-	private String code = null;
-	private String message = null;
+	private String code;
+	private String message;
 	private int status = -1;
-	private String originalMessage = null;
+	private String originalMessage;
 
 	/**
 	 * Create a new B2Api Exception
@@ -19,8 +35,8 @@ public class B2ApiException extends Exception {
 	}
 
 	/**
-	 * Create a new B2Api Exception with a message.  If the message is in JSON 
-	 * (as returned by the backblaze B2 api) format, this message will be parsed 
+	 * Create a new B2 Exception with a message.  If the message is in JSON (as 
+	 * returned by the backblaze B2 api) format, this message will be parsed 
 	 * and the following information extracted:
 	 * 
 	 * <ul>
@@ -64,15 +80,15 @@ public class B2ApiException extends Exception {
 		super(cause);
 	}
 
-	private void parseMessage(String message) {
-		this.originalMessage = message;
+	private void parseMessage(String json) {
+		this.originalMessage = json;
 
-		if(null == message) {
+		if(null == json) {
 			return;
 		}
 
 		try {
-			JSONObject jsonObject = new JSONObject(message);
+			JSONObject jsonObject = new JSONObject(json);
 
 			String tempMessage = jsonObject.getString("message");
 			if(null != tempMessage) {
@@ -80,11 +96,11 @@ public class B2ApiException extends Exception {
 			}
 
 			this.status = jsonObject.optInt("status");
-			this.code = jsonObject.optString("code");
+			this.code = jsonObject.optString("code", null);
 
 		} catch (JSONException ex) {
 			this.code = "not_json";
-			this.message = message;
+			this.message = json;
 		}
 	}
 

@@ -2,6 +2,7 @@ package synapticloop.b2.request;
 
 import static org.junit.Assert.*;
 
+import org.apache.http.impl.client.HttpClients;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -38,7 +39,7 @@ public class B2AuthorizeAccountRequestTest {
 			System.exit(-1);
 		}
 
-		B2AuthorizeAccountRequest b2AuthorizeAccountRequest = new B2AuthorizeAccountRequest(b2AccountId, b2ApplicationKey);
+		B2AuthorizeAccountRequest b2AuthorizeAccountRequest = new B2AuthorizeAccountRequest(HttpClients.createDefault(), b2AccountId, b2ApplicationKey);
 		B2AuthorizeAccountResponse response = b2AuthorizeAccountRequest.getResponse();
 		assertNotNull(response.getAuthorizationToken());
 		assertNotNull(response.getAccountId());
@@ -48,7 +49,7 @@ public class B2AuthorizeAccountRequestTest {
 
 	@Test (expected=B2ApiException.class)
 	public void testIncorrectCredentials() throws B2ApiException {
-		B2AuthorizeAccountRequest b2AuthorizeAccountRequest = new B2AuthorizeAccountRequest("bad", "value");
+		B2AuthorizeAccountRequest b2AuthorizeAccountRequest = new B2AuthorizeAccountRequest(HttpClients.createDefault(), "bad", "value");
 		b2AuthorizeAccountRequest.getResponse();
 	}
 

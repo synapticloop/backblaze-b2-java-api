@@ -1,123 +1,187 @@
 package synapticloop.b2.request;
 
+/*
+ * Copyright (c) 2016 synapticloop.
+ * 
+ * All rights reserved.
+ * 
+ * This code may contain contributions from other parties which, where 
+ * applicable, will be listed in the default build file for the project 
+ * ~and/or~ in a file named CONTRIBUTORS.txt in the root of the project.
+ * 
+ * This source code and any derived binaries are covered by the terms and 
+ * conditions of the Licence agreement ("the Licence").  You may not use this 
+ * source code or any derived binaries except in compliance with the Licence.  
+ * A copy of the Licence is available in the file named LICENSE.txt shipped with 
+ * this source code or binaries.
+ */
+
 import java.io.File;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.Iterator;
+import java.io.IOException;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpHeaders;
+import org.apache.http.entity.FileEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.util.EntityUtils;
 
 import synapticloop.b2.exception.B2ApiException;
 import synapticloop.b2.response.B2AuthorizeAccountResponse;
 import synapticloop.b2.response.B2FileResponse;
 import synapticloop.b2.response.B2GetUploadUrlResponse;
+import synapticloop.b2.response.B2ResponseHeaders;
 import synapticloop.b2.util.Helper;
 
 /**
  * <p>Uploads one file to B2, returning its unique file ID.</p>
- * 
- * 
+ *
+ *
  * This is the interaction class for the <strong>b2_upload_file</strong> api calls, this was
  * generated from the backblaze api documentation - which can be found here:
  * <a href="http://www.backblaze.com/b2/docs/b2_upload_file.html">http://www.backblaze.com/b2/docs/b2_upload_file.html</a>
- * 
+ *
  * @author synapticloop
  */
-
 public class B2UploadFileRequest extends BaseB2Request {
-	private static final Logger LOGGER = LoggerFactory.getLogger(B2UploadFileRequest.class);
+	private final HttpEntity entity;
+	private final String mimeType;
+	private final String fileName;
 
-	private File file = null;
-	private String mimeType = null;
-	private String fileName = null;
-
-	/**
-	 * Instantiate a upload file request in order to place a file on the B2 bucket,
-	 * the sha1 sum will be automatically generated.
-	 * 
-	 * @param b2AuthorizeAccountResponse The authorize account response
-	 * @param b2GetUploadUrlResponse the upload URL for this request
-	 * @param fileName the name of the file
-	 * @param file the file to upload
-	 * @param mimeType the mimeTyp (optional, will default to 'b2/x-auto' which 
-	 *     backblaze will attempt to determine automatically)
-	 * @param fileInfo the file info map which are passed through as headers
-	 *     prefixed by "X-Bz-Info-"
-	 */
-	public B2UploadFileRequest(B2AuthorizeAccountResponse b2AuthorizeAccountResponse, B2GetUploadUrlResponse b2GetUploadUrlResponse, String fileName, File file, String mimeType, Map<String, String> fileInfo) {
-		super(b2AuthorizeAccountResponse);
-		this.fileName = fileName;
-		this.url = b2GetUploadUrlResponse.getUploadUrl();
-		headers.put(REQUEST_PROPERTY_AUTHORIZATION, b2GetUploadUrlResponse.getAuthorizationToken());
-		this.file = file;
-		this.mimeType = mimeType;
-
-		// now go through and add in the 'X-Bz-Info-*' headers
-		if(null != fileInfo) {
-			Iterator<String> iterator = fileInfo.keySet().iterator();
-			while (iterator.hasNext()) {
-				String key = (String) iterator.next();
-				headers.put(HEADER_X_BZ_INFO_PREFIX + Helper.urlEncode(key), Helper.urlEncode(fileInfo.get(key)));
-			}
-		}
-	}
+	protected static final String CONTENT_TYPE_VALUE_B2_X_AUTO = "b2/x-auto";
 
 	/**
 	 * Instantiate a upload file request in order to place a file on the B2 bucket,
 	 * the sha1 sum will be automatically generated
-	 * 
+	 *
+	 * @param client Shared HTTP client instance
 	 * @param b2AuthorizeAccountResponse The authorize account response
 	 * @param b2GetUploadUrlResponse the upload URL for this request
 	 * @param fileName the name of the file
 	 * @param file the file to upload
+	 * @param fileInfo the file info map which are passed through as headers prefixed by "X-Bz-Info-"
+	 */
+	public B2UploadFileRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse, 
+			B2GetUploadUrlResponse b2GetUploadUrlResponse, String fileName, File file, Map<String, String> fileInfo) throws B2ApiException {
+
+		this(client, b2AuthorizeAccountResponse, b2GetUploadUrlResponse, fileName, file, null, fileInfo);
+	}
+
+	/**
+	 * Instantiate a upload file request in order to place a file on the B2 bucket,
+	 * the sha1 sum will be automatically generated.
+	 *
+	 * @param client Shared HTTP client instance
+	 * @param b2AuthorizeAccountResponse The authorize account response
+	 * @param b2GetUploadUrlResponse the upload URL for this request
+	 * @param fileName the name of the file
+	 * @param file the file to upload
+	 * @param mimeType the mimeTyp (optional, will default to 'b2/x-auto' which
+	 *     backblaze will attempt to determine automatically)
+	 */
+	public B2UploadFileRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse, 
+			B2GetUploadUrlResponse b2GetUploadUrlResponse, String fileName, File file, String mimeType) throws B2ApiException {
+
+		this(client, b2AuthorizeAccountResponse, b2GetUploadUrlResponse, fileName, file, mimeType, null);
+	}
+
+	/**
+	 * Instantiate a upload file request in order to place a file on the B2 bucket,
+	 * the sha1 sum will be automatically generated.
+	 *
+	 * @param client Shared HTTP client instance
+	 * @param b2AuthorizeAccountResponse The authorize account response
+	 * @param b2GetUploadUrlResponse the upload URL for this request
+	 * @param fileName the name of the file
+	 * @param file the file to upload
+	 */
+	public B2UploadFileRequest(CloseableHttpClient client, 
+			B2AuthorizeAccountResponse b2AuthorizeAccountResponse,
+			B2GetUploadUrlResponse b2GetUploadUrlResponse, 
+			String fileName, 
+			File file) throws B2ApiException {
+
+		this(client, b2AuthorizeAccountResponse, b2GetUploadUrlResponse, fileName, file, null, null);
+	}
+
+	/**
+	 * Instantiate a upload file request in order to place a file on the B2 bucket,
+	 * the sha1 sum will be automatically generated.
+	 *
+	 * @param client Shared HTTP client instance
+	 * @param b2AuthorizeAccountResponse The authorize account response
+	 * @param b2GetUploadUrlResponse the upload URL for this request
+	 * @param fileName the name of the file
+	 * @param file the file to upload
+	 * @param mimeType the mimeTyp (optional, will default to 'b2/x-auto' which
+	 *     backblaze will attempt to determine automatically)
 	 * @param fileInfo the file info map which are passed through as headers
 	 *     prefixed by "X-Bz-Info-"
 	 */
-	public B2UploadFileRequest(B2AuthorizeAccountResponse b2AuthorizeAccountResponse, B2GetUploadUrlResponse b2GetUploadUrlResponse, String fileName, File file, Map<String, String> fileInfo) {
-		this(b2AuthorizeAccountResponse, b2GetUploadUrlResponse, fileName, file, null, fileInfo);
+	public B2UploadFileRequest(CloseableHttpClient client, 
+			B2AuthorizeAccountResponse b2AuthorizeAccountResponse, 
+			B2GetUploadUrlResponse b2GetUploadUrlResponse, 
+			String fileName, 
+			File file, 
+			String mimeType, 
+			Map<String, String> fileInfo) throws B2ApiException {
+
+		this(client, 
+				b2AuthorizeAccountResponse, 
+				b2GetUploadUrlResponse, 
+				fileName, 
+				new FileEntity(file),
+				Helper.calculateSha1(file),
+				mimeType, fileInfo);
+	}
+
+	public B2UploadFileRequest(CloseableHttpClient client, 
+			B2AuthorizeAccountResponse b2AuthorizeAccountResponse, 
+			B2GetUploadUrlResponse b2GetUploadUrlResponse, 
+			String fileName, 
+			HttpEntity entity, 
+			String sha1Checksum, 
+			String mimeType, 
+			Map<String, String> fileInfo) {
+
+		super(client, b2AuthorizeAccountResponse, b2GetUploadUrlResponse.getUploadUrl());
+
+		this.fileName = fileName;
+		this.entity = entity;
+		this.mimeType = mimeType;
+
+		// now go through and add in the 'X-Bz-Info-*' headers
+		if(null != fileInfo) {
+			for(final String key : fileInfo.keySet()) {
+				requestHeaders.put(B2ResponseHeaders.HEADER_X_BZ_INFO_PREFIX + Helper.urlEncode(key), Helper.urlEncode(fileInfo.get(key)));
+			}
+		}
+		requestHeaders.put(B2ResponseHeaders.HEADER_X_BZ_CONTENT_SHA1, sha1Checksum);
+		// Override generic authorization header
+		requestHeaders.put(HttpHeaders.AUTHORIZATION, b2GetUploadUrlResponse.getAuthorizationToken());
 	}
 
 	/**
-	 * Instantiate a upload file request in order to place a file on the B2 bucket,
-	 * the sha1 sum will be automatically generated.
+	 * Return the file response 
 	 * 
-	 * @param b2AuthorizeAccountResponse The authorize account response
-	 * @param b2GetUploadUrlResponse the upload URL for this request
-	 * @param fileName the name of the file
-	 * @param file the file to upload
-	 * @param mimeType the mimeTyp (optional, will default to 'b2/x-auto' which 
-	 *     backblaze will attempt to determine automatically)
-	 */
-	public B2UploadFileRequest(B2AuthorizeAccountResponse b2AuthorizeAccountResponse, B2GetUploadUrlResponse b2GetUploadUrlResponse, String fileName, File file, String mimeType) {
-		this(b2AuthorizeAccountResponse, b2GetUploadUrlResponse, fileName, file, mimeType, null);
-	}
-
-	/**
-	 * Instantiate a upload file request in order to place a file on the B2 bucket,
-	 * the sha1 sum will be automatically generated.
+	 * @return the file response
 	 * 
-	 * @param b2AuthorizeAccountResponse The authorize account response
-	 * @param b2GetUploadUrlResponse the upload URL for this request
-	 * @param fileName the name of the file
-	 * @param file the file to upload
+	 * @throws B2ApiException if something went wrong
 	 */
-	public B2UploadFileRequest(B2AuthorizeAccountResponse b2AuthorizeAccountResponse, B2GetUploadUrlResponse b2GetUploadUrlResponse, String fileName, File file) {
-		this(b2AuthorizeAccountResponse, b2GetUploadUrlResponse, fileName, file, null, null);
-	}
 
 	public B2FileResponse getResponse() throws B2ApiException {
 		if(null == mimeType) {
-			headers.put(HEADER_CONTENT_TYPE, VALUE_B2_X_AUTO);
+			requestHeaders.put(B2ResponseHeaders.HEADER_CONTENT_TYPE, CONTENT_TYPE_VALUE_B2_X_AUTO);
 		} else {
-			headers.put(HEADER_CONTENT_TYPE, mimeType);
+			requestHeaders.put(B2ResponseHeaders.HEADER_CONTENT_TYPE, mimeType);
 		}
 
-		headers.put(HEADER_X_BZ_FILE_NAME, Helper.urlEncode(fileName));
+		requestHeaders.put(B2ResponseHeaders.HEADER_X_BZ_FILE_NAME, Helper.urlEncode(fileName));
 
-		headers.put(HEADER_X_BZ_CONTENT_SHA1, Helper.calculateSha1(file));
-
-		return(new B2FileResponse(executePost(LOGGER, file)));
+		try {
+			return new B2FileResponse(EntityUtils.toString(executePost(entity).getEntity()));
+		} catch(IOException e) {
+			throw new B2ApiException(e);
+		}
 	}
 }

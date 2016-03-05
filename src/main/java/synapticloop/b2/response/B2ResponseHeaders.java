@@ -1,4 +1,4 @@
-package synapticloop.b2;
+package synapticloop.b2.response;
 
 /*
  * Copyright (c) 2016 synapticloop.
@@ -16,12 +16,10 @@ package synapticloop.b2;
  * this source code or binaries.
  */
 
-/**
- * The type of bucket, either allPrivate, or allPublic
- *
- * @author synapticloop
- */
-public enum BucketType {
-	allPublic,
-	allPrivate
+public final class B2ResponseHeaders {
+	public static final String HEADER_CONTENT_TYPE = "Content-Type";
+	public static final String HEADER_X_BZ_CONTENT_SHA1 = "X-Bz-Content-Sha1";
+	public static final String HEADER_X_BZ_FILE_NAME = "X-Bz-File-Name";
+	public static final String HEADER_X_BZ_FILE_ID = "X-Bz-File-Id";
+	public static final String HEADER_X_BZ_INFO_PREFIX = "X-Bz-Info-";
 }

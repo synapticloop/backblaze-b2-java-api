@@ -1,58 +1,72 @@
 package synapticloop.b2.response;
 
+/*
+ * Copyright (c) 2016 synapticloop.
+ * 
+ * All rights reserved.
+ * 
+ * This code may contain contributions from other parties which, where 
+ * applicable, will be listed in the default build file for the project 
+ * ~and/or~ in a file named CONTRIBUTORS.txt in the root of the project.
+ * 
+ * This source code and any derived binaries are covered by the terms and 
+ * conditions of the Licence agreement ("the Licence").  You may not use this 
+ * source code or any derived binaries except in compliance with the Licence.  
+ * A copy of the Licence is available in the file named LICENSE.txt shipped with 
+ * this source code or binaries.
+ */
+
 import java.util.Iterator;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import synapticloop.b2.exception.B2ApiException;
 
 public abstract class BaseB2Response {
-	private static final Logger LOGGER = LoggerFactory.getLogger(BaseB2Response.class);
+	protected JSONObject response;
 
-	protected static final String HEADER_X_BZ_INFO_PREFIX = "x-bz-info-";
+	/**
+	 * Create a new B2 Response object by parsing the passed in String
+	 * 
+	 * @param json the Response (in json format)
+	 * 
+	 * @throws B2ApiException if there was an error in the parsing of the reponse
+	 */
+	public BaseB2Response(final String json) throws B2ApiException {
+		this(parse(json));
+	}
 
-	protected static final String KEY_ACCOUNT_ID = "accountId";
-	protected static final String KEY_ACTION = "action";
-	protected static final String KEY_API_URL = "apiUrl";
-	protected static final String KEY_AUTHORIZATION_TOKEN = "authorizationToken";
-	protected static final String KEY_BUCKET_ID = "bucketId";
-	protected static final String KEY_BUCKET_NAME = "bucketName";
-	protected static final String KEY_BUCKET_TYPE = "bucketType";
-	protected static final String KEY_CONTENT_LENGTH = "contentLength";
-	protected static final String KEY_CONTENT_SHA1 = "contentSha1";
-	protected static final String KEY_CONTENT_TYPE = "contentType";
-	protected static final String KEY_DOWNLOAD_URL = "downloadUrl";
-	protected static final String KEY_FILE_ID = "fileId";
-	protected static final String KEY_FILE_INFO = "fileInfo";
-	protected static final String KEY_FILE_NAME = "fileName";
-	protected static final String KEY_FILES = "files";
-	protected static final String KEY_NEXT_FILE_ID = "nextFileId";
-	protected static final String KEY_NEXT_FILE_NAME = "nextFileName";
-	protected static final String KEY_SIZE = "size";
-	protected static final String KEY_UPLOAD_TIMESTAMP = "uploadTimestamp";
-	protected static final String KEY_UPLOAD_URL = "uploadUrl";
+	/**
+	 * Create a new B2 Response with a pre parsed JSONObject response
+	 * 
+	 * @param responsem the pre-parsed json object
+	 * 
+	 * @throws B2ApiException if there was an error in the response
+	 */
+
+	public BaseB2Response(final JSONObject response) throws B2ApiException {
+		this.response = response;
+	}
 
 	/**
 	 * Parse a string into a JSON object 
 	 * 
-	 * @param response the data to parse to an object
+	 * @param json the data to parse to an object
 	 * 
 	 * @return the parsed JSON object
 	 * 
 	 * @throws B2ApiException if there was an error parsing the object
 	 */
-	public static JSONObject getParsedResponse(String response) throws B2ApiException {
-		JSONObject jsonObject = null;
+	private static JSONObject parse(String json) throws B2ApiException {
+		JSONObject jsonObject;
 		try {
-			jsonObject = new JSONObject(response);
+			jsonObject = new JSONObject(json);
 		} catch (JSONException ex) {
-			LOGGER.error("Could not parse response as json, data was '{}'", response);
 			throw new B2ApiException(ex);
 		}
-		return(jsonObject);
+		return jsonObject;
 	}
 
 	/**
@@ -75,5 +89,4 @@ public abstract class BaseB2Response {
 			}
 		}
 	}
-
 }

@@ -1,10 +1,25 @@
 package synapticloop.b2.response;
 
+/*
+ * Copyright (c) 2016 synapticloop.
+ * 
+ * All rights reserved.
+ * 
+ * This code may contain contributions from other parties which, where 
+ * applicable, will be listed in the default build file for the project 
+ * ~and/or~ in a file named CONTRIBUTORS.txt in the root of the project.
+ * 
+ * This source code and any derived binaries are covered by the terms and 
+ * conditions of the Licence agreement ("the Licence").  You may not use this 
+ * source code or any derived binaries except in compliance with the Licence.  
+ * A copy of the Licence is available in the file named LICENSE.txt shipped with 
+ * this source code or binaries.
+ */
+
 import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONArray;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,37 +28,40 @@ import synapticloop.b2.exception.B2ApiException;
 public class B2ListFilesResponse extends BaseB2Response {
 	private static final Logger LOGGER = LoggerFactory.getLogger(B2ListFilesResponse.class);
 
-	private List<B2FileInfoResponse> files = new ArrayList<B2FileInfoResponse>();
-	private String nextFileName = null;
-	private String nextFileId = null;
+	private final List<B2FileInfoResponse> files;
+	private final String nextFileName;
+	private final String nextFileId;
 
 	/**
 	 * Instantiate a list files response with the JSON response as a 
 	 * string from the API call.  This response is then parsed into the 
 	 * relevant fields.
 	 * 
-	 * @param response the response (in JSON format)
+	 * @param json the response (in JSON format)
 	 * 
 	 * @throws B2ApiException if there was an error parsing the response
 	 */
-	public B2ListFilesResponse(String response) throws B2ApiException {
-		JSONObject jsonObject = getParsedResponse(response);
+	public B2ListFilesResponse(String json) throws B2ApiException {
+		super(json);
 
-		this.nextFileName = jsonObject.optString(KEY_NEXT_FILE_NAME);
-		jsonObject.remove(KEY_NEXT_FILE_NAME);
+		this.nextFileName = response.optString(B2ResponseProperties.KEY_NEXT_FILE_NAME, null);
+		this.nextFileId = response.optString(B2ResponseProperties.KEY_NEXT_FILE_ID, null);
 
-		this.nextFileId = jsonObject.optString(KEY_NEXT_FILE_ID);
-		jsonObject.remove(KEY_NEXT_FILE_ID);
+		JSONArray filesArray = response.optJSONArray(B2ResponseProperties.KEY_FILES);
 
-		JSONArray filesArray = jsonObject.optJSONArray(KEY_FILES);
-
-		// now go through the filesArray
+		files = new ArrayList<B2FileInfoResponse>();
 		for(int i = 0; i < filesArray.length(); i ++) {
 			files.add(new B2FileInfoResponse(filesArray.optJSONObject(i)));
 		}
-		jsonObject.remove(KEY_FILES);
 
-		warnOnMissedKeys(LOGGER, jsonObject);
+		if(LOGGER.isWarnEnabled()) {
+			response.remove(B2ResponseProperties.KEY_NEXT_FILE_NAME);
+			response.remove(B2ResponseProperties.KEY_NEXT_FILE_ID);
+			response.remove(B2ResponseProperties.KEY_FILES);
+
+			warnOnMissedKeys(LOGGER, response);
+		}
+
 	}
 
 	/**
@@ -68,4 +86,14 @@ public class B2ListFilesResponse extends BaseB2Response {
 	 * @return the list of files for this request
 	 */
 	public List<B2FileInfoResponse> getFiles() { return this.files; }
+
+	@Override
+	public String toString() {
+		final StringBuilder sb = new StringBuilder("B2ListFilesResponse{");
+		sb.append("files=").append(files);
+		sb.append(", nextFileName='").append(nextFileName).append('\'');
+		sb.append(", nextFileId='").append(nextFileId).append('\'');
+		sb.append('}');
+		return sb.toString();
+	}
 }

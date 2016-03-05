@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.util.List;
 
+import org.apache.http.impl.client.HttpClients;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -29,8 +30,8 @@ public class B2ListBucketsRequestTest {
 		String bucketName = createRandomPrivateBucket.getBucketName();
 		String bucketId = createRandomPrivateBucket.getBucketId();
 
-		B2ListBucketsRequest b2ListBucketsRequest = new B2ListBucketsRequest(b2AuthorizeAccountResponse);
-		List<B2BucketResponse> responses = b2ListBucketsRequest.getResponse();
+		B2ListBucketsRequest b2ListBucketsRequest = new B2ListBucketsRequest(HttpClients.createDefault(), b2AuthorizeAccountResponse);
+		List<B2BucketResponse> responses = b2ListBucketsRequest.getResponse().getBuckets();
 		// this may actually not be the greatest test as there may already be more than one bucket...
 		assertTrue(responses.size() > 0);
 

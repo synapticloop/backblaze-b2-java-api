@@ -1,6 +1,7 @@
 package synapticloop.b2.request;
 import static org.junit.Assert.*;
 
+import org.apache.http.impl.client.HttpClients;
 import org.junit.Test;
 
 import synapticloop.b2.exception.B2ApiException;
@@ -15,7 +16,7 @@ public class B2GetUploadUrlRequestTest {
 	public void testGetUploadUrl() throws B2ApiException {
 		B2BucketResponse privateBucket = B2TestHelper.createRandomPrivateBucket();
 
-		B2GetUploadUrlResponse response = new B2GetUploadUrlRequest(B2TestHelper.getB2AuthorizeAccountResponse(), privateBucket.getBucketId()).getResponse();
+		B2GetUploadUrlResponse response = new B2GetUploadUrlRequest(HttpClients.createDefault(), B2TestHelper.getB2AuthorizeAccountResponse(), privateBucket.getBucketId()).getResponse();
 
 		assertNotNull(response.getAuthorizationToken());
 		assertEquals(privateBucket.getBucketId(), response.getBucketId());

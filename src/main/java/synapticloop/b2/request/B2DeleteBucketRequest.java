@@ -1,7 +1,25 @@
 package synapticloop.b2.request;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+/*
+ * Copyright (c) 2016 synapticloop.
+ * 
+ * All rights reserved.
+ * 
+ * This code may contain contributions from other parties which, where 
+ * applicable, will be listed in the default build file for the project 
+ * ~and/or~ in a file named CONTRIBUTORS.txt in the root of the project.
+ * 
+ * This source code and any derived binaries are covered by the terms and 
+ * conditions of the Licence agreement ("the Licence").  You may not use this 
+ * source code or any derived binaries except in compliance with the Licence.  
+ * A copy of the Licence is available in the file named LICENSE.txt shipped with 
+ * this source code or binaries.
+ */
+
+import java.io.IOException;
+
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.util.EntityUtils;
 
 import synapticloop.b2.exception.B2ApiException;
 import synapticloop.b2.response.B2AuthorizeAccountResponse;
@@ -18,24 +36,22 @@ import synapticloop.b2.response.B2BucketResponse;
  * 
  * @author synapticloop
  */
-
 public class B2DeleteBucketRequest extends BaseB2Request {
-	private static final Logger LOGGER = LoggerFactory.getLogger(B2DeleteBucketRequest.class);
 	private static final String B2_DELETE_BUCKET = BASE_API_VERSION + "b2_delete_bucket";
 
 	/**
 	 * Instantiate a new delete bucket request
-	 * 
+	 *
+	 * @param client Shared HTTP client instance
 	 * @param b2AuthorizeAccountResponse the authorize account response
-	 * 
 	 * @param bucketId the id of the bucket to delete
 	 */
-	public B2DeleteBucketRequest(B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String bucketId) {
-		super(b2AuthorizeAccountResponse);
-		url = b2AuthorizeAccountResponse.getApiUrl() + B2_DELETE_BUCKET;
+	public B2DeleteBucketRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String bucketId) {
 
-		stringData.put(KEY_ACCOUNT_ID, b2AuthorizeAccountResponse.getAccountId());
-		stringData.put(KEY_BUCKET_ID, bucketId);
+		super(client, b2AuthorizeAccountResponse, b2AuthorizeAccountResponse.getApiUrl() + B2_DELETE_BUCKET);
+
+		requestBodyData.put(B2RequestProperties.KEY_ACCOUNT_ID, b2AuthorizeAccountResponse.getAccountId());
+		requestBodyData.put(B2RequestProperties.KEY_BUCKET_ID, bucketId);
 	}
 
 	/**
@@ -43,10 +59,14 @@ public class B2DeleteBucketRequest extends BaseB2Request {
 	 * 
 	 * @return The deleted bucket response
 	 * 
-	 * @throws B2ApiException if there was an error with the call, or if you are 
+	 * @throws B2ApiException if there was an error with the call, or if you are
 	 *     trying to delete a bucket which is not empty
 	 */
 	public B2BucketResponse getResponse() throws B2ApiException {
-		return(new B2BucketResponse(executePost(LOGGER)));
+		try {
+			return(new B2BucketResponse(EntityUtils.toString(executePost().getEntity())));
+		} catch(IOException e) {
+			throw new B2ApiException(e);
+		}
 	}
 }
