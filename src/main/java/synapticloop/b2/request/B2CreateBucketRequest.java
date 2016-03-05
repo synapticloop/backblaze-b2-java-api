@@ -1,9 +1,25 @@
 package synapticloop.b2.request;
 
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.util.EntityUtils;
+/*
+ * Copyright (c) 2016 synapticloop.
+ * 
+ * All rights reserved.
+ * 
+ * This code may contain contributions from other parties which, where 
+ * applicable, will be listed in the default build file for the project 
+ * ~and/or~ in a file named CONTRIBUTORS.txt in the root of the project.
+ * 
+ * This source code and any derived binaries are covered by the terms and 
+ * conditions of the Licence agreement ("the Licence").  You may not use this 
+ * source code or any derived binaries except in compliance with the Licence.  
+ * A copy of the Licence is available in the file named LICENSE.txt shipped with 
+ * this source code or binaries.
+ */
 
 import java.io.IOException;
+
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.util.EntityUtils;
 
 import synapticloop.b2.BucketType;
 import synapticloop.b2.exception.B2Exception;
@@ -42,6 +58,7 @@ public class B2CreateBucketRequest extends BaseB2Request {
 	 *     that files in this bucket can be downloaded by anybody, or "allPrivate",
 	 */
 	public B2CreateBucketRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String bucketName, BucketType bucketType) {
+
 		super(client, b2AuthorizeAccountResponse, b2AuthorizeAccountResponse.getApiUrl() + B2_CREATE_BUCKET);
 
 		requestBodyData.put(B2RequestProperties.KEY_ACCOUNT_ID, b2AuthorizeAccountResponse.getAccountId());
@@ -59,8 +76,7 @@ public class B2CreateBucketRequest extends BaseB2Request {
 	public B2BucketResponse getResponse() throws B2Exception {
 		try {
 			return(new B2BucketResponse(EntityUtils.toString(executePost().getEntity())));
-		}
-		catch(IOException e) {
+		} catch(IOException e) {
 			throw new B2Exception(e);
 		}
 	}

@@ -1,9 +1,25 @@
 package synapticloop.b2.request;
 
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.util.EntityUtils;
+/*
+ * Copyright (c) 2016 synapticloop.
+ * 
+ * All rights reserved.
+ * 
+ * This code may contain contributions from other parties which, where 
+ * applicable, will be listed in the default build file for the project 
+ * ~and/or~ in a file named CONTRIBUTORS.txt in the root of the project.
+ * 
+ * This source code and any derived binaries are covered by the terms and 
+ * conditions of the Licence agreement ("the Licence").  You may not use this 
+ * source code or any derived binaries except in compliance with the Licence.  
+ * A copy of the Licence is available in the file named LICENSE.txt shipped with 
+ * this source code or binaries.
+ */
 
 import java.io.IOException;
+
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.util.EntityUtils;
 
 import synapticloop.b2.exception.B2Exception;
 import synapticloop.b2.response.B2AuthorizeAccountResponse;
@@ -37,20 +53,29 @@ public class B2ListFileNamesRequest extends BaseB2Request {
 		super(client, b2AuthorizeAccountResponse, b2AuthorizeAccountResponse.getApiUrl() + B2_LIST_FILE_NAMES);
 
 		requestBodyData.put(B2RequestProperties.KEY_BUCKET_ID, bucketId);
+
 		if(null != startFileName) {
 			requestBodyData.put(B2RequestProperties.KEY_START_FILE_NAME, Helper.urlEncode(startFileName));
 		}
+
 		if(maxFileCount > MAX_FILE_COUNT_RETURN) {
 			throw new B2Exception("Maximum return file count is " + MAX_FILE_COUNT_RETURN);
 		}
+
 		requestBodyData.put(B2RequestProperties.KEY_MAX_FILE_COUNT, maxFileCount);
 	}
 
+	/**
+	 * Return the list file names response 
+	 * 
+	 * @return the list file names response
+	 * 
+	 * @throws B2Exception if something went wrong
+	 */
 	public B2ListFilesResponse getResponse() throws B2Exception {
 		try {
 			return(new B2ListFilesResponse(EntityUtils.toString(executePost().getEntity())));
-		}
-		catch(IOException e) {
+		} catch(IOException e) {
 			throw new B2Exception(e);
 		}
 	}

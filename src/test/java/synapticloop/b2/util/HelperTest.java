@@ -112,7 +112,7 @@ public class HelperTest {
 			"]";
 
 	@Test
-	public void testEncoding() throws JSONException {
+	public void testEncodingFileName() throws JSONException {
 		Helper.urlEncode("");
 		JSONArray jsonArray = new JSONArray(ENCODING_TEST_JSON);
 		int length = jsonArray.length();
@@ -124,7 +124,7 @@ public class HelperTest {
 			String string = jsonObject.getString("string");
 
 			// assert encoding
-			String urlEncode = Helper.urlEncode(string);
+			String urlEncode = Helper.urlEncodeFileName(string);
 			if(!(minimallyEncoded.equals(urlEncode) || fullyEncoded.equals(urlEncode))) {
 				assertTrue("Invalid encoding, could not encode '" + 
 						string + 
@@ -142,6 +142,42 @@ public class HelperTest {
 			// assert decoding
 			assertEquals(string, Helper.urlDecode(fullyEncoded)); 
 			assertEquals(string, Helper.urlDecode(minimallyEncoded));
+
+		}
+	}
+	@Test
+	public void testEncoding() throws JSONException {
+		Helper.urlEncode("");
+		JSONArray jsonArray = new JSONArray(ENCODING_TEST_JSON);
+		int length = jsonArray.length();
+		for(int i = 0; i< length; i++) {
+			JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+			String fullyEncoded = jsonObject.getString("fullyEncoded");
+			String minimallyEncoded = jsonObject.getString("minimallyEncoded");
+			String string = jsonObject.getString("string");
+
+			// assert encoding
+			if(!"/".equals(string)) {
+				String urlEncode = Helper.urlEncode(string);
+				if(!(minimallyEncoded.equals(urlEncode) || fullyEncoded.equals(urlEncode))) {
+					assertTrue("Invalid encoding, could not encode '" + 
+							string + 
+							"' to either '" + 
+							minimallyEncoded + 
+							"' or '" + 
+							fullyEncoded + 
+							"'.  The encoded output was '" +
+							"'" +
+							urlEncode + 
+							"'.", 
+							false);
+				}
+
+				// assert decoding
+				assertEquals(string, Helper.urlDecode(fullyEncoded)); 
+				assertEquals(string, Helper.urlDecode(minimallyEncoded));
+			}
 
 		}
 	}

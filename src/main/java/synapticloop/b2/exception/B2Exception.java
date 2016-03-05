@@ -1,5 +1,21 @@
 package synapticloop.b2.exception;
 
+/*
+ * Copyright (c) 2016 synapticloop.
+ * 
+ * All rights reserved.
+ * 
+ * This code may contain contributions from other parties which, where 
+ * applicable, will be listed in the default build file for the project 
+ * ~and/or~ in a file named CONTRIBUTORS.txt in the root of the project.
+ * 
+ * This source code and any derived binaries are covered by the terms and 
+ * conditions of the Licence agreement ("the Licence").  You may not use this 
+ * source code or any derived binaries except in compliance with the Licence.  
+ * A copy of the Licence is available in the file named LICENSE.txt shipped with 
+ * this source code or binaries.
+ */
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -19,8 +35,8 @@ public class B2Exception extends Exception {
 	}
 
 	/**
-	 * Create a new B2Api Exception with a message.  If the message is in JSON 
-	 * (as returned by the backblaze B2 api) format, this message will be parsed 
+	 * Create a new B2 Exception with a message.  If the message is in JSON (as 
+	 * returned by the backblaze B2 api) format, this message will be parsed 
 	 * and the following information extracted:
 	 * 
 	 * <ul>

@@ -1,7 +1,5 @@
 package synapticloop.b2.util;
 
-import org.apache.commons.io.IOUtils;
-
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -13,6 +11,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
+
+import org.apache.commons.io.IOUtils;
 
 import synapticloop.b2.exception.B2Exception;
 
@@ -37,6 +37,15 @@ public class Helper {
 		}
 	}
 
+	/**
+	 * Calculate and return the sha1 sum of an input stream
+	 * 
+	 * @param in the input stream to calculate the sha1 sum of
+	 * 
+	 * @return the sha1 sum
+	 * 
+	 * @throws B2Exception if there was an error calculating the sha1 sum
+	 */
 	public static String calculateSha1(InputStream in) throws B2Exception {
 
 		MessageDigest messageDigest;
@@ -71,6 +80,25 @@ public class Helper {
 	public static String urlEncode(String url) {
 		try {
 			return java.net.URLEncoder.encode(url, UTF_8);
+		} catch (UnsupportedEncodingException ex) {
+			return url;
+		}
+	}
+
+	/**
+	 * UTF-8 url encoding wrapper method which does not encode slashes for requests.
+	 * See <a href="https://www.backblaze.com/b2/docs/string_encoding.html">https://www.backblaze.com/b2/docs/string_encoding.html</a>
+	 * for usage why it will not be encoded.
+	 * 
+	 * If there was an unsupported encoding exception, return the un-encoded url
+	 * 
+	 * @param url the URL to encode
+	 * 
+	 * @return the encoded URL
+	 */
+	public static String urlEncodeFileName(String url) {
+		try {
+			return java.net.URLEncoder.encode(url, UTF_8).replace("%2F", "/");
 		} catch (UnsupportedEncodingException ex) {
 			return url;
 		}

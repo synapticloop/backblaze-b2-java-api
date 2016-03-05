@@ -1,61 +1,107 @@
 package synapticloop.b2.response;
 
-import org.json.JSONObject;
-
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+
+import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import synapticloop.b2.Action;
 import synapticloop.b2.exception.B2Exception;
 
 public class B2FileInfoResponse extends BaseB2Response {
+	private static final Logger LOGGER = LoggerFactory.getLogger(B2FileInfoResponse.class);
+
 	private final String fileId;
 	private final String fileName;
-	private final Long contentLength;
 	private final String contentSha1;
-	private final Map<String, Object> fileInfo;
+	private final Long contentLength;
+
+	private final Map<String, String> fileInfo;
 	private final Action action;
 	private final Integer size;
 	private final Long uploadTimestamp;
 
-    public B2FileInfoResponse(final JSONObject response) throws B2Exception {
-        super(response);
+	@SuppressWarnings("rawtypes")
+	public B2FileInfoResponse(final JSONObject response) throws B2Exception {
+		super(response);
 
-        this.fileId = response.optString(B2ResponseProperties.KEY_FILE_ID, null);
+		this.fileId = response.optString(B2ResponseProperties.KEY_FILE_ID, null);
 		this.fileName = response.optString(B2ResponseProperties.KEY_FILE_NAME, null);
 		this.contentLength = response.optLong(B2ResponseProperties.KEY_CONTENT_LENGTH);
 		this.contentSha1 = response.optString(B2ResponseProperties.KEY_CONTENT_SHA1, null);
-		this.fileInfo = new HashMap<>();
+		this.fileInfo = new HashMap<String, String>();
+
 		JSONObject fileInfoObject = response.optJSONObject(B2ResponseProperties.KEY_FILE_INFO);
 		if(null != fileInfoObject) {
 			Iterator keys = fileInfoObject.keys();
 			while (keys.hasNext()) {
 				String key = (String) keys.next();
-				fileInfo.put(key, fileInfoObject.opt(key));
+				fileInfo.put(key, fileInfoObject.optString(key, null));
 			}
 		}
 
 		String action = response.optString(B2ResponseProperties.KEY_ACTION, null);
-        if(null != action) {
-            this.action = Action.valueOf(action);
-        }
-        else {
-            // Default
-            this.action = Action.upload;
-        }
+		if(null != action) {
+			this.action = Action.valueOf(action);
+		} else {
+			// Default
+			this.action = Action.upload;
+		}
+
 		this.size = response.optInt(B2ResponseProperties.KEY_SIZE);
 		this.uploadTimestamp = response.optLong(B2ResponseProperties.KEY_UPLOAD_TIMESTAMP);
+
+		if(LOGGER.isWarnEnabled()) {
+			response.remove(B2ResponseProperties.KEY_FILE_ID);
+			response.remove(B2ResponseProperties.KEY_FILE_NAME);
+			response.remove(B2ResponseProperties.KEY_CONTENT_LENGTH);
+			response.remove(B2ResponseProperties.KEY_CONTENT_SHA1);
+
+			warnOnMissedKeys(LOGGER, response);
+		}
+
 	}
 
+	/**
+	 * Get the fileId that uniquely identifies this file
+	 * 
+	 * @return the fileId
+	 */
 	public String getFileId() { return this.fileId; }
+
+	/**
+	 * Get the name of the file as stored in the backblaze bucket
+	 * 
+	 * @return the name of the file as stored in the backblaze bucket
+	 */
 	public String getFileName() { return this.fileName; }
+
+	/**
+	 * Get the content length for this file
+	 * 
+	 * @return the length of content for this file
+	 */
 	public long getContentLength() { return this.contentLength; }
+	
+	/**
+	 * Get the sha1 hash of the content - this can be used to verify the 
+	 * integrity of the downloaded file
+	 * 
+	 * @return the sha1 has of the content
+	 */
 	public String getContentSha1() { return this.contentSha1; }
-	public Map<String, Object> getFileInfo() { return this.fileInfo; }
-	public Action getAction() { return this.action; }
-	public int getSize() { return this.size; }
-	public long getUploadTimestamp() { return this.uploadTimestamp; }
+	
+	/**
+	 * Get the file info for the downloaded file - which is a map of key value
+	 * pairs with both the key and value being strings
+	 * 
+	 * @return the file info map of key:value strings
+	 */
+	
+	public Map<String, String> getFileInfo() { return this.fileInfo; }
 
 	@Override
 	public String toString() {
@@ -65,7 +111,6 @@ public class B2FileInfoResponse extends BaseB2Response {
 		sb.append(", contentLength=").append(contentLength);
 		sb.append(", contentSha1='").append(contentSha1).append('\'');
 		sb.append(", fileInfo=").append(fileInfo);
-		sb.append(", action=").append(action);
 		sb.append(", size=").append(size);
 		sb.append(", uploadTimestamp=").append(uploadTimestamp);
 		sb.append('}');

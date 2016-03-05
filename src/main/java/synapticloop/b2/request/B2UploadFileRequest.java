@@ -1,18 +1,30 @@
 package synapticloop.b2.request;
 
+/*
+ * Copyright (c) 2016 synapticloop.
+ * 
+ * All rights reserved.
+ * 
+ * This code may contain contributions from other parties which, where 
+ * applicable, will be listed in the default build file for the project 
+ * ~and/or~ in a file named CONTRIBUTORS.txt in the root of the project.
+ * 
+ * This source code and any derived binaries are covered by the terms and 
+ * conditions of the Licence agreement ("the Licence").  You may not use this 
+ * source code or any derived binaries except in compliance with the Licence.  
+ * A copy of the Licence is available in the file named LICENSE.txt shipped with 
+ * this source code or binaries.
+ */
+
+import java.io.File;
+import java.io.IOException;
+import java.util.Map;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHeaders;
-import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.entity.FileEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.util.EntityUtils;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.Map;
 
 import synapticloop.b2.exception.B2Exception;
 import synapticloop.b2.response.B2AuthorizeAccountResponse;
@@ -49,8 +61,9 @@ public class B2UploadFileRequest extends BaseB2Request {
 	 * @param file the file to upload
 	 * @param fileInfo the file info map which are passed through as headers prefixed by "X-Bz-Info-"
 	 */
-	public B2UploadFileRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse,
-							   B2GetUploadUrlResponse b2GetUploadUrlResponse, String fileName, File file, Map<String, String> fileInfo) throws B2Exception {
+	public B2UploadFileRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse, 
+			B2GetUploadUrlResponse b2GetUploadUrlResponse, String fileName, File file, Map<String, String> fileInfo) throws B2Exception {
+
 		this(client, b2AuthorizeAccountResponse, b2GetUploadUrlResponse, fileName, file, null, fileInfo);
 	}
 
@@ -66,8 +79,9 @@ public class B2UploadFileRequest extends BaseB2Request {
 	 * @param mimeType the mimeTyp (optional, will default to 'b2/x-auto' which
 	 *     backblaze will attempt to determine automatically)
 	 */
-	public B2UploadFileRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse,
-							   B2GetUploadUrlResponse b2GetUploadUrlResponse, String fileName, File file, String mimeType) throws B2Exception {
+	public B2UploadFileRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse, 
+			B2GetUploadUrlResponse b2GetUploadUrlResponse, String fileName, File file, String mimeType) throws B2Exception {
+
 		this(client, b2AuthorizeAccountResponse, b2GetUploadUrlResponse, fileName, file, mimeType, null);
 	}
 
@@ -81,8 +95,12 @@ public class B2UploadFileRequest extends BaseB2Request {
 	 * @param fileName the name of the file
 	 * @param file the file to upload
 	 */
-	public B2UploadFileRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse,
-							   B2GetUploadUrlResponse b2GetUploadUrlResponse, String fileName, File file) throws B2Exception {
+	public B2UploadFileRequest(CloseableHttpClient client, 
+			B2AuthorizeAccountResponse b2AuthorizeAccountResponse,
+			B2GetUploadUrlResponse b2GetUploadUrlResponse, 
+			String fileName, 
+			File file) throws B2Exception {
+
 		this(client, b2AuthorizeAccountResponse, b2GetUploadUrlResponse, fileName, file, null, null);
 	}
 
@@ -100,17 +118,32 @@ public class B2UploadFileRequest extends BaseB2Request {
 	 * @param fileInfo the file info map which are passed through as headers
 	 *     prefixed by "X-Bz-Info-"
 	 */
-	public B2UploadFileRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse,
-							   B2GetUploadUrlResponse b2GetUploadUrlResponse, String fileName,
-							   File file, String mimeType, Map<String, String> fileInfo) throws B2Exception {
-		this(client, b2AuthorizeAccountResponse, b2GetUploadUrlResponse, fileName, new FileEntity(file),
+	public B2UploadFileRequest(CloseableHttpClient client, 
+			B2AuthorizeAccountResponse b2AuthorizeAccountResponse, 
+			B2GetUploadUrlResponse b2GetUploadUrlResponse, 
+			String fileName, 
+			File file, 
+			String mimeType, 
+			Map<String, String> fileInfo) throws B2Exception {
+
+		this(client, 
+				b2AuthorizeAccountResponse, 
+				b2GetUploadUrlResponse, 
+				fileName, 
+				new FileEntity(file),
 				Helper.calculateSha1(file),
 				mimeType, fileInfo);
 	}
 
-	public B2UploadFileRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse,
-							   B2GetUploadUrlResponse b2GetUploadUrlResponse, String fileName,
-							   HttpEntity entity, String sha1Checksum, String mimeType, Map<String, String> fileInfo) {
+	public B2UploadFileRequest(CloseableHttpClient client, 
+			B2AuthorizeAccountResponse b2AuthorizeAccountResponse, 
+			B2GetUploadUrlResponse b2GetUploadUrlResponse, 
+			String fileName, 
+			HttpEntity entity, 
+			String sha1Checksum, 
+			String mimeType, 
+			Map<String, String> fileInfo) {
+
 		super(client, b2AuthorizeAccountResponse, b2GetUploadUrlResponse.getUploadUrl());
 
 		this.fileName = fileName;
@@ -128,6 +161,14 @@ public class B2UploadFileRequest extends BaseB2Request {
 		requestHeaders.put(HttpHeaders.AUTHORIZATION, b2GetUploadUrlResponse.getAuthorizationToken());
 	}
 
+	/**
+	 * Return the file response 
+	 * 
+	 * @return the file response
+	 * 
+	 * @throws B2Exception if something went wrong
+	 */
+
 	public B2FileResponse getResponse() throws B2Exception {
 		if(null == mimeType) {
 			requestHeaders.put(B2ResponseHeaders.HEADER_CONTENT_TYPE, CONTENT_TYPE_VALUE_B2_X_AUTO);
@@ -139,8 +180,7 @@ public class B2UploadFileRequest extends BaseB2Request {
 
 		try {
 			return new B2FileResponse(EntityUtils.toString(executePost(entity).getEntity()));
-		}
-		catch(IOException e) {
+		} catch(IOException e) {
 			throw new B2Exception(e);
 		}
 	}

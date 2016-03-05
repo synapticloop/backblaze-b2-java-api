@@ -3,8 +3,10 @@ package synapticloop.b2.response;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.io.input.NullInputStream;
 import org.apache.http.Header;
@@ -18,7 +20,17 @@ import synapticloop.b2.exception.B2Exception;
 import synapticloop.b2.io.HttpMethodReleaseInputStream;
 
 public class B2DownloadFileResponse {
-	private static final Logger log = LoggerFactory.getLogger(B2DownloadFileResponse.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(B2DownloadFileResponse.class);
+
+	private static final Set<String> ignoredHeaders = new HashSet<String>();
+	static {
+		ignoredHeaders.add("server");
+		ignoredHeaders.add("x-content-type-options");
+		ignoredHeaders.add("x-xss-protection");
+		ignoredHeaders.add("x-frame-options");
+		ignoredHeaders.add("cache-control");
+		ignoredHeaders.add("date");
+	}
 
 	private final InputStream stream;
 	private final Integer contentLength;
@@ -33,25 +45,27 @@ public class B2DownloadFileResponse {
 		try {
 			if(null != response.getEntity()) {
 				stream = new HttpMethodReleaseInputStream(response);
-			}
-			else {
+			} else {
 				// HEAD responses do not have an entity
 				stream = new NullInputStream(0L);
 				EntityUtils.consume(response.getEntity());
 			}
+
 			contentLength = Integer.parseInt(response.getFirstHeader(HttpHeaders.CONTENT_LENGTH).getValue());
 			contentType = response.getFirstHeader(HttpHeaders.CONTENT_TYPE).getValue();
 			contentSha1 = response.getFirstHeader(B2ResponseHeaders.HEADER_X_BZ_CONTENT_SHA1).getValue();
 			fileId = response.getFirstHeader(B2ResponseHeaders.HEADER_X_BZ_FILE_ID).getValue();
 			fileName = response.getFirstHeader(B2ResponseHeaders.HEADER_X_BZ_FILE_NAME).getValue();
+
 			for (Header header : response.getAllHeaders()) {
 				String headerName = header.getName();
 				String headerValue = header.getValue();
-				if(headerName.toLowerCase(Locale.ENGLISH).startsWith(
-						B2ResponseHeaders.HEADER_X_BZ_INFO_PREFIX.toLowerCase(Locale.ENGLISH))) {
+				if(headerName.toLowerCase(Locale.ENGLISH).startsWith(B2ResponseHeaders.HEADER_X_BZ_INFO_PREFIX.toLowerCase(Locale.ENGLISH))) {
 					fileInfo.put(headerName.substring(B2ResponseHeaders.HEADER_X_BZ_INFO_PREFIX.length()), headerValue);
 				} else {
-					log.warn("Found a header named '{}' with value '{}', that was not mapped", headerName, headerValue);
+					if(!ignoredHeaders.contains(headerName.toLowerCase())) {
+						LOGGER.warn("Found a header named '{}' with value '{}', that was not mapped", headerName, headerValue);
+					}
 				}
 			}
 		} catch (IllegalStateException | IOException ex) {

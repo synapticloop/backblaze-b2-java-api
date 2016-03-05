@@ -1,12 +1,12 @@
 package synapticloop.b2.helper;
 
-import org.apache.http.impl.client.HttpClients;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Map;
 import java.util.UUID;
+
+import org.apache.http.impl.client.HttpClients;
 
 import synapticloop.b2.BucketType;
 import synapticloop.b2.exception.B2Exception;
@@ -120,7 +120,7 @@ public class B2TestHelper {
 		B2GetUploadUrlResponse b2GetUploadUrlResponse = getUploadUrl(bucketId);
 		File file = null;
 		try {
-			file = File.createTempFile("backblaze-api-test", ".txt");
+			file = File.createTempFile("test/path/backblaze-api-test", ".txt");
 			FileWriter fileWriter = new FileWriter(file);
 			fileWriter.write(DUMMY_FILE_CONTENT);
 			fileWriter.flush();
@@ -131,6 +131,22 @@ public class B2TestHelper {
 		}
 		return(new B2UploadFileRequest(HttpClients.createDefault(), getB2AuthorizeAccountResponse(), b2GetUploadUrlResponse, file.getName(), file).getResponse());
 	}
+
+//	public static B2FileResponse uploadTemporaryFileToBucketWithPath(String bucketId) throws B2Exception {
+//		B2GetUploadUrlResponse b2GetUploadUrlResponse = getUploadUrl(bucketId);
+//		File file = null;
+//		try {
+//			file = File.createTempFile("test/path/backblaze-api-test", ".txt");
+//			FileWriter fileWriter = new FileWriter(file);
+//			fileWriter.write(DUMMY_FILE_CONTENT);
+//			fileWriter.flush();
+//			fileWriter.close();
+//			file.deleteOnExit();
+//		} catch(IOException ioex) {
+//			throw new B2Exception("Could not create temporary file", ioex);
+//		}
+//		return(new B2UploadFileRequest(HttpClients.createDefault(), getB2AuthorizeAccountResponse(), b2GetUploadUrlResponse, file.getName(), file).getResponse());
+//	}
 
 	/**
 	 * Create a temporary file into a bucket

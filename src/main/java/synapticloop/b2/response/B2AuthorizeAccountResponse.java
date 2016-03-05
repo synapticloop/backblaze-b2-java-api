@@ -1,8 +1,29 @@
 package synapticloop.b2.response;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+/*
+ * Copyright (c) 2016 synapticloop.
+ * 
+ * All rights reserved.
+ * 
+ * This code may contain contributions from other parties which, where 
+ * applicable, will be listed in the default build file for the project 
+ * ~and/or~ in a file named CONTRIBUTORS.txt in the root of the project.
+ * 
+ * This source code and any derived binaries are covered by the terms and 
+ * conditions of the Licence agreement ("the Licence").  You may not use this 
+ * source code or any derived binaries except in compliance with the Licence.  
+ * A copy of the Licence is available in the file named LICENSE.txt shipped with 
+ * this source code or binaries.
+ */
+
 import synapticloop.b2.exception.B2Exception;
 
 public class B2AuthorizeAccountResponse extends BaseB2Response {
+	private static final Logger LOGGER = LoggerFactory.getLogger(B2AuthorizeAccountResponse.class);
+
 	private final String accountId;
 	private final String apiUrl;
 	private final String authorizationToken;
@@ -24,6 +45,15 @@ public class B2AuthorizeAccountResponse extends BaseB2Response {
 		this.apiUrl = response.optString(B2ResponseProperties.KEY_API_URL, null);
 		this.authorizationToken = response.optString(B2ResponseProperties.KEY_AUTHORIZATION_TOKEN, null);
 		this.downloadUrl = response.optString(B2ResponseProperties.KEY_DOWNLOAD_URL, null);
+
+		if(LOGGER.isWarnEnabled()) {
+			response.remove(B2ResponseProperties.KEY_ACCOUNT_ID);
+			response.remove(B2ResponseProperties.KEY_API_URL);
+			response.remove(B2ResponseProperties.KEY_AUTHORIZATION_TOKEN);
+			response.remove(B2ResponseProperties.KEY_DOWNLOAD_URL);
+
+			warnOnMissedKeys(LOGGER, response);
+		}
 	}
 
 	/**

@@ -1,5 +1,28 @@
 package synapticloop.b2.request;
 
+/*
+ * Copyright (c) 2016 synapticloop.
+ * 
+ * All rights reserved.
+ * 
+ * This code may contain contributions from other parties which, where 
+ * applicable, will be listed in the default build file for the project 
+ * ~and/or~ in a file named CONTRIBUTORS.txt in the root of the project.
+ * 
+ * This source code and any derived binaries are covered by the terms and 
+ * conditions of the Licence agreement ("the Licence").  You may not use this 
+ * source code or any derived binaries except in compliance with the Licence.  
+ * A copy of the Licence is available in the file named LICENSE.txt shipped with 
+ * this source code or binaries.
+ */
+
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHeaders;
 import org.apache.http.HttpStatus;
@@ -18,73 +41,76 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-
 import synapticloop.b2.exception.B2Exception;
 import synapticloop.b2.response.B2AuthorizeAccountResponse;
 
 public abstract class BaseB2Request {
-	private static final Logger log = LoggerFactory.getLogger(BaseB2Request.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(BaseB2Request.class);
 
 	protected static final String BASE_API_HOST = "https://api.backblaze.com";
 	protected static final String BASE_API_VERSION = "/b2api/v1/";
 	protected static final String BASE_API = BASE_API_HOST + BASE_API_VERSION;
 
-    public static final String VALUE_APPLICATION_X_WWW_FORM_URLENCODED = "application/x-www-form-urlencoded";
+	public static final String VALUE_APPLICATION_X_WWW_FORM_URLENCODED = "application/x-www-form-urlencoded";
 	public static final String VALUE_UTF_8 = "UTF-8";
 
 	public static final int MAX_FILE_COUNT_RETURN = 1000;
 
 	protected final Map<String, String> requestHeaders = new HashMap<>();
 
-    /**
-     * Query parameters for request URI
-     */
-    protected Map<String, String> requestParameters = new HashMap<>();
+	/**
+	 * Query parameters for request URI
+	 */
+	protected Map<String, String> requestParameters = new HashMap<>();
 
-    /**
-     * POST data key value pairs
-     */
+	/**
+	 * POST data key value pairs
+	 */
 	protected Map<String, Object> requestBodyData = new HashMap<>();
 
-    private CloseableHttpClient client;
+	private CloseableHttpClient client;
 
-    private final String url;
+	private final String url;
 
-    /**
-     * Instantiate the base B2 with no authorization header.
-     *
-     * @param client Shared HTTP client
-     * @param url Fully qualified request URI
-     */
-    protected BaseB2Request(CloseableHttpClient client, final String url) {
-        this.client = client;
-        this.url = url;
-    }
+	/**
+	 * Instantiate the base B2 with no authorization header, this is used as the
+	 * request that will authorize the account.
+	 *
+	 * @param client Shared HTTP client
+	 * @param url Fully qualified request URI
+	 */
+	protected BaseB2Request(CloseableHttpClient client, final String url) {
+		this.client = client;
+		this.url = url;
+	}
 
-    /**
-     * Instantiate the base B2 request which adds headers with the authorization
-     * token.
-     *  @param client Shared HTTP client
-     * @param b2AuthorizeAccountResponse the authorize account response
-     * @param url Fully qualified request URI
-     */
-    protected BaseB2Request(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse,
-                            String url) {
-        this(client, b2AuthorizeAccountResponse, url, Collections.<String, String>emptyMap());
-    }
+	/**
+	 * Instantiate the base B2 request which adds headers with the authorization
+	 * token.
+	 * 
+	 * @param client Shared HTTP client
+	 * @param b2AuthorizeAccountResponse the authorize account response
+	 * @param url Fully qualified request URI
+	 */
+	protected BaseB2Request(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String url) {
+		this(client, b2AuthorizeAccountResponse, url, Collections.<String, String>emptyMap());
+	}
 
-    protected BaseB2Request(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse,
-                            String url, Map<String, String> headers) {
-        this(client, url);
+	/**
+	 * Instantiate the base B2 request which adds headers with the authorization
+	 * token.
+	 * 
+	 * @param client Shared HTTP client
+	 * @param b2AuthorizeAccountResponse the authorize account response
+	 * @param url Fully qualified request URI
+	 * @param headers the map of the headers that are required
+	 */
+
+	protected BaseB2Request(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String url, Map<String, String> headers) {
+		this(client, url);
 		this.requestHeaders.put(HttpHeaders.CONTENT_TYPE, VALUE_APPLICATION_X_WWW_FORM_URLENCODED);
-        this.requestHeaders.put(HttpHeaders.AUTHORIZATION, b2AuthorizeAccountResponse.getAuthorizationToken());
-    }
+		this.requestHeaders.put(HttpHeaders.AUTHORIZATION, b2AuthorizeAccountResponse.getAuthorizationToken());
+	}
 
 	/**
 	 * Execute an HTTP HEAD request and return the response for further parsing
@@ -97,25 +123,25 @@ public abstract class BaseB2Request {
 		try {
 			URI uri = this.buildUri();
 
-			log.debug("HEAD request to URL '{}'", uri.toString());
+			LOGGER.debug("HEAD request to URL '{}'", uri.toString());
 
 			HttpHead httpHead = new HttpHead(uri);
 
 			CloseableHttpResponse httpResponse = this.execute(httpHead);
 
-            switch(httpResponse.getStatusLine().getStatusCode()) {
-                case HttpStatus.SC_OK:
-                    return httpResponse;
-            }
-            throw new B2Exception(EntityUtils.toString(httpResponse.getEntity()), new HttpResponseException(
-                    httpResponse.getStatusLine().getStatusCode(), httpResponse.getStatusLine().getReasonPhrase()));
+			switch(httpResponse.getStatusLine().getStatusCode()) {
+			case HttpStatus.SC_OK:
+				return httpResponse;
+			}
+			throw new B2Exception(EntityUtils.toString(httpResponse.getEntity()), new HttpResponseException(
+					httpResponse.getStatusLine().getStatusCode(), httpResponse.getStatusLine().getReasonPhrase()));
 		} catch (IOException | URISyntaxException ex) {
 			throw new B2Exception(ex);
 		}
 	}
 
-    /**
-     * Execute a GET request, returning the data stream from the response.
+	/**
+	 * Execute a GET request, returning the data stream from the response.
 	 * 
 	 * @return The response from the GET request
 	 * 
@@ -126,17 +152,18 @@ public abstract class BaseB2Request {
 			URI uri = this.buildUri();
 
 			HttpGet httpGet = new HttpGet(uri);
+			System.out.println(">>>" + uri);
 
 			CloseableHttpResponse httpResponse = this.execute(httpGet);
 
 			// you will either get an OK or a partial content
-            switch(httpResponse.getStatusLine().getStatusCode()) {
-                case HttpStatus.SC_OK:
-                case HttpStatus.SC_PARTIAL_CONTENT:
-                    return httpResponse;
-            }
-            throw new B2Exception(EntityUtils.toString(httpResponse.getEntity()), new HttpResponseException(
-                    httpResponse.getStatusLine().getStatusCode(), httpResponse.getStatusLine().getReasonPhrase()));
+			switch(httpResponse.getStatusLine().getStatusCode()) {
+			case HttpStatus.SC_OK:
+			case HttpStatus.SC_PARTIAL_CONTENT:
+				return httpResponse;
+			}
+			throw new B2Exception(EntityUtils.toString(httpResponse.getEntity()), new HttpResponseException(
+					httpResponse.getStatusLine().getStatusCode(), httpResponse.getStatusLine().getReasonPhrase()));
 		} catch (IOException | URISyntaxException ex) {
 			throw new B2Exception(ex);
 		}
@@ -152,21 +179,21 @@ public abstract class BaseB2Request {
 	 */
 	protected CloseableHttpResponse executePost() throws B2Exception {
 		try {
-            URI uri = this.buildUri();
+			URI uri = this.buildUri();
 
-    		String postData = convertPostData();
-    		HttpPost httpPost = new HttpPost(uri);
+			String postData = convertPostData();
+			HttpPost httpPost = new HttpPost(uri);
 
 			httpPost.setEntity(new StringEntity(postData));
 			CloseableHttpResponse httpResponse = this.execute(httpPost);
 
-            switch(httpResponse.getStatusLine().getStatusCode()) {
-                case HttpStatus.SC_OK:
-                    return httpResponse;
-            }
-            throw new B2Exception(EntityUtils.toString(httpResponse.getEntity()), new HttpResponseException(
-                    httpResponse.getStatusLine().getStatusCode(), httpResponse.getStatusLine().getReasonPhrase()));
-        } catch (IOException | URISyntaxException ex) {
+			switch(httpResponse.getStatusLine().getStatusCode()) {
+			case HttpStatus.SC_OK:
+				return httpResponse;
+			}
+			throw new B2Exception(EntityUtils.toString(httpResponse.getEntity()), 
+					new HttpResponseException(httpResponse.getStatusLine().getStatusCode(), httpResponse.getStatusLine().getReasonPhrase()));
+		} catch (IOException | URISyntaxException ex) {
 			throw new B2Exception(ex);
 		}
 	}
@@ -183,20 +210,20 @@ public abstract class BaseB2Request {
 	 */
 	protected CloseableHttpResponse executePost(HttpEntity entity) throws B2Exception {
 		try {
-            URI uri = this.buildUri();
+			URI uri = this.buildUri();
 
-            HttpPost httpPost = new HttpPost(uri);
+			HttpPost httpPost = new HttpPost(uri);
 
-            httpPost.setEntity(entity);
+			httpPost.setEntity(entity);
 			CloseableHttpResponse httpResponse = this.execute(httpPost);
 
-            switch(httpResponse.getStatusLine().getStatusCode()) {
-                case HttpStatus.SC_OK:
-                    return httpResponse;
-            }
-            throw new B2Exception(EntityUtils.toString(httpResponse.getEntity()), new HttpResponseException(
-                    httpResponse.getStatusLine().getStatusCode(), httpResponse.getStatusLine().getReasonPhrase()));
-        } catch (IOException | URISyntaxException ex) {
+			switch(httpResponse.getStatusLine().getStatusCode()) {
+			case HttpStatus.SC_OK:
+				return httpResponse;
+			}
+			throw new B2Exception(EntityUtils.toString(httpResponse.getEntity()), new HttpResponseException(
+					httpResponse.getStatusLine().getStatusCode(), httpResponse.getStatusLine().getReasonPhrase()));
+		} catch (IOException | URISyntaxException ex) {
 			throw new B2Exception(ex);
 		}
 	}
@@ -211,14 +238,13 @@ public abstract class BaseB2Request {
 	 */
 	protected String convertPostData() throws B2Exception {
 		JSONObject jsonObject = new JSONObject();
-        for(final String key : requestBodyData.keySet()) {
-            try {
-                jsonObject.put(key, requestBodyData.get(key));
-            }
-            catch(JSONException ex) {
-                throw new B2Exception(ex);
-            }
-        }
+		for(final String key : requestBodyData.keySet()) {
+			try {
+				jsonObject.put(key, requestBodyData.get(key));
+			} catch(JSONException ex) {
+				throw new B2Exception(ex);
+			}
+		}
 		return jsonObject.toString();
 	}
 
@@ -233,9 +259,9 @@ public abstract class BaseB2Request {
 	protected URI buildUri() throws URISyntaxException {
 		URIBuilder uriBuilder = new URIBuilder(url);
 
-        for(final String key : requestParameters.keySet()) {
-            uriBuilder.addParameter(key, requestParameters.get(key));
-        }
+		for(final String key : requestParameters.keySet()) {
+			uriBuilder.addParameter(key, requestParameters.get(key));
+		}
 
 		return uriBuilder.build();
 	}
@@ -253,24 +279,22 @@ public abstract class BaseB2Request {
 	protected void setHeaders(HttpUriRequest request) throws B2Exception {
 		for (String headerKey : requestHeaders.keySet()) {
 			if(!request.containsHeader(headerKey)) {
-                final String headerValue = requestHeaders.get(headerKey);
-                log.trace("Setting header '" + headerKey + "' to '" + headerValue + "'.");
-                request.setHeader(headerKey, headerValue);
+				final String headerValue = requestHeaders.get(headerKey);
+				LOGGER.trace("Setting header '" + headerKey + "' to '" + headerValue + "'.");
+				request.setHeader(headerKey, headerValue);
+			} else {
+				LOGGER.warn("Ignore duplicate header " + headerKey);
 			}
-            else {
-                log.warn("Ignore duplicate header " + headerKey);
-            }
 		}
 	}
 
-    protected CloseableHttpResponse execute(final HttpUriRequest request) throws IOException, B2Exception {
-        this.setHeaders(request);
-        log.debug("{} request to URL '{}'", request.getMethod(), request.getURI());
-        final CloseableHttpResponse httpResponse = client.execute(request);
-        if(log.isDebugEnabled()) {
-            log.debug("Received status code of: {}, for {} request to url '{}'",
-                    httpResponse.getStatusLine().getStatusCode(), request.getMethod(), request.getURI());
-        }
-        return httpResponse;
-    }
+	protected CloseableHttpResponse execute(final HttpUriRequest request) throws IOException, B2Exception {
+		this.setHeaders(request);
+		LOGGER.debug("{} request to URL '{}'", request.getMethod(), request.getURI());
+		final CloseableHttpResponse httpResponse = client.execute(request);
+		if(LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Received status code of: {}, for {} request to url '{}'", httpResponse.getStatusLine().getStatusCode(), request.getMethod(), request.getURI());
+		}
+		return httpResponse;
+	}
 }

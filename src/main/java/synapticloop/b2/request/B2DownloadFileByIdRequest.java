@@ -1,5 +1,21 @@
 package synapticloop.b2.request;
 
+/*
+ * Copyright (c) 2016 synapticloop.
+ * 
+ * All rights reserved.
+ * 
+ * This code may contain contributions from other parties which, where 
+ * applicable, will be listed in the default build file for the project 
+ * ~and/or~ in a file named CONTRIBUTORS.txt in the root of the project.
+ * 
+ * This source code and any derived binaries are covered by the terms and 
+ * conditions of the Licence agreement ("the Licence").  You may not use this 
+ * source code or any derived binaries except in compliance with the Licence.  
+ * A copy of the Licence is available in the file named LICENSE.txt shipped with 
+ * this source code or binaries.
+ */
+
 import org.apache.http.HttpHeaders;
 import org.apache.http.impl.client.CloseableHttpClient;
 
@@ -55,7 +71,9 @@ public class B2DownloadFileByIdRequest extends BaseB2Request {
 	 * @param rangeEnd the end of the range
 	 */
 	public B2DownloadFileByIdRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String fileId, long rangeStart, long rangeEnd) {
+
 		this(client, b2AuthorizeAccountResponse, fileId);
+
 		requestHeaders.put(HttpHeaders.RANGE, String.format("bytes=%d-%d", rangeStart, rangeEnd));
 	}
 
