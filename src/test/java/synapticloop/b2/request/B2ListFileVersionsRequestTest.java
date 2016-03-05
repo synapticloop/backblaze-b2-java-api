@@ -4,11 +4,13 @@ import static org.junit.Assert.*;
 
 import java.util.List;
 
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import synapticloop.b2.exception.B2ApiException;
+import synapticloop.b2.exception.B2Exception;
 import synapticloop.b2.helper.B2TestHelper;
 import synapticloop.b2.response.B2AuthorizeAccountResponse;
 import synapticloop.b2.response.B2BucketResponse;
@@ -25,7 +27,7 @@ public class B2ListFileVersionsRequestTest {
 	private static String bucketId = null;
 
 	@BeforeClass
-	public static void setupBeforeClass() throws B2ApiException {
+	public static void setupBeforeClass() throws B2Exception {
 		b2AuthorizeAccountResponse = B2TestHelper.getB2AuthorizeAccountResponse();
 		B2BucketResponse randomPrivateBucket = B2TestHelper.createRandomPrivateBucket();
 		bucketId = randomPrivateBucket.getBucketId();
@@ -36,15 +38,15 @@ public class B2ListFileVersionsRequestTest {
 	}
 
 	@Test
-	public void listFileVersions() throws B2ApiException {
-		B2ListFilesResponse b2ListFileVersionsResponse = new B2ListFileVersionsRequest(b2AuthorizeAccountResponse, bucketId).getResponse();
+	public void listFileVersions() throws B2Exception {
+		B2ListFilesResponse b2ListFileVersionsResponse = new B2ListFileVersionsRequest(HttpClients.createDefault(), b2AuthorizeAccountResponse, bucketId, 1000).getResponse();
 		List<B2FileInfoResponse> files = b2ListFileVersionsResponse.getFiles();
 		assertEquals(4, files.size());
 	}
 
 	@Test
-	public void listFileVersionByName() throws B2ApiException {
-		B2ListFilesResponse b2ListFileVersionsResponse = new B2ListFileVersionsRequest(b2AuthorizeAccountResponse, bucketId, tempFileOne.getFileName(), null, 1).getResponse();
+	public void listFileVersionByName() throws B2Exception {
+		B2ListFilesResponse b2ListFileVersionsResponse = new B2ListFileVersionsRequest(HttpClients.createDefault(), b2AuthorizeAccountResponse, bucketId, 1, tempFileOne.getFileName(), null).getResponse();
 		List<B2FileInfoResponse> files = b2ListFileVersionsResponse.getFiles();
 		assertEquals(1, files.size());
 
@@ -53,8 +55,8 @@ public class B2ListFileVersionsRequestTest {
 	}
 
 	@Test
-	public void listFileVersionByNameAndId() throws B2ApiException {
-		B2ListFilesResponse b2ListFileVersionsResponse = new B2ListFileVersionsRequest(b2AuthorizeAccountResponse, bucketId, tempFileTwo.getFileName(), tempFileTwo.getFileId(), 1).getResponse();
+	public void listFileVersionByNameAndId() throws B2Exception {
+		B2ListFilesResponse b2ListFileVersionsResponse = new B2ListFileVersionsRequest(HttpClients.createDefault(),  b2AuthorizeAccountResponse, bucketId, 1, tempFileTwo.getFileName(), tempFileTwo.getFileId()).getResponse();
 		List<B2FileInfoResponse> files = b2ListFileVersionsResponse.getFiles();
 		assertEquals(1, files.size());
 
@@ -62,9 +64,9 @@ public class B2ListFileVersionsRequestTest {
 		assertEquals(b2FileInfoResponse.getFileId(), tempFileTwo.getFileId());
 	}
 
-	@Test(expected = B2ApiException.class)
-	public void listFileVersionIncorrect() throws B2ApiException {
-		B2ListFilesResponse b2ListFileVersionsResponse = new B2ListFileVersionsRequest(b2AuthorizeAccountResponse, bucketId, null, tempFileTwo.getFileId(), 1).getResponse();
+	@Test(expected = B2Exception.class)
+	public void listFileVersionIncorrect() throws B2Exception {
+		B2ListFilesResponse b2ListFileVersionsResponse = new B2ListFileVersionsRequest(HttpClients.createDefault(), b2AuthorizeAccountResponse, bucketId, 1, null, tempFileTwo.getFileId()).getResponse();
 		List<B2FileInfoResponse> files = b2ListFileVersionsResponse.getFiles();
 		assertEquals(1, files.size());
 
@@ -74,26 +76,28 @@ public class B2ListFileVersionsRequestTest {
 	}
 
 	@Test
-	public void listFiles() throws B2ApiException {
-		B2ListFilesResponse b2ListFileVersionsResponse = new B2ListFileVersionsRequest(b2AuthorizeAccountResponse, bucketId, tempFileOne.getFileName(), null, 1).getResponse();
+	public void listFiles() throws B2Exception {
+		CloseableHttpClient client = HttpClients.createDefault();
+		B2ListFilesResponse b2ListFileVersionsResponse = new B2ListFileVersionsRequest(client, b2AuthorizeAccountResponse, bucketId, 1, tempFileOne.getFileName(), null).getResponse();
 		assertEquals(1, b2ListFileVersionsResponse.getFiles().size());
 
-		b2ListFileVersionsResponse = new B2ListFileVersionsRequest(b2AuthorizeAccountResponse, bucketId, b2ListFileVersionsResponse.getNextFileName(), null, 1).getResponse();
+		b2ListFileVersionsResponse = new B2ListFileVersionsRequest(client, b2AuthorizeAccountResponse, bucketId, 1, b2ListFileVersionsResponse.getNextFileName(), null).getResponse();
 		assertEquals(1, b2ListFileVersionsResponse.getFiles().size());
 
-		b2ListFileVersionsResponse = new B2ListFileVersionsRequest(b2AuthorizeAccountResponse, bucketId, b2ListFileVersionsResponse.getNextFileName(), null, 1).getResponse();
+		b2ListFileVersionsResponse = new B2ListFileVersionsRequest(client, b2AuthorizeAccountResponse, bucketId, 1, b2ListFileVersionsResponse.getNextFileName(), null).getResponse();
 		assertEquals(1, b2ListFileVersionsResponse.getFiles().size());
 
-		b2ListFileVersionsResponse = new B2ListFileVersionsRequest(b2AuthorizeAccountResponse, bucketId, b2ListFileVersionsResponse.getNextFileName(), null, 1).getResponse();
+		b2ListFileVersionsResponse = new B2ListFileVersionsRequest(client, b2AuthorizeAccountResponse, bucketId, 1, b2ListFileVersionsResponse.getNextFileName(), null).getResponse();
 		assertEquals(1, b2ListFileVersionsResponse.getFiles().size());
 	}
 
 	@AfterClass
-	public static void tearDownAfterClass() throws B2ApiException {
-		new B2DeleteFileVersionRequest(b2AuthorizeAccountResponse, tempFileOne.getFileName(), tempFileOne.getFileId()).getResponse();
-		new B2DeleteFileVersionRequest(b2AuthorizeAccountResponse, tempFileTwo.getFileName(), tempFileTwo.getFileId()).getResponse();
-		new B2DeleteFileVersionRequest(b2AuthorizeAccountResponse, tempFileThree.getFileName(), tempFileThree.getFileId()).getResponse();
-		new B2DeleteFileVersionRequest(b2AuthorizeAccountResponse, tempFileFour.getFileName(), tempFileFour.getFileId()).getResponse();
+	public static void tearDownAfterClass() throws B2Exception {
+		CloseableHttpClient client = HttpClients.createDefault();
+		new B2DeleteFileVersionRequest(client, b2AuthorizeAccountResponse, tempFileOne.getFileName(), tempFileOne.getFileId()).getResponse();
+		new B2DeleteFileVersionRequest(client, b2AuthorizeAccountResponse, tempFileTwo.getFileName(), tempFileTwo.getFileId()).getResponse();
+		new B2DeleteFileVersionRequest(client, b2AuthorizeAccountResponse, tempFileThree.getFileName(), tempFileThree.getFileId()).getResponse();
+		new B2DeleteFileVersionRequest(client, b2AuthorizeAccountResponse, tempFileFour.getFileName(), tempFileFour.getFileId()).getResponse();
 		B2TestHelper.deleteBucket(bucketId);
 	}
 }

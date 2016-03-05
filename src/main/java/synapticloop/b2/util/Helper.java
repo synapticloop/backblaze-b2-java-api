@@ -1,8 +1,11 @@
 package synapticloop.b2.util;
 
+import org.apache.commons.io.IOUtils;
+
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -11,10 +14,9 @@ import java.security.NoSuchAlgorithmException;
 
 import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
 
-import synapticloop.b2.exception.B2ApiException;
+import synapticloop.b2.exception.B2Exception;
 
 public class Helper {
-	private static final String SHA_1 = "SHA-1";
 	private static final String UTF_8 = "UTF-8";
 
 	/**
@@ -24,17 +26,24 @@ public class Helper {
 	 * 
 	 * @return the sha1 of the file
 	 * 
-	 * @throws B2ApiException if something went wrong with the calculation, 
-	 *   either through a no such algorithm exception (unlikely) or an IO
-	 *   exception with the reading of the file
+	 * @throws B2Exception if something went wrong with the calculation
 	 */
-	public static String calculateSha1(File file) throws B2ApiException {
+	public static String calculateSha1(File file) throws B2Exception {
+		try {
+			return calculateSha1(new FileInputStream(file));
+		}
+		catch(FileNotFoundException e) {
+			throw new B2Exception(e);
+		}
+	}
 
-		MessageDigest messageDigest = null;
+	public static String calculateSha1(InputStream in) throws B2Exception {
+
+		MessageDigest messageDigest;
 		InputStream inputStream = null;
 		try {
-			messageDigest = MessageDigest.getInstance(SHA_1);
-			inputStream = new BufferedInputStream(new FileInputStream(file));
+			messageDigest = MessageDigest.getInstance("SHA-1");
+			inputStream = new BufferedInputStream(in);
 			byte[] buffer = new byte[8192];
 			int len = inputStream.read(buffer);
 
@@ -45,11 +54,9 @@ public class Helper {
 
 			return(new HexBinaryAdapter().marshal(messageDigest.digest()));
 		} catch (NoSuchAlgorithmException | IOException ex) {
-			throw new B2ApiException(ex);
+			throw new B2Exception(ex);
 		} finally {
-			if(null != inputStream) {
-				try { inputStream.close(); } catch (IOException ex) { }
-			}
+			IOUtils.closeQuietly(inputStream);
 		}
 	}
 
@@ -63,10 +70,9 @@ public class Helper {
 	 */
 	public static String urlEncode(String url) {
 		try {
-			return java.net.URLEncoder.encode(url, UTF_8).replace("%2F", "/");
+			return java.net.URLEncoder.encode(url, UTF_8);
 		} catch (UnsupportedEncodingException ex) {
-			// highly unlikely
-			return(url);
+			return url;
 		}
 	}
 
@@ -83,8 +89,7 @@ public class Helper {
 		try {
 			return java.net.URLDecoder.decode(url, UTF_8);
 		} catch (UnsupportedEncodingException ex) {
-			// highly unlikey
-			return(url);
+			return url;
 		}
 	}
 

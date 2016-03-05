@@ -2,10 +2,11 @@ package synapticloop.b2.request;
 
 import static org.junit.Assert.*;
 
+import org.apache.http.impl.client.HttpClients;
 import org.junit.Before;
 import org.junit.Test;
 
-import synapticloop.b2.exception.B2ApiException;
+import synapticloop.b2.exception.B2Exception;
 import synapticloop.b2.response.B2AuthorizeAccountResponse;
 
 
@@ -19,7 +20,7 @@ public class B2AuthorizeAccountRequestTest {
 	}
 
 	@Test
-	public void testCorrectCredentials() throws B2ApiException {
+	public void testCorrectCredentials() throws B2Exception {
 		boolean isOK = true;
 		String b2AccountId = System.getenv(B2_ACCOUNT_ID);
 		String b2ApplicationKey = System.getenv(B2_APPLICATION_KEY);
@@ -38,7 +39,7 @@ public class B2AuthorizeAccountRequestTest {
 			System.exit(-1);
 		}
 
-		B2AuthorizeAccountRequest b2AuthorizeAccountRequest = new B2AuthorizeAccountRequest(b2AccountId, b2ApplicationKey);
+		B2AuthorizeAccountRequest b2AuthorizeAccountRequest = new B2AuthorizeAccountRequest(HttpClients.createDefault(), b2AccountId, b2ApplicationKey);
 		B2AuthorizeAccountResponse response = b2AuthorizeAccountRequest.getResponse();
 		assertNotNull(response.getAuthorizationToken());
 		assertNotNull(response.getAccountId());
@@ -46,9 +47,9 @@ public class B2AuthorizeAccountRequestTest {
 		assertNotNull(response.getDownloadUrl());
 	}
 
-	@Test (expected=B2ApiException.class)
-	public void testIncorrectCredentials() throws B2ApiException {
-		B2AuthorizeAccountRequest b2AuthorizeAccountRequest = new B2AuthorizeAccountRequest("bad", "value");
+	@Test (expected=B2Exception.class)
+	public void testIncorrectCredentials() throws B2Exception {
+		B2AuthorizeAccountRequest b2AuthorizeAccountRequest = new B2AuthorizeAccountRequest(HttpClients.createDefault(), "bad", "value");
 		b2AuthorizeAccountRequest.getResponse();
 	}
 

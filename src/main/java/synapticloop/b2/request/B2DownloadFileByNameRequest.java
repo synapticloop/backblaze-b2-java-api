@@ -1,9 +1,9 @@
 package synapticloop.b2.request;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.http.HttpHeaders;
+import org.apache.http.impl.client.CloseableHttpClient;
 
-import synapticloop.b2.exception.B2ApiException;
+import synapticloop.b2.exception.B2Exception;
 import synapticloop.b2.response.B2AuthorizeAccountResponse;
 import synapticloop.b2.response.B2DownloadFileResponse;
 import synapticloop.b2.util.Helper;
@@ -21,21 +21,18 @@ import synapticloop.b2.util.Helper;
  * 
  * @author synapticloop
  */
-
 public class B2DownloadFileByNameRequest extends BaseB2Request {
-	private static final Logger LOGGER = LoggerFactory.getLogger(B2DownloadFileByNameRequest.class);
 
-	public B2DownloadFileByNameRequest(B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String bucketName, String fileName) {
-		super(b2AuthorizeAccountResponse);
-		url = b2AuthorizeAccountResponse.getDownloadUrl() + "/file/" + Helper.urlEncode(bucketName) + "/" + Helper.urlEncode(fileName);
+	public B2DownloadFileByNameRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String bucketName, String fileName) {
+		super(client, b2AuthorizeAccountResponse, b2AuthorizeAccountResponse.getDownloadUrl() + "/file/" + Helper.urlEncode(bucketName) + "/" + Helper.urlEncode(fileName));
 	}
 
-	public B2DownloadFileByNameRequest(B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String bucketName, String fileName, long rangeStart, long rangeEnd) {
-		this(b2AuthorizeAccountResponse, bucketName, fileName);
-		unencodedHeaders.put(KEY_RANGE, "bytes=" + rangeStart + "-" + rangeEnd);
+	public B2DownloadFileByNameRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String bucketName, String fileName, long rangeStart, long rangeEnd) {
+		this(client, b2AuthorizeAccountResponse, bucketName, fileName);
+		requestHeaders.put(HttpHeaders.RANGE, "bytes=" + rangeStart + "-" + rangeEnd);
 	}
 
-	public B2DownloadFileResponse getResponse() throws B2ApiException {
-		return(new B2DownloadFileResponse(executeGetWithData(LOGGER)));
+	public B2DownloadFileResponse getResponse() throws B2Exception {
+		return(new B2DownloadFileResponse(executeGet()));
 	}
 }

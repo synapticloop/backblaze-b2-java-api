@@ -1,44 +1,29 @@
 package synapticloop.b2.response;
 
-import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import synapticloop.b2.exception.B2ApiException;
+import synapticloop.b2.exception.B2Exception;
 
 public class B2AuthorizeAccountResponse extends BaseB2Response {
-	private static final Logger LOGGER = LoggerFactory.getLogger(B2AuthorizeAccountResponse.class);
-
-	private String accountId = null;
-	private String apiUrl = null;
-	private String authorizationToken = null;
-	private String downloadUrl = null;
+	private final String accountId;
+	private final String apiUrl;
+	private final String authorizationToken;
+	private final String downloadUrl;
 
 	/**
 	 * Instantiate an authorize account response with the JSON response as a 
 	 * string from the API call.  This response is then parsed into the 
 	 * relevant fields.
 	 * 
-	 * @param response the response (in JSON format)
+	 * @param json the response (in JSON format)
 	 * 
-	 * @throws B2ApiException if there was an error parsing the response
+	 * @throws B2Exception if there was an error parsing the response
 	 */
-	public B2AuthorizeAccountResponse(String response) throws B2ApiException {
-		JSONObject jsonObject = getParsedResponse(response);
+	public B2AuthorizeAccountResponse(String json) throws B2Exception {
+		super(json);
 
-		this.accountId = jsonObject.optString(KEY_ACCOUNT_ID);
-		jsonObject.remove(KEY_ACCOUNT_ID);
-
-		this.apiUrl = jsonObject.optString(KEY_API_URL);
-		jsonObject.remove(KEY_API_URL);
-
-		this.authorizationToken = jsonObject.optString(KEY_AUTHORIZATION_TOKEN);
-		jsonObject.remove(KEY_AUTHORIZATION_TOKEN);
-
-		this.downloadUrl = jsonObject.optString(KEY_DOWNLOAD_URL);
-		jsonObject.remove(KEY_DOWNLOAD_URL);
-
-		warnOnMissedKeys(LOGGER, jsonObject);
+		this.accountId = response.optString(B2ResponseProperties.KEY_ACCOUNT_ID, null);
+		this.apiUrl = response.optString(B2ResponseProperties.KEY_API_URL, null);
+		this.authorizationToken = response.optString(B2ResponseProperties.KEY_AUTHORIZATION_TOKEN, null);
+		this.downloadUrl = response.optString(B2ResponseProperties.KEY_DOWNLOAD_URL, null);
 	}
 
 	/**
@@ -68,4 +53,14 @@ public class B2AuthorizeAccountResponse extends BaseB2Response {
 	 * @return the url to be used for downloading files
 	 */
 	public String getDownloadUrl() { return this.downloadUrl; }
+
+	@Override
+	public String toString() {
+		final StringBuilder sb = new StringBuilder("B2AuthorizeAccountResponse{");
+		sb.append("accountId='").append(accountId).append('\'');
+		sb.append(", apiUrl='").append(apiUrl).append('\'');
+		sb.append(", downloadUrl='").append(downloadUrl).append('\'');
+		sb.append('}');
+		return sb.toString();
+	}
 }

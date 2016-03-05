@@ -7,6 +7,7 @@ import java.io.FileWriter;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.http.impl.client.HttpClients;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -19,10 +20,6 @@ import synapticloop.b2.response.B2GetUploadUrlResponse;
 
 public class B2UploadAndDeleteFileRequestTest {
 
-	@Before
-	public void setup() {
-	}
-
 	@Test
 	public void testFileUpload() throws Exception {
 		B2BucketResponse privateBucket = B2TestHelper.createRandomPrivateBucket();
@@ -32,14 +29,14 @@ public class B2UploadAndDeleteFileRequestTest {
 		fileWriter.write("hello world!");
 		fileWriter.flush();
 		fileWriter.close();
-		B2FileResponse b2UploadFileResponse = new B2UploadFileRequest(B2TestHelper.getB2AuthorizeAccountResponse(), b2GetUploadUrlResponse, file.getName(), file).getResponse();
+		B2FileResponse b2UploadFileResponse = new B2UploadFileRequest(HttpClients.createDefault(), B2TestHelper.getB2AuthorizeAccountResponse(), b2GetUploadUrlResponse, file.getName(), file).getResponse();
 
 		String fileName = b2UploadFileResponse.getFileName();
 		String fileId = b2UploadFileResponse.getFileId();
 
 		// now we need to delete the file as well to clean up after ourselves
 
-		B2DeleteFileVersionResponse b2DeleteFileVersionResponse = new B2DeleteFileVersionRequest(B2TestHelper.getB2AuthorizeAccountResponse(), fileName, fileId).getResponse();
+		B2DeleteFileVersionResponse b2DeleteFileVersionResponse = new B2DeleteFileVersionRequest(HttpClients.createDefault(), B2TestHelper.getB2AuthorizeAccountResponse(), fileName, fileId).getResponse();
 		assertEquals(fileName, b2DeleteFileVersionResponse.getFileName());
 		assertEquals(fileId, b2DeleteFileVersionResponse.getFileId());
 
@@ -59,22 +56,21 @@ public class B2UploadAndDeleteFileRequestTest {
 		fileWriter.flush();
 		fileWriter.close();
 
-		B2FileResponse b2UploadFileResponse = new B2UploadFileRequest(B2TestHelper.getB2AuthorizeAccountResponse(), b2GetUploadUrlResponse, file.getName(), file, fileInfo).getResponse();
+		B2FileResponse b2UploadFileResponse = new B2UploadFileRequest(HttpClients.createDefault(), B2TestHelper.getB2AuthorizeAccountResponse(), b2GetUploadUrlResponse, file.getName(), file, fileInfo).getResponse();
 
 		String fileName = b2UploadFileResponse.getFileName();
 		String fileId = b2UploadFileResponse.getFileId();
 
 		// try and get the info for the file
-		B2FileResponse b2FileInfoResponse = new B2GetFileInfoRequest(B2TestHelper.getB2AuthorizeAccountResponse(), b2UploadFileResponse.getFileId()).getResponse();
+		B2FileResponse b2FileInfoResponse = new B2GetFileInfoRequest(HttpClients.createDefault(), B2TestHelper.getB2AuthorizeAccountResponse(), b2UploadFileResponse.getFileId()).getResponse();
 		assertEquals("world", b2FileInfoResponse.getFileInfo().get("hello"));
 
 		// now we need to delete the file as well to clean up after ourselves
 
-		B2DeleteFileVersionResponse b2DeleteFileVersionResponse = new B2DeleteFileVersionRequest(B2TestHelper.getB2AuthorizeAccountResponse(), fileName, fileId).getResponse();
+		B2DeleteFileVersionResponse b2DeleteFileVersionResponse = new B2DeleteFileVersionRequest(HttpClients.createDefault(), B2TestHelper.getB2AuthorizeAccountResponse(), fileName, fileId).getResponse();
 		assertEquals(fileName, b2DeleteFileVersionResponse.getFileName());
 		assertEquals(fileId, b2DeleteFileVersionResponse.getFileId());
 
 		B2TestHelper.deleteBucket(privateBucket.getBucketId());
 	}
-
 }

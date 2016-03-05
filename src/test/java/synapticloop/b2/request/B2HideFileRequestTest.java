@@ -1,11 +1,12 @@
 package synapticloop.b2.request;
 import static org.junit.Assert.*;
 
+import org.apache.http.impl.client.HttpClients;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import synapticloop.b2.exception.B2ApiException;
+import synapticloop.b2.exception.B2Exception;
 import synapticloop.b2.helper.B2TestHelper;
 import synapticloop.b2.response.B2BucketResponse;
 import synapticloop.b2.response.B2FileResponse;
@@ -24,26 +25,26 @@ public class B2HideFileRequestTest {
 	}
 
 	@Test
-	public void testHideFile() throws B2ApiException {
+	public void testHideFile() throws B2Exception {
 		randomPrivateBucket = B2TestHelper.createRandomPrivateBucket();
 		String bucketId = randomPrivateBucket.getBucketId();
 		b2FileResponse = B2TestHelper.uploadTemporaryFileToBucket(bucketId);
 
-		B2ListFilesResponse b2ListFilesResponse = new B2ListFileNamesRequest(B2TestHelper.getB2AuthorizeAccountResponse(), bucketId).getResponse();
+		B2ListFilesResponse b2ListFilesResponse = new B2ListFileNamesRequest(HttpClients.createDefault(), B2TestHelper.getB2AuthorizeAccountResponse(), bucketId).getResponse();
 		assertEquals(1, b2ListFilesResponse.getFiles().size());
 
-		b2HideFileResponse  = new B2HideFileRequest(B2TestHelper.getB2AuthorizeAccountResponse(), bucketId, b2FileResponse.getFileName()).getResponse();
+		b2HideFileResponse  = new B2HideFileRequest(HttpClients.createDefault(), B2TestHelper.getB2AuthorizeAccountResponse(), bucketId, b2FileResponse.getFileName()).getResponse();
 		assertEquals("hide", b2HideFileResponse.getAction().toString());
 
 		// we now have two versions...
-		b2ListFilesResponse = new B2ListFileNamesRequest(B2TestHelper.getB2AuthorizeAccountResponse(), bucketId).getResponse();
+		b2ListFilesResponse = new B2ListFileNamesRequest(HttpClients.createDefault(), B2TestHelper.getB2AuthorizeAccountResponse(), bucketId).getResponse();
 		assertEquals(2, b2ListFilesResponse.getFiles().size());
 
 		assertNull(null);
 	}
 
 	@After
-	public void tearDown() throws B2ApiException {
+	public void tearDown() throws B2Exception {
 		B2TestHelper.deleteFile(b2HideFileResponse.getFileName(), b2HideFileResponse.getFileId());
 		B2TestHelper.deleteFile(b2FileResponse.getFileName(), b2FileResponse.getFileId());
 		B2TestHelper.deleteBucket(randomPrivateBucket.getBucketId());
