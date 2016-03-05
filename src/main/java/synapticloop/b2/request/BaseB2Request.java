@@ -239,7 +239,7 @@ public abstract class BaseB2Request {
 		JSONObject jsonObject = new JSONObject();
 		for(final String key : requestBodyData.keySet()) {
 			try {
-				LOGGER.debug("Setting key '{}' to value '{}'", key, obfuscateData(requestBodyData.get(key)));
+				LOGGER.debug("Setting key '{}' to value '{}'", key, obfuscateData(key, requestBodyData.get(key)));
 				jsonObject.put(key, requestBodyData.get(key));
 			} catch(JSONException ex) {
 				throw new B2ApiException(ex);
@@ -307,8 +307,13 @@ public abstract class BaseB2Request {
 	 * 
 	 * @return the obfuscated data
 	 */
-	private String obfuscateData(Object data) {
-		return(data.toString().replaceAll("\"accountId\":\".*\"", "\"accountId\":\"[redacted]\""));
+	private Object obfuscateData(String key, Object data) {
+		if(LOGGER.isDebugEnabled()) {
+			if("accountId".equals(key)) {
+				return("[redacted]");
+			}
+		}
+		return(data);
 	}
 
 }
