@@ -29,21 +29,22 @@ public class DeleteTestBuckets {
 			System.exit(-1);
 		}
 
-		B2ApiClient b2ApiClient = new B2ApiClient(b2AccountId, b2ApplicationKey);
-		List<B2BucketResponse> listBuckets = b2ApiClient.listBuckets();
+		B2ApiClient client = new B2ApiClient();
+		client.authenticate(b2AccountId, b2ApplicationKey);
+		List<B2BucketResponse> listBuckets = client.listBuckets();
 		for (B2BucketResponse b2BucketResponse : listBuckets) {
 			if(b2BucketResponse.getBucketName().startsWith(B2TestHelper.B2_BUCKET_PREFIX)) {
 				// go through and delete all of the files
 				String bucketId = b2BucketResponse.getBucketId();
 				System.out.println("Deleting files in bucket '" + bucketId + "'.");
-				List<B2FileInfoResponse> files = b2ApiClient.listFileVersions(bucketId).getFiles();
+				List<B2FileInfoResponse> files = client.listFileVersions(bucketId).getFiles();
 				for (B2FileInfoResponse b2FileInfoResponse : files) {
 					String fileName = b2FileInfoResponse.getFileName();
 					System.out.println("Deleting file version name: '" + fileName + "'.");
-					b2ApiClient.deleteFileVersion(fileName, b2FileInfoResponse.getFileId());
+					client.deleteFileVersion(fileName, b2FileInfoResponse.getFileId());
 				}
 				System.out.println("Deleting bucket '" + bucketId + "'.");
-				b2ApiClient.deleteBucket(bucketId);
+				client.deleteBucket(bucketId);
 			}
 		}
 	}

@@ -1,11 +1,30 @@
 package synapticloop.b2.request;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+/*
+ * Copyright (c) 2016 synapticloop.
+ * 
+ * All rights reserved.
+ * 
+ * This code may contain contributions from other parties which, where 
+ * applicable, will be listed in the default build file for the project 
+ * ~and/or~ in a file named CONTRIBUTORS.txt in the root of the project.
+ * 
+ * This source code and any derived binaries are covered by the terms and 
+ * conditions of the Licence agreement ("the Licence").  You may not use this 
+ * source code or any derived binaries except in compliance with the Licence.  
+ * A copy of the Licence is available in the file named LICENSE.txt shipped with 
+ * this source code or binaries.
+ */
+
+import java.io.IOException;
+
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.util.EntityUtils;
 
 import synapticloop.b2.exception.B2ApiException;
 import synapticloop.b2.response.B2AuthorizeAccountResponse;
 import synapticloop.b2.response.B2ListFilesResponse;
+import synapticloop.b2.util.Helper;
 
 /**
  * <p>Lists the names of all files in a bucket, starting at a given name.</p>
@@ -21,24 +40,26 @@ import synapticloop.b2.response.B2ListFilesResponse;
  * 
  * @author synapticloop
  */
-
 public class B2ListFileNamesRequest extends BaseB2Request {
-	private static final Logger LOGGER = LoggerFactory.getLogger(B2ListFileNamesRequest.class);
 	private static final String B2_LIST_FILE_NAMES = BASE_API_VERSION + "b2_list_file_versions";
 
-	private Integer maxFileCount = 100;
+	private static final int DEFAULT_MAX_FILE_COUNT = 100;
 
-	public B2ListFileNamesRequest(B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String bucketId) {
-		super(b2AuthorizeAccountResponse);
-		url = b2AuthorizeAccountResponse.getApiUrl() + B2_LIST_FILE_NAMES;
-
+<<<<<<< HEAD
 		requestBodyStringData.put(KEY_BUCKET_ID, bucketId);
 		requestBodyIntegerData.put(KEY_MAX_FILE_COUNT, maxFileCount);
+=======
+	public B2ListFileNamesRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String bucketId) throws B2ApiException {
+		this(client, b2AuthorizeAccountResponse, bucketId, null, DEFAULT_MAX_FILE_COUNT);
+>>>>>>> master
 	}
 
-	public B2ListFileNamesRequest(B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String bucketId, String startFileName, Integer maxFileCount) {
-		this(b2AuthorizeAccountResponse, bucketId);
+	public B2ListFileNamesRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String bucketId, String startFileName, Integer maxFileCount) throws B2ApiException {
+		super(client, b2AuthorizeAccountResponse, b2AuthorizeAccountResponse.getApiUrl() + B2_LIST_FILE_NAMES);
 
+		requestBodyData.put(B2RequestProperties.KEY_BUCKET_ID, bucketId);
+
+<<<<<<< HEAD
 		requestBodyStringData.put(KEY_BUCKET_ID, bucketId);
 		if(null != startFileName) {
 			requestBodyStringData.put(KEY_START_FILE_NAME, startFileName);
@@ -46,14 +67,31 @@ public class B2ListFileNamesRequest extends BaseB2Request {
 
 		if(null != maxFileCount) {
 			requestBodyIntegerData.put(KEY_MAX_FILE_COUNT, maxFileCount);
+=======
+		if(null != startFileName) {
+			requestBodyData.put(B2RequestProperties.KEY_START_FILE_NAME, Helper.urlEncode(startFileName));
 		}
-	}
 
-	public B2ListFilesResponse getResponse() throws B2ApiException {
 		if(maxFileCount > MAX_FILE_COUNT_RETURN) {
 			throw new B2ApiException("Maximum return file count is " + MAX_FILE_COUNT_RETURN);
+>>>>>>> master
 		}
 
-		return(new B2ListFilesResponse(executePost(LOGGER)));
+		requestBodyData.put(B2RequestProperties.KEY_MAX_FILE_COUNT, maxFileCount);
+	}
+
+	/**
+	 * Return the list file names response 
+	 * 
+	 * @return the list file names response
+	 * 
+	 * @throws B2ApiException if something went wrong
+	 */
+	public B2ListFilesResponse getResponse() throws B2ApiException {
+		try {
+			return(new B2ListFilesResponse(EntityUtils.toString(executePost().getEntity())));
+		} catch(IOException e) {
+			throw new B2ApiException(e);
+		}
 	}
 }

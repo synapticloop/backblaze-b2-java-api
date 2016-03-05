@@ -1,11 +1,30 @@
 package synapticloop.b2.request;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+/*
+ * Copyright (c) 2016 synapticloop.
+ * 
+ * All rights reserved.
+ * 
+ * This code may contain contributions from other parties which, where 
+ * applicable, will be listed in the default build file for the project 
+ * ~and/or~ in a file named CONTRIBUTORS.txt in the root of the project.
+ * 
+ * This source code and any derived binaries are covered by the terms and 
+ * conditions of the Licence agreement ("the Licence").  You may not use this 
+ * source code or any derived binaries except in compliance with the Licence.  
+ * A copy of the Licence is available in the file named LICENSE.txt shipped with 
+ * this source code or binaries.
+ */
+
+import java.io.IOException;
+
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.util.EntityUtils;
 
 import synapticloop.b2.exception.B2ApiException;
 import synapticloop.b2.response.B2AuthorizeAccountResponse;
 import synapticloop.b2.response.B2ListFilesResponse;
+import synapticloop.b2.util.Helper;
 
 /**
  * <p>Lists all of the versions of all of the files contained in one bucket, in alphabetical order by file name, and by reverse of date/time uploaded for versions of files with the same name.</p>
@@ -17,32 +36,48 @@ import synapticloop.b2.response.B2ListFilesResponse;
  * 
  * @author synapticloop
  */
-
 public class B2ListFileVersionsRequest extends BaseB2Request {
-	private static final Logger LOGGER = LoggerFactory.getLogger(B2ListFileVersionsRequest.class);
 	private static final String B2_LIST_FILE_VERSIONS = BASE_API_VERSION + "b2_list_file_versions";
 
-	private int maxFileCount = 100;
+	private static final int DEFAULT_MAX_FILE_COUNT = 100;
 
-	public B2ListFileVersionsRequest(B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String bucketId, Integer maxFileCount) {
-		super(b2AuthorizeAccountResponse);
-		url = b2AuthorizeAccountResponse.getApiUrl() + B2_LIST_FILE_VERSIONS;
+	public B2ListFileVersionsRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String bucketId) throws B2ApiException {
+		this(client, b2AuthorizeAccountResponse, bucketId, DEFAULT_MAX_FILE_COUNT);
+	}
 
+<<<<<<< HEAD
+		requestBodyStringData.put(KEY_BUCKET_ID, bucketId);
+		requestBodyIntegerData.put(KEY_MAX_FILE_COUNT, maxFileCount);
+=======
+	public B2ListFileVersionsRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String bucketId, Integer maxFileCount) throws B2ApiException {
+		this(client, b2AuthorizeAccountResponse, bucketId, maxFileCount, null, null);
+>>>>>>> master
+	}
+
+	public B2ListFileVersionsRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String bucketId, Integer maxFileCount, String startFileName, String startFileId) throws B2ApiException {
+		super(client, b2AuthorizeAccountResponse, b2AuthorizeAccountResponse.getApiUrl() + B2_LIST_FILE_VERSIONS);
+		if(null != startFileId) {
+			if(null == startFileName) {
+				throw new B2ApiException(String.format("Must include a '%s', if you are also include a '%s'.",
+						B2RequestProperties.KEY_START_FILE_NAME, B2RequestProperties.KEY_START_FILE_ID));
+			}
+		}
+
+		requestBodyData.put(B2RequestProperties.KEY_BUCKET_ID, bucketId);
+
+<<<<<<< HEAD
 		requestBodyStringData.put(KEY_BUCKET_ID, bucketId);
 		requestBodyIntegerData.put(KEY_MAX_FILE_COUNT, maxFileCount);
 	}
+=======
+		if(maxFileCount > MAX_FILE_COUNT_RETURN) {
+			throw new B2ApiException(String.format("Maximum return file count is %d", MAX_FILE_COUNT_RETURN));
+		}
+>>>>>>> master
 
-	public B2ListFileVersionsRequest(B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String bucketId) {
-		super(b2AuthorizeAccountResponse);
-		url = b2AuthorizeAccountResponse.getApiUrl() + B2_LIST_FILE_VERSIONS;
+		requestBodyData.put(B2RequestProperties.KEY_MAX_FILE_COUNT, maxFileCount);
 
-		requestBodyStringData.put(KEY_BUCKET_ID, bucketId);
-		requestBodyIntegerData.put(KEY_MAX_FILE_COUNT, maxFileCount);
-	}
-
-	public B2ListFileVersionsRequest(B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String bucketId, String startFileName, String startFileId, Integer maxFileCount) {
-		this(b2AuthorizeAccountResponse, bucketId);
-
+<<<<<<< HEAD
 		requestBodyStringData.put(KEY_BUCKET_ID, bucketId);
 		if(null != startFileName) {
 			requestBodyStringData.put(KEY_START_FILE_NAME, startFileName);
@@ -54,18 +89,38 @@ public class B2ListFileVersionsRequest extends BaseB2Request {
 
 		if(null != maxFileCount) {
 			requestBodyIntegerData.put(KEY_MAX_FILE_COUNT, maxFileCount);
+=======
+		if(null != startFileName) {
+			requestBodyData.put(B2RequestProperties.KEY_START_FILE_NAME, Helper.urlEncode(startFileName));
+		}
+
+		if(null != startFileId) {
+			requestBodyData.put(B2RequestProperties.KEY_START_FILE_ID, startFileId);
+>>>>>>> master
 		}
 	}
 
+	/**
+	 * Return the list file versions response 
+	 * 
+	 * @return the list file versions response
+	 * 
+	 * @throws B2ApiException if something went wrong
+	 */
 	public B2ListFilesResponse getResponse() throws B2ApiException {
-		if(maxFileCount > MAX_FILE_COUNT_RETURN) {
-			throw new B2ApiException("Maximum return file count is " + MAX_FILE_COUNT_RETURN);
+		try {
+			return new B2ListFilesResponse(EntityUtils.toString(executePost().getEntity()));
+		} catch(IOException e) {
+			throw new B2ApiException(e);
 		}
+<<<<<<< HEAD
 
 		if(null != requestBodyStringData.get(KEY_START_FILE_ID) && null == requestBodyStringData.get(KEY_START_FILE_NAME)) {
 			throw new B2ApiException("You __MUST__ include a '" + KEY_START_FILE_NAME + "', if you are also include a '" + KEY_START_FILE_ID + "'.");
 		}
 
 		return(new B2ListFilesResponse(executePost(LOGGER)));
+=======
+>>>>>>> master
 	}
 }

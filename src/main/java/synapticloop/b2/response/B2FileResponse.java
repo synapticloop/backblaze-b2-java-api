@@ -1,5 +1,21 @@
 package synapticloop.b2.response;
 
+/*
+ * Copyright (c) 2016 synapticloop.
+ * 
+ * All rights reserved.
+ * 
+ * This code may contain contributions from other parties which, where 
+ * applicable, will be listed in the default build file for the project 
+ * ~and/or~ in a file named CONTRIBUTORS.txt in the root of the project.
+ * 
+ * This source code and any derived binaries are covered by the terms and 
+ * conditions of the Licence agreement ("the Licence").  You may not use this 
+ * source code or any derived binaries except in compliance with the Licence.  
+ * A copy of the Licence is available in the file named LICENSE.txt shipped with 
+ * this source code or binaries.
+ */
+
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -13,53 +29,50 @@ import synapticloop.b2.exception.B2ApiException;
 public class B2FileResponse extends BaseB2Response {
 	private static final Logger LOGGER = LoggerFactory.getLogger(B2FileResponse.class);
 
-	private String fileId = null;
-	private String fileName = null;
-	private String accountId = null;
-	private String bucketId = null;
-	private long contentLength = -1l;
-	private String contentSha1 = null;
-	private String contentType = null;
-	private Map<String, Object> fileInfo = new HashMap<String, Object>();
+	private final String fileId;
+	private final String fileName;
+	private final String accountId;
+	private final String bucketId;
+	private final Long contentLength;
+	private final String contentSha1;
+	private final String contentType;
+	private final Map<String, String> fileInfo;
 
 	@SuppressWarnings("rawtypes")
-	public B2FileResponse(String response) throws B2ApiException {
-		JSONObject jsonObject = getParsedResponse(response);
+	public B2FileResponse(String json) throws B2ApiException {
+		super(json);
 
-		this.fileId = jsonObject.optString(KEY_FILE_ID);
-		jsonObject.remove(KEY_FILE_ID);
+		this.fileId = response.optString(B2ResponseProperties.KEY_FILE_ID, null);
+		this.fileName = response.optString(B2ResponseProperties.KEY_FILE_NAME, null);
+		this.accountId = response.optString(B2ResponseProperties.KEY_ACCOUNT_ID, null);
+		this.bucketId = response.optString(B2ResponseProperties.KEY_BUCKET_ID, null);
+		this.contentLength = response.optLong(B2ResponseProperties.KEY_CONTENT_LENGTH, -1l);
+		this.contentSha1 = response.optString(B2ResponseProperties.KEY_CONTENT_SHA1, null);
+		this.contentType = response.optString(B2ResponseProperties.KEY_CONTENT_TYPE, null);
 
-		this.fileName = jsonObject.optString(KEY_FILE_NAME);
-		jsonObject.remove(KEY_FILE_NAME);
+		this.fileInfo = new HashMap<String, String>();
 
-		this.accountId = jsonObject.optString(KEY_ACCOUNT_ID);
-		jsonObject.remove(KEY_ACCOUNT_ID);
-
-		this.bucketId = jsonObject.optString(KEY_BUCKET_ID);
-		jsonObject.remove(KEY_BUCKET_ID);
-
-		this.contentLength = jsonObject.optLong(KEY_CONTENT_LENGTH);
-		jsonObject.remove(KEY_CONTENT_LENGTH);
-
-		this.contentSha1 = jsonObject.optString(KEY_CONTENT_SHA1);
-		jsonObject.remove(KEY_CONTENT_SHA1);
-
-		this.contentType = jsonObject.optString(KEY_CONTENT_TYPE);
-		jsonObject.remove(KEY_CONTENT_TYPE);
-
-
-		JSONObject fileInfoObject = jsonObject.optJSONObject(KEY_FILE_INFO);
+		JSONObject fileInfoObject = response.optJSONObject(B2ResponseProperties.KEY_FILE_INFO);
 		if(null != fileInfoObject) {
 			Iterator keys = fileInfoObject.keys();
 			while (keys.hasNext()) {
 				String key = (String) keys.next();
-				fileInfo.put(key, fileInfoObject.opt(key));
+				fileInfo.put(key, fileInfoObject.optString(key, null));
 			}
 		}
-		jsonObject.remove(KEY_FILE_INFO);
 
-		warnOnMissedKeys(LOGGER, jsonObject);
+		if(LOGGER.isWarnEnabled()) {
+			response.remove(B2ResponseProperties.KEY_FILE_ID);
+			response.remove(B2ResponseProperties.KEY_FILE_NAME);
+			response.remove(B2ResponseProperties.KEY_ACCOUNT_ID);
+			response.remove(B2ResponseProperties.KEY_BUCKET_ID);
+			response.remove(B2ResponseProperties.KEY_CONTENT_LENGTH);
+			response.remove(B2ResponseProperties.KEY_CONTENT_SHA1);
+			response.remove(B2ResponseProperties.KEY_CONTENT_TYPE);
+			response.remove(B2ResponseProperties.KEY_FILE_INFO);
 
+			warnOnMissedKeys(LOGGER, response);
+		}
 	}
 
 	/**
@@ -113,6 +126,7 @@ public class B2FileResponse extends BaseB2Response {
 	 * @return the content type of the file that was operated on
 	 */
 	public String getContentType() { return this.contentType; }
+<<<<<<< HEAD
 
 	/**
 	 * Get the map of the file info for the file that was operated on, or an empty 
@@ -121,4 +135,22 @@ public class B2FileResponse extends BaseB2Response {
 	 * @return the map of the file info for the file that was operated on
 	 */
 	public Map<String, Object> getFileInfo() { return this.fileInfo; }
+=======
+	public Map<String, String> getFileInfo() { return this.fileInfo; }
+
+	@Override
+	public String toString() {
+		final StringBuilder sb = new StringBuilder("B2FileResponse{");
+		sb.append("fileId='").append(fileId).append('\'');
+		sb.append(", fileName='").append(fileName).append('\'');
+		sb.append(", accountId='").append(accountId).append('\'');
+		sb.append(", bucketId='").append(bucketId).append('\'');
+		sb.append(", contentLength=").append(contentLength);
+		sb.append(", contentSha1='").append(contentSha1).append('\'');
+		sb.append(", contentType='").append(contentType).append('\'');
+		sb.append(", fileInfo=").append(fileInfo);
+		sb.append('}');
+		return sb.toString();
+	}
+>>>>>>> master
 }

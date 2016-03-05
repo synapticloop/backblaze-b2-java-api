@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/synapticloop/backblaze-b2-java-api.svg?branch=master)](https://travis-ci.org/synapticloop/backblaze-b2-java-api)
+[![Build Status](https://travis-ci.org/synapticloop/backblaze-b2-java-api.svg?branch=master)](https://travis-ci.org/synapticloop/backblaze-b2-java-api) [![Download](https://api.bintray.com/packages/synapticloop/maven/backblaze-b2-java-api/images/download.svg) ](https://bintray.com/synapticloop/maven/backblaze-b2-java-api/_latestVersion)
 
 A Java API for the truly excellent backblaze B2 storage
 
@@ -8,7 +8,8 @@ A Java API for the truly excellent backblaze B2 storage
 String b2AccountId = ""; // your b2 account ID
 String b2ApplicationKey = ""; // your b2 application Key
 
-B2ApiClient b2ApiClient = new B2ApiClient(b2AccountId, b2ApplicationKey);
+B2ApiClient b2ApiClient = new B2ApiClient();
+b2ApiClient.authorize(b2AccountId, b2ApplicationKey);
 
 // now create a private bucket
 B2BucketResponse createPrivateBucket = b2ApiClient.createBucket("super-secret-bucket" , BucketType.ALL_PRIVATE);
@@ -24,7 +25,10 @@ see [B2ApiClient.java](https://github.com/synapticloop/backblaze-b2-java-api/blo
 
 ```
 // create a new B2ApiClient
-B2ApiClient(String, String)
+B2ApiClient()
+
+// authorize the client
+authorize(String, String)
 
 // create a bucket
 createBucket(String, BucketType)

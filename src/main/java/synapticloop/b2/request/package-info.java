@@ -6,21 +6,16 @@
  * 
  * <ul>
  *   <li>
- *     Map&lt;String, String&gt; headers - these key value pairs are added 
+ *     Map&lt;String, String&gt; requestHeaders - these key value pairs are added 
  *     to the request headers
  *   </li>
  *   <li>
- *     Map&lt;String, String&gt; parameters - these key value pairs are
+ *     Map&lt;String, String&gt; requestParameters - these key value pairs are
  *     added to the request parameters
  *   </li>
  *   <li>
- *     Map&lt;String, String&gt; stringData - these key value pairs are added
- *     to the body of the request which is a JSONObject with keys to string
- *     values
- *   </li>
- *   <li>
- *     Map&lt;String, Integer&gt; integerData - these key value pairs are added
- *     to the body of the request which is a JSONObject with keys to integer
+ *     Map&lt;String, Object&gt; requestBodyData - these key value pairs are added
+ *     to the body of the request which is a JSONObject with keys to object
  *     values
  *   </li>
  * </ul>

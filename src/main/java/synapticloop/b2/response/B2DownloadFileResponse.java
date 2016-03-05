@@ -1,121 +1,103 @@
 package synapticloop.b2.response;
 
+/*
+ * Copyright (c) 2016 synapticloop.
+ * 
+ * All rights reserved.
+ * 
+ * This code may contain contributions from other parties which, where 
+ * applicable, will be listed in the default build file for the project 
+ * ~and/or~ in a file named CONTRIBUTORS.txt in the root of the project.
+ * 
+ * This source code and any derived binaries are covered by the terms and 
+ * conditions of the Licence agreement ("the Licence").  You may not use this 
+ * source code or any derived binaries except in compliance with the Licence.  
+ * A copy of the Licence is available in the file named LICENSE.txt shipped with 
+ * this source code or binaries.
+ */
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.io.input.NullInputStream;
 import org.apache.http.Header;
+import org.apache.http.HttpHeaders;
 import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import synapticloop.b2.exception.B2ApiException;
+import synapticloop.b2.io.HttpMethodReleaseInputStream;
 
-public class B2DownloadFileResponse extends BaseB2Response {
+public class B2DownloadFileResponse {
 	private static final Logger LOGGER = LoggerFactory.getLogger(B2DownloadFileResponse.class);
-
-	private static final int HEADER_CONTENT_LENGTH = 0;
-	private static final int HEADER_CONTENT_TYPE = 1;
-	private static final int HEADER_X_BZ_FILE_ID = 2;
-	private static final int HEADER_X_BZ_FILE_NAME = 3;
-	private static final int HEADER_X_BZ_CONTENT_SHA1 = 4;
-	private static final int HEADER_ACCEPT_RANGES = 5;
-	private static final int HEADER_CONTENT_RANGE = 6;
-
-	// headers are all lowercase for lookup
-	private static final Map<String, Integer> headerLookup = new HashMap<String, Integer>();
-	static {
-		headerLookup.put("content-length", HEADER_CONTENT_LENGTH);
-		headerLookup.put("content-type", HEADER_CONTENT_TYPE);
-		headerLookup.put("x-bz-file-id", HEADER_X_BZ_FILE_ID);
-		headerLookup.put("x-bz-file-name", HEADER_X_BZ_FILE_NAME);
-		headerLookup.put("x-bz-content-sha1", HEADER_X_BZ_CONTENT_SHA1);
-		headerLookup.put("accept-ranges", HEADER_ACCEPT_RANGES);
-		headerLookup.put("content-range", HEADER_CONTENT_RANGE);
-	}
 
 	private static final Set<String> ignoredHeaders = new HashSet<String>();
 	static {
-		ignoredHeaders.add("server");
-		ignoredHeaders.add("x-content-type-options");
 		ignoredHeaders.add("x-xss-protection");
 		ignoredHeaders.add("x-frame-options");
-		ignoredHeaders.add("cache-control");
-		ignoredHeaders.add("date");
+
+		ignoredHeaders.add(HttpHeaders.SERVER.toLowerCase(Locale.ENGLISH));
+		ignoredHeaders.add(HttpHeaders.ACCEPT_RANGES.toLowerCase(Locale.ENGLISH));
+		ignoredHeaders.add(HttpHeaders.CONTENT_RANGE.toLowerCase(Locale.ENGLISH));
+		ignoredHeaders.add(HttpHeaders.CACHE_CONTROL.toLowerCase(Locale.ENGLISH));
+		ignoredHeaders.add(HttpHeaders.DATE.toLowerCase(Locale.ENGLISH));
+
+		// the following are mapped
+		ignoredHeaders.add(HttpHeaders.CONTENT_LENGTH.toLowerCase(Locale.ENGLISH));
+		ignoredHeaders.add(HttpHeaders.CONTENT_TYPE.toLowerCase(Locale.ENGLISH));
+		ignoredHeaders.add(B2ResponseHeaders.HEADER_X_BZ_CONTENT_SHA1.toLowerCase(Locale.ENGLISH));
+		ignoredHeaders.add(B2ResponseHeaders.HEADER_X_BZ_FILE_ID.toLowerCase(Locale.ENGLISH));
+		ignoredHeaders.add(B2ResponseHeaders.HEADER_X_BZ_FILE_NAME.toLowerCase(Locale.ENGLISH));
 	}
 
-	private InputStream content = null;
-	private Integer contentLength = null;
-	private String contentType = null;
-	private String fileId = null;
-	private String fileName = null;
-	private String contentSha1 = null;
-	private String acceptRanges = null;
-	private String contentRanges = null;
+	private final InputStream stream;
+	private final Integer contentLength;
+	private final String contentType;
+	private final String fileId;
+	private final String fileName;
+	private final String contentSha1;
 
-	private Map<String, String> fileInfo = new HashMap<String, String>();
+	private final Map<String, String> fileInfo = new HashMap<>();
 
-	public B2DownloadFileResponse(CloseableHttpResponse closeableHttpResponse) throws B2ApiException {
+	public B2DownloadFileResponse(CloseableHttpResponse response) throws B2ApiException {
 		try {
-			// HEAD responses do not have an entity
-			if(null != closeableHttpResponse.getEntity()) {
-				content = closeableHttpResponse.getEntity().getContent();
-			}
-			parseHeaders(closeableHttpResponse);
-
-		} catch (IllegalStateException | IOException ex) {
-			throw new B2ApiException("Could not retrieve response", ex);
-		} finally {
-		}
-	}
-
-	private void parseHeaders(CloseableHttpResponse closeableHttpResponse) throws B2ApiException {
-		Header[] allHeaders = closeableHttpResponse.getAllHeaders();
-		for (Header header : allHeaders) {
-			String headerName = header.getName();
-			String headerValue = header.getValue();
-			// we need to lowercase the headers, as they do not match the normal 
-			// camel-case of the input headers
-			if(headerLookup.containsKey(headerName.toLowerCase())) {
-				switch (headerLookup.get(headerName.toLowerCase())) {
-				case HEADER_CONTENT_LENGTH:
-					contentLength = Integer.parseInt(headerValue);
-					break;
-				case HEADER_CONTENT_TYPE:
-					contentType = headerValue;
-					break;
-				case HEADER_X_BZ_CONTENT_SHA1:
-					contentSha1 = headerValue;
-					break;
-				case HEADER_X_BZ_FILE_ID:
-					fileId = headerValue;
-					break;
-				case HEADER_X_BZ_FILE_NAME:
-					fileName = headerValue;
-					break;
-				case HEADER_ACCEPT_RANGES:
-					acceptRanges = headerValue;
-					break;
-				case HEADER_CONTENT_RANGE:
-					contentRanges = headerValue;
-					break;
-				default:
-					throw new B2ApiException("Unknown header for lookup '" + headerName + "'");
-				}
+			if(null != response.getEntity()) {
+				stream = new HttpMethodReleaseInputStream(response);
 			} else {
-				// could not find it in the lookup, need to only look for 'X-Bz-Info-*' 
-				// headers
-				if(headerName.startsWith(HEADER_X_BZ_INFO_PREFIX)) {
-					fileInfo.put(headerName.substring(HEADER_X_BZ_INFO_PREFIX.length()), headerValue);
+				// HEAD responses do not have an entity
+				stream = new NullInputStream(0L);
+				EntityUtils.consume(response.getEntity());
+			}
+
+			contentLength = Integer.parseInt(response.getFirstHeader(HttpHeaders.CONTENT_LENGTH).getValue());
+			contentType = response.getFirstHeader(HttpHeaders.CONTENT_TYPE).getValue();
+			contentSha1 = response.getFirstHeader(B2ResponseHeaders.HEADER_X_BZ_CONTENT_SHA1).getValue();
+			fileId = response.getFirstHeader(B2ResponseHeaders.HEADER_X_BZ_FILE_ID).getValue();
+			fileName = response.getFirstHeader(B2ResponseHeaders.HEADER_X_BZ_FILE_NAME).getValue();
+
+			for (Header header : response.getAllHeaders()) {
+				String headerName = header.getName();
+				String headerValue = header.getValue();
+
+				String headerNameLowerCase = headerName.toLowerCase(Locale.ENGLISH);
+
+				if(headerNameLowerCase.startsWith(B2ResponseHeaders.HEADER_X_BZ_INFO_PREFIX.toLowerCase(Locale.ENGLISH))) {
+					fileInfo.put(headerName.substring(B2ResponseHeaders.HEADER_X_BZ_INFO_PREFIX.length()), headerValue);
 				} else {
-					if(!ignoredHeaders.contains(headerName.toLowerCase())) {
+					if(!ignoredHeaders.contains(headerNameLowerCase)) {
 						LOGGER.warn("Found a header named '{}' with value '{}', that was not mapped", headerName, headerValue);
 					}
 				}
 			}
+		} catch (IllegalStateException | IOException ex) {
+			throw new B2ApiException("Could not retrieve response", ex);
 		}
 	}
 
@@ -125,7 +107,7 @@ public class B2DownloadFileResponse extends BaseB2Response {
 	 * 
 	 * @return the downloaded file
 	 */
-	public InputStream getContent() { return this.content; }
+	public InputStream getContent() { return this.stream; }
 
 	/**
 	 * Get the content length of the downloaded file
@@ -163,22 +145,6 @@ public class B2DownloadFileResponse extends BaseB2Response {
 	public String getContentSha1() { return this.contentSha1; }
 
 	/**
-	 * Get the Accept-Ranges header value, this will only be non-null if the 
-	 * range (bytes=from-to) header was set on the request.
-	 * 
-	 * @return The accept ranges header value
-	 */
-	public String getAcceptRanges() { return this.acceptRanges; }
-
-	/**
-	 * Get the Content-Ranges header value, this will only be non-null if the 
-	 * range (bytes=from-to) header was set on the request.
-	 * 
-	 * @return The content ranges header value
-	 */
-	public String getContentRanges() { return this.contentRanges; }
-
-	/**
 	 * Get the file info for the file, this is stored as x-bz-info-* headers when 
 	 * the file was uploaded.  This will be mapped with the x-bz-info- header
 	 * prefix removed.  E.g. if the file was uploaded with the header: 
@@ -188,4 +154,18 @@ public class B2DownloadFileResponse extends BaseB2Response {
 	 * @return The map of the file info 
 	 */
 	public Map<String, String> getFileInfo() { return this.fileInfo; }
+
+	@Override
+	public String toString() {
+		final StringBuilder sb = new StringBuilder("B2DownloadFileResponse{");
+		sb.append("content=").append(stream);
+		sb.append(", contentLength=").append(contentLength);
+		sb.append(", contentType='").append(contentType).append('\'');
+		sb.append(", fileId='").append(fileId).append('\'');
+		sb.append(", fileName='").append(fileName).append('\'');
+		sb.append(", contentSha1='").append(contentSha1).append('\'');
+		sb.append(", fileInfo=").append(fileInfo);
+		sb.append('}');
+		return sb.toString();
+	}
 }

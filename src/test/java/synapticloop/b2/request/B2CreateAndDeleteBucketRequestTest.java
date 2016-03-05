@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.util.UUID;
 
+import org.apache.http.impl.client.HttpClients;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -27,20 +28,20 @@ public class B2CreateAndDeleteBucketRequestTest {
 	@Test
 	public void testBucketCreationAndDeletion() throws B2ApiException {
 
-		b2CreateBucketRequest = new B2CreateBucketRequest(b2AuthorizeAccountResponse, bucketName, BucketType.ALL_PRIVATE);
+		b2CreateBucketRequest = new B2CreateBucketRequest(HttpClients.createDefault(), b2AuthorizeAccountResponse, bucketName, BucketType.allPrivate);
 		B2BucketResponse b2BucketResponse = b2CreateBucketRequest.getResponse();
 		assertEquals(b2AuthorizeAccountResponse.getAccountId(), b2BucketResponse.getAccountId());
 		String bucketId = b2BucketResponse.getBucketId();
 		assertNotNull(bucketId);
 		assertEquals(bucketName, b2BucketResponse.getBucketName());
-		assertEquals(BucketType.ALL_PRIVATE.toString(), b2BucketResponse.getBucketType());
+		assertEquals(BucketType.allPrivate, b2BucketResponse.getBucketType());
 
-		B2DeleteBucketRequest b2DeleteBucketRequest = new B2DeleteBucketRequest(b2AuthorizeAccountResponse, bucketId);
+		B2DeleteBucketRequest b2DeleteBucketRequest = new B2DeleteBucketRequest(HttpClients.createDefault(), b2AuthorizeAccountResponse, bucketId);
 		B2BucketResponse response = b2DeleteBucketRequest.getResponse();
 
 		assertNotNull(response.getBucketId());
 		assertEquals(bucketId, response.getBucketId());
 		assertEquals(bucketName, b2BucketResponse.getBucketName());
-		assertEquals(BucketType.ALL_PRIVATE.toString(), b2BucketResponse.getBucketType());
+		assertEquals(BucketType.allPrivate, b2BucketResponse.getBucketType());
 	}
 }
