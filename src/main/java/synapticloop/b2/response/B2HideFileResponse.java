@@ -47,6 +47,14 @@ public class B2HideFileResponse extends BaseB2Response {
 	private final int size;
 	private final long uploadTimestamp;
 
+	/**
+	 * Instantiate a hide file response with the JSON response as a string from 
+	 * the API call.  This response is then parsed into the relevant fields.
+	 * 
+	 * @param json The response (in JSON format)
+	 * 
+	 * @throws B2ApiException if there was an error parsing the response
+	 */
 	public B2HideFileResponse(String json) throws B2ApiException {
 		super(json);
 

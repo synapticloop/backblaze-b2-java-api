@@ -39,6 +39,14 @@ import synapticloop.b2.util.Helper;
 public class B2HideFileRequest extends BaseB2Request {
 	private static final String B2_HIDE_FILE = BASE_API_VERSION + "b2_hide_file";
 
+	/**
+	 * Create a hide file request
+	 * 
+	 * @param client the http client to use
+	 * @param b2AuthorizeAccountResponse the authorize account response
+	 * @param bucketId the id of the bucket to use
+	 * @param fileName the name and path of the file
+	 */
 	public B2HideFileRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String bucketId, String fileName) {
 		super(client, b2AuthorizeAccountResponse, b2AuthorizeAccountResponse.getApiUrl() + B2_HIDE_FILE);
 

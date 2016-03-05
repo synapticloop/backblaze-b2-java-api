@@ -38,6 +38,14 @@ public class B2FileResponse extends BaseB2Response {
 	private final String contentType;
 	private final Map<String, String> fileInfo;
 
+	/**
+	 * Instantiate a file response with the JSON response as a string from 
+	 * the API call.  This response is then parsed into the relevant fields.
+	 * 
+	 * @param json The response (in JSON format)
+	 * 
+	 * @throws B2ApiException if there was an error parsing the response
+	 */
 	@SuppressWarnings("rawtypes")
 	public B2FileResponse(String json) throws B2ApiException {
 		super(json);

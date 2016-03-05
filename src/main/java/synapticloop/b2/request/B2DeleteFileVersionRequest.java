@@ -32,7 +32,7 @@ import synapticloop.b2.util.Helper;
  * <p>If the version you delete is the latest version, and there are older 
  * versions, then the most recent older version will become the current 
  * version, and be the one that you'll get when downloading by name. See 
- * the File Versions page for more details.</p>
+ * the <a href="https://www.backblaze.com/b2/docs/file_versions.html">File Versions</a> page for more details.</p>
  * 
  * 
  * This is the interaction class for the <strong>b2_delete_file_version</strong> api calls, this was
@@ -50,9 +50,9 @@ public class B2DeleteFileVersionRequest extends BaseB2Request {
 	 *
 	 * @param client Shared HTTP client instance
 	 * @param b2AuthorizeAccountResponse the authorize account response
-	 * @param fileName the name of the file to delete
+	 * @param fileName the name (and path) of the file to delete
 	 * @param fileId The ID of the file, as returned by {@link B2UploadFileRequest},
-	 *    {@link B2ListFileNamesRequest}, or {@link B2ListFileVersionsRequest}..
+	 *    {@link B2ListFileNamesRequest}, or {@link B2ListFileVersionsRequest}.
 	 */
 	public B2DeleteFileVersionRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String fileName, String fileId) {
 
@@ -63,7 +63,7 @@ public class B2DeleteFileVersionRequest extends BaseB2Request {
 	}
 
 	/**
-	 * Return the http response for the call
+	 * Return the response for the call
 	 * 
 	 * @return the delete file version response
 	 * 

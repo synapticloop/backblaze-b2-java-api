@@ -43,7 +43,11 @@ public class B2GetFileInfoRequest extends BaseB2Request {
 	 *
 	 * @param client Shared HTTP client instance
 	 * @param b2AuthorizeAccountResponse the authorize account response
-	 * @param fileId the id for the file
+	 * @param fileId The ID of the file, as returned by b2_upload_file, b2_list_file_names, or b2_list_file_versions.
+	 * 
+	 * {@link B2UploadFileRequest}
+	 * {@link B2ListFileNamesRequest}
+	 * {@link B2ListFileVersionsRequest}
 	 */
 	public B2GetFileInfoRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String fileId) {
 		super(client, b2AuthorizeAccountResponse, b2AuthorizeAccountResponse.getApiUrl() + B2_GET_FILE_INFO);

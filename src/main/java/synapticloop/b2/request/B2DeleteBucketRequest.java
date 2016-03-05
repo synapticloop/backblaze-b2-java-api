@@ -44,7 +44,7 @@ public class B2DeleteBucketRequest extends BaseB2Request {
 	 *
 	 * @param client Shared HTTP client instance
 	 * @param b2AuthorizeAccountResponse the authorize account response
-	 * @param bucketId the id of the bucket to delete
+	 * @param bucketId The id of the bucket to delete
 	 */
 	public B2DeleteBucketRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String bucketId) {
 

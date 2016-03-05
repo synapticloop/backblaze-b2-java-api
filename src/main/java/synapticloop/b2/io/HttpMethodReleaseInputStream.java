@@ -31,7 +31,10 @@ public class HttpMethodReleaseInputStream extends CountingInputStream {
 	private HttpResponse response;
 
 	/**
+	 * Create a HTTP method release input Stream
+	 * 
 	 * @param response The HTTP response to read from
+	 * 
 	 * @throws IOException If there is a problem reading from the response
 	 * @throws NullPointerException If the response has no message entity
 	 */
@@ -54,8 +57,7 @@ public class HttpMethodReleaseInputStream extends CountingInputStream {
 			if(read == response.getEntity().getContentLength()) {
 				// Fully consumed
 				super.close();
-			}
-			else {
+			} else {
 				if(LOGGER.isLoggable(Level.WARNING)) {
 					LOGGER.warning(String.format("Abort connection for response '{}'", response));
 				}
@@ -66,8 +68,7 @@ public class HttpMethodReleaseInputStream extends CountingInputStream {
 				// The response proxy will force close the connection.
 				((CloseableHttpResponse) response).close();
 			}
-		}
-		else {
+		} else {
 			// Consume and close
 			super.close();
 		}

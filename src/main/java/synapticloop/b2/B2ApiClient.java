@@ -68,7 +68,20 @@ public class B2ApiClient {
 	private final CloseableHttpClient client;
 
 	/**
+	 * Create a B2ApiClient and authenticate
+	 * 
+	 * @param accountId The account id
+	 * @param applicationKey the application key
+	 * @throws B2ApiException if there was an error authenticating the account
+	 */
+	public B2ApiClient(String accountId, String applicationKey) throws B2ApiException {
+		this();
+		this.b2AuthorizeAccountResponse = authenticate(accountId, applicationKey);
+	}
+
+	/**
 	 * Must authenticate first before API actions are available. Using default HTTP client configuration
+	 * 
 	 * @see #authenticate(String, String)
 	 */
 	public B2ApiClient() {
@@ -330,7 +343,7 @@ public class B2ApiClient {
 	 */
 
 	public B2FileResponse uploadFile(String bucketId, String fileName, File file, Map<String, String> fileInfo) throws B2ApiException {
-		B2GetUploadUrlResponse b2GetUploadUrlResponse = new B2GetUploadUrlRequest(client, b2AuthorizeAccountResponse, bucketId, fileInfo).getResponse();
+		B2GetUploadUrlResponse b2GetUploadUrlResponse = new B2GetUploadUrlRequest(client, b2AuthorizeAccountResponse, bucketId).getResponse();
 		return new B2UploadFileRequest(client, b2AuthorizeAccountResponse, b2GetUploadUrlResponse, fileName, file, fileInfo).getResponse();
 	}
 

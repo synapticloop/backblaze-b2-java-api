@@ -32,6 +32,14 @@ import synapticloop.b2.response.B2AuthorizeAccountResponse;
  * used for account-level operations, and a URL that should be used as the base 
  * URL for subsequent API calls.</p>
  * 
+ * An HTTP basic auth value constructed as follows:
+ * <ul>
+ *   <li>The B2 account id and B2 application key for the account are combined 
+ *   into a string in the format "accountId:applicationKey".</li>
+ *   <li>The combined string is Base64 encoded.</li>
+ *   <li>"Basic " is put before the encoded string.</li>
+ * </ul>
+ * 
  * This is the interaction class for the <strong>b2_authorize_account</strong> api 
  * calls, this was generated from the backblaze api documentation - which can be 
  * found here:

@@ -66,6 +66,14 @@ public class B2DownloadFileResponse {
 
 	private final Map<String, String> fileInfo = new HashMap<>();
 
+	/**
+	 * Instantiate a bucket response with the JSON response as a string from 
+	 * the API call.  This response is then parsed into the relevant fields.
+	 * 
+	 * @param response The HTTP response object
+	 * 
+	 * @throws B2ApiException if there was an error parsing the response
+	 */
 	public B2DownloadFileResponse(CloseableHttpResponse response) throws B2ApiException {
 		try {
 			if(null != response.getEntity()) {

@@ -25,18 +25,22 @@ public class B2StartLargeFileResponse extends BaseB2Response {
 	private String uploadAuthToken = null;
 	private List<String> uploadUrls = new ArrayList<String>();
 
+	/**
+	 * Instantiate a start large file response with the JSON response as a string from 
+	 * the API call.  This response is then parsed into the relevant fields.
+	 * 
+	 * @param json The response (in JSON format)
+	 * 
+	 * @throws B2ApiException if there was an error parsing the response
+	 */
 	@SuppressWarnings("rawtypes")
 	public B2StartLargeFileResponse(String json) throws B2ApiException {
 		super(json);
 
 		this.fileId = response.optString(B2ResponseProperties.KEY_FILE_ID);
-
 		this.fileName = response.optString(B2ResponseProperties.KEY_FILE_NAME);
-
 		this.accountId = response.optString(B2ResponseProperties.KEY_ACCOUNT_ID);
-
 		this.bucketId = response.optString(B2ResponseProperties.KEY_BUCKET_ID);
-
 		this.contentType = response.optString(B2ResponseProperties.KEY_CONTENT_TYPE);
 
 		JSONObject fileInfoObject = response.optJSONObject(B2ResponseProperties.KEY_FILE_INFO);

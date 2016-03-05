@@ -33,6 +33,7 @@ public class B2StartLargeFileRequest extends BaseB2Request {
 	/**
 	 * Create a new B2 Start large file request
 	 * 
+	 * @param client the HTTP client to use
 	 * @param b2AuthorizeAccountResponse the authorise account response
 	 * @param bucketId the id of the bucket to upload to
 	 * @param fileName the name of the file
@@ -40,11 +41,11 @@ public class B2StartLargeFileRequest extends BaseB2Request {
 	 *     backblaze will attempt to determine automatically)
 	 * @param fileInfo the file info map which are passed through as key value
 	 *     pairs in a jsonObject named 'fileInfo'
+	 * @throws B2ApiException If the number of file info headers is greater than the allowable
 	 */
-	protected B2StartLargeFileRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String bucketId, String fileName, String mimeType, Map<String, String> fileInfo) {
+	protected B2StartLargeFileRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String bucketId, String fileName, String mimeType, Map<String, String> fileInfo) throws B2ApiException {
 		super(client, b2AuthorizeAccountResponse, b2AuthorizeAccountResponse.getApiUrl() + B2_START_LARGE_FILE);
 
-		
 		requestBodyData.put(B2RequestProperties.KEY_BUCKET_ID, bucketId);
 		requestBodyData.put(B2RequestProperties.KEY_FILE_NAME, fileName);
 		if(null != mimeType) {
@@ -55,6 +56,11 @@ public class B2StartLargeFileRequest extends BaseB2Request {
 
 		// now go through and add in the 'X-Bz-Info-*' headers
 		if(null != fileInfo) {
+			int fileInfoSize = fileInfo.size();
+			if(fileInfoSize > MAX_FILE_INFO_HEADERS) {
+				throw new B2ApiException(String.format("The maximum allowable file info size is '%d', you sent '%d'", MAX_FILE_INFO_HEADERS, fileInfoSize));
+			}
+
 			Iterator<String> iterator = fileInfo.keySet().iterator();
 			while (iterator.hasNext()) {
 				String key = (String) iterator.next();

@@ -17,7 +17,6 @@ package synapticloop.b2.request;
  */
 
 import java.io.IOException;
-import java.util.Map;
 
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.util.EntityUtils;
@@ -42,13 +41,14 @@ import synapticloop.b2.response.B2GetUploadUrlResponse;
 public class B2GetUploadUrlRequest extends BaseB2Request {
 	private static final String B2_GET_UPLOAD_URL = BASE_API_VERSION + "b2_get_upload_url";
 
+	/**
+	 * Instantiate a get upload URL request
+	 * 
+	 * @param client the HTTP client to use
+	 * @param b2AuthorizeAccountResponse the authorize account response
+	 * @param bucketId The ID of the bucket that you want to upload to.
+	 */
 	public B2GetUploadUrlRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String bucketId) {
-		super(client, b2AuthorizeAccountResponse, b2AuthorizeAccountResponse.getApiUrl() + B2_GET_UPLOAD_URL);
-
-		requestBodyData.put(B2RequestProperties.KEY_BUCKET_ID, bucketId);
-	}
-
-	public B2GetUploadUrlRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String bucketId, Map<String, String> fileInfo) {
 		super(client, b2AuthorizeAccountResponse, b2AuthorizeAccountResponse.getApiUrl() + B2_GET_UPLOAD_URL);
 
 		requestBodyData.put(B2RequestProperties.KEY_BUCKET_ID, bucketId);

@@ -23,11 +23,28 @@ import synapticloop.b2.response.B2AuthorizeAccountResponse;
 import synapticloop.b2.response.B2DownloadFileResponse;
 
 /**
- * <p>Downloads one file from B2.</p>
+ * <p>Gets information on one file from B2.</p>
+ * 
+ * <p><strong>NO</strong> file content is returned with this request
  * 
  * <p>The response contains the following headers, which contain the same information they did when the file was uploaded:</p>
  * 
+ * <ul>
+ *   <li>Content-Length</li>
+ *   <li>Content-Type</li>
+ *   <li>X-Bz-File-Id</li>
+ *   <li>X-Bz-File-Name</li>
+ *   <li>X-Bz-Content-Sha1</li>
+ *   <li>X-Bz-Info-*</li>
+ * </ul>
  * 
+ * <p>HEAD requests are also supported, and work just like a GET, except that the 
+ * body of the response is not included. All of the same headers, including 
+ * Content-Length are returned. See the B2HeadFileByIdRequest</p>
+ * 
+ * <p>If the bucket containing the file is set to require authorization, then you 
+ * must supply the bucket's auth token in the Authorzation header.</p>
+ *  * 
  * This is the interaction class for the <strong>b2_download_file_by_id</strong> 
  * api calls, this was generated from the backblaze api documentation - which 
  * can be found here:
@@ -39,6 +56,14 @@ import synapticloop.b2.response.B2DownloadFileResponse;
 public class B2HeadFileByIdRequest extends BaseB2Request {
 	private static final String B2_DOWNLOAD_FILE_BY_ID = BASE_API_VERSION + "b2_download_file_by_id";
 
+	/**
+	 * Create a head file by Id request which returns the information about the 
+	 * file and any attached file information
+	 * 
+	 * @param client The HTTPClient to use
+	 * @param b2AuthorizeAccountResponse the authorize account response
+	 * @param fileId the id of the file to request information for
+	 */
 	public B2HeadFileByIdRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String fileId) {
 		super(client, b2AuthorizeAccountResponse, b2AuthorizeAccountResponse.getDownloadUrl() + B2_DOWNLOAD_FILE_BY_ID);
 		requestParameters.put(B2RequestProperties.KEY_FILE_ID, fileId);

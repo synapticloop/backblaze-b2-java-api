@@ -43,6 +43,14 @@ public class B2DeleteFileVersionResponse extends BaseB2Response {
 	private final String fileId;
 	private final String fileName;
 
+	/**
+	 * Instantiate a delete file version response with the JSON response as a string from 
+	 * the API call.  This response is then parsed into the relevant fields.
+	 * 
+	 * @param json The response (in JSON format)
+	 * 
+	 * @throws B2ApiException if there was an error parsing the response
+	 */
 	public B2DeleteFileVersionResponse(String json) throws B2ApiException {
 		super(json);
 

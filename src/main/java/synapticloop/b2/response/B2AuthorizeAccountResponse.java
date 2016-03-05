@@ -87,7 +87,9 @@ public class B2AuthorizeAccountResponse extends BaseB2Response {
 	public String getApiUrl() { return this.apiUrl; }
 
 	/**
-	 * Return the authorization token to be used for all subsequent calls
+	 * Get authorization token to use with all calls, other than b2_authorize_account, 
+	 * that need an Authorization header. This authorization token is valid for at 
+	 * most 24 hours.
 	 * 
 	 * @return the authorization token to be used for all subsequent calls
 	 */
