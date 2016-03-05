@@ -61,7 +61,7 @@ public class B2BucketResponse extends BaseB2Response {
 	 * Instantiate a bucket response with the JSON response as a string from 
 	 * the API call.  This response is then parsed into the relevant fields.
 	 * 
-	 * @param JSONObject The pre-parsed jsonObject
+	 * @param response The pre-parsed jsonObject
 	 * 
 	 * @throws B2ApiException if there was an error parsing the response
 	 */

@@ -77,7 +77,9 @@ public class B2ApiClient {
 
 	/**
 	 * Must authenticate first before API actions are available
-	 *  @param client Shared HTTP client
+	 * 
+	 * @param client Shared HTTP client
+	 * 
 	 * @see #authenticate(String, String)
 	 */
 	public B2ApiClient(CloseableHttpClient client) {
@@ -98,18 +100,29 @@ public class B2ApiClient {
 		return b2AuthorizeAccountResponse = new B2AuthorizeAccountRequest(client, accountId, applicationKey).getResponse();
 	}
 
+	/**
+	 * Get the download URL for the authorized response
+	 * 
+	 * @return the download URL for the authorized response
+	 */
 	public String getDownloadUrl() {
 		return b2AuthorizeAccountResponse.getDownloadUrl();
 	}
 
+	/**
+	 * Get the API url 
+	 * 
+	 * @return the API URL for backblaze
+	 */
 	public String getApiUrl() {
 		return b2AuthorizeAccountResponse.getApiUrl();
 	}
 
-    /**
-     * Release all resources from the connection pool.
-     * @throws IOException
-     */
+	/**
+	 * Release all resources from the connection pool.
+	 * 
+	 * @throws IOException if the client could not be closed
+	 */
 	public void close() throws IOException {
 		client.close();
 	}
@@ -264,6 +277,7 @@ public class B2ApiClient {
 	 * @param fileName the name of the file that will be placed in the bucket
 	 *     (including any path separators '/')
 	 * @param entity the file content to upload
+	 * @param sha1Checksum the checksum for the file
 	 * @param mimeType the mime type of the file, if null, then the mime type
 	 *     will be attempted to be automatically mapped by the backblaze B2 API
 	 *     see <a href="https://www.backblaze.com/b2/docs/content-types.html">https://www.backblaze.com/b2/docs/content-types.html</a>
@@ -389,7 +403,7 @@ public class B2ApiClient {
 	 * @return The hide response
 	 *
 	 * @throws B2ApiException if there was an error hiding the file
-     */
+	 */
 	public B2HideFileResponse hideFile(String bucketId, String fileName) throws B2ApiException {
 		return new B2HideFileRequest(client, b2AuthorizeAccountResponse, bucketId, fileName).getResponse();
 	}

@@ -274,7 +274,9 @@ public abstract class BaseB2Request {
 	 * To override what headers are set, this should be done in the constructor
 	 * of the base request object.
 	 * 
-	 * @param request The http request to set the headers on
+	 * @param request The HTTP request to set the headers on
+	 * 
+	 * @throws B2ApiException if there was an error setting the headers
 	 */
 	protected void setHeaders(HttpUriRequest request) throws B2ApiException {
 		for (String headerKey : requestHeaders.keySet()) {
