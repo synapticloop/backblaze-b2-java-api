@@ -21,7 +21,7 @@ import java.io.IOException;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.util.EntityUtils;
 
-import synapticloop.b2.exception.B2Exception;
+import synapticloop.b2.exception.B2ApiException;
 import synapticloop.b2.response.B2AuthorizeAccountResponse;
 import synapticloop.b2.response.B2ListFilesResponse;
 import synapticloop.b2.util.Helper;
@@ -45,11 +45,11 @@ public class B2ListFileNamesRequest extends BaseB2Request {
 
 	private static final int DEFAULT_MAX_FILE_COUNT = 100;
 
-	public B2ListFileNamesRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String bucketId) throws B2Exception {
+	public B2ListFileNamesRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String bucketId) throws B2ApiException {
 		this(client, b2AuthorizeAccountResponse, bucketId, null, DEFAULT_MAX_FILE_COUNT);
 	}
 
-	public B2ListFileNamesRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String bucketId, String startFileName, Integer maxFileCount) throws B2Exception {
+	public B2ListFileNamesRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String bucketId, String startFileName, Integer maxFileCount) throws B2ApiException {
 		super(client, b2AuthorizeAccountResponse, b2AuthorizeAccountResponse.getApiUrl() + B2_LIST_FILE_NAMES);
 
 		requestBodyData.put(B2RequestProperties.KEY_BUCKET_ID, bucketId);
@@ -59,7 +59,7 @@ public class B2ListFileNamesRequest extends BaseB2Request {
 		}
 
 		if(maxFileCount > MAX_FILE_COUNT_RETURN) {
-			throw new B2Exception("Maximum return file count is " + MAX_FILE_COUNT_RETURN);
+			throw new B2ApiException("Maximum return file count is " + MAX_FILE_COUNT_RETURN);
 		}
 
 		requestBodyData.put(B2RequestProperties.KEY_MAX_FILE_COUNT, maxFileCount);
@@ -70,13 +70,13 @@ public class B2ListFileNamesRequest extends BaseB2Request {
 	 * 
 	 * @return the list file names response
 	 * 
-	 * @throws B2Exception if something went wrong
+	 * @throws B2ApiException if something went wrong
 	 */
-	public B2ListFilesResponse getResponse() throws B2Exception {
+	public B2ListFilesResponse getResponse() throws B2ApiException {
 		try {
 			return(new B2ListFilesResponse(EntityUtils.toString(executePost().getEntity())));
 		} catch(IOException e) {
-			throw new B2Exception(e);
+			throw new B2ApiException(e);
 		}
 	}
 }

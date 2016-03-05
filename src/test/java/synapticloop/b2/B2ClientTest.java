@@ -7,14 +7,14 @@ import java.util.UUID;
 import org.junit.Before;
 import org.junit.Test;
 
-import synapticloop.b2.exception.B2Exception;
+import synapticloop.b2.exception.B2ApiException;
 import synapticloop.b2.helper.B2TestHelper;
 import synapticloop.b2.response.B2BucketResponse;
 
 public class B2ClientTest {
 	public static final String B2_ACCOUNT_ID = "B2_ACCOUNT_ID";
 	public static final String B2_APPLICATION_KEY = "B2_APPLICATION_KEY";
-	private B2Client client;
+	private B2ApiClient client;
 
 	@Before
 	public void setup() throws Exception {
@@ -36,12 +36,12 @@ public class B2ClientTest {
 			System.exit(-1);
 		}
 
-		client = new B2Client();
+		client = new B2ApiClient();
 		client.authenticate(b2AccountId, b2ApplicationKey);
 	}
 
 	@Test
-	public void testPrivateBuckets() throws B2Exception {
+	public void testPrivateBuckets() throws B2ApiException {
 		B2BucketResponse createPrivateBucket = client.createBucket(B2TestHelper.B2_BUCKET_PREFIX + UUID.randomUUID().toString(), BucketType.allPrivate);
 
 		B2BucketResponse updateBucket = client.updateBucket(createPrivateBucket.getBucketId(), BucketType.allPublic);
@@ -51,7 +51,7 @@ public class B2ClientTest {
 	}
 
 	@Test
-	public void testPublicBuckets() throws B2Exception {
+	public void testPublicBuckets() throws B2ApiException {
 		B2BucketResponse createPublicBucket = client.createBucket(B2TestHelper.B2_BUCKET_PREFIX + UUID.randomUUID().toString(), BucketType.allPublic);
 		client.deleteBucket(createPublicBucket.getBucketId());
 	}

@@ -24,7 +24,7 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.util.EntityUtils;
 
-import synapticloop.b2.exception.B2Exception;
+import synapticloop.b2.exception.B2ApiException;
 import synapticloop.b2.response.B2AuthorizeAccountResponse;
 
 /**
@@ -62,14 +62,14 @@ public class B2AuthorizeAccountRequest extends BaseB2Request {
 	 * 
 	 * @return the authorize response
 	 * 
-	 * @throws B2Exception if there was an error with the call
+	 * @throws B2ApiException if there was an error with the call
 	 */
-	public B2AuthorizeAccountResponse getResponse() throws B2Exception {
+	public B2AuthorizeAccountResponse getResponse() throws B2ApiException {
 		final CloseableHttpResponse httpResponse = executeGet();
 		try {
 			return(new B2AuthorizeAccountResponse(EntityUtils.toString(httpResponse.getEntity())));
 		} catch(IOException e) {
-			throw new B2Exception(e);
+			throw new B2ApiException(e);
 		}
 	}
 }

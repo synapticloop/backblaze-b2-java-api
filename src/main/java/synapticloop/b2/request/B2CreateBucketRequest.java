@@ -22,7 +22,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.util.EntityUtils;
 
 import synapticloop.b2.BucketType;
-import synapticloop.b2.exception.B2Exception;
+import synapticloop.b2.exception.B2ApiException;
 import synapticloop.b2.response.B2AuthorizeAccountResponse;
 import synapticloop.b2.response.B2BucketResponse;
 
@@ -71,13 +71,13 @@ public class B2CreateBucketRequest extends BaseB2Request {
 	 * 
 	 * @return the created bucket response
 	 * 
-	 * @throws B2Exception if there was an error with the call
+	 * @throws B2ApiException if there was an error with the call
 	 */
-	public B2BucketResponse getResponse() throws B2Exception {
+	public B2BucketResponse getResponse() throws B2ApiException {
 		try {
 			return(new B2BucketResponse(EntityUtils.toString(executePost().getEntity())));
 		} catch(IOException e) {
-			throw new B2Exception(e);
+			throw new B2ApiException(e);
 		}
 	}
 }

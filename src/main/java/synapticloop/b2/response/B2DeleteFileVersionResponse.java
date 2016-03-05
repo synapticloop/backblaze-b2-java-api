@@ -35,7 +35,7 @@ import org.slf4j.LoggerFactory;
  * this source code or binaries.
  */
 
-import synapticloop.b2.exception.B2Exception;
+import synapticloop.b2.exception.B2ApiException;
 
 public class B2DeleteFileVersionResponse extends BaseB2Response {
 	private static final Logger LOGGER = LoggerFactory.getLogger(B2DeleteFileVersionResponse.class);
@@ -43,7 +43,7 @@ public class B2DeleteFileVersionResponse extends BaseB2Response {
 	private final String fileId;
 	private final String fileName;
 
-	public B2DeleteFileVersionResponse(String json) throws B2Exception {
+	public B2DeleteFileVersionResponse(String json) throws B2ApiException {
 		super(json);
 
 		this.fileId = response.optString(B2ResponseProperties.KEY_FILE_ID, null);

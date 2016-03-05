@@ -36,7 +36,7 @@ import org.slf4j.LoggerFactory;
  */
 
 import synapticloop.b2.Action;
-import synapticloop.b2.exception.B2Exception;
+import synapticloop.b2.exception.B2ApiException;
 
 public class B2HideFileResponse extends BaseB2Response {
 	private static final Logger LOGGER = LoggerFactory.getLogger(B2HideFileResponse.class);
@@ -47,7 +47,7 @@ public class B2HideFileResponse extends BaseB2Response {
 	private final int size;
 	private final long uploadTimestamp;
 
-	public B2HideFileResponse(String json) throws B2Exception {
+	public B2HideFileResponse(String json) throws B2ApiException {
 		super(json);
 
 		this.fileId = response.optString(B2ResponseProperties.KEY_FILE_ID, null);

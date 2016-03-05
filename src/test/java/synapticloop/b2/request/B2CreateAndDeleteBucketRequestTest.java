@@ -9,7 +9,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import synapticloop.b2.BucketType;
-import synapticloop.b2.exception.B2Exception;
+import synapticloop.b2.exception.B2ApiException;
 import synapticloop.b2.helper.B2TestHelper;
 import synapticloop.b2.response.B2AuthorizeAccountResponse;
 import synapticloop.b2.response.B2BucketResponse;
@@ -20,13 +20,13 @@ public class B2CreateAndDeleteBucketRequestTest {
 	private static String bucketName = null;
 
 	@BeforeClass
-	public static void setupBeforClass() throws B2Exception {
+	public static void setupBeforClass() throws B2ApiException {
 		b2AuthorizeAccountResponse = B2TestHelper.getB2AuthorizeAccountResponse();
 		bucketName = UUID.randomUUID().toString();
 	}
 
 	@Test
-	public void testBucketCreationAndDeletion() throws B2Exception {
+	public void testBucketCreationAndDeletion() throws B2ApiException {
 
 		b2CreateBucketRequest = new B2CreateBucketRequest(HttpClients.createDefault(), b2AuthorizeAccountResponse, bucketName, BucketType.allPrivate);
 		B2BucketResponse b2BucketResponse = b2CreateBucketRequest.getResponse();

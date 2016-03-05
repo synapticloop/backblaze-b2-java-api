@@ -7,7 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import synapticloop.b2.BucketType;
-import synapticloop.b2.exception.B2Exception;
+import synapticloop.b2.exception.B2ApiException;
 import synapticloop.b2.helper.B2TestHelper;
 import synapticloop.b2.response.B2AuthorizeAccountResponse;
 import synapticloop.b2.response.B2BucketResponse;
@@ -15,7 +15,7 @@ import synapticloop.b2.response.B2BucketResponse;
 public class B2UpdateBucketRequestTest {
 
 	@Test
-	public void testUpdateBucket() throws B2Exception {
+	public void testUpdateBucket() throws B2ApiException {
 		B2AuthorizeAccountResponse b2AuthorizeAccountResponse = B2TestHelper.getB2AuthorizeAccountResponse();
 
 		B2BucketResponse privateBucket = B2TestHelper.createRandomPrivateBucket();

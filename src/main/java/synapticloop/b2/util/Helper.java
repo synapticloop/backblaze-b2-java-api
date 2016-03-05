@@ -30,7 +30,7 @@ import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
 
 import org.apache.commons.io.IOUtils;
 
-import synapticloop.b2.exception.B2Exception;
+import synapticloop.b2.exception.B2ApiException;
 
 public class Helper {
 	private static final String UTF_8 = "UTF-8";
@@ -42,14 +42,14 @@ public class Helper {
 	 * 
 	 * @return the sha1 of the file
 	 * 
-	 * @throws B2Exception if something went wrong with the calculation
+	 * @throws B2ApiException if something went wrong with the calculation
 	 */
-	public static String calculateSha1(File file) throws B2Exception {
+	public static String calculateSha1(File file) throws B2ApiException {
 		try {
 			return calculateSha1(new FileInputStream(file));
 		}
 		catch(FileNotFoundException e) {
-			throw new B2Exception(e);
+			throw new B2ApiException(e);
 		}
 	}
 
@@ -60,9 +60,9 @@ public class Helper {
 	 * 
 	 * @return the sha1 sum
 	 * 
-	 * @throws B2Exception if there was an error calculating the sha1 sum
+	 * @throws B2ApiException if there was an error calculating the sha1 sum
 	 */
-	public static String calculateSha1(InputStream in) throws B2Exception {
+	public static String calculateSha1(InputStream in) throws B2ApiException {
 
 		MessageDigest messageDigest;
 		InputStream inputStream = null;
@@ -79,7 +79,7 @@ public class Helper {
 
 			return(new HexBinaryAdapter().marshal(messageDigest.digest()));
 		} catch (NoSuchAlgorithmException | IOException ex) {
-			throw new B2Exception(ex);
+			throw new B2ApiException(ex);
 		} finally {
 			IOUtils.closeQuietly(inputStream);
 		}

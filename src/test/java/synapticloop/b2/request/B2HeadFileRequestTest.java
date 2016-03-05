@@ -8,7 +8,7 @@ import java.util.Map;
 import org.apache.http.impl.client.HttpClients;
 import org.junit.Test;
 
-import synapticloop.b2.exception.B2Exception;
+import synapticloop.b2.exception.B2ApiException;
 import synapticloop.b2.helper.B2TestHelper;
 import synapticloop.b2.response.B2BucketResponse;
 import synapticloop.b2.response.B2DownloadFileResponse;
@@ -17,7 +17,7 @@ import synapticloop.b2.response.B2FileResponse;
 public class B2HeadFileRequestTest {
 
 	@Test
-	public void testHeadFileById() throws B2Exception, IOException {
+	public void testHeadFileById() throws B2ApiException, IOException {
 		final B2BucketResponse randomPrivateBucket = B2TestHelper.createRandomPrivateBucket();
 
 		Map<String, String> fileInfo = new HashMap<String, String>();

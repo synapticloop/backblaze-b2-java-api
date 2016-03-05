@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
  * this source code or binaries.
  */
 
-import synapticloop.b2.exception.B2Exception;
+import synapticloop.b2.exception.B2ApiException;
 
 public class B2GetUploadUrlResponse extends BaseB2Response {
 	private static final Logger LOGGER = LoggerFactory.getLogger(B2GetUploadUrlResponse.class);
@@ -28,7 +28,7 @@ public class B2GetUploadUrlResponse extends BaseB2Response {
 	private final String uploadUrl;
 	private final String authorizationToken;
 
-	public B2GetUploadUrlResponse(String json) throws B2Exception {
+	public B2GetUploadUrlResponse(String json) throws B2ApiException {
 		super(json);
 
 		this.bucketId = response.optString(B2ResponseProperties.KEY_BUCKET_ID, null);

@@ -8,7 +8,7 @@ import org.apache.http.impl.client.HttpClients;
 import org.junit.Before;
 import org.junit.Test;
 
-import synapticloop.b2.exception.B2Exception;
+import synapticloop.b2.exception.B2ApiException;
 import synapticloop.b2.helper.B2TestHelper;
 import synapticloop.b2.response.B2AuthorizeAccountResponse;
 import synapticloop.b2.response.B2BucketResponse;
@@ -19,12 +19,12 @@ public class B2ListBucketsRequestTest {
 	private B2AuthorizeAccountResponse b2AuthorizeAccountResponse = null;
 
 	@Before
-	public void setup() throws B2Exception {
+	public void setup() throws B2ApiException {
 		b2AuthorizeAccountResponse = B2TestHelper.getB2AuthorizeAccountResponse();
 	}
 
 	@Test
-	public void testListBuckets() throws B2Exception {
+	public void testListBuckets() throws B2ApiException {
 		// first we want to create a bucker
 		B2BucketResponse createRandomPrivateBucket = B2TestHelper.createRandomPrivateBucket();
 		String bucketName = createRandomPrivateBucket.getBucketName();

@@ -2,14 +2,14 @@ package synapticloop.b2;
 
 import java.util.List;
 
-import synapticloop.b2.exception.B2Exception;
+import synapticloop.b2.exception.B2ApiException;
 import synapticloop.b2.helper.B2TestHelper;
 import synapticloop.b2.response.B2BucketResponse;
 import synapticloop.b2.response.B2FileInfoResponse;
 
 public class DeleteTestBuckets {
 
-	public static void main(String[] args) throws B2Exception {
+	public static void main(String[] args) throws B2ApiException {
 		String b2AccountId = System.getenv(B2TestHelper.B2_ACCOUNT_ID);
 		String b2ApplicationKey = System.getenv(B2TestHelper.B2_APPLICATION_KEY);
 
@@ -29,7 +29,7 @@ public class DeleteTestBuckets {
 			System.exit(-1);
 		}
 
-		B2Client client = new B2Client();
+		B2ApiClient client = new B2ApiClient();
 		client.authenticate(b2AccountId, b2ApplicationKey);
 		List<B2BucketResponse> listBuckets = client.listBuckets();
 		for (B2BucketResponse b2BucketResponse : listBuckets) {

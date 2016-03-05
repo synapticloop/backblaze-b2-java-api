@@ -19,7 +19,7 @@ package synapticloop.b2.request;
 import org.apache.http.HttpHeaders;
 import org.apache.http.impl.client.CloseableHttpClient;
 
-import synapticloop.b2.exception.B2Exception;
+import synapticloop.b2.exception.B2ApiException;
 import synapticloop.b2.response.B2AuthorizeAccountResponse;
 import synapticloop.b2.response.B2DownloadFileResponse;
 
@@ -82,9 +82,9 @@ public class B2DownloadFileByIdRequest extends BaseB2Request {
 	 * 
 	 * @return The download file response
 	 * 
-	 * @throws B2Exception If there was an error with the call
+	 * @throws B2ApiException If there was an error with the call
 	 */
-	public B2DownloadFileResponse getResponse() throws B2Exception {
+	public B2DownloadFileResponse getResponse() throws B2ApiException {
 		return(new B2DownloadFileResponse(executeGet()));
 	}
 }

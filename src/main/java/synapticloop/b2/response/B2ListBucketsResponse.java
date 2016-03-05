@@ -23,14 +23,14 @@ import org.json.JSONArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import synapticloop.b2.exception.B2Exception;
+import synapticloop.b2.exception.B2ApiException;
 
 public final class B2ListBucketsResponse extends BaseB2Response {
 	private static final Logger LOGGER = LoggerFactory.getLogger(B2ListBucketsResponse.class);
 
 	private final List<B2BucketResponse> buckets;
 
-	public B2ListBucketsResponse(final String json) throws B2Exception {
+	public B2ListBucketsResponse(final String json) throws B2ApiException {
 		super(json);
 
 		buckets = new ArrayList<>();

@@ -21,7 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import synapticloop.b2.BucketType;
-import synapticloop.b2.exception.B2Exception;
+import synapticloop.b2.exception.B2ApiException;
 
 public class B2BucketResponse extends BaseB2Response {
 	private static final Logger LOGGER = LoggerFactory.getLogger(B2BucketResponse.class);
@@ -37,9 +37,9 @@ public class B2BucketResponse extends BaseB2Response {
 	 * 
 	 * @param json The response (in JSON format)
 	 * 
-	 * @throws B2Exception if there was an error parsing the response
+	 * @throws B2ApiException if there was an error parsing the response
 	 */
-	public B2BucketResponse(String json) throws B2Exception {
+	public B2BucketResponse(String json) throws B2ApiException {
 		super(json);
 
 		this.bucketId = response.optString(B2ResponseProperties.KEY_BUCKET_ID, null);
@@ -63,9 +63,9 @@ public class B2BucketResponse extends BaseB2Response {
 	 * 
 	 * @param JSONObject The pre-parsed jsonObject
 	 * 
-	 * @throws B2Exception if there was an error parsing the response
+	 * @throws B2ApiException if there was an error parsing the response
 	 */
-	public B2BucketResponse(final JSONObject response) throws B2Exception {
+	public B2BucketResponse(final JSONObject response) throws B2ApiException {
 		super(response);
 
 		this.bucketId = response.optString(B2ResponseProperties.KEY_BUCKET_ID, null);

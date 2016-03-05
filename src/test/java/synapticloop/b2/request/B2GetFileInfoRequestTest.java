@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 import org.apache.http.impl.client.HttpClients;
 import org.junit.Test;
 
-import synapticloop.b2.exception.B2Exception;
+import synapticloop.b2.exception.B2ApiException;
 import synapticloop.b2.helper.B2TestHelper;
 import synapticloop.b2.response.B2AuthorizeAccountResponse;
 import synapticloop.b2.response.B2BucketResponse;
@@ -14,7 +14,7 @@ import synapticloop.b2.response.B2FileResponse;
 public class B2GetFileInfoRequestTest {
 
 	@Test
-	public void testGetFileInfo() throws B2Exception {
+	public void testGetFileInfo() throws B2ApiException {
 		B2AuthorizeAccountResponse b2AuthorizeAccountResponse = B2TestHelper.getB2AuthorizeAccountResponse();
 		B2BucketResponse b2BucketResponse = B2TestHelper.createRandomPrivateBucket();
 		B2FileResponse b2FileResponseIn = B2TestHelper.uploadTemporaryFileToBucket(b2BucketResponse.getBucketId());

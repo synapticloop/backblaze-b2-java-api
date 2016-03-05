@@ -23,7 +23,7 @@ import org.json.JSONArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import synapticloop.b2.exception.B2Exception;
+import synapticloop.b2.exception.B2ApiException;
 
 public class B2ListFilesResponse extends BaseB2Response {
 	private static final Logger LOGGER = LoggerFactory.getLogger(B2ListFilesResponse.class);
@@ -39,9 +39,9 @@ public class B2ListFilesResponse extends BaseB2Response {
 	 * 
 	 * @param json the response (in JSON format)
 	 * 
-	 * @throws B2Exception if there was an error parsing the response
+	 * @throws B2ApiException if there was an error parsing the response
 	 */
-	public B2ListFilesResponse(String json) throws B2Exception {
+	public B2ListFilesResponse(String json) throws B2ApiException {
 		super(json);
 
 		this.nextFileName = response.optString(B2ResponseProperties.KEY_NEXT_FILE_NAME, null);

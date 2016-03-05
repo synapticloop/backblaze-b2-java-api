@@ -21,7 +21,7 @@ import java.io.IOException;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.util.EntityUtils;
 
-import synapticloop.b2.exception.B2Exception;
+import synapticloop.b2.exception.B2ApiException;
 import synapticloop.b2.response.B2AuthorizeAccountResponse;
 import synapticloop.b2.response.B2HideFileResponse;
 import synapticloop.b2.util.Helper;
@@ -51,13 +51,13 @@ public class B2HideFileRequest extends BaseB2Request {
 	 * 
 	 * @return the hide file response
 	 * 
-	 * @throws B2Exception if something went wrong
+	 * @throws B2ApiException if something went wrong
 	 */
-	public B2HideFileResponse getResponse() throws B2Exception {
+	public B2HideFileResponse getResponse() throws B2ApiException {
 		try {
 			return(new B2HideFileResponse(EntityUtils.toString(executePost().getEntity())));
 		} catch(IOException e) {
-			throw new B2Exception(e);
+			throw new B2ApiException(e);
 		}
 	}
 }

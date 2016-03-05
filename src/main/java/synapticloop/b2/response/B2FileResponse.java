@@ -24,7 +24,7 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import synapticloop.b2.exception.B2Exception;
+import synapticloop.b2.exception.B2ApiException;
 
 public class B2FileResponse extends BaseB2Response {
 	private static final Logger LOGGER = LoggerFactory.getLogger(B2FileResponse.class);
@@ -39,7 +39,7 @@ public class B2FileResponse extends BaseB2Response {
 	private final Map<String, String> fileInfo;
 
 	@SuppressWarnings("rawtypes")
-	public B2FileResponse(String json) throws B2Exception {
+	public B2FileResponse(String json) throws B2ApiException {
 		super(json);
 
 		this.fileId = response.optString(B2ResponseProperties.KEY_FILE_ID, null);

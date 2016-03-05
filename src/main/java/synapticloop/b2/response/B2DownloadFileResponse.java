@@ -32,7 +32,7 @@ import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import synapticloop.b2.exception.B2Exception;
+import synapticloop.b2.exception.B2ApiException;
 import synapticloop.b2.io.HttpMethodReleaseInputStream;
 
 public class B2DownloadFileResponse {
@@ -66,7 +66,7 @@ public class B2DownloadFileResponse {
 
 	private final Map<String, String> fileInfo = new HashMap<>();
 
-	public B2DownloadFileResponse(CloseableHttpResponse response) throws B2Exception {
+	public B2DownloadFileResponse(CloseableHttpResponse response) throws B2ApiException {
 		try {
 			if(null != response.getEntity()) {
 				stream = new HttpMethodReleaseInputStream(response);
@@ -97,7 +97,7 @@ public class B2DownloadFileResponse {
 				}
 			}
 		} catch (IllegalStateException | IOException ex) {
-			throw new B2Exception("Could not retrieve response", ex);
+			throw new B2ApiException("Could not retrieve response", ex);
 		}
 	}
 

@@ -35,7 +35,7 @@ import org.slf4j.LoggerFactory;
  * this source code or binaries.
  */
 
-import synapticloop.b2.exception.B2Exception;
+import synapticloop.b2.exception.B2ApiException;
 
 public class B2AuthorizeAccountResponse extends BaseB2Response {
 	private static final Logger LOGGER = LoggerFactory.getLogger(B2AuthorizeAccountResponse.class);
@@ -52,9 +52,9 @@ public class B2AuthorizeAccountResponse extends BaseB2Response {
 	 * 
 	 * @param json the response (in JSON format)
 	 * 
-	 * @throws B2Exception if there was an error parsing the response
+	 * @throws B2ApiException if there was an error parsing the response
 	 */
-	public B2AuthorizeAccountResponse(String json) throws B2Exception {
+	public B2AuthorizeAccountResponse(String json) throws B2ApiException {
 		super(json);
 
 		this.accountId = response.optString(B2ResponseProperties.KEY_ACCOUNT_ID, null);

@@ -41,7 +41,7 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import synapticloop.b2.exception.B2Exception;
+import synapticloop.b2.exception.B2ApiException;
 import synapticloop.b2.response.B2AuthorizeAccountResponse;
 
 public abstract class BaseB2Request {
@@ -117,9 +117,9 @@ public abstract class BaseB2Request {
 	 * 
 	 * @return the response object
 	 * 
-	 * @throws B2Exception if something went wrong with the call
+	 * @throws B2ApiException if something went wrong with the call
 	 */
-	protected CloseableHttpResponse executeHead() throws B2Exception {
+	protected CloseableHttpResponse executeHead() throws B2ApiException {
 		try {
 			URI uri = this.buildUri();
 
@@ -133,10 +133,10 @@ public abstract class BaseB2Request {
 			case HttpStatus.SC_OK:
 				return httpResponse;
 			}
-			throw new B2Exception(EntityUtils.toString(httpResponse.getEntity()), new HttpResponseException(
+			throw new B2ApiException(EntityUtils.toString(httpResponse.getEntity()), new HttpResponseException(
 					httpResponse.getStatusLine().getStatusCode(), httpResponse.getStatusLine().getReasonPhrase()));
 		} catch (IOException | URISyntaxException ex) {
-			throw new B2Exception(ex);
+			throw new B2ApiException(ex);
 		}
 	}
 
@@ -145,9 +145,9 @@ public abstract class BaseB2Request {
 	 * 
 	 * @return The response from the GET request
 	 * 
-	 * @throws B2Exception if there was an error with the request
+	 * @throws B2ApiException if there was an error with the request
 	 */
-	protected CloseableHttpResponse executeGet() throws B2Exception {
+	protected CloseableHttpResponse executeGet() throws B2ApiException {
 		try {
 			URI uri = this.buildUri();
 
@@ -161,10 +161,10 @@ public abstract class BaseB2Request {
 			case HttpStatus.SC_PARTIAL_CONTENT:
 				return httpResponse;
 			}
-			throw new B2Exception(EntityUtils.toString(httpResponse.getEntity()), new HttpResponseException(
+			throw new B2ApiException(EntityUtils.toString(httpResponse.getEntity()), new HttpResponseException(
 					httpResponse.getStatusLine().getStatusCode(), httpResponse.getStatusLine().getReasonPhrase()));
 		} catch (IOException | URISyntaxException ex) {
-			throw new B2Exception(ex);
+			throw new B2ApiException(ex);
 		}
 	}
 
@@ -173,10 +173,10 @@ public abstract class BaseB2Request {
 	 * 
 	 * @return the response data as a string
 	 * 
-	 * @throws B2Exception if there was an error with the call, most notably
+	 * @throws B2ApiException if there was an error with the call, most notably
 	 *     a non OK status code (i.e. not 200)
 	 */
-	protected CloseableHttpResponse executePost() throws B2Exception {
+	protected CloseableHttpResponse executePost() throws B2ApiException {
 		try {
 			URI uri = this.buildUri();
 
@@ -190,10 +190,10 @@ public abstract class BaseB2Request {
 			case HttpStatus.SC_OK:
 				return httpResponse;
 			}
-			throw new B2Exception(EntityUtils.toString(httpResponse.getEntity()), 
+			throw new B2ApiException(EntityUtils.toString(httpResponse.getEntity()), 
 					new HttpResponseException(httpResponse.getStatusLine().getStatusCode(), httpResponse.getStatusLine().getReasonPhrase()));
 		} catch (IOException | URISyntaxException ex) {
-			throw new B2Exception(ex);
+			throw new B2ApiException(ex);
 		}
 	}
 
@@ -204,10 +204,10 @@ public abstract class BaseB2Request {
 	 * 
 	 * @return the string representation of the response
 	 * 
-	 * @throws B2Exception if there was an error with the call, most notably
+	 * @throws B2ApiException if there was an error with the call, most notably
 	 *     a non OK status code (i.e. not 200)
 	 */
-	protected CloseableHttpResponse executePost(HttpEntity entity) throws B2Exception {
+	protected CloseableHttpResponse executePost(HttpEntity entity) throws B2ApiException {
 		try {
 			URI uri = this.buildUri();
 
@@ -220,10 +220,10 @@ public abstract class BaseB2Request {
 			case HttpStatus.SC_OK:
 				return httpResponse;
 			}
-			throw new B2Exception(EntityUtils.toString(httpResponse.getEntity()), new HttpResponseException(
+			throw new B2ApiException(EntityUtils.toString(httpResponse.getEntity()), new HttpResponseException(
 					httpResponse.getStatusLine().getStatusCode(), httpResponse.getStatusLine().getReasonPhrase()));
 		} catch (IOException | URISyntaxException ex) {
-			throw new B2Exception(ex);
+			throw new B2ApiException(ex);
 		}
 	}
 
@@ -233,16 +233,16 @@ public abstract class BaseB2Request {
 	 * 
 	 * @return the JSON string of the data
 	 * 
-	 * @throws B2Exception if there was an error converting the data.
+	 * @throws B2ApiException if there was an error converting the data.
 	 */
-	protected String convertPostData() throws B2Exception {
+	protected String convertPostData() throws B2ApiException {
 		JSONObject jsonObject = new JSONObject();
 		for(final String key : requestBodyData.keySet()) {
 			try {
 				LOGGER.debug("Setting key '{}' to value '{}'", key, obfuscateData(requestBodyData.get(key)));
 				jsonObject.put(key, requestBodyData.get(key));
 			} catch(JSONException ex) {
-				throw new B2Exception(ex);
+				throw new B2ApiException(ex);
 			}
 		}
 		return jsonObject.toString();
@@ -276,7 +276,7 @@ public abstract class BaseB2Request {
 	 * 
 	 * @param request The http request to set the headers on
 	 */
-	protected void setHeaders(HttpUriRequest request) throws B2Exception {
+	protected void setHeaders(HttpUriRequest request) throws B2ApiException {
 		for (String headerKey : requestHeaders.keySet()) {
 			if(!request.containsHeader(headerKey)) {
 				final String headerValue = requestHeaders.get(headerKey);
@@ -288,7 +288,7 @@ public abstract class BaseB2Request {
 		}
 	}
 
-	protected CloseableHttpResponse execute(final HttpUriRequest request) throws IOException, B2Exception {
+	protected CloseableHttpResponse execute(final HttpUriRequest request) throws IOException, B2ApiException {
 		this.setHeaders(request);
 		LOGGER.debug("{} request to URL '{}'", request.getMethod(), request.getURI());
 		final CloseableHttpResponse httpResponse = client.execute(request);

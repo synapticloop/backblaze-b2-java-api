@@ -25,7 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import synapticloop.b2.Action;
-import synapticloop.b2.exception.B2Exception;
+import synapticloop.b2.exception.B2ApiException;
 
 public class B2FileInfoResponse extends BaseB2Response {
 	private static final Logger LOGGER = LoggerFactory.getLogger(B2FileInfoResponse.class);
@@ -41,7 +41,7 @@ public class B2FileInfoResponse extends BaseB2Response {
 	private final long uploadTimestamp;
 
 	@SuppressWarnings("rawtypes")
-	public B2FileInfoResponse(final JSONObject response) throws B2Exception {
+	public B2FileInfoResponse(final JSONObject response) throws B2ApiException {
 		super(response);
 
 		this.fileId = response.optString(B2ResponseProperties.KEY_FILE_ID, null);

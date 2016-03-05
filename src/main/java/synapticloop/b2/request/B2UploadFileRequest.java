@@ -26,7 +26,7 @@ import org.apache.http.entity.FileEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.util.EntityUtils;
 
-import synapticloop.b2.exception.B2Exception;
+import synapticloop.b2.exception.B2ApiException;
 import synapticloop.b2.response.B2AuthorizeAccountResponse;
 import synapticloop.b2.response.B2FileResponse;
 import synapticloop.b2.response.B2GetUploadUrlResponse;
@@ -62,7 +62,7 @@ public class B2UploadFileRequest extends BaseB2Request {
 	 * @param fileInfo the file info map which are passed through as headers prefixed by "X-Bz-Info-"
 	 */
 	public B2UploadFileRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse, 
-			B2GetUploadUrlResponse b2GetUploadUrlResponse, String fileName, File file, Map<String, String> fileInfo) throws B2Exception {
+			B2GetUploadUrlResponse b2GetUploadUrlResponse, String fileName, File file, Map<String, String> fileInfo) throws B2ApiException {
 
 		this(client, b2AuthorizeAccountResponse, b2GetUploadUrlResponse, fileName, file, null, fileInfo);
 	}
@@ -80,7 +80,7 @@ public class B2UploadFileRequest extends BaseB2Request {
 	 *     backblaze will attempt to determine automatically)
 	 */
 	public B2UploadFileRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse, 
-			B2GetUploadUrlResponse b2GetUploadUrlResponse, String fileName, File file, String mimeType) throws B2Exception {
+			B2GetUploadUrlResponse b2GetUploadUrlResponse, String fileName, File file, String mimeType) throws B2ApiException {
 
 		this(client, b2AuthorizeAccountResponse, b2GetUploadUrlResponse, fileName, file, mimeType, null);
 	}
@@ -99,7 +99,7 @@ public class B2UploadFileRequest extends BaseB2Request {
 			B2AuthorizeAccountResponse b2AuthorizeAccountResponse,
 			B2GetUploadUrlResponse b2GetUploadUrlResponse, 
 			String fileName, 
-			File file) throws B2Exception {
+			File file) throws B2ApiException {
 
 		this(client, b2AuthorizeAccountResponse, b2GetUploadUrlResponse, fileName, file, null, null);
 	}
@@ -124,7 +124,7 @@ public class B2UploadFileRequest extends BaseB2Request {
 			String fileName, 
 			File file, 
 			String mimeType, 
-			Map<String, String> fileInfo) throws B2Exception {
+			Map<String, String> fileInfo) throws B2ApiException {
 
 		this(client, 
 				b2AuthorizeAccountResponse, 
@@ -166,10 +166,10 @@ public class B2UploadFileRequest extends BaseB2Request {
 	 * 
 	 * @return the file response
 	 * 
-	 * @throws B2Exception if something went wrong
+	 * @throws B2ApiException if something went wrong
 	 */
 
-	public B2FileResponse getResponse() throws B2Exception {
+	public B2FileResponse getResponse() throws B2ApiException {
 		if(null == mimeType) {
 			requestHeaders.put(B2ResponseHeaders.HEADER_CONTENT_TYPE, CONTENT_TYPE_VALUE_B2_X_AUTO);
 		} else {
@@ -181,7 +181,7 @@ public class B2UploadFileRequest extends BaseB2Request {
 		try {
 			return new B2FileResponse(EntityUtils.toString(executePost(entity).getEntity()));
 		} catch(IOException e) {
-			throw new B2Exception(e);
+			throw new B2ApiException(e);
 		}
 	}
 }

@@ -22,7 +22,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 
-import synapticloop.b2.exception.B2Exception;
+import synapticloop.b2.exception.B2ApiException;
 
 public abstract class BaseB2Response {
 	protected JSONObject response;
@@ -32,9 +32,9 @@ public abstract class BaseB2Response {
 	 * 
 	 * @param json the Response (in json format)
 	 * 
-	 * @throws B2Exception if there was an error in the parsing of the reponse
+	 * @throws B2ApiException if there was an error in the parsing of the reponse
 	 */
-	public BaseB2Response(final String json) throws B2Exception {
+	public BaseB2Response(final String json) throws B2ApiException {
 		this(parse(json));
 	}
 
@@ -43,10 +43,10 @@ public abstract class BaseB2Response {
 	 * 
 	 * @param responsem the pre-parsed json object
 	 * 
-	 * @throws B2Exception if there was an error in the response
+	 * @throws B2ApiException if there was an error in the response
 	 */
 
-	public BaseB2Response(final JSONObject response) throws B2Exception {
+	public BaseB2Response(final JSONObject response) throws B2ApiException {
 		this.response = response;
 	}
 
@@ -57,14 +57,14 @@ public abstract class BaseB2Response {
 	 * 
 	 * @return the parsed JSON object
 	 * 
-	 * @throws B2Exception if there was an error parsing the object
+	 * @throws B2ApiException if there was an error parsing the object
 	 */
-	private static JSONObject parse(String json) throws B2Exception {
+	private static JSONObject parse(String json) throws B2ApiException {
 		JSONObject jsonObject;
 		try {
 			jsonObject = new JSONObject(json);
 		} catch (JSONException ex) {
-			throw new B2Exception(ex);
+			throw new B2ApiException(ex);
 		}
 		return jsonObject;
 	}
