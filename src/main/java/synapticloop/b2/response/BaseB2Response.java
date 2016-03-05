@@ -89,5 +89,4 @@ public abstract class BaseB2Response {
 			}
 		}
 	}
-
 }

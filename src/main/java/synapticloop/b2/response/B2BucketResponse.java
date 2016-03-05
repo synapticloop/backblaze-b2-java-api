@@ -24,7 +24,7 @@ import synapticloop.b2.BucketType;
 import synapticloop.b2.exception.B2Exception;
 
 public class B2BucketResponse extends BaseB2Response {
-	private static final Logger LOGGER = LoggerFactory.getLogger(B2DownloadFileResponse.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(B2BucketResponse.class);
 
 	private final String bucketId;
 	private final String accountId;
@@ -58,7 +58,7 @@ public class B2BucketResponse extends BaseB2Response {
 	}
 
 	/**
-	 * Instantiate an bucket response with the JSON response as a string from 
+	 * Instantiate a bucket response with the JSON response as a string from 
 	 * the API call.  This response is then parsed into the relevant fields.
 	 * 
 	 * @param JSONObject The pre-parsed jsonObject
@@ -72,6 +72,16 @@ public class B2BucketResponse extends BaseB2Response {
 		this.accountId = response.optString(B2ResponseProperties.KEY_ACCOUNT_ID, null);
 		this.bucketName = response.optString(B2ResponseProperties.KEY_BUCKET_NAME, null);
 		this.bucketType = response.optString(B2ResponseProperties.KEY_BUCKET_TYPE, null);
+
+		if(LOGGER.isWarnEnabled()) {
+			response.remove(B2ResponseProperties.KEY_BUCKET_ID);
+			response.remove(B2ResponseProperties.KEY_ACCOUNT_ID);
+			response.remove(B2ResponseProperties.KEY_BUCKET_NAME);
+			response.remove(B2ResponseProperties.KEY_BUCKET_TYPE);
+
+			warnOnMissedKeys(LOGGER, response);
+		}
+
 	}
 
 	/**

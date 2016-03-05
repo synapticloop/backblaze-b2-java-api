@@ -37,8 +37,8 @@ public class B2FileInfoResponse extends BaseB2Response {
 
 	private final Map<String, String> fileInfo;
 	private final Action action;
-	private final Integer size;
-	private final Long uploadTimestamp;
+	private final int size;
+	private final long uploadTimestamp;
 
 	@SuppressWarnings("rawtypes")
 	public B2FileInfoResponse(final JSONObject response) throws B2Exception {
@@ -46,7 +46,7 @@ public class B2FileInfoResponse extends BaseB2Response {
 
 		this.fileId = response.optString(B2ResponseProperties.KEY_FILE_ID, null);
 		this.fileName = response.optString(B2ResponseProperties.KEY_FILE_NAME, null);
-		this.contentLength = response.optLong(B2ResponseProperties.KEY_CONTENT_LENGTH);
+		this.contentLength = response.optLong(B2ResponseProperties.KEY_CONTENT_LENGTH, -1l);
 		this.contentSha1 = response.optString(B2ResponseProperties.KEY_CONTENT_SHA1, null);
 		this.fileInfo = new HashMap<String, String>();
 
@@ -67,8 +67,8 @@ public class B2FileInfoResponse extends BaseB2Response {
 			this.action = Action.upload;
 		}
 
-		this.size = response.optInt(B2ResponseProperties.KEY_SIZE);
-		this.uploadTimestamp = response.optLong(B2ResponseProperties.KEY_UPLOAD_TIMESTAMP);
+		this.size = response.optInt(B2ResponseProperties.KEY_SIZE, -1);
+		this.uploadTimestamp = response.optLong(B2ResponseProperties.KEY_UPLOAD_TIMESTAMP, -1l);
 
 		if(LOGGER.isWarnEnabled()) {
 			response.remove(B2ResponseProperties.KEY_FILE_ID);
@@ -76,6 +76,7 @@ public class B2FileInfoResponse extends BaseB2Response {
 			response.remove(B2ResponseProperties.KEY_CONTENT_LENGTH);
 			response.remove(B2ResponseProperties.KEY_CONTENT_SHA1);
 			response.remove(B2ResponseProperties.KEY_FILE_INFO);
+			response.remove(B2ResponseProperties.KEY_ACTION);
 			response.remove(B2ResponseProperties.KEY_SIZE);
 			response.remove(B2ResponseProperties.KEY_UPLOAD_TIMESTAMP);
 
@@ -123,6 +124,8 @@ public class B2FileInfoResponse extends BaseB2Response {
 	public Map<String, String> getFileInfo() { return this.fileInfo; }
 
 	public Action getAction() { return this.action; }
+
+	public long getUploadTimestamp() { return this.uploadTimestamp; }
 
 	@Override
 	public String toString() {

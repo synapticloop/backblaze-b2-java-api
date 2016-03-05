@@ -44,7 +44,8 @@ public class B2HideFileResponse extends BaseB2Response {
 	private final String fileId;
 	private final String fileName;
 	private final Action action;
-	private final Long size;
+	private final int size;
+	private final long uploadTimestamp;
 
 	public B2HideFileResponse(String json) throws B2Exception {
 		super(json);
@@ -57,12 +58,16 @@ public class B2HideFileResponse extends BaseB2Response {
 		} else {
 			this.action = null;
 		}
-		this.size = response.optLong(B2ResponseProperties.KEY_SIZE);
+
+		this.size = response.optInt(B2ResponseProperties.KEY_SIZE, -1);
+		this.uploadTimestamp = response.optLong(B2ResponseProperties.KEY_UPLOAD_TIMESTAMP, -1l);
 
 		if(LOGGER.isWarnEnabled()) {
 			response.remove(B2ResponseProperties.KEY_FILE_ID);
 			response.remove(B2ResponseProperties.KEY_FILE_NAME);
 			response.remove(B2ResponseProperties.KEY_ACTION);
+			response.remove(B2ResponseProperties.KEY_SIZE);
+			response.remove(B2ResponseProperties.KEY_UPLOAD_TIMESTAMP);
 
 			warnOnMissedKeys(LOGGER, response);
 		}
@@ -75,7 +80,9 @@ public class B2HideFileResponse extends BaseB2Response {
 
 	public Action getAction() { return this.action; }
 
-	public long getSize() { return this.size; }
+	public int getSize() { return this.size; }
+
+	public long getUploadTimestamp() { return this.uploadTimestamp; }
 
 	@Override
 	public String toString() {

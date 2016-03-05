@@ -46,7 +46,7 @@ public class B2FileResponse extends BaseB2Response {
 		this.fileName = response.optString(B2ResponseProperties.KEY_FILE_NAME, null);
 		this.accountId = response.optString(B2ResponseProperties.KEY_ACCOUNT_ID, null);
 		this.bucketId = response.optString(B2ResponseProperties.KEY_BUCKET_ID, null);
-		this.contentLength = response.optLong(B2ResponseProperties.KEY_CONTENT_LENGTH);
+		this.contentLength = response.optLong(B2ResponseProperties.KEY_CONTENT_LENGTH, -1l);
 		this.contentSha1 = response.optString(B2ResponseProperties.KEY_CONTENT_SHA1, null);
 		this.contentType = response.optString(B2ResponseProperties.KEY_CONTENT_TYPE, null);
 
@@ -69,6 +69,7 @@ public class B2FileResponse extends BaseB2Response {
 			response.remove(B2ResponseProperties.KEY_CONTENT_LENGTH);
 			response.remove(B2ResponseProperties.KEY_CONTENT_SHA1);
 			response.remove(B2ResponseProperties.KEY_CONTENT_TYPE);
+			response.remove(B2ResponseProperties.KEY_FILE_INFO);
 
 			warnOnMissedKeys(LOGGER, response);
 		}

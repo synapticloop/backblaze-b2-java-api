@@ -40,12 +40,21 @@ public class B2DownloadFileResponse {
 
 	private static final Set<String> ignoredHeaders = new HashSet<String>();
 	static {
-		ignoredHeaders.add("server");
-		ignoredHeaders.add("x-content-type-options");
 		ignoredHeaders.add("x-xss-protection");
 		ignoredHeaders.add("x-frame-options");
-		ignoredHeaders.add("cache-control");
-		ignoredHeaders.add("date");
+
+		ignoredHeaders.add(HttpHeaders.SERVER.toLowerCase(Locale.ENGLISH));
+		ignoredHeaders.add(HttpHeaders.ACCEPT_RANGES.toLowerCase(Locale.ENGLISH));
+		ignoredHeaders.add(HttpHeaders.CONTENT_RANGE.toLowerCase(Locale.ENGLISH));
+		ignoredHeaders.add(HttpHeaders.CACHE_CONTROL.toLowerCase(Locale.ENGLISH));
+		ignoredHeaders.add(HttpHeaders.DATE.toLowerCase(Locale.ENGLISH));
+
+		// the following are mapped
+		ignoredHeaders.add(HttpHeaders.CONTENT_LENGTH.toLowerCase(Locale.ENGLISH));
+		ignoredHeaders.add(HttpHeaders.CONTENT_TYPE.toLowerCase(Locale.ENGLISH));
+		ignoredHeaders.add(B2ResponseHeaders.HEADER_X_BZ_CONTENT_SHA1.toLowerCase(Locale.ENGLISH));
+		ignoredHeaders.add(B2ResponseHeaders.HEADER_X_BZ_FILE_ID.toLowerCase(Locale.ENGLISH));
+		ignoredHeaders.add(B2ResponseHeaders.HEADER_X_BZ_FILE_NAME.toLowerCase(Locale.ENGLISH));
 	}
 
 	private final InputStream stream;
@@ -76,10 +85,13 @@ public class B2DownloadFileResponse {
 			for (Header header : response.getAllHeaders()) {
 				String headerName = header.getName();
 				String headerValue = header.getValue();
-				if(headerName.toLowerCase(Locale.ENGLISH).startsWith(B2ResponseHeaders.HEADER_X_BZ_INFO_PREFIX.toLowerCase(Locale.ENGLISH))) {
+
+				String headerNameLowerCase = headerName.toLowerCase(Locale.ENGLISH);
+
+				if(headerNameLowerCase.startsWith(B2ResponseHeaders.HEADER_X_BZ_INFO_PREFIX.toLowerCase(Locale.ENGLISH))) {
 					fileInfo.put(headerName.substring(B2ResponseHeaders.HEADER_X_BZ_INFO_PREFIX.length()), headerValue);
 				} else {
-					if(!ignoredHeaders.contains(headerName.toLowerCase())) {
+					if(!ignoredHeaders.contains(headerNameLowerCase)) {
 						LOGGER.warn("Found a header named '{}' with value '{}', that was not mapped", headerName, headerValue);
 					}
 				}

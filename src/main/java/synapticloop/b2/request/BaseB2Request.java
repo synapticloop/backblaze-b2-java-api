@@ -152,7 +152,6 @@ public abstract class BaseB2Request {
 			URI uri = this.buildUri();
 
 			HttpGet httpGet = new HttpGet(uri);
-			System.out.println(">>>" + uri);
 
 			CloseableHttpResponse httpResponse = this.execute(httpGet);
 
@@ -240,6 +239,7 @@ public abstract class BaseB2Request {
 		JSONObject jsonObject = new JSONObject();
 		for(final String key : requestBodyData.keySet()) {
 			try {
+				LOGGER.debug("Setting key '{}' to value '{}'", key, obfuscateData(requestBodyData.get(key)));
 				jsonObject.put(key, requestBodyData.get(key));
 			} catch(JSONException ex) {
 				throw new B2Exception(ex);
@@ -297,4 +297,18 @@ public abstract class BaseB2Request {
 		}
 		return httpResponse;
 	}
+
+
+	/**
+	 * Obfuscate the data by removing the accountId and replacing it with the
+	 * string "[redacted]"
+	 * 
+	 * @param data the data to obfuscate
+	 * 
+	 * @return the obfuscated data
+	 */
+	private String obfuscateData(Object data) {
+		return(data.toString().replaceAll("\"accountId\":\".*\"", "\"accountId\":\"[redacted]\""));
+	}
+
 }
