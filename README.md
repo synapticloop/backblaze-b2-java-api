@@ -1,6 +1,9 @@
-[![Build Status](https://travis-ci.org/synapticloop/backblaze-b2-java-api.svg?branch=master)](https://travis-ci.org/synapticloop/backblaze-b2-java-api) [![Download](https://api.bintray.com/packages/synapticloop/maven/backblaze-b2-java-api/images/download.svg) ](https://bintray.com/synapticloop/maven/backblaze-b2-java-api/_latestVersion)
 
-A Java API for the truly excellent backblaze B2 storage
+[![Build Status](https://travis-ci.org/synapticloop/backblaze-b2-java-api.svg?branch=master)](https://travis-ci.org/synapticloop/backblaze-b2-java-api)
+[![Download](https://api.bintray.com/packages/synapticloop/maven/backblaze-b2-java-api/images/download.svg) ](https://bintray.com/synapticloop/maven/backblaze-b2-java-api/_latestVersion)
+[![GitHub Release](https://img.shields.io/github/release/synapticloop/backblaze-b2-java-api.svg)](https://github.com/synapticloop/backblaze-b2-java-api/releases)
+
+> A Java API for the truly excellent backblaze B2 storage
 
 # Usage
 

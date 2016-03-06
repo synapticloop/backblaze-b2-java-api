@@ -10,7 +10,7 @@ plugins {
 
 group = 'synapticloop'
 archivesBaseName = 'backblaze-b2-java-api'
-description = """An api for backblaze b2 storage in java"""
+description = """A java api for the truly excellent backblaze b2 storage service"""
 
 version = 'v1.2.1'
 

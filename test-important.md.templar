@@ -1,0 +1,10 @@
+{\n}
+**!!!   IMPORTANT   !!!** {\n}
+{\n}
+You **MUST** have the following environment variables set:{\n}
+{\n}
+```{\n}
+export B2_ACCOUNT_ID="your-account-id"{\n}
+export B2_APPLICATION_KEY="your-application-key"{\n}
+```{\n}
+{\n}
