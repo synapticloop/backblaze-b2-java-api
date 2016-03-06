@@ -1,9 +1,11 @@
+[![Build Status](https://travis-ci.org/synapticloop/backblaze-b2-java-api.svg?branch=master)](https://travis-ci.org/synapticloop/backblaze-b2-java-api)[![Download](https://api.bintray.com/packages/synapticloop/maven/backblaze-b2-java-api/images/download.svg) ](https://bintray.com/synapticloop/maven/backblaze-b2-java-api/_latestVersion)[![GitHub Release](https://img.shields.io/github/release/synapticloop/backblaze-b2-java-api.svg)](https://github.com/synapticloop/backblaze-b2-java-api/releases)
 
-[![Build Status](https://travis-ci.org/synapticloop/backblaze-b2-java-api.svg?branch=master)](https://travis-ci.org/synapticloop/backblaze-b2-java-api)
-[![Download](https://api.bintray.com/packages/synapticloop/maven/backblaze-b2-java-api/images/download.svg) ](https://bintray.com/synapticloop/maven/backblaze-b2-java-api/_latestVersion)
-[![GitHub Release](https://img.shields.io/github/release/synapticloop/backblaze-b2-java-api.svg)](https://github.com/synapticloop/backblaze-b2-java-api/releases)
+# backblaze-b2-java-api
 
-> A Java API for the truly excellent backblaze B2 storage
+
+
+> A java api for the truly excellent backblaze b2 storage service
+
 
 # Usage
 
@@ -97,9 +99,69 @@ uploadFile(String, String, File, String)
 uploadFile(String, String, File, String, Map<String, String>)
 ```
 
+# Building the Package
+
+## *NIX/Mac OS X
+
+From the root of the project, simply run
+
+`./gradlew build`
+
+
+## Windows
+
+`./gradlew.bat build`
+
+
+This will compile and assemble the artefacts into the `build/libs/` directory.
+
+Note that this may also run tests (if applicable see the Testing notes)
+
+# Running the Tests
+
+## *NIX/Mac OS X
+
+From the root of the project, simply run
+
+`gradle --info test`
+
+if you do not have gradle installed, try:
+
+`gradlew --info test`
+
+## Windows
+
+From the root of the project, simply run
+
+`gradle --info test`
+
+if you do not have gradle installed, try:
+
+`./gradlew.bat --info test`
+
+
+The `--info` switch will also output logging for the tests
+
+
+**WARNING:** These tests make calls against resources (either API calls to a service provider, or consumption of resources from a service provider) which may contribute to your limits, which may lead to a cost.
+
+
+**!!!   IMPORTANT   !!!** 
+
+You **MUST** have the following environment variables set:
+
+```
+export B2_ACCOUNT_ID="your-account-id"
+export B2_APPLICATION_KEY="your-application-key"
+```
+
 # Logging
 
-slf4j is the logging framework used, (with log4j for the tests, a sample `log4j2.xml` is below:
+slf4j is the logging framework used for this project.  In order to use a logging framework with this project, sample configurations are below:
+
+## Log4j
+
+A sample `log4j2.xml` is below:
 
 ```
 <Configuration status="WARN">
@@ -120,130 +182,128 @@ slf4j is the logging framework used, (with log4j for the tests, a sample `log4j2
 
 > Note that the latest version can be found [https://bintray.com/synapticloop/maven/backblaze-b2-java-api/view](https://bintray.com/synapticloop/maven/backblaze-b2-java-api/view)
 
-Include the dependency
-
-## maven
+## maven setup
 
 this comes from the jcenter bintray, to set up your repository:
 
-    <?xml version="1.0" encoding="UTF-8" ?>
-    <settings xsi:schemaLocation='http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd' xmlns='http://maven.apache.org/SETTINGS/1.0.0' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'>
-      <profiles>
-        <profile>
-          <repositories>
-            <repository>
-              <snapshots>
-                <enabled>false</enabled>
-              </snapshots>
-              <id>central</id>
-              <name>bintray</name>
-              <url>http://jcenter.bintray.com</url>
-            </repository>
-          </repositories>
-          <pluginRepositories>
-            <pluginRepository>
-              <snapshots>
-                <enabled>false</enabled>
-              </snapshots>
-              <id>central</id>
-              <name>bintray-plugins</name>
-              <url>http://jcenter.bintray.com</url>
-            </pluginRepository>
-          </pluginRepositories>
-          <id>bintray</id>
-        </profile>
-      </profiles>
-      <activeProfiles>
-        <activeProfile>bintray</activeProfile>
-      </activeProfiles>
-    </settings>
+```
+<?xml version="1.0" encoding="UTF-8" ?>
+<settings xsi:schemaLocation='http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd' xmlns='http://maven.apache.org/SETTINGS/1.0.0' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'>
+  <profiles>
+    <profile>
+      <repositories>
+        <repository>
+          <snapshots>
+            <enabled>false</enabled>
+          </snapshots>
+          <id>central</id>
+          <name>bintray</name>
+          <url>http://jcenter.bintray.com</url>
+        </repository>
+      </repositories>
+      <pluginRepositories>
+        <pluginRepository>
+          <snapshots>
+            <enabled>false</enabled>
+          </snapshots>
+          <id>central</id>
+          <name>bintray-plugins</name>
+          <url>http://jcenter.bintray.com</url>
+        </pluginRepository>
+      </pluginRepositories>
+      <id>bintray</id>
+    </profile>
+  </profiles>
+  <activeProfiles>
+    <activeProfile>bintray</activeProfile>
+  </activeProfiles>
+</settings>
+```
 
 And now for the dependency
 
-    <dependency>
-      <groupId>synapticloop</groupId>
-      <artifactId>backblaze-b2-java-api</artifactId>
-      <version>v1.1.3</version>
-      <type>jar</type>
-    </dependency>
- 
- 
-## gradle
+```
+<dependency>
+	<groupId>synapticloop</groupId>
+	<artifactId>backblaze-b2-java-api</artifactId>
+	<version>v1.2.1</version>
+	<type>jar</type>
+</dependency>
+```
+
+
+## gradle setup
 
 Repository
 
-    repositories {
-        maven {
-            url  "http://jcenter.bintray.com" 
-        }
-    }
- 
- or just
- 
-    repositories {
-      jcenter()
-    }
+```
+repositories {
+	maven {
+		url  "http://jcenter.bintray.com" 
+	}
+}
+```
+
+or just
+
+```
+repositories {
+	jcenter()
+}
+```
 
 and then include the dependency:
 
-    runtime(group: 'synapticloop', name: 'backblaze-b2-java-api', version: 'v1.1.3', ext: 'jar')
+```
+dependencies {
+	runtime(group: 'synapticloop', name: 'backblaze-b2-java-api', version: 'v1.2.1', ext: 'jar')
 
-    compile(group: 'synapticloop', name: 'backblaze-b2-java-api', version: 'v1.1.3', ext: 'jar')
- 
-or, more simply for later versions of gradle
+	compile(group: 'synapticloop', name: 'backblaze-b2-java-api', version: 'v1.2.1', ext: 'jar')
+}
+```
 
-    runtime 'synapticloop:backblaze-b2-java-api:v1.1.3'
+or, more simply for versions of gradle greater than 2.4
 
-    compile 'synapticloop:backblaze-b2-java-api:v1.1.3'
-    
+```
+dependencies {
+	runtime 'synapticloop:backblaze-b2-java-api:v1.2.1'
+
+	compile 'synapticloop:backblaze-b2-java-api:v1.2.1'
+}
+```
+
 ## Other packages
+
 
 You may either download the files from [https://bintray.com/synapticloop/maven/backblaze-b2-java-api/](https://bintray.com/synapticloop/maven/backblaze-b2-java-api/) or from [https://github.com/synapticloop/backblaze-b2-java-api/releases](https://github.com/synapticloop/backblaze-b2-java-api/releases)
 
 You will also need the dependencies:
 
- - runtime 'org.apache.httpcomponents:httpclient:4.3.4'
- - runtime 'commons-io:commons-io:2.4'
- - runtime 'org.json:json:20090211'
- - runtime 'org.slf4j:slf4j-api:1.7.13'
+### runtime dependencies
 
-which can be found by searching here: [http://mvnrepository.com/](http://mvnrepository.com/) (and you may need to download their dependencies in turn)
+  - org.apache.httpcomponents, httpclient, 4.5.1: (It may be available on: [bintray](https://bintray.com/org.apache.httpcomponents/maven/httpclient/4.5.1/view#files/org.apache.httpcomponents/httpclient/4.5.1) [mvn central](http://search.maven.org/#artifactdetails|org.apache.httpcomponents|httpclient|4.5.1|jar) [mvn repository](http://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient/4.5.1) )
+  - commons-io, commons-io, 2.4: (It may be available on: [bintray](https://bintray.com/commons-io/maven/commons-io/2.4/view#files/commons-io/commons-io/2.4) [mvn central](http://search.maven.org/#artifactdetails|commons-io|commons-io|2.4|jar) [mvn repository](http://mvnrepository.com/artifact/commons-io/commons-io/2.4) )
+  - org.json, json, 20160212: (It may be available on: [bintray](https://bintray.com/org.json/maven/json/20160212/view#files/org.json/json/20160212) [mvn central](http://search.maven.org/#artifactdetails|org.json|json|20160212|jar) [mvn repository](http://mvnrepository.com/artifact/org.json/json/20160212) )
+  - org.slf4j, slf4j-api, 1.7.13: (It may be available on: [bintray](https://bintray.com/org.slf4j/maven/slf4j-api/1.7.13/view#files/org.slf4j/slf4j-api/1.7.13) [mvn central](http://search.maven.org/#artifactdetails|org.slf4j|slf4j-api|1.7.13|jar) [mvn repository](http://mvnrepository.com/artifact/org.slf4j/slf4j-api/1.7.13) )
 
-# Building the Package
 
-`gradlew build`
+### compile dependencies
 
-this will output the artefacts into the `build/libs/` directory.
+  - org.apache.httpcomponents, httpclient, 4.5.1: (It may be available on: [bintray](https://bintray.com/org.apache.httpcomponents/maven/httpclient/4.5.1/view#files/org.apache.httpcomponents/httpclient/4.5.1) [mvn central](http://search.maven.org/#artifactdetails|org.apache.httpcomponents|httpclient|4.5.1|jar) [mvn repository](http://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient/4.5.1) )
+  - commons-io, commons-io, 2.4: (It may be available on: [bintray](https://bintray.com/commons-io/maven/commons-io/2.4/view#files/commons-io/commons-io/2.4) [mvn central](http://search.maven.org/#artifactdetails|commons-io|commons-io|2.4|jar) [mvn repository](http://mvnrepository.com/artifact/commons-io/commons-io/2.4) )
+  - org.json, json, 20160212: (It may be available on: [bintray](https://bintray.com/org.json/maven/json/20160212/view#files/org.json/json/20160212) [mvn central](http://search.maven.org/#artifactdetails|org.json|json|20160212|jar) [mvn repository](http://mvnrepository.com/artifact/org.json/json/20160212) )
+  - org.slf4j, slf4j-api, 1.7.13: (It may be available on: [bintray](https://bintray.com/org.slf4j/maven/slf4j-api/1.7.13/view#files/org.slf4j/slf4j-api/1.7.13) [mvn central](http://search.maven.org/#artifactdetails|org.slf4j|slf4j-api|1.7.13|jar) [mvn repository](http://mvnrepository.com/artifact/org.slf4j/slf4j-api/1.7.13) )
 
-Note that this will also run all of the tests (see notes below)
 
-# Running the Tests
 
-`gradle --info test`
-
-Which will also print out the logging
-
-if you do not have gradle installed, try:
-
-`gradlew --info test`
-
-**!!!   IMPORTANT   !!!** 
-
-You **MUST** have the following environment variables set:
-
-```
-export B2_ACCOUNT_ID="your-account-id"
-export B2_APPLICATION_KEY="your-application-key"
-```
-
-**WARNING:** These tests make API calls against your account which contribute to your call limits, which may lead to a cost.
+**NOTE:** You may need to download any dependencies of the above dependencies in turn
 
 # License
 
 ```
 The MIT License (MIT)
 
-Copyright (c) 2015 Synapticloop
+Copyright (c) 2016 synapticloop
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -263,3 +323,11 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
+
+
+--
+
+> `Hand-crafted with care utilising synapticloop` [`templar`](https://github.com/synapticloop/templar/) `->`[`documentr`](https://github.com/synapticloop/documentr/)
+
+--
+
