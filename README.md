@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/synapticloop/backblaze-b2-java-api.svg?branch=master)](https://travis-ci.org/synapticloop/backblaze-b2-java-api)[![Download](https://api.bintray.com/packages/synapticloop/maven/backblaze-b2-java-api/images/download.svg) ](https://bintray.com/synapticloop/maven/backblaze-b2-java-api/_latestVersion)[![GitHub Release](https://img.shields.io/github/release/synapticloop/backblaze-b2-java-api.svg)](https://github.com/synapticloop/backblaze-b2-java-api/releases)
+[![Build Status](https://travis-ci.org/synapticloop/backblaze-b2-java-api.svg?branch=master)](https://travis-ci.org/synapticloop/backblaze-b2-java-api)[![Download](https://api.bintray.com/packages/synapticloop/maven/backblaze-b2-java-api/images/download.svg)](https://bintray.com/synapticloop/maven/backblaze-b2-java-api/_latestVersion)[![GitHub Release](https://img.shields.io/github/release/synapticloop/backblaze-b2-java-api.svg)](https://github.com/synapticloop/backblaze-b2-java-api/releases)
 
 # backblaze-b2-java-api
 
