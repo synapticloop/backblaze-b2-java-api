@@ -53,9 +53,7 @@ public class URLEncoder {
 			// for proper URI percented encoding.
 			return b.toString()
 					.replace("+", "%20")
-					.replace("*", "%2A")
-					.replace(".", "%2E")
-					.replace("-", "%2D");
+					.replace("*", "%2A");
 		} catch (UnsupportedEncodingException ex) {
 			return url;
 		}
