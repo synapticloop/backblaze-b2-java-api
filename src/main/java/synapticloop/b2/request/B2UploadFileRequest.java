@@ -31,7 +31,6 @@ import synapticloop.b2.response.B2AuthorizeAccountResponse;
 import synapticloop.b2.response.B2FileResponse;
 import synapticloop.b2.response.B2GetUploadUrlResponse;
 import synapticloop.b2.response.B2ResponseHeaders;
-import synapticloop.b2.util.ChecksumHelper;
 import synapticloop.b2.util.URLEncoder;
 
 /**
@@ -63,6 +62,7 @@ public class B2UploadFileRequest extends BaseB2Request {
 	 * @param b2GetUploadUrlResponse the upload URL for this request
 	 * @param fileName the name of the file
 	 * @param file the file to upload
+	 * @param sha1Checksum the sha1 checksum for the file
 	 * @param fileInfo the file info map which are passed through as headers prefixed by "X-Bz-Info-"
 	 */
 	public B2UploadFileRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse, 
@@ -80,6 +80,7 @@ public class B2UploadFileRequest extends BaseB2Request {
 	 * @param b2GetUploadUrlResponse the upload URL for this request
 	 * @param fileName the name of the file
 	 * @param file the file to upload
+	 * @param sha1Checksum the sha1 checksum for the file
 	 * @param mimeType the mimeType (optional, will default to 'b2/x-auto' which
 	 *     backblaze will attempt to determine automatically).  The MIME type of 
 	 *     the content of the file, which will be returned in the Content-Type 
@@ -103,6 +104,7 @@ public class B2UploadFileRequest extends BaseB2Request {
 	 * @param b2GetUploadUrlResponse the upload URL for this request
 	 * @param fileName the name of the file
 	 * @param file the file to upload
+	 * @param sha1Checksum the sha1 checksum for the file
 	 */
 	public B2UploadFileRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse,
 			B2GetUploadUrlResponse b2GetUploadUrlResponse, String fileName, File file, String sha1Checksum) {
@@ -119,6 +121,7 @@ public class B2UploadFileRequest extends BaseB2Request {
 	 * @param b2GetUploadUrlResponse the upload URL for this request
 	 * @param fileName the name of the file
 	 * @param file the file to upload
+	 * @param sha1Checksum the sha1 checksum for the file
 	 * @param mimeType the mimeType (optional, will default to 'b2/x-auto' which
 	 *     backblaze will attempt to determine automatically).  The MIME type of 
 	 *     the content of the file, which will be returned in the Content-Type 

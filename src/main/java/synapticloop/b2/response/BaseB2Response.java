@@ -185,8 +185,6 @@ public abstract class BaseB2Response {
 	 * {@link BaseB2Response#readLong(String)}
 	 * {@link BaseB2Response#readString(String)}
 	 * {@link BaseB2Response#readObject(String)}
-	 *
-	 * @param LOGGER     The logger to use
 	 */
 	@SuppressWarnings("rawtypes")
 	protected void warnOnMissedKeys() {
