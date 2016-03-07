@@ -24,7 +24,7 @@ import org.apache.http.util.EntityUtils;
 import synapticloop.b2.exception.B2ApiException;
 import synapticloop.b2.response.B2AuthorizeAccountResponse;
 import synapticloop.b2.response.B2ListFilesResponse;
-import synapticloop.b2.util.Helper;
+import synapticloop.b2.util.URLEncoder;
 
 /**
  * <p>Lists all of the versions of all of the files contained in one bucket, in 
@@ -110,7 +110,7 @@ public class B2ListFileVersionsRequest extends BaseB2Request {
 
 		this.addProperty(B2RequestProperties.KEY_MAX_FILE_COUNT, maxFileCount);
 		if(null != startFileName) {
-			this.addProperty(B2RequestProperties.KEY_START_FILE_NAME, Helper.urlEncode(startFileName));
+			this.addProperty(B2RequestProperties.KEY_START_FILE_NAME, URLEncoder.encode(startFileName));
 		}
 
 		if(null != startFileId) {

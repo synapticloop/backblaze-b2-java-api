@@ -1,0 +1,77 @@
+package synapticloop.b2.util;
+
+/*
+ * Copyright (c) 2016 synapticloop.
+ *
+ * All rights reserved.
+ *
+ * This code may contain contributions from other parties which, where
+ * applicable, will be listed in the default build file for the project
+ * ~and/or~ in a file named CONTRIBUTORS.txt in the root of the project.
+ *
+ * This source code and any derived binaries are covered by the terms and
+ * conditions of the Licence agreement ("the Licence").  You may not use this
+ * source code or any derived binaries except in compliance with the Licence.
+ * A copy of the Licence is available in the file named LICENSE.txt shipped with
+ * this source code or binaries.
+ */
+
+import org.apache.commons.io.IOUtils;
+import synapticloop.b2.exception.B2ApiException;
+
+import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
+import java.io.*;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
+public class ChecksumHelper {
+	/**
+	 * Calculate and return the sha1 sum of a file
+	 *
+	 * @param file the file to calculate the sha1 sum on
+	 *
+	 * @return the sha1 of the file
+	 *
+	 * @throws B2ApiException if something went wrong with the calculation
+	 */
+	public static String calculateSha1(File file) throws B2ApiException {
+		try {
+			return calculateSha1(new FileInputStream(file));
+		}
+		catch(FileNotFoundException e) {
+			throw new B2ApiException(e);
+		}
+	}
+
+	/**
+	 * Calculate and return the sha1 sum of an input stream
+	 *
+	 * @param in the input stream to calculate the sha1 sum of
+	 *
+	 * @return the sha1 sum
+	 *
+	 * @throws B2ApiException if there was an error calculating the sha1 sum
+	 */
+	public static String calculateSha1(InputStream in) throws B2ApiException {
+
+		MessageDigest messageDigest;
+		InputStream inputStream = null;
+		try {
+			messageDigest = MessageDigest.getInstance("SHA-1");
+			inputStream = new BufferedInputStream(in);
+			byte[] buffer = new byte[8192];
+			int len = inputStream.read(buffer);
+
+			while (len != -1) {
+				messageDigest.update(buffer, 0, len);
+				len = inputStream.read(buffer);
+			}
+
+			return(new HexBinaryAdapter().marshal(messageDigest.digest()));
+		} catch (NoSuchAlgorithmException | IOException ex) {
+			throw new B2ApiException(ex);
+		} finally {
+			IOUtils.closeQuietly(inputStream);
+		}
+	}
+}
