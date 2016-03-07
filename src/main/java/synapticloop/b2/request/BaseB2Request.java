@@ -115,6 +115,9 @@ public abstract class BaseB2Request {
 
 	/**
 	 * Add header to request replacing previous if any
+	 * 
+	 * @param key the key to add
+	 * @param value the value to add
 	 */
 	protected void addHeader(String key, String value) {
 		requestHeaders.put(key, value);
@@ -122,6 +125,9 @@ public abstract class BaseB2Request {
 
 	/**
 	 * Add query parameter to request replacing previous if any
+	 * 
+	 * @param key the key to add
+	 * @param value the value to add
 	 */
 	protected void addParameter(String key, String value) {
 		requestParameters.put(key, value);
@@ -129,6 +135,9 @@ public abstract class BaseB2Request {
 
 	/**
 	 * Add property to JSON request body
+	 * 
+	 * @param key the key to add
+	 * @param value the value to add
 	 */
 	protected void addProperty(String key, Object value) {
 		requestBodyData.put(key, value);

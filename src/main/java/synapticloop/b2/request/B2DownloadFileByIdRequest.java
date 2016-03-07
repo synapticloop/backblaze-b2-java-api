@@ -25,9 +25,9 @@ import synapticloop.b2.response.B2DownloadFileResponse;
 
 /**
  * <p>Downloads one file from B2.</p>
- * <p>
+ * 
  * <p>The response contains the following headers, which contain the same information they did when the file was uploaded:</p>
- * <p>
+ * 
  * <ul>
  * <li>Content-Length</li>
  * <li>Content-Type</li>
@@ -36,18 +36,18 @@ import synapticloop.b2.response.B2DownloadFileResponse;
  * <li>X-Bz-Content-Sha1</li>
  * <li>X-Bz-Info-*</li>
  * </ul>
- * <p>
+ * 
  * <p>HEAD requests are also supported, and work just like a GET, except that the
  * body of the response is not included. All of the same headers, including
  * Content-Length are returned. See the B2HeadFileByIdRequest</p>
- * <p>
+ * 
  * <p>If the bucket containing the file is set to require authorization, then you
  * must supply the bucket's auth token in the Authorzation header.</p>
- * <p>
+ * 
  * <p>Because errors can happen in network transmission, you should check the
  * SHA1 of the data you receive against the SHA1 returned in the
  * X-Bz-Content-Sha1 header.</p>
- * <p>
+ * 
  * This is the interaction class for the <strong>b2_download_file_by_id</strong> api calls, this was
  * generated from the backblaze api documentation - which can be found here:
  * <a href="http://www.backblaze.com/b2/docs/b2_download_file_by_id.html">http://www.backblaze.com/b2/docs/b2_download_file_by_id.html</a>
@@ -69,18 +69,22 @@ public class B2DownloadFileByIdRequest extends BaseB2Request {
 	}
 
 	/**
-	 * Create a download file by ID request to download the range of bytes
+	 * <p>Create a download file by ID request to download the range of bytes
 	 * between rangeStart and rangeEnd (inclusive)
+	 * </p>
 	 * <p>
 	 * A standard byte-range request, which will return just part of the stored file.
+	 * </p>
 	 * <p>
 	 * The value "bytes=0-99" selects bytes 0 through 99 (inclusive) of the file,
 	 * so it will return the first 100 bytes. Valid byte ranges will cause the
 	 * response to contain a Content-Range header that specifies which bytes are
 	 * returned. Invalid byte ranges will just return the whole file.
+	 * </p>
 	 * <p>
 	 * Note that the SHA1 checksum returned is still the checksum for the entire
 	 * file, so it cannot be used on the byte range.
+	 * </p>
 	 *
 	 * @param client                     Shared HTTP client instance
 	 * @param b2AuthorizeAccountResponse The authorize account response

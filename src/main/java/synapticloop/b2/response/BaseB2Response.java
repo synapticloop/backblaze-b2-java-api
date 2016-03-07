@@ -1,5 +1,7 @@
 package synapticloop.b2.response;
 
+import java.util.Iterator;
+
 /*
  * Copyright (c) 2016 synapticloop.
  * 
@@ -21,9 +23,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import synapticloop.b2.exception.B2ApiException;
 
-import java.util.Iterator;
+import synapticloop.b2.exception.B2ApiException;
 
 public abstract class BaseB2Response {
 	private static final Logger LOGGER = LoggerFactory.getLogger(BaseB2Response.class);
@@ -69,12 +70,24 @@ public abstract class BaseB2Response {
 	}
 
 	/**
-	 * Read and remove object with key from JSON
+	 * Read and remove String with key from JSON
+	 * 
+	 * @param key the key to read as a string and remove
+	 * 
+	 * @return the read key (or null if it doesn't exist)
 	 */
 	protected String readString(String key) {
 		return this.readString(response, key);
 	}
 
+	/**
+	 * Read and remove String with key from JSON object
+	 * 
+	 * @param response The JSON object to read from
+	 * @param key the key to read as a string and remove
+	 * 
+	 * @return the read key (or null if it doesn't exist)
+	 */
 	protected String readString(JSONObject response, String key) {
 		final Object value = response.remove(key);
 		if (null == value || JSONObject.NULL == value) {
@@ -85,7 +98,11 @@ public abstract class BaseB2Response {
 	}
 
 	/**
-	 * Read and remove object with key from JSON
+	 * Read and remove int with key from JSON object
+	 * 
+	 * @param key the key to read as an int and remove
+	 * 
+	 * @return the read key (or -1 if it doesn't exist)
 	 */
 	protected int readInt(String key) {
 		final Object value = response.remove(key);
@@ -97,7 +114,11 @@ public abstract class BaseB2Response {
 	}
 
 	/**
-	 * Read and remove object with key from JSON
+	 * Read and remove long with key from JSON object
+	 * 
+	 * @param key the key to read as a long and remove
+	 * 
+	 * @return the read key (or -1L if it doesn't exist)
 	 */
 	protected long readLong(String key) {
 		final Object value = response.remove(key);
@@ -108,10 +129,25 @@ public abstract class BaseB2Response {
 		return value instanceof Number ? ((Number) value).longValue() : Long.parseLong(value.toString());
 	}
 
+	/**
+	 * Read and remove JSONObject with key from JSON object
+	 * 
+	 * @param key the key to read as a JSONObject and remove
+	 * 
+	 * @return the read key (or null if it doesn't exist)
+	 */
 	protected JSONObject readObject(String key) {
 		return this.readObject(response, key);
 	}
 
+	/**
+	 * Read and remove JSONObject with key from JSON object
+	 * 
+	 * @param response The JSON object to read from
+	 * @param key the key to read as a JSONObject and remove
+	 * 
+	 * @return the read key (or null if it doesn't exist)
+	 */
 	protected JSONObject readObject(JSONObject response, String key) {
 		final Object value = response.remove(key);
 		if (null == value || JSONObject.NULL == value) {
@@ -122,7 +158,11 @@ public abstract class BaseB2Response {
 	}
 
 	/**
-	 * Read and remove object with key from JSON
+	 * Read and remove JSONArray with key from JSON object
+	 * 
+	 * @param key the key to read as a JSONArray and remove
+	 * 
+	 * @return the read key (or null if it doesn't exist)
 	 */
 	protected JSONArray readObjects(String key) {
 		final Object value = response.remove(key);
@@ -139,7 +179,15 @@ public abstract class BaseB2Response {
 	 * the response will not be mapped.  This will loop through the JSON object
 	 * and any key left in the object will generate a 'WARN' message.  The
 	 * response class __MUST__ remove the object (i.e. jsonObject.remove(KEY_NAME))
-	 * after getting the value
+	 * after getting the value, or use the utility methods in this class.  This 
+	 * is used more as a testing tool/sanity test than anything else as there 
+	 * are some instances in where keys are returned, however are not listed in 
+	 * the documentation.
+	 * 
+	 * {@link BaseB2Response#readInt(String)}
+	 * {@link BaseB2Response#readLong(String)}
+	 * {@link BaseB2Response#readString(String)}
+	 * {@link BaseB2Response#readObject(String)}
 	 *
 	 * @param LOGGER     The logger to use
 	 */
