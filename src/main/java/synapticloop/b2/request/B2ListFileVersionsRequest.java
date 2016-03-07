@@ -50,10 +50,9 @@ public class B2ListFileVersionsRequest extends BaseB2Request {
 	 * @param client The HTTP client to use
 	 * @param b2AuthorizeAccountResponse the authorize account response
 	 * @param bucketId The id of the bucket to look for file names in.
-	 * 
-	 * @throws B2ApiException if there was a problem creating the request
 	 */
-	public B2ListFileVersionsRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String bucketId) throws B2ApiException {
+	public B2ListFileVersionsRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse,
+									 String bucketId) {
 		this(client, b2AuthorizeAccountResponse, bucketId, DEFAULT_MAX_FILE_COUNT);
 	}
 
@@ -65,10 +64,9 @@ public class B2ListFileVersionsRequest extends BaseB2Request {
 	 * @param bucketId The id of the bucket to look for file names in.
 	 * @param maxFileCount The maximum number of files to return from this call. 
 	 *     The default value is 100, and the maximum allowed is 1000.
-	 * 
-	 * @throws B2ApiException if there was a problem creating the request
 	 */
-	public B2ListFileVersionsRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String bucketId, Integer maxFileCount) throws B2ApiException {
+	public B2ListFileVersionsRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse,
+									 String bucketId, Integer maxFileCount) {
 		this(client, b2AuthorizeAccountResponse, bucketId, maxFileCount, null, null);
 	}
 
@@ -89,30 +87,16 @@ public class B2ListFileVersionsRequest extends BaseB2Request {
 	 *     ID will be first in the list.
 	 * @param startFileId The first file ID to return. startFileName must also 
 	 *     be provided if startFileId is specified. (See startFileName.)
-	 * 
-	 * @throws B2ApiException if there was an error creating the request
 	 */
-	public B2ListFileVersionsRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String bucketId, Integer maxFileCount, String startFileName, String startFileId) throws B2ApiException {
+	public B2ListFileVersionsRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse,
+									 String bucketId, Integer maxFileCount, String startFileName, String startFileId) {
 		super(client, b2AuthorizeAccountResponse, b2AuthorizeAccountResponse.getApiUrl() + B2_LIST_FILE_VERSIONS);
 
-		if(null != startFileId) {
-			if(null == startFileName) {
-				throw new B2ApiException(String.format("Must include a '%s', if you are also include a '%s'.",
-						B2RequestProperties.KEY_START_FILE_NAME, B2RequestProperties.KEY_START_FILE_ID));
-			}
-
-		}
-
 		this.addProperty(B2RequestProperties.KEY_BUCKET_ID, bucketId);
-		if(maxFileCount > MAX_FILE_COUNT_RETURN) {
-			throw new B2ApiException(String.format("Maximum return file count is %d", MAX_FILE_COUNT_RETURN));
-		}
-
 		this.addProperty(B2RequestProperties.KEY_MAX_FILE_COUNT, maxFileCount);
 		if(null != startFileName) {
 			this.addProperty(B2RequestProperties.KEY_START_FILE_NAME, Helper.urlEncode(startFileName));
 		}
-
 		if(null != startFileId) {
 			this.addProperty(B2RequestProperties.KEY_START_FILE_ID, startFileId);
 		}

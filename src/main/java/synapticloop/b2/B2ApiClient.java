@@ -54,6 +54,7 @@ import synapticloop.b2.response.B2FileResponse;
 import synapticloop.b2.response.B2GetUploadUrlResponse;
 import synapticloop.b2.response.B2HideFileResponse;
 import synapticloop.b2.response.B2ListFilesResponse;
+import synapticloop.b2.util.Helper;
 
 /**
  * This is a wrapper class for the underlying calls to the request/response
@@ -325,7 +326,8 @@ public class B2ApiClient {
 	 */
 	public B2FileResponse uploadFile(String bucketId, String fileName, File file, String mimeType, Map<String, String> fileInfo) throws B2ApiException {
 		B2GetUploadUrlResponse b2GetUploadUrlResponse = new B2GetUploadUrlRequest(client, b2AuthorizeAccountResponse, bucketId).getResponse();
-		return new B2UploadFileRequest(client, b2AuthorizeAccountResponse, b2GetUploadUrlResponse, fileName, file, mimeType, fileInfo).getResponse();
+		return new B2UploadFileRequest(client, b2AuthorizeAccountResponse, b2GetUploadUrlResponse, fileName, file,
+				Helper.calculateSha1(file), mimeType, fileInfo).getResponse();
 	}
 
 	/**
@@ -344,7 +346,8 @@ public class B2ApiClient {
 
 	public B2FileResponse uploadFile(String bucketId, String fileName, File file, Map<String, String> fileInfo) throws B2ApiException {
 		B2GetUploadUrlResponse b2GetUploadUrlResponse = new B2GetUploadUrlRequest(client, b2AuthorizeAccountResponse, bucketId).getResponse();
-		return new B2UploadFileRequest(client, b2AuthorizeAccountResponse, b2GetUploadUrlResponse, fileName, file, fileInfo).getResponse();
+		return new B2UploadFileRequest(client, b2AuthorizeAccountResponse, b2GetUploadUrlResponse, fileName, file,
+				Helper.calculateSha1(file), fileInfo).getResponse();
 	}
 
 	/**
@@ -365,7 +368,8 @@ public class B2ApiClient {
 	 */
 	public B2FileResponse uploadFile(String bucketId, String fileName, File file, String mimeType) throws B2ApiException {
 		B2GetUploadUrlResponse b2GetUploadUrlResponse = new B2GetUploadUrlRequest(client, b2AuthorizeAccountResponse, bucketId).getResponse();
-		return new B2UploadFileRequest(client, b2AuthorizeAccountResponse, b2GetUploadUrlResponse, fileName, file, mimeType).getResponse();
+		return new B2UploadFileRequest(client, b2AuthorizeAccountResponse, b2GetUploadUrlResponse, fileName, file,
+				Helper.calculateSha1(file), mimeType).getResponse();
 	}
 
 	/**
@@ -383,7 +387,8 @@ public class B2ApiClient {
 	 */
 	public B2FileResponse uploadFile(String bucketId, String fileName, File file) throws B2ApiException {
 		B2GetUploadUrlResponse b2GetUploadUrlResponse = new B2GetUploadUrlRequest(client, b2AuthorizeAccountResponse, bucketId).getResponse();
-		return new B2UploadFileRequest(client, b2AuthorizeAccountResponse, b2GetUploadUrlResponse, fileName, file).getResponse();
+		return new B2UploadFileRequest(client, b2AuthorizeAccountResponse, b2GetUploadUrlResponse, fileName,
+				file, Helper.calculateSha1(file)).getResponse();
 	}
 
 

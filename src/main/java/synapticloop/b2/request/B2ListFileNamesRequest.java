@@ -52,10 +52,8 @@ public class B2ListFileNamesRequest extends BaseB2Request {
 	 * @param client the HTTP client to use
 	 * @param b2AuthorizeAccountResponse the authorize account response
 	 * @param bucketId the id of the bucket to list
-	 * @throws B2ApiException if the requested maximum number of files to be 
-	 *     returned is greater than the allowable limt
 	 */
-	public B2ListFileNamesRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String bucketId) throws B2ApiException {
+	public B2ListFileNamesRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String bucketId) {
 		this(client, b2AuthorizeAccountResponse, bucketId, null, DEFAULT_MAX_FILE_COUNT);
 	}
 
@@ -67,12 +65,8 @@ public class B2ListFileNamesRequest extends BaseB2Request {
 	 * @param bucketId the id of the bucket to list
 	 * @param maxFileCount The maximum number of files to return from this call. 
 	 *     The default value is 100, and the maximum allowed is 1000.
-	 * @throws B2ApiException if the requested maximum number of files to be 
-	 *     returned is greater than the allowable limt
-	 *
-	 * @throws B2ApiException if there was an error constructing the request
 	 */
-	public B2ListFileNamesRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String bucketId, Integer maxFileCount) throws B2ApiException {
+	public B2ListFileNamesRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String bucketId, Integer maxFileCount) {
 		this(client, b2AuthorizeAccountResponse, bucketId, null, maxFileCount);
 	}
 
@@ -87,22 +81,14 @@ public class B2ListFileNamesRequest extends BaseB2Request {
 	 *     file name after this the first one after this name.
 	 * @param maxFileCount The maximum number of files to return from this call. 
 	 *     The default value is 100, and the maximum allowed is 1000.
-	 * @throws B2ApiException if the requested maximum number of files to be 
-	 *     returned is greater than the allowable limit
-	 *
-	 * @throws B2ApiException if there was an error constructing the request
 	 */
-	public B2ListFileNamesRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String bucketId, String startFileName, Integer maxFileCount) throws B2ApiException {
+	public B2ListFileNamesRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String bucketId, String startFileName, Integer maxFileCount) {
 		super(client, b2AuthorizeAccountResponse, b2AuthorizeAccountResponse.getApiUrl() + B2_LIST_FILE_NAMES);
 
 		this.addProperty(B2RequestProperties.KEY_BUCKET_ID, bucketId);
 
 		if(null != startFileName) {
 			this.addProperty(B2RequestProperties.KEY_START_FILE_NAME, Helper.urlEncode(startFileName));
-		}
-
-		if(maxFileCount > MAX_FILE_COUNT_RETURN) {
-			throw new B2ApiException("Maximum allowed return file count is " + MAX_FILE_COUNT_RETURN);
 		}
 
 		this.addProperty(B2RequestProperties.KEY_MAX_FILE_COUNT, maxFileCount);

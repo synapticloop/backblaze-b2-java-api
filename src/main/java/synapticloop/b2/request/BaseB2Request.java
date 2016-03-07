@@ -54,9 +54,6 @@ public abstract class BaseB2Request {
 	public static final String VALUE_APPLICATION_X_WWW_FORM_URLENCODED = "application/x-www-form-urlencoded";
 	public static final String VALUE_UTF_8 = "UTF-8";
 
-	public static final int MAX_FILE_COUNT_RETURN = 1000;
-	public static final int MAX_FILE_INFO_HEADERS = 10;
-
 	private final Map<String, String> requestHeaders = new HashMap<>();
 
 	/**

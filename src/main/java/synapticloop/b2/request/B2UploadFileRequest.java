@@ -50,10 +50,8 @@ import synapticloop.b2.util.Helper;
  */
 public class B2UploadFileRequest extends BaseB2Request {
 	private final HttpEntity entity;
-	private final String mimeType;
-	private final String fileName;
 
-	protected static final String CONTENT_TYPE_VALUE_B2_X_AUTO = "b2/x-auto";
+	private static final String CONTENT_TYPE_VALUE_B2_X_AUTO = "b2/x-auto";
 
 	/**
 	 * Instantiate a upload file request in order to place a file on the B2 bucket,
@@ -65,13 +63,11 @@ public class B2UploadFileRequest extends BaseB2Request {
 	 * @param fileName the name of the file
 	 * @param file the file to upload
 	 * @param fileInfo the file info map which are passed through as headers prefixed by "X-Bz-Info-"
-	 * 
-	 * @throws B2ApiException if there was an error in the request
 	 */
 	public B2UploadFileRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse, 
-			B2GetUploadUrlResponse b2GetUploadUrlResponse, String fileName, File file, Map<String, String> fileInfo) throws B2ApiException {
+			B2GetUploadUrlResponse b2GetUploadUrlResponse, String fileName, File file, String sha1Checksum, Map<String, String> fileInfo) {
 
-		this(client, b2AuthorizeAccountResponse, b2GetUploadUrlResponse, fileName, file, null, fileInfo);
+		this(client, b2AuthorizeAccountResponse, b2GetUploadUrlResponse, fileName, file, sha1Checksum, null, fileInfo);
 	}
 
 	/**
@@ -90,13 +86,11 @@ public class B2UploadFileRequest extends BaseB2Request {
 	 *     to automatically set the stored Content-Type post upload. In the case 
 	 *     where a file extension is absent or the lookup fails, the Content-Type 
 	 *     is set to application/octet-stream.
-	 * 
-	 * @throws B2ApiException if there was an error in the request
 	 */
 	public B2UploadFileRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse, 
-			B2GetUploadUrlResponse b2GetUploadUrlResponse, String fileName, File file, String mimeType) throws B2ApiException {
+			B2GetUploadUrlResponse b2GetUploadUrlResponse, String fileName, File file, String sha1Checksum, String mimeType) {
 
-		this(client, b2AuthorizeAccountResponse, b2GetUploadUrlResponse, fileName, file, mimeType, null);
+		this(client, b2AuthorizeAccountResponse, b2GetUploadUrlResponse, fileName, file, sha1Checksum, mimeType, null);
 	}
 
 	/**
@@ -108,13 +102,11 @@ public class B2UploadFileRequest extends BaseB2Request {
 	 * @param b2GetUploadUrlResponse the upload URL for this request
 	 * @param fileName the name of the file
 	 * @param file the file to upload
-	 * 
-	 * @throws B2ApiException if there was an error in the request
 	 */
 	public B2UploadFileRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse,
-			B2GetUploadUrlResponse b2GetUploadUrlResponse, String fileName, File file) throws B2ApiException {
+			B2GetUploadUrlResponse b2GetUploadUrlResponse, String fileName, File file, String sha1Checksum) {
 
-		this(client, b2AuthorizeAccountResponse, b2GetUploadUrlResponse, fileName, file, null, null);
+		this(client, b2AuthorizeAccountResponse, b2GetUploadUrlResponse, fileName, file, sha1Checksum, null, null);
 	}
 
 	/**
@@ -135,19 +127,18 @@ public class B2UploadFileRequest extends BaseB2Request {
 	 *     is set to application/octet-stream.
 	 * @param fileInfo the file info map which are passed through as headers
 	 *     prefixed by "X-Bz-Info-"
-	 * 
-	 * @throws B2ApiException if there was an error in the request
 	 */
 	public B2UploadFileRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse, 
-			B2GetUploadUrlResponse b2GetUploadUrlResponse, String fileName, File file, String mimeType, 
-			Map<String, String> fileInfo) throws B2ApiException {
+							   B2GetUploadUrlResponse b2GetUploadUrlResponse, String fileName, File file,
+							   String sha1Checksum, String mimeType,
+							   Map<String, String> fileInfo) {
 
 		this(client, 
 				b2AuthorizeAccountResponse, 
 				b2GetUploadUrlResponse, 
 				fileName, 
 				new FileEntity(file),
-				Helper.calculateSha1(file),
+				sha1Checksum,
 				mimeType, fileInfo);
 	}
 
@@ -175,31 +166,18 @@ public class B2UploadFileRequest extends BaseB2Request {
 	 * @param fileInfo A map of information that will be stored with the file. Up
 	 *     to 10 of keys may be present.. The same file info headers sent with the 
 	 *     upload will be returned with the download. 
-	 *     
-	 * @throws B2ApiException If the number of file info headers is greater than the allowable
 	 */
-	public B2UploadFileRequest(CloseableHttpClient client, 
-			B2AuthorizeAccountResponse b2AuthorizeAccountResponse, 
+	public B2UploadFileRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse,
 			B2GetUploadUrlResponse b2GetUploadUrlResponse, 
-			String fileName, 
-			HttpEntity entity, 
-			String sha1Checksum, 
-			String mimeType, 
-			Map<String, String> fileInfo) throws B2ApiException {
+			String fileName, HttpEntity entity, String sha1Checksum, String mimeType,  Map<String, String> fileInfo) {
 
 		super(client, b2AuthorizeAccountResponse, b2GetUploadUrlResponse.getUploadUrl());
 
-		this.fileName = fileName;
 		this.entity = entity;
-		this.mimeType = mimeType;
 
-		// now go through and add in the 'X-Bz-Info-*' headers
+		// Add 'X-Bz-Info-*' headers
 		if(null != fileInfo) {
 			int fileInfoSize = fileInfo.size();
-			if(fileInfoSize > MAX_FILE_INFO_HEADERS) {
-				throw new B2ApiException(String.format("The maximum allowable file info size is '%d', you sent '%d'", MAX_FILE_INFO_HEADERS, fileInfoSize));
-			}
-
 			for(final String key : fileInfo.keySet()) {
 				this.addHeader(B2ResponseHeaders.HEADER_X_BZ_INFO_PREFIX + Helper.urlEncode(key), Helper.urlEncode(fileInfo.get(key)));
 			}
