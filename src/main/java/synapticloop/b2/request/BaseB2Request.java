@@ -57,19 +57,19 @@ public abstract class BaseB2Request {
 	public static final int MAX_FILE_COUNT_RETURN = 1000;
 	public static final int MAX_FILE_INFO_HEADERS = 10;
 
-	protected final Map<String, String> requestHeaders = new HashMap<>();
+	private final Map<String, String> requestHeaders = new HashMap<>();
 
 	/**
 	 * Query parameters for request URI
 	 */
-	protected Map<String, String> requestParameters = new HashMap<>();
+	private final Map<String, String> requestParameters = new HashMap<>();
 
 	/**
 	 * POST data key value pairs
 	 */
-	protected Map<String, Object> requestBodyData = new HashMap<>();
+	private final Map<String, Object> requestBodyData = new HashMap<>();
 
-	private CloseableHttpClient client;
+	private final CloseableHttpClient client;
 
 	private final String url;
 
@@ -109,9 +109,35 @@ public abstract class BaseB2Request {
 
 	protected BaseB2Request(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String url, Map<String, String> headers) {
 		this(client, url);
+<<<<<<< HEAD
 
 		this.requestHeaders.put(HttpHeaders.CONTENT_TYPE, VALUE_APPLICATION_X_WWW_FORM_URLENCODED);
 		this.requestHeaders.put(HttpHeaders.AUTHORIZATION, b2AuthorizeAccountResponse.getAuthorizationToken());
+=======
+		this.addHeader(HttpHeaders.CONTENT_TYPE, VALUE_APPLICATION_X_WWW_FORM_URLENCODED);
+		this.addHeader(HttpHeaders.AUTHORIZATION, b2AuthorizeAccountResponse.getAuthorizationToken());
+	}
+
+	/**
+	 * Add header to request replacing previous if any
+	 */
+	protected void addHeader(String key, String value) {
+		requestHeaders.put(key, value);
+	}
+
+	/**
+	 * Add query parameter to request replacing previous if any
+	 */
+	protected void addParameter(String key, String value) {
+		requestParameters.put(key, value);
+	}
+
+	/**
+	 * Add property to JSON request body
+	 */
+	protected void addProperty(String key, Object value) {
+		requestBodyData.put(key, value);
+>>>>>>> pr/8
 	}
 
 	/**

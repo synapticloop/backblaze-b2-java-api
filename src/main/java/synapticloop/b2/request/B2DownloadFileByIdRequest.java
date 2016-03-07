@@ -91,12 +91,12 @@ public class B2DownloadFileByIdRequest extends BaseB2Request {
 									 String fileId, long rangeStart, long rangeEnd) {
 
 		super(client, b2AuthorizeAccountResponse, b2AuthorizeAccountResponse.getDownloadUrl() + B2_DOWNLOAD_FILE_BY_ID);
-		requestParameters.put(B2RequestProperties.KEY_FILE_ID, fileId);
+		this.addHeader(B2RequestProperties.KEY_FILE_ID, fileId);
 		if (rangeStart > -1) {
 			if (rangeEnd > -1) {
-				requestHeaders.put(HttpHeaders.RANGE, String.format("bytes=%d-%d", rangeStart, rangeEnd));
+				this.addHeader(HttpHeaders.RANGE, String.format("bytes=%d-%d", rangeStart, rangeEnd));
 			} else {
-				requestHeaders.put(HttpHeaders.RANGE, String.format("bytes=%d-", rangeStart));
+				this.addHeader(HttpHeaders.RANGE, String.format("bytes=%d-", rangeStart));
 			}
 		}
 	}

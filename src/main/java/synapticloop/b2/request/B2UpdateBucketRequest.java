@@ -53,9 +53,9 @@ public class B2UpdateBucketRequest extends BaseB2Request {
 	public B2UpdateBucketRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String bucketId, BucketType bucketType) {
 		super(client, b2AuthorizeAccountResponse, b2AuthorizeAccountResponse.getApiUrl() + B2_UPDATE_BUCKET);
 
-		requestBodyData.put(B2RequestProperties.KEY_ACCOUNT_ID, b2AuthorizeAccountResponse.getAccountId());
-		requestBodyData.put(B2RequestProperties.KEY_BUCKET_ID, bucketId);
-		requestBodyData.put(B2RequestProperties.KEY_BUCKET_TYPE, bucketType.toString());
+		this.addProperty(B2RequestProperties.KEY_ACCOUNT_ID, b2AuthorizeAccountResponse.getAccountId());
+		this.addProperty(B2RequestProperties.KEY_BUCKET_ID, bucketId);
+		this.addProperty(B2RequestProperties.KEY_BUCKET_TYPE, bucketType.toString());
 	}
 
 	/**

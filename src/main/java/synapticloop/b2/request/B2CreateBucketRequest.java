@@ -60,9 +60,9 @@ public class B2CreateBucketRequest extends BaseB2Request {
 	public B2CreateBucketRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String bucketName, BucketType bucketType) {
 		super(client, b2AuthorizeAccountResponse, b2AuthorizeAccountResponse.getApiUrl() + B2_CREATE_BUCKET);
 
-		requestBodyData.put(B2RequestProperties.KEY_ACCOUNT_ID, b2AuthorizeAccountResponse.getAccountId());
-		requestBodyData.put(B2RequestProperties.KEY_BUCKET_NAME, bucketName);
-		requestBodyData.put(B2RequestProperties.KEY_BUCKET_TYPE, bucketType.toString());
+		this.addProperty(B2RequestProperties.KEY_ACCOUNT_ID, b2AuthorizeAccountResponse.getAccountId());
+		this.addProperty(B2RequestProperties.KEY_BUCKET_NAME, bucketName);
+		this.addProperty(B2RequestProperties.KEY_BUCKET_TYPE, bucketType.toString());
 	}
 
 	/**

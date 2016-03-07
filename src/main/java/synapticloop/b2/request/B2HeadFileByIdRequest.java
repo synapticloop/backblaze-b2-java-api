@@ -66,7 +66,7 @@ public class B2HeadFileByIdRequest extends BaseB2Request {
 	 */
 	public B2HeadFileByIdRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String fileId) {
 		super(client, b2AuthorizeAccountResponse, b2AuthorizeAccountResponse.getDownloadUrl() + B2_DOWNLOAD_FILE_BY_ID);
-		requestParameters.put(B2RequestProperties.KEY_FILE_ID, fileId);
+		this.addParameter(B2RequestProperties.KEY_FILE_ID, fileId);
 	}
 
 	/**

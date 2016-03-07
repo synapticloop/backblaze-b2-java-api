@@ -51,7 +51,7 @@ public class B2GetUploadUrlRequest extends BaseB2Request {
 	public B2GetUploadUrlRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String bucketId) {
 		super(client, b2AuthorizeAccountResponse, b2AuthorizeAccountResponse.getApiUrl() + B2_GET_UPLOAD_URL);
 
-		requestBodyData.put(B2RequestProperties.KEY_BUCKET_ID, bucketId);
+		this.addProperty(B2RequestProperties.KEY_BUCKET_ID, bucketId);
 	}
 
 	/**

@@ -201,13 +201,19 @@ public class B2UploadFileRequest extends BaseB2Request {
 			}
 
 			for(final String key : fileInfo.keySet()) {
-				requestHeaders.put(B2ResponseHeaders.HEADER_X_BZ_INFO_PREFIX + Helper.urlEncode(key), Helper.urlEncode(fileInfo.get(key)));
+				this.addHeader(B2ResponseHeaders.HEADER_X_BZ_INFO_PREFIX + Helper.urlEncode(key), Helper.urlEncode(fileInfo.get(key)));
 			}
 		}
 
-		requestHeaders.put(B2ResponseHeaders.HEADER_X_BZ_CONTENT_SHA1, sha1Checksum);
+		this.addHeader(B2ResponseHeaders.HEADER_X_BZ_CONTENT_SHA1, sha1Checksum);
 		// Override generic authorization header
-		requestHeaders.put(HttpHeaders.AUTHORIZATION, b2GetUploadUrlResponse.getAuthorizationToken());
+		this.addHeader(HttpHeaders.AUTHORIZATION, b2GetUploadUrlResponse.getAuthorizationToken());
+		if(null == mimeType) {
+			this.addHeader(B2ResponseHeaders.HEADER_CONTENT_TYPE, CONTENT_TYPE_VALUE_B2_X_AUTO);
+		} else {
+			this.addHeader(B2ResponseHeaders.HEADER_CONTENT_TYPE, mimeType);
+		}
+		this.addHeader(B2ResponseHeaders.HEADER_X_BZ_FILE_NAME, Helper.urlEncode(fileName));
 	}
 
 	/**
@@ -219,14 +225,6 @@ public class B2UploadFileRequest extends BaseB2Request {
 	 */
 
 	public B2FileResponse getResponse() throws B2ApiException {
-		if(null == mimeType) {
-			requestHeaders.put(B2ResponseHeaders.HEADER_CONTENT_TYPE, CONTENT_TYPE_VALUE_B2_X_AUTO);
-		} else {
-			requestHeaders.put(B2ResponseHeaders.HEADER_CONTENT_TYPE, mimeType);
-		}
-
-		requestHeaders.put(B2ResponseHeaders.HEADER_X_BZ_FILE_NAME, Helper.urlEncode(fileName));
-
 		try {
 			return new B2FileResponse(EntityUtils.toString(executePost(entity).getEntity()));
 		} catch(IOException e) {

@@ -49,8 +49,8 @@ public class B2DeleteBucketRequest extends BaseB2Request {
 	public B2DeleteBucketRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String bucketId) {
 		super(client, b2AuthorizeAccountResponse, b2AuthorizeAccountResponse.getApiUrl() + B2_DELETE_BUCKET);
 
-		requestBodyData.put(B2RequestProperties.KEY_ACCOUNT_ID, b2AuthorizeAccountResponse.getAccountId());
-		requestBodyData.put(B2RequestProperties.KEY_BUCKET_ID, bucketId);
+		this.addProperty(B2RequestProperties.KEY_ACCOUNT_ID, b2AuthorizeAccountResponse.getAccountId());
+		this.addProperty(B2RequestProperties.KEY_BUCKET_ID, bucketId);
 	}
 
 	/**

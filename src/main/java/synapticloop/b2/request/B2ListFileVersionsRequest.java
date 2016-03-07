@@ -103,18 +103,18 @@ public class B2ListFileVersionsRequest extends BaseB2Request {
 
 		}
 
-		requestBodyData.put(B2RequestProperties.KEY_BUCKET_ID, bucketId);
+		this.addProperty(B2RequestProperties.KEY_BUCKET_ID, bucketId);
 		if(maxFileCount > MAX_FILE_COUNT_RETURN) {
 			throw new B2ApiException(String.format("Maximum return file count is %d", MAX_FILE_COUNT_RETURN));
 		}
 
-		requestBodyData.put(B2RequestProperties.KEY_MAX_FILE_COUNT, maxFileCount);
+		this.addProperty(B2RequestProperties.KEY_MAX_FILE_COUNT, maxFileCount);
 		if(null != startFileName) {
-			requestBodyData.put(B2RequestProperties.KEY_START_FILE_NAME, Helper.urlEncode(startFileName));
+			this.addProperty(B2RequestProperties.KEY_START_FILE_NAME, Helper.urlEncode(startFileName));
 		}
 
 		if(null != startFileId) {
-			requestBodyData.put(B2RequestProperties.KEY_START_FILE_ID, startFileId);
+			this.addProperty(B2RequestProperties.KEY_START_FILE_ID, startFileId);
 		}
 	}
 
@@ -126,10 +126,6 @@ public class B2ListFileVersionsRequest extends BaseB2Request {
 	 * @throws B2ApiException if something went wrong
 	 */
 	public B2ListFilesResponse getResponse() throws B2ApiException {
-		if(null != requestBodyData.get(B2RequestProperties.KEY_START_FILE_ID) && null == requestBodyData.get(B2RequestProperties.KEY_START_FILE_NAME)) {
-			throw new B2ApiException(String.format("You __MUST__ include a '%s', if you are also include a '%s'." + B2RequestProperties.KEY_START_FILE_NAME, B2RequestProperties.KEY_START_FILE_ID));
-		}
-
 		try {
 			return new B2ListFilesResponse(EntityUtils.toString(executePost().getEntity()));
 		} catch(IOException e) {
