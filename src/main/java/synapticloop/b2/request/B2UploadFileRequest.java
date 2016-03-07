@@ -181,7 +181,6 @@ public class B2UploadFileRequest extends BaseB2Request {
 
 		// Add 'X-Bz-Info-*' headers
 		if(null != fileInfo) {
-			int fileInfoSize = fileInfo.size();
 			for(final String key : fileInfo.keySet()) {
 				this.addHeader(B2ResponseHeaders.HEADER_X_BZ_INFO_PREFIX + URLEncoder.encode(key), URLEncoder.encode(fileInfo.get(key)));
 			}
