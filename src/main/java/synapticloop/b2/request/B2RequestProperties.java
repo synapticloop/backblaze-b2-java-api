@@ -27,7 +27,6 @@ public final class B2RequestProperties {
 	public static final String KEY_START_FILE_ID = "startFileId";
 	public static final String KEY_START_FILE_NAME = "startFileName";
 	public static final int MAX_FILE_COUNT_RETURN = 1000;
-	public static final String REQUEST_PROPERTY_CHARSET = "charset";
 	public static final String REQUEST_PROPERTY_CONTENT_TYPE = "Content-Type";
 	public static final String REQUEST_PROPERTY_AUTHORIZATION = "Authorization";
 

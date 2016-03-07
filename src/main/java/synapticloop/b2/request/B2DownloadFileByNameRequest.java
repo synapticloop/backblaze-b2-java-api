@@ -77,9 +77,9 @@ public class B2DownloadFileByNameRequest extends BaseB2Request {
 				b2AuthorizeAccountResponse.getDownloadUrl() + "/file/" + Helper.urlEncode(bucketName) + "/" + Helper.urlEncodeFileName(fileName));
 		if (rangeStart > -1) {
 			if (rangeEnd > -1) {
-				requestHeaders.put(HttpHeaders.RANGE, String.format("bytes=%d-%d", rangeStart, rangeEnd));
+				this.addHeader(HttpHeaders.RANGE, String.format("bytes=%d-%d", rangeStart, rangeEnd));
 			} else {
-				requestHeaders.put(HttpHeaders.RANGE, String.format("bytes=%d-", rangeStart));
+				this.addHeader(HttpHeaders.RANGE, String.format("bytes=%d-", rangeStart));
 			}
 		}
 	}

@@ -95,17 +95,17 @@ public class B2ListFileNamesRequest extends BaseB2Request {
 	public B2ListFileNamesRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String bucketId, String startFileName, Integer maxFileCount) throws B2ApiException {
 		super(client, b2AuthorizeAccountResponse, b2AuthorizeAccountResponse.getApiUrl() + B2_LIST_FILE_NAMES);
 
-		requestBodyData.put(B2RequestProperties.KEY_BUCKET_ID, bucketId);
+		this.addProperty(B2RequestProperties.KEY_BUCKET_ID, bucketId);
 
 		if(null != startFileName) {
-			requestBodyData.put(B2RequestProperties.KEY_START_FILE_NAME, Helper.urlEncode(startFileName));
+			this.addProperty(B2RequestProperties.KEY_START_FILE_NAME, Helper.urlEncode(startFileName));
 		}
 
 		if(maxFileCount > MAX_FILE_COUNT_RETURN) {
 			throw new B2ApiException("Maximum allowed return file count is " + MAX_FILE_COUNT_RETURN);
 		}
 
-		requestBodyData.put(B2RequestProperties.KEY_MAX_FILE_COUNT, maxFileCount);
+		this.addProperty(B2RequestProperties.KEY_MAX_FILE_COUNT, maxFileCount);
 	}
 
 	/**

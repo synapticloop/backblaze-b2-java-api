@@ -62,7 +62,7 @@ public class B2AuthorizeAccountRequest extends BaseB2Request {
 
 		super(client, B2_AUTHORIZE_ACCOUNT);
 
-		requestHeaders.put(HttpHeaders.AUTHORIZATION,  String.format("Basic %s", Base64.encodeBase64String((String.format("%s:%s", accountId, applicationKey)).getBytes())));
+		this.addHeader(HttpHeaders.AUTHORIZATION,  String.format("Basic %s", Base64.encodeBase64String((String.format("%s:%s", accountId, applicationKey)).getBytes())));
 	}
 
 	/**
