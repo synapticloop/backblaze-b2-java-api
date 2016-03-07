@@ -39,18 +39,11 @@ public class B2GetUploadUrlResponse extends BaseB2Response {
 	public B2GetUploadUrlResponse(String json) throws B2ApiException {
 		super(json);
 
-		this.bucketId = response.optString(B2ResponseProperties.KEY_BUCKET_ID, null);
-		this.uploadUrl = response.optString(B2ResponseProperties.KEY_UPLOAD_URL, null);
-		this.authorizationToken = response.optString(B2ResponseProperties.KEY_AUTHORIZATION_TOKEN, null);
+		this.bucketId = this.readString(B2ResponseProperties.KEY_BUCKET_ID);
+		this.uploadUrl = this.readString(B2ResponseProperties.KEY_UPLOAD_URL);
+		this.authorizationToken = this.readString(B2ResponseProperties.KEY_AUTHORIZATION_TOKEN);
 
-		if(LOGGER.isWarnEnabled()) {
-			response.remove(B2ResponseProperties.KEY_BUCKET_ID);
-			response.remove(B2ResponseProperties.KEY_UPLOAD_URL);
-			response.remove(B2ResponseProperties.KEY_AUTHORIZATION_TOKEN);
-
-			warnOnMissedKeys(LOGGER, response);
-		}
-
+		this.warnOnMissedKeys(LOGGER);
 	}
 
 	/**

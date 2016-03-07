@@ -42,17 +42,12 @@ public final class B2ListBucketsResponse extends BaseB2Response {
 		super(json);
 
 		buckets = new ArrayList<>();
-		JSONArray optJSONArray = response.optJSONArray(B2ResponseProperties.KEY_BUCKETS);
+		JSONArray optJSONArray = this.readObjects(B2ResponseProperties.KEY_BUCKETS);
 		for(int i = 0; i < optJSONArray.length(); i++) {
 			buckets.add(new B2BucketResponse(optJSONArray.optJSONObject(i)));
 		}
 
-		if(LOGGER.isWarnEnabled()) {
-			response.remove(B2ResponseProperties.KEY_BUCKETS);
-
-			warnOnMissedKeys(LOGGER, response);
-		}
-
+		this.warnOnMissedKeys(LOGGER);
 	}
 
 	/**

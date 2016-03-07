@@ -57,19 +57,12 @@ public class B2AuthorizeAccountResponse extends BaseB2Response {
 	public B2AuthorizeAccountResponse(String json) throws B2ApiException {
 		super(json);
 
-		this.accountId = response.optString(B2ResponseProperties.KEY_ACCOUNT_ID, null);
-		this.apiUrl = response.optString(B2ResponseProperties.KEY_API_URL, null);
-		this.authorizationToken = response.optString(B2ResponseProperties.KEY_AUTHORIZATION_TOKEN, null);
-		this.downloadUrl = response.optString(B2ResponseProperties.KEY_DOWNLOAD_URL, null);
+		this.accountId = this.readString(B2ResponseProperties.KEY_ACCOUNT_ID);
+		this.apiUrl = this.readString(B2ResponseProperties.KEY_API_URL);
+		this.authorizationToken = this.readString(B2ResponseProperties.KEY_AUTHORIZATION_TOKEN);
+		this.downloadUrl = this.readString(B2ResponseProperties.KEY_DOWNLOAD_URL);
 
-		if(LOGGER.isWarnEnabled()) {
-			response.remove(B2ResponseProperties.KEY_ACCOUNT_ID);
-			response.remove(B2ResponseProperties.KEY_API_URL);
-			response.remove(B2ResponseProperties.KEY_AUTHORIZATION_TOKEN);
-			response.remove(B2ResponseProperties.KEY_DOWNLOAD_URL);
-
-			warnOnMissedKeys(LOGGER, response);
-		}
+		this.warnOnMissedKeys(LOGGER);
 	}
 
 	/**

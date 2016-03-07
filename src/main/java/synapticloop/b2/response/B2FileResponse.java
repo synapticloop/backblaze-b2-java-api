@@ -50,37 +50,26 @@ public class B2FileResponse extends BaseB2Response {
 	public B2FileResponse(String json) throws B2ApiException {
 		super(json);
 
-		this.fileId = response.optString(B2ResponseProperties.KEY_FILE_ID, null);
-		this.fileName = response.optString(B2ResponseProperties.KEY_FILE_NAME, null);
-		this.accountId = response.optString(B2ResponseProperties.KEY_ACCOUNT_ID, null);
-		this.bucketId = response.optString(B2ResponseProperties.KEY_BUCKET_ID, null);
-		this.contentLength = response.optLong(B2ResponseProperties.KEY_CONTENT_LENGTH, -1l);
-		this.contentSha1 = response.optString(B2ResponseProperties.KEY_CONTENT_SHA1, null);
-		this.contentType = response.optString(B2ResponseProperties.KEY_CONTENT_TYPE, null);
+		this.fileId = this.readString(B2ResponseProperties.KEY_FILE_ID);
+		this.fileName = this.readString(B2ResponseProperties.KEY_FILE_NAME);
+		this.accountId = this.readString(B2ResponseProperties.KEY_ACCOUNT_ID);
+		this.bucketId = this.readString(B2ResponseProperties.KEY_BUCKET_ID);
+		this.contentLength = this.readLong(B2ResponseProperties.KEY_CONTENT_LENGTH);
+		this.contentSha1 = this.readString(B2ResponseProperties.KEY_CONTENT_SHA1);
+		this.contentType = this.readString(B2ResponseProperties.KEY_CONTENT_TYPE);
 
 		this.fileInfo = new HashMap<String, String>();
 
-		JSONObject fileInfoObject = response.optJSONObject(B2ResponseProperties.KEY_FILE_INFO);
+		JSONObject fileInfoObject = this.readObject(B2ResponseProperties.KEY_FILE_INFO);
 		if(null != fileInfoObject) {
 			Iterator keys = fileInfoObject.keys();
 			while (keys.hasNext()) {
 				String key = (String) keys.next();
-				fileInfo.put(key, fileInfoObject.optString(key, null));
+				fileInfo.put(key, this.readString(fileInfoObject, key));
 			}
 		}
 
-		if(LOGGER.isWarnEnabled()) {
-			response.remove(B2ResponseProperties.KEY_FILE_ID);
-			response.remove(B2ResponseProperties.KEY_FILE_NAME);
-			response.remove(B2ResponseProperties.KEY_ACCOUNT_ID);
-			response.remove(B2ResponseProperties.KEY_BUCKET_ID);
-			response.remove(B2ResponseProperties.KEY_CONTENT_LENGTH);
-			response.remove(B2ResponseProperties.KEY_CONTENT_SHA1);
-			response.remove(B2ResponseProperties.KEY_CONTENT_TYPE);
-			response.remove(B2ResponseProperties.KEY_FILE_INFO);
-
-			warnOnMissedKeys(LOGGER, response);
-		}
+		this.warnOnMissedKeys(LOGGER);
 	}
 
 	/**
