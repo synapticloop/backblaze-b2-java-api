@@ -18,6 +18,7 @@ package synapticloop.b2.request;
 
 import org.apache.http.HttpHeaders;
 import org.apache.http.impl.client.CloseableHttpClient;
+
 import synapticloop.b2.exception.B2ApiException;
 import synapticloop.b2.response.B2AuthorizeAccountResponse;
 import synapticloop.b2.response.B2DownloadFileResponse;
@@ -91,7 +92,7 @@ public class B2DownloadFileByIdRequest extends BaseB2Request {
 									 String fileId, long rangeStart, long rangeEnd) {
 
 		super(client, b2AuthorizeAccountResponse, b2AuthorizeAccountResponse.getDownloadUrl() + B2_DOWNLOAD_FILE_BY_ID);
-		this.addHeader(B2RequestProperties.KEY_FILE_ID, fileId);
+		this.addParameter(B2RequestProperties.KEY_FILE_ID, fileId);
 		if (rangeStart > -1) {
 			if (rangeEnd > -1) {
 				this.addHeader(HttpHeaders.RANGE, String.format("bytes=%d-%d", rangeStart, rangeEnd));

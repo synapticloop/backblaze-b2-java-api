@@ -1,4 +1,5 @@
 package synapticloop.b2.request;
+
 import static org.junit.Assert.*;
 
 import java.io.File;
