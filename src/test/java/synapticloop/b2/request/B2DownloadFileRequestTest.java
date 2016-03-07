@@ -17,6 +17,7 @@ import synapticloop.b2.response.B2DeleteFileVersionResponse;
 import synapticloop.b2.response.B2DownloadFileResponse;
 import synapticloop.b2.response.B2FileResponse;
 import synapticloop.b2.response.B2GetUploadUrlResponse;
+import synapticloop.b2.util.Helper;
 
 public class B2DownloadFileRequestTest {
 	private B2BucketResponse randomPrivateBucket = null;
@@ -36,7 +37,7 @@ public class B2DownloadFileRequestTest {
 		B2FileResponse b2UploadFileResponse = new B2UploadFileRequest(HttpClients.createDefault(), 
 				B2TestHelper.getB2AuthorizeAccountResponse(), 
 				b2GetUploadUrlResponse, 
-				testFileName, file).getResponse();
+				testFileName, file, Helper.calculateSha1(file)).getResponse();
 
 		String fileName = b2UploadFileResponse.getFileName();
 		String fileId = b2UploadFileResponse.getFileId();

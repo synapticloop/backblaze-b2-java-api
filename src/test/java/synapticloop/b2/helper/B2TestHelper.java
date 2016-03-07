@@ -21,6 +21,7 @@ import synapticloop.b2.response.B2BucketResponse;
 import synapticloop.b2.response.B2DeleteFileVersionResponse;
 import synapticloop.b2.response.B2FileResponse;
 import synapticloop.b2.response.B2GetUploadUrlResponse;
+import synapticloop.b2.util.Helper;
 
 public class B2TestHelper {
 	public static final String B2_BUCKET_PREFIX = "b2api-test-";
@@ -129,7 +130,8 @@ public class B2TestHelper {
 		} catch(IOException ioex) {
 			throw new B2ApiException("Could not create temporary file", ioex);
 		}
-		return(new B2UploadFileRequest(HttpClients.createDefault(), getB2AuthorizeAccountResponse(), b2GetUploadUrlResponse, file.getName(), file).getResponse());
+		return(new B2UploadFileRequest(HttpClients.createDefault(), getB2AuthorizeAccountResponse(),
+				b2GetUploadUrlResponse, file.getName(), file, Helper.calculateSha1(file)).getResponse());
 	}
 
 //	public static B2FileResponse uploadTemporaryFileToBucketWithPath(String bucketId) throws B2Exception {
@@ -170,7 +172,8 @@ public class B2TestHelper {
 		} catch(IOException ioex) {
 			throw new B2ApiException("Could not create temporary file", ioex);
 		}
-		return(new B2UploadFileRequest(HttpClients.createDefault(), getB2AuthorizeAccountResponse(), b2GetUploadUrlResponse, file.getName(), file, fileInfo).getResponse());
+		return(new B2UploadFileRequest(HttpClients.createDefault(), getB2AuthorizeAccountResponse(), b2GetUploadUrlResponse, file.getName(), file,
+				Helper.calculateSha1(file), fileInfo).getResponse());
 	}
 
 }
