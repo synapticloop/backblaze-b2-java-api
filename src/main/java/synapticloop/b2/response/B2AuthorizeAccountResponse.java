@@ -44,7 +44,7 @@ public class B2AuthorizeAccountResponse extends BaseB2Response {
 	private final String apiUrl;
 	private final String authorizationToken;
 	private final String downloadUrl;
-
+	private final int minimumPartSize;
 	/**
 	 * Instantiate an authorize account response with the JSON response as a 
 	 * string from the API call.  This response is then parsed into the 
@@ -61,6 +61,7 @@ public class B2AuthorizeAccountResponse extends BaseB2Response {
 		this.apiUrl = this.readString(B2ResponseProperties.KEY_API_URL);
 		this.authorizationToken = this.readString(B2ResponseProperties.KEY_AUTHORIZATION_TOKEN);
 		this.downloadUrl = this.readString(B2ResponseProperties.KEY_DOWNLOAD_URL);
+		this.minimumPartSize = this.readInt(B2ResponseProperties.KEY_MINIMUM_PART_SIZE);
 
 		this.warnOnMissedKeys(LOGGER);
 	}
@@ -95,13 +96,31 @@ public class B2AuthorizeAccountResponse extends BaseB2Response {
 	 */
 	public String getDownloadUrl() { return this.downloadUrl; }
 
+	/**
+	 * The minimum size for each part of a large file (except the last one). This 
+	 * will always be 100,000,000, but we recommend that you write your code to 
+	 * get the number here, rather than use a hard-coded constant.
+	 * 
+	 * @return the minimum part size for downloads
+	 */
+	public int getMinimumPartSize() {return this.minimumPartSize; }
+
 	@Override
 	public String toString() {
-		final StringBuilder sb = new StringBuilder("B2AuthorizeAccountResponse{");
-		sb.append("accountId='").append(accountId).append('\'');
-		sb.append(", apiUrl='").append(apiUrl).append('\'');
-		sb.append(", downloadUrl='").append(downloadUrl).append('\'');
-		sb.append('}');
-		return sb.toString();
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append("B2AuthorizeAccountResponse [accountId=");
+		stringBuilder.append(this.accountId);
+		stringBuilder.append(", apiUrl=");
+		stringBuilder.append(this.apiUrl);
+		stringBuilder.append(", authorizationToken=");
+		stringBuilder.append(this.authorizationToken);
+		stringBuilder.append(", downloadUrl=");
+		stringBuilder.append(this.downloadUrl);
+		stringBuilder.append(", minimumPartSize=");
+		stringBuilder.append(this.minimumPartSize);
+		stringBuilder.append("]");
+		return stringBuilder.toString();
 	}
+
+	
 }

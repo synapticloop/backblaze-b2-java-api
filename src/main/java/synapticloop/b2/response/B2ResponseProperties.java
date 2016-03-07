@@ -40,4 +40,5 @@ public final class B2ResponseProperties {
 	public static final String KEY_BUCKETS = "buckets";
 	public static final String KEY_UPLOAD_AUTH_TOKEN = "uploadAuthToken";
 	public static final String KEY_UPLOAD_URLS = "uploadUrls";
+	public static final String KEY_MINIMUM_PART_SIZE = "minimumPartSize";
 }
