@@ -127,8 +127,13 @@ public class B2FileInfoResponse extends BaseB2Response {
 	public Action getAction() { return this.action; }
 
 	/**
+	 * @return The number of bytes in the file.
+	 */
+	public int getSize() { return this.size; }
+
+	/**
 	 * Return the timestamp that the file was uploaded
-	 * 
+	 *
 	 * @return the timestamp for when the file was uploaded
 	 */
 	public long getUploadTimestamp() { return this.uploadTimestamp; }
