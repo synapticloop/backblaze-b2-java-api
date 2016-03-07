@@ -24,7 +24,7 @@ import org.apache.http.util.EntityUtils;
 import synapticloop.b2.exception.B2ApiException;
 import synapticloop.b2.response.B2AuthorizeAccountResponse;
 import synapticloop.b2.response.B2HideFileResponse;
-import synapticloop.b2.util.Helper;
+import synapticloop.b2.util.URLEncoder;
 
 /**
  * <p>Hides a file so that downloading by name will not find the file, but previous versions of the file are still stored. See File Versions about what it means to hide a file.</p>
@@ -51,7 +51,7 @@ public class B2HideFileRequest extends BaseB2Request {
 		super(client, b2AuthorizeAccountResponse, b2AuthorizeAccountResponse.getApiUrl() + B2_HIDE_FILE);
 
 		this.addProperty(B2RequestProperties.KEY_BUCKET_ID, bucketId);
-		this.addProperty(B2RequestProperties.KEY_FILE_NAME, Helper.urlEncode(fileName));
+		this.addProperty(B2RequestProperties.KEY_FILE_NAME, URLEncoder.encode(fileName));
 	}
 
 	/**

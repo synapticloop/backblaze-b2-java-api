@@ -226,7 +226,7 @@ And now for the dependency
 <dependency>
 	<groupId>synapticloop</groupId>
 	<artifactId>backblaze-b2-java-api</artifactId>
-	<version>v1.2.2</version>
+	<version>v1.2.4</version>
 	<type>jar</type>
 </dependency>
 ```
@@ -256,9 +256,9 @@ and then include the dependency:
 
 ```
 dependencies {
-	runtime(group: 'synapticloop', name: 'backblaze-b2-java-api', version: 'v1.2.2', ext: 'jar')
+	runtime(group: 'synapticloop', name: 'backblaze-b2-java-api', version: 'v1.2.4', ext: 'jar')
 
-	compile(group: 'synapticloop', name: 'backblaze-b2-java-api', version: 'v1.2.2', ext: 'jar')
+	compile(group: 'synapticloop', name: 'backblaze-b2-java-api', version: 'v1.2.4', ext: 'jar')
 }
 ```
 
@@ -266,9 +266,9 @@ or, more simply for versions of gradle greater than 2.4
 
 ```
 dependencies {
-	runtime 'synapticloop:backblaze-b2-java-api:v1.2.2'
+	runtime 'synapticloop:backblaze-b2-java-api:v1.2.4'
 
-	compile 'synapticloop:backblaze-b2-java-api:v1.2.2'
+	compile 'synapticloop:backblaze-b2-java-api:v1.2.4'
 }
 ```
 
@@ -327,7 +327,7 @@ SOFTWARE.
 
 --
 
-> `This README.md file was hand-crafted with care utilising synapticloop` [`templar`](https://github.com/synapticloop/templar/) `->`[`documentr`](https://github.com/synapticloop/documentr/)
+> `This README.md file was hand-crafted with care utilising synapticloop`[`templar`](https://github.com/synapticloop/templar/)`->`[`documentr`](https://github.com/synapticloop/documentr/)
 
 --
 

@@ -31,7 +31,8 @@ import synapticloop.b2.response.B2AuthorizeAccountResponse;
 import synapticloop.b2.response.B2FileResponse;
 import synapticloop.b2.response.B2GetUploadUrlResponse;
 import synapticloop.b2.response.B2ResponseHeaders;
-import synapticloop.b2.util.Helper;
+import synapticloop.b2.util.ChecksumHelper;
+import synapticloop.b2.util.URLEncoder;
 
 /**
  * <p>Uploads one file to B2, returning its unique file ID.</p>
@@ -165,7 +166,7 @@ public class B2UploadFileRequest extends BaseB2Request {
 	 *     is set to application/octet-stream.
 	 * @param fileInfo A map of information that will be stored with the file. Up
 	 *     to 10 of keys may be present.. The same file info headers sent with the 
-	 *     upload will be returned with the download. 
+	 *     upload will be returned with the download.
 	 */
 	public B2UploadFileRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse,
 			B2GetUploadUrlResponse b2GetUploadUrlResponse, 
@@ -179,7 +180,7 @@ public class B2UploadFileRequest extends BaseB2Request {
 		if(null != fileInfo) {
 			int fileInfoSize = fileInfo.size();
 			for(final String key : fileInfo.keySet()) {
-				this.addHeader(B2ResponseHeaders.HEADER_X_BZ_INFO_PREFIX + Helper.urlEncode(key), Helper.urlEncode(fileInfo.get(key)));
+				this.addHeader(B2ResponseHeaders.HEADER_X_BZ_INFO_PREFIX + URLEncoder.encode(key), URLEncoder.encode(fileInfo.get(key)));
 			}
 		}
 
@@ -191,7 +192,7 @@ public class B2UploadFileRequest extends BaseB2Request {
 		} else {
 			this.addHeader(B2ResponseHeaders.HEADER_CONTENT_TYPE, mimeType);
 		}
-		this.addHeader(B2ResponseHeaders.HEADER_X_BZ_FILE_NAME, Helper.urlEncode(fileName));
+		this.addHeader(B2ResponseHeaders.HEADER_X_BZ_FILE_NAME, URLEncoder.encode(fileName));
 	}
 
 	/**

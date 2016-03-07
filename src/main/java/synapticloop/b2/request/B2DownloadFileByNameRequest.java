@@ -22,7 +22,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import synapticloop.b2.exception.B2ApiException;
 import synapticloop.b2.response.B2AuthorizeAccountResponse;
 import synapticloop.b2.response.B2DownloadFileResponse;
-import synapticloop.b2.util.Helper;
+import synapticloop.b2.util.URLEncoder;
 
 /**
  * <p>Downloads one file by providing the name of the bucket and the name of the file.</p>
@@ -74,7 +74,7 @@ public class B2DownloadFileByNameRequest extends BaseB2Request {
 	public B2DownloadFileByNameRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String bucketName, String fileName, long rangeStart, long rangeEnd) {
 		super(client,
 				b2AuthorizeAccountResponse,
-				b2AuthorizeAccountResponse.getDownloadUrl() + "/file/" + Helper.urlEncode(bucketName) + "/" + Helper.urlEncodeFileName(fileName));
+				b2AuthorizeAccountResponse.getDownloadUrl() + "/file/" + URLEncoder.encode(bucketName) + "/" + URLEncoder.encode(fileName));
 		if (rangeStart > -1) {
 			if (rangeEnd > -1) {
 				this.addHeader(HttpHeaders.RANGE, String.format("bytes=%d-%d", rangeStart, rangeEnd));
