@@ -13,7 +13,7 @@ group = 'synapticloop'
 archivesBaseName = 'backblaze-b2-java-api'
 description = """A java api for the truly excellent backblaze b2 storage service"""
 
-version = 'v1.2.5'
+version = 'v1.2.6'
 
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
