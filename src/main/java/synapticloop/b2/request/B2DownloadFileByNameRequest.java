@@ -48,34 +48,40 @@ public class B2DownloadFileByNameRequest extends BaseB2Request {
 	 * @param fileName the name and path of the file
 	 */
 	public B2DownloadFileByNameRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String bucketName, String fileName) {
-		super(client, 
-				b2AuthorizeAccountResponse, 
-				b2AuthorizeAccountResponse.getDownloadUrl() + "/file/" + Helper.urlEncode(bucketName) + "/" + Helper.urlEncodeFileName(fileName));
+		this(client, b2AuthorizeAccountResponse, bucketName, fileName, -1, -1);
 	}
 
 	/**
 	 * Create a download file by name request with a specified range
-	 * 
+	 *
 	 * A standard byte-range request, which will return just part of the stored file.
-	 * 
-	 * The value "bytes=0-99" selects bytes 0 through 99 (inclusive) of the file, 
-	 * so it will return the first 100 bytes. Valid byte ranges will cause the 
-	 * response to contain a Content-Range header that specifies which bytes 
+	 *
+	 * The value "bytes=0-99" selects bytes 0 through 99 (inclusive) of the file,
+	 * so it will return the first 100 bytes. Valid byte ranges will cause the
+	 * response to contain a Content-Range header that specifies which bytes
 	 * are returned. Invalid byte ranges will just return the whole file.
-	 * 
-	 * Note that the SHA1 checksum returned is still the checksum for the entire 
+	 *
+	 * Note that the SHA1 checksum returned is still the checksum for the entire
 	 * file, so it cannot be used on the byte range.
-	 * 
+	 *
 	 * @param client The http client to use
 	 * @param b2AuthorizeAccountResponse the authorize account response
 	 * @param bucketName the name of the bucket
 	 * @param fileName the name and path of the file
-	 * @param rangeStart the range start of the partial file contents
-	 * @param rangeEnd the range end of the partial file contents
+	 * @param rangeStart the range start of the partial file contents. -1 to read from start of file
+	 * @param rangeEnd the range end of the partial file contents. -1 to read from start of file
 	 */
 	public B2DownloadFileByNameRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String bucketName, String fileName, long rangeStart, long rangeEnd) {
-		this(client, b2AuthorizeAccountResponse, bucketName, fileName);
-		requestHeaders.put(HttpHeaders.RANGE, "bytes=" + rangeStart + "-" + rangeEnd);
+		super(client,
+				b2AuthorizeAccountResponse,
+				b2AuthorizeAccountResponse.getDownloadUrl() + "/file/" + Helper.urlEncode(bucketName) + "/" + Helper.urlEncodeFileName(fileName));
+		if (rangeStart > -1) {
+			if (rangeEnd > -1) {
+				requestHeaders.put(HttpHeaders.RANGE, String.format("bytes=%d-%d", rangeStart, rangeEnd));
+			} else {
+				requestHeaders.put(HttpHeaders.RANGE, String.format("bytes=%d-", rangeStart));
+			}
+		}
 	}
 
 	/**
