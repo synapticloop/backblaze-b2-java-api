@@ -58,7 +58,6 @@ public class B2CreateBucketRequest extends BaseB2Request {
 	 *     that files in this bucket can be downloaded by anybody, or "allPrivate",
 	 */
 	public B2CreateBucketRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String bucketName, BucketType bucketType) {
-
 		super(client, b2AuthorizeAccountResponse, b2AuthorizeAccountResponse.getApiUrl() + B2_CREATE_BUCKET);
 
 		this.addProperty(B2RequestProperties.KEY_ACCOUNT_ID, b2AuthorizeAccountResponse.getAccountId());
