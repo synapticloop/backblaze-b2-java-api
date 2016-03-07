@@ -54,7 +54,7 @@ public class B2ListFilesResponse extends BaseB2Response {
 			files.add(new B2FileInfoResponse(filesArray.optJSONObject(i)));
 		}
 
-		this.warnOnMissedKeys(LOGGER);
+		this.warnOnMissedKeys();
 	}
 
 	/**
@@ -79,6 +79,9 @@ public class B2ListFilesResponse extends BaseB2Response {
 	 * @return the list of files for this request
 	 */
 	public List<B2FileInfoResponse> getFiles() { return this.files; }
+
+	@Override
+	protected Logger getLogger() { return LOGGER; }
 
 	@Override
 	public String toString() {

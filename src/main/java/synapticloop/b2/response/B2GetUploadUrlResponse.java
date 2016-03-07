@@ -43,7 +43,7 @@ public class B2GetUploadUrlResponse extends BaseB2Response {
 		this.uploadUrl = this.readString(B2ResponseProperties.KEY_UPLOAD_URL);
 		this.authorizationToken = this.readString(B2ResponseProperties.KEY_AUTHORIZATION_TOKEN);
 
-		this.warnOnMissedKeys(LOGGER);
+		this.warnOnMissedKeys();
 	}
 
 	/**
@@ -66,6 +66,9 @@ public class B2GetUploadUrlResponse extends BaseB2Response {
 	 * @return the authorization token to be used with the file upload
 	 */
 	public String getAuthorizationToken() { return this.authorizationToken; }
+
+	@Override
+	protected Logger getLogger() { return LOGGER; }
 
 	@Override
 	public String toString() {

@@ -226,7 +226,7 @@ And now for the dependency
 <dependency>
 	<groupId>synapticloop</groupId>
 	<artifactId>backblaze-b2-java-api</artifactId>
-	<version>v1.2.6</version>
+	<version>v1.2.7</version>
 	<type>jar</type>
 </dependency>
 ```
@@ -256,9 +256,9 @@ and then include the dependency:
 
 ```
 dependencies {
-	runtime(group: 'synapticloop', name: 'backblaze-b2-java-api', version: 'v1.2.6', ext: 'jar')
+	runtime(group: 'synapticloop', name: 'backblaze-b2-java-api', version: 'v1.2.7', ext: 'jar')
 
-	compile(group: 'synapticloop', name: 'backblaze-b2-java-api', version: 'v1.2.6', ext: 'jar')
+	compile(group: 'synapticloop', name: 'backblaze-b2-java-api', version: 'v1.2.7', ext: 'jar')
 }
 ```
 
@@ -266,9 +266,9 @@ or, more simply for versions of gradle greater than 2.4
 
 ```
 dependencies {
-	runtime 'synapticloop:backblaze-b2-java-api:v1.2.6'
+	runtime 'synapticloop:backblaze-b2-java-api:v1.2.7'
 
-	compile 'synapticloop:backblaze-b2-java-api:v1.2.6'
+	compile 'synapticloop:backblaze-b2-java-api:v1.2.7'
 }
 ```
 

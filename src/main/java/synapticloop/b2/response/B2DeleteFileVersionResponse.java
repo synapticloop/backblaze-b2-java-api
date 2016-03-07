@@ -57,7 +57,7 @@ public class B2DeleteFileVersionResponse extends BaseB2Response {
 		this.fileId = this.readString(B2ResponseProperties.KEY_FILE_ID);
 		this.fileName = this.readString(B2ResponseProperties.KEY_FILE_NAME);
 
-		this.warnOnMissedKeys(LOGGER);
+		this.warnOnMissedKeys();
 	}
 
 	/**
@@ -73,6 +73,9 @@ public class B2DeleteFileVersionResponse extends BaseB2Response {
 	 * @return the name of the file as stored in the backblaze bucket
 	 */
 	public String getFileName() { return this.fileName; }
+
+	@Override
+	protected Logger getLogger() { return LOGGER; }
 
 	@Override
 	public String toString() {

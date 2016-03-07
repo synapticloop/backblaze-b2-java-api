@@ -63,7 +63,7 @@ public class B2AuthorizeAccountResponse extends BaseB2Response {
 		this.downloadUrl = this.readString(B2ResponseProperties.KEY_DOWNLOAD_URL);
 		this.minimumPartSize = this.readInt(B2ResponseProperties.KEY_MINIMUM_PART_SIZE);
 
-		this.warnOnMissedKeys(LOGGER);
+		this.warnOnMissedKeys();
 	}
 
 	/**
@@ -104,6 +104,9 @@ public class B2AuthorizeAccountResponse extends BaseB2Response {
 	 * @return the minimum part size for downloads
 	 */
 	public int getMinimumPartSize() {return this.minimumPartSize; }
+
+	@Override
+	protected Logger getLogger() { return LOGGER; }
 
 	@Override
 	public String toString() {

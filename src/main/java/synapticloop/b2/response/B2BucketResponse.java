@@ -19,6 +19,7 @@ package synapticloop.b2.response;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import synapticloop.b2.BucketType;
 import synapticloop.b2.exception.B2ApiException;
 
@@ -45,7 +46,7 @@ public class B2BucketResponse extends BaseB2Response {
 		this.bucketName = this.readString(B2ResponseProperties.KEY_BUCKET_NAME);
 		this.bucketType = this.readString(B2ResponseProperties.KEY_BUCKET_TYPE);
 
-		this.warnOnMissedKeys(LOGGER);
+		this.warnOnMissedKeys();
 	}
 
 	/**
@@ -63,7 +64,7 @@ public class B2BucketResponse extends BaseB2Response {
 		this.bucketName = this.readString(B2ResponseProperties.KEY_BUCKET_NAME);
 		this.bucketType = this.readString(B2ResponseProperties.KEY_BUCKET_TYPE);
 
-		this.warnOnMissedKeys(LOGGER);
+		this.warnOnMissedKeys();
 	}
 
 	/**
@@ -93,6 +94,9 @@ public class B2BucketResponse extends BaseB2Response {
 	 * @return The bucket type
 	 */
 	public BucketType getBucketType() { return BucketType.valueOf(this.bucketType); }
+
+	@Override
+	protected Logger getLogger() { return LOGGER; }
 
 	@Override
 	public String toString() {

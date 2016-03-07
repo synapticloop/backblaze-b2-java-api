@@ -69,7 +69,7 @@ public class B2FileResponse extends BaseB2Response {
 			}
 		}
 
-		this.warnOnMissedKeys(LOGGER);
+		this.warnOnMissedKeys();
 	}
 
 	/**
@@ -131,6 +131,9 @@ public class B2FileResponse extends BaseB2Response {
 	 * @return the map of the file info for the file that was operated on
 	 */
 	public Map<String, String> getFileInfo() { return this.fileInfo; }
+
+	@Override
+	protected Logger getLogger() { return LOGGER; }
 
 	@Override
 	public String toString() {

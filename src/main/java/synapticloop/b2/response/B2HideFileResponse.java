@@ -71,7 +71,7 @@ public class B2HideFileResponse extends BaseB2Response {
 		this.size = this.readInt(B2ResponseProperties.KEY_SIZE);
 		this.uploadTimestamp = this.readLong(B2ResponseProperties.KEY_UPLOAD_TIMESTAMP);
 
-		this.warnOnMissedKeys(LOGGER);
+		this.warnOnMissedKeys();
 	}
 
 	public String getFileId() { return this.fileId; }
@@ -85,6 +85,9 @@ public class B2HideFileResponse extends BaseB2Response {
 	public long getUploadTimestamp() { return this.uploadTimestamp; }
 
 	@Override
+	protected Logger getLogger() { return LOGGER; }
+
+	@Override
 	public String toString() {
 		final StringBuilder sb = new StringBuilder("B2HideFileResponse{");
 		sb.append("fileId='").append(fileId).append('\'');
@@ -94,4 +97,5 @@ public class B2HideFileResponse extends BaseB2Response {
 		sb.append('}');
 		return sb.toString();
 	}
+
 }

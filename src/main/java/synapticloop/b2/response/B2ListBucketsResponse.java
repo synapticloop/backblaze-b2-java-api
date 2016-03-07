@@ -47,7 +47,7 @@ public final class B2ListBucketsResponse extends BaseB2Response {
 			buckets.add(new B2BucketResponse(optJSONArray.optJSONObject(i)));
 		}
 
-		this.warnOnMissedKeys(LOGGER);
+		this.warnOnMissedKeys();
 	}
 
 	/**
@@ -58,6 +58,9 @@ public final class B2ListBucketsResponse extends BaseB2Response {
 	public List<B2BucketResponse> getBuckets() {
 		return buckets;
 	}
+
+	@Override
+	protected Logger getLogger() { return LOGGER; }
 
 	@Override
 	public String toString() {

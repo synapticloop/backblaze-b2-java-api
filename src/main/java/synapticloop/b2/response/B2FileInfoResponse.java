@@ -78,7 +78,7 @@ public class B2FileInfoResponse extends BaseB2Response {
 		this.size = this.readInt(B2ResponseProperties.KEY_SIZE);
 		this.uploadTimestamp = this.readLong(B2ResponseProperties.KEY_UPLOAD_TIMESTAMP);
 
-		this.warnOnMissedKeys(LOGGER);
+		this.warnOnMissedKeys();
 	}
 
 	/**
@@ -137,6 +137,9 @@ public class B2FileInfoResponse extends BaseB2Response {
 	 * @return the timestamp for when the file was uploaded
 	 */
 	public long getUploadTimestamp() { return this.uploadTimestamp; }
+
+	@Override
+	protected Logger getLogger() { return LOGGER; }
 
 	@Override
 	public String toString() {
