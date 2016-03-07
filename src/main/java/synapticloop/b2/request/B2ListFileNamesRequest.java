@@ -24,7 +24,7 @@ import org.apache.http.util.EntityUtils;
 import synapticloop.b2.exception.B2ApiException;
 import synapticloop.b2.response.B2AuthorizeAccountResponse;
 import synapticloop.b2.response.B2ListFilesResponse;
-import synapticloop.b2.util.Helper;
+import synapticloop.b2.util.URLEncoder;
 
 /**
  * <p>Lists the names of all files in a bucket, starting at a given name.</p>
@@ -98,7 +98,7 @@ public class B2ListFileNamesRequest extends BaseB2Request {
 		this.addProperty(B2RequestProperties.KEY_BUCKET_ID, bucketId);
 
 		if(null != startFileName) {
-			this.addProperty(B2RequestProperties.KEY_START_FILE_NAME, Helper.urlEncode(startFileName));
+			this.addProperty(B2RequestProperties.KEY_START_FILE_NAME, URLEncoder.encode(startFileName));
 		}
 
 		if(maxFileCount > MAX_FILE_COUNT_RETURN) {

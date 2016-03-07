@@ -31,7 +31,8 @@ import synapticloop.b2.response.B2AuthorizeAccountResponse;
 import synapticloop.b2.response.B2FileResponse;
 import synapticloop.b2.response.B2GetUploadUrlResponse;
 import synapticloop.b2.response.B2ResponseHeaders;
-import synapticloop.b2.util.Helper;
+import synapticloop.b2.util.ChecksumHelper;
+import synapticloop.b2.util.URLEncoder;
 
 /**
  * <p>Uploads one file to B2, returning its unique file ID.</p>
@@ -147,7 +148,7 @@ public class B2UploadFileRequest extends BaseB2Request {
 				b2GetUploadUrlResponse, 
 				fileName, 
 				new FileEntity(file),
-				Helper.calculateSha1(file),
+				ChecksumHelper.calculateSha1(file),
 				mimeType, fileInfo);
 	}
 
@@ -201,7 +202,7 @@ public class B2UploadFileRequest extends BaseB2Request {
 			}
 
 			for(final String key : fileInfo.keySet()) {
-				this.addHeader(B2ResponseHeaders.HEADER_X_BZ_INFO_PREFIX + Helper.urlEncode(key), Helper.urlEncode(fileInfo.get(key)));
+				this.addHeader(B2ResponseHeaders.HEADER_X_BZ_INFO_PREFIX + URLEncoder.encode(key), URLEncoder.encode(fileInfo.get(key)));
 			}
 		}
 
@@ -213,7 +214,7 @@ public class B2UploadFileRequest extends BaseB2Request {
 		} else {
 			this.addHeader(B2ResponseHeaders.HEADER_CONTENT_TYPE, mimeType);
 		}
-		this.addHeader(B2ResponseHeaders.HEADER_X_BZ_FILE_NAME, Helper.urlEncode(fileName));
+		this.addHeader(B2ResponseHeaders.HEADER_X_BZ_FILE_NAME, URLEncoder.encode(fileName));
 	}
 
 	/**
