@@ -58,28 +58,20 @@ public class B2HideFileResponse extends BaseB2Response {
 	public B2HideFileResponse(String json) throws B2ApiException {
 		super(json);
 
-		this.fileId = response.optString(B2ResponseProperties.KEY_FILE_ID, null);
-		this.fileName = response.optString(B2ResponseProperties.KEY_FILE_NAME, null);
+		this.fileId = this.readString(B2ResponseProperties.KEY_FILE_ID);
+		this.fileName = this.readString(B2ResponseProperties.KEY_FILE_NAME);
 
-		if(null != response.optString(B2ResponseProperties.KEY_ACTION, null)) {
-			this.action = Action.valueOf(response.optString(B2ResponseProperties.KEY_ACTION, null));
+		final String actionValue = this.readString(B2ResponseProperties.KEY_ACTION);
+		if(null != actionValue) {
+			this.action = Action.valueOf(actionValue);
 		} else {
 			this.action = null;
 		}
 
-		this.size = response.optInt(B2ResponseProperties.KEY_SIZE, -1);
-		this.uploadTimestamp = response.optLong(B2ResponseProperties.KEY_UPLOAD_TIMESTAMP, -1l);
+		this.size = this.readInt(B2ResponseProperties.KEY_SIZE);
+		this.uploadTimestamp = this.readLong(B2ResponseProperties.KEY_UPLOAD_TIMESTAMP);
 
-		if(LOGGER.isWarnEnabled()) {
-			response.remove(B2ResponseProperties.KEY_FILE_ID);
-			response.remove(B2ResponseProperties.KEY_FILE_NAME);
-			response.remove(B2ResponseProperties.KEY_ACTION);
-			response.remove(B2ResponseProperties.KEY_SIZE);
-			response.remove(B2ResponseProperties.KEY_UPLOAD_TIMESTAMP);
-
-			warnOnMissedKeys(LOGGER, response);
-		}
-
+		this.warnOnMissedKeys(LOGGER);
 	}
 
 	public String getFileId() { return this.fileId; }

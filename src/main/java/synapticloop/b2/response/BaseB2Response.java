@@ -16,22 +16,24 @@ package synapticloop.b2.response;
  * this source code or binaries.
  */
 
-import java.util.Iterator;
-
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
-
+import org.slf4j.LoggerFactory;
 import synapticloop.b2.exception.B2ApiException;
 
+import java.util.Iterator;
+
 public abstract class BaseB2Response {
-	protected JSONObject response;
+	private static final Logger LOGGER = LoggerFactory.getLogger(BaseB2Response.class);
+
+	private final JSONObject response;
 
 	/**
 	 * Create a new B2 Response object by parsing the passed in String
-	 * 
+	 *
 	 * @param json the Response (in json format)
-	 * 
 	 * @throws B2ApiException if there was an error in the parsing of the reponse
 	 */
 	public BaseB2Response(final String json) throws B2ApiException {
@@ -40,9 +42,8 @@ public abstract class BaseB2Response {
 
 	/**
 	 * Create a new B2 Response with a pre parsed JSONObject response
-	 * 
+	 *
 	 * @param response the pre-parsed json object
-	 * 
 	 * @throws B2ApiException if there was an error in the response
 	 */
 
@@ -51,12 +52,10 @@ public abstract class BaseB2Response {
 	}
 
 	/**
-	 * Parse a string into a JSON object 
-	 * 
+	 * Parse a string into a JSON object
+	 *
 	 * @param json the data to parse to an object
-	 * 
 	 * @return the parsed JSON object
-	 * 
 	 * @throws B2ApiException if there was an error parsing the object
 	 */
 	private static JSONObject parse(String json) throws B2ApiException {
@@ -70,22 +69,87 @@ public abstract class BaseB2Response {
 	}
 
 	/**
-	 * Parse through the expected keys to determine whether any of the keys in 
-	 * the response will not be mapped.  This will loop through the JSON object 
-	 * and any key left in the object will generate a 'WARN' message.  The 
+	 * Read and remove object with key from JSON
+	 */
+	protected String readString(String key) {
+		return this.readString(response, key);
+	}
+
+	protected String readString(JSONObject response, String key) {
+		final Object value = response.remove(key);
+		if (null == value || JSONObject.NULL == value) {
+			LOGGER.warn("No field for key {}", key);
+			return null;
+		}
+		return value.toString();
+	}
+
+	/**
+	 * Read and remove object with key from JSON
+	 */
+	protected int readInt(String key) {
+		final Object value = response.remove(key);
+		if (null == value || JSONObject.NULL == value) {
+			LOGGER.warn("No field for key {}", key);
+			return -1;
+		}
+		return value instanceof Number ? ((Number) value).intValue() : Integer.parseInt(value.toString());
+	}
+
+	/**
+	 * Read and remove object with key from JSON
+	 */
+	protected long readLong(String key) {
+		final Object value = response.remove(key);
+		if (null == value || JSONObject.NULL == value) {
+			LOGGER.warn("No field for key {}", key);
+			return -1L;
+		}
+		return value instanceof Number ? ((Number) value).longValue() : Long.parseLong(value.toString());
+	}
+
+	protected JSONObject readObject(String key) {
+		return this.readObject(response, key);
+	}
+
+	protected JSONObject readObject(JSONObject response, String key) {
+		final Object value = response.remove(key);
+		if (null == value || JSONObject.NULL == value) {
+			LOGGER.warn("No field for key {}", key);
+			return null;
+		}
+		return value instanceof JSONObject ? (JSONObject) value : null;
+	}
+
+	/**
+	 * Read and remove object with key from JSON
+	 */
+	protected JSONArray readObjects(String key) {
+		final Object value = response.remove(key);
+		if (null == value || JSONObject.NULL == value) {
+			LOGGER.warn("No field for key {}", key);
+			return null;
+		}
+		return value instanceof JSONArray ? (JSONArray) value : null;
+	}
+
+
+	/**
+	 * Parse through the expected keys to determine whether any of the keys in
+	 * the response will not be mapped.  This will loop through the JSON object
+	 * and any key left in the object will generate a 'WARN' message.  The
 	 * response class __MUST__ remove the object (i.e. jsonObject.remove(KEY_NAME))
 	 * after getting the value
-	 * 
-	 * @param LOGGER The logger to use
-	 * @param jsonObject the parsed response as a json Object
+	 *
+	 * @param LOGGER     The logger to use
 	 */
 	@SuppressWarnings("rawtypes")
-	protected void warnOnMissedKeys(Logger LOGGER, JSONObject jsonObject) {
-		if(LOGGER.isWarnEnabled()) {
-			Iterator keys = jsonObject.keys();
+	protected void warnOnMissedKeys(Logger LOGGER) {
+		if (LOGGER.isWarnEnabled()) {
+			Iterator keys = response.keys();
 			while (keys.hasNext()) {
 				String key = (String) keys.next();
-				LOGGER.warn("Found an unexpected json key of '{}', this is not mapped to a field...", key);
+				LOGGER.warn("Found an unexpected key of '{}' in JSON that is not mapped to a field.", key);
 			}
 		}
 	}

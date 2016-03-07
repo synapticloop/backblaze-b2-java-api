@@ -44,24 +44,17 @@ public class B2ListFilesResponse extends BaseB2Response {
 	public B2ListFilesResponse(String json) throws B2ApiException {
 		super(json);
 
-		this.nextFileName = response.optString(B2ResponseProperties.KEY_NEXT_FILE_NAME, null);
-		this.nextFileId = response.optString(B2ResponseProperties.KEY_NEXT_FILE_ID, null);
+		this.nextFileName = this.readString(B2ResponseProperties.KEY_NEXT_FILE_NAME);
+		this.nextFileId = this.readString(B2ResponseProperties.KEY_NEXT_FILE_ID);
 
-		JSONArray filesArray = response.optJSONArray(B2ResponseProperties.KEY_FILES);
+		JSONArray filesArray = this.readObjects(B2ResponseProperties.KEY_FILES);
 
 		files = new ArrayList<B2FileInfoResponse>();
 		for(int i = 0; i < filesArray.length(); i ++) {
 			files.add(new B2FileInfoResponse(filesArray.optJSONObject(i)));
 		}
 
-		if(LOGGER.isWarnEnabled()) {
-			response.remove(B2ResponseProperties.KEY_NEXT_FILE_NAME);
-			response.remove(B2ResponseProperties.KEY_NEXT_FILE_ID);
-			response.remove(B2ResponseProperties.KEY_FILES);
-
-			warnOnMissedKeys(LOGGER, response);
-		}
-
+		this.warnOnMissedKeys(LOGGER);
 	}
 
 	/**
