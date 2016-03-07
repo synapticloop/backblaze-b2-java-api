@@ -1,27 +1,17 @@
 package synapticloop.b2.helper;
 
+import org.apache.http.impl.client.HttpClients;
+import synapticloop.b2.BucketType;
+import synapticloop.b2.exception.B2ApiException;
+import synapticloop.b2.request.*;
+import synapticloop.b2.response.*;
+import synapticloop.b2.util.ChecksumHelper;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Map;
 import java.util.UUID;
-
-import org.apache.http.impl.client.HttpClients;
-
-import synapticloop.b2.BucketType;
-import synapticloop.b2.exception.B2ApiException;
-import synapticloop.b2.request.B2AuthorizeAccountRequest;
-import synapticloop.b2.request.B2CreateBucketRequest;
-import synapticloop.b2.request.B2DeleteBucketRequest;
-import synapticloop.b2.request.B2DeleteFileVersionRequest;
-import synapticloop.b2.request.B2GetUploadUrlRequest;
-import synapticloop.b2.request.B2UploadFileRequest;
-import synapticloop.b2.response.B2AuthorizeAccountResponse;
-import synapticloop.b2.response.B2BucketResponse;
-import synapticloop.b2.response.B2DeleteFileVersionResponse;
-import synapticloop.b2.response.B2FileResponse;
-import synapticloop.b2.response.B2GetUploadUrlResponse;
-import synapticloop.b2.util.Helper;
 
 public class B2TestHelper {
 	public static final String B2_BUCKET_PREFIX = "b2api-test-";
@@ -131,7 +121,7 @@ public class B2TestHelper {
 			throw new B2ApiException("Could not create temporary file", ioex);
 		}
 		return(new B2UploadFileRequest(HttpClients.createDefault(), getB2AuthorizeAccountResponse(),
-				b2GetUploadUrlResponse, file.getName(), file, Helper.calculateSha1(file)).getResponse());
+				b2GetUploadUrlResponse, file.getName(), file, ChecksumHelper.calculateSha1(file)).getResponse());
 	}
 
 //	public static B2FileResponse uploadTemporaryFileToBucketWithPath(String bucketId) throws B2Exception {
@@ -173,7 +163,7 @@ public class B2TestHelper {
 			throw new B2ApiException("Could not create temporary file", ioex);
 		}
 		return(new B2UploadFileRequest(HttpClients.createDefault(), getB2AuthorizeAccountResponse(), b2GetUploadUrlResponse, file.getName(), file,
-				Helper.calculateSha1(file), fileInfo).getResponse());
+				ChecksumHelper.calculateSha1(file), fileInfo).getResponse());
 	}
 
 }
