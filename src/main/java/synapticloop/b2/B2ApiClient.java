@@ -177,45 +177,6 @@ public class B2ApiClient {
 	}
 
 	/**
-	 * Delete a bucket including all of the files that reside within the bucket.
-	 *
-	 * <strong>WARNING:</strong> this is a destructive action and will delete
-	 * everything within the bucket and the bucket itself
-	 *
-	 * @param bucketId the id of the bucket to delete
-	 *
-	 * @return the deleted bucket response
-	 *
-	 * @throws B2ApiException if there was an error deleting the bucket, or any
-	 *     of the enclosed files
-	 */
-	public B2BucketResponse deleteBucketFully(String bucketId) throws B2ApiException {
-		B2ListFilesResponse b2ListFilesResponse = new B2ListFileVersionsRequest(client, b2AuthorizeAccountResponse, bucketId,
-				B2RequestProperties.MAX_FILE_COUNT_RETURN).getResponse();
-		String nextFileName = b2ListFilesResponse.getNextFileName();
-		String nextFileId = b2ListFilesResponse.getNextFileId();
-		while(true) {
-			List<B2FileInfoResponse> files = b2ListFilesResponse.getFiles();
-			for (B2FileInfoResponse b2FileInfoResponse : files) {
-				new B2DeleteFileVersionRequest(client, b2AuthorizeAccountResponse,
-						b2FileInfoResponse.getFileName(), b2FileInfoResponse.getFileId()).getResponse();
-			}
-
-			if(null == nextFileName) {
-				break;
-			} else {
-				b2ListFilesResponse = new B2ListFileVersionsRequest(client, b2AuthorizeAccountResponse, bucketId,
-						B2RequestProperties.MAX_FILE_COUNT_RETURN, nextFileName, nextFileId).getResponse();
-				nextFileName = b2ListFilesResponse.getNextFileName();
-				nextFileId = b2ListFilesResponse.getNextFileId();
-			}
-		}
-
-		// now delete the bucket
-		return new B2DeleteBucketRequest(client, b2AuthorizeAccountResponse, bucketId).getResponse();
-	}
-
-	/**
 	 * Update a bucket to be a specified type
 	 *
 	 * @param bucketId the id of the bucket to set
