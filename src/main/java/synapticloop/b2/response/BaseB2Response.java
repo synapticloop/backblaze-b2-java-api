@@ -20,11 +20,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import synapticloop.b2.exception.B2ApiException;
 
 import java.util.Iterator;
 
 public abstract class BaseB2Response {
+	private static final Logger LOGGER = LoggerFactory.getLogger(BaseB2Response.class);
+
 	private final JSONObject response;
 
 	/**
@@ -75,6 +78,7 @@ public abstract class BaseB2Response {
 	protected String readString(JSONObject response, String key) {
 		final Object value = response.remove(key);
 		if (null == value) {
+			LOGGER.warn("No field for key {}", key);
 			return null;
 		}
 		return value.toString();
@@ -86,6 +90,7 @@ public abstract class BaseB2Response {
 	protected int readInt(String key) {
 		final Object value = response.remove(key);
 		if (null == value) {
+			LOGGER.warn("No field for key {}", key);
 			return -1;
 		}
 		return value instanceof Number ? ((Number) value).intValue() : Integer.parseInt(value.toString());
@@ -97,6 +102,7 @@ public abstract class BaseB2Response {
 	protected long readLong(String key) {
 		final Object value = response.remove(key);
 		if (null == value) {
+			LOGGER.warn("No field for key {}", key);
 			return -1L;
 		}
 		return value instanceof Number ? ((Number) value).longValue() : Long.parseLong(value.toString());
@@ -109,6 +115,7 @@ public abstract class BaseB2Response {
 	protected JSONObject readObject(JSONObject response, String key) {
 		final Object value = response.remove(key);
 		if (null == value) {
+			LOGGER.warn("No field for key {}", key);
 			return null;
 		}
 		return value instanceof JSONObject ? (JSONObject) value : null;
@@ -120,6 +127,7 @@ public abstract class BaseB2Response {
 	protected JSONArray readObjects(String key) {
 		final Object value = response.remove(key);
 		if (null == value) {
+			LOGGER.warn("No field for key {}", key);
 			return null;
 		}
 		return value instanceof JSONArray ? (JSONArray) value : null;
