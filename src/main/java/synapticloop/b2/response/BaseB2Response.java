@@ -77,7 +77,7 @@ public abstract class BaseB2Response {
 
 	protected String readString(JSONObject response, String key) {
 		final Object value = response.remove(key);
-		if (JSONObject.NULL == value) {
+		if (null == value || JSONObject.NULL == value) {
 			LOGGER.warn("No field for key {}", key);
 			return null;
 		}
@@ -89,7 +89,7 @@ public abstract class BaseB2Response {
 	 */
 	protected int readInt(String key) {
 		final Object value = response.remove(key);
-		if (JSONObject.NULL == value) {
+		if (null == value || JSONObject.NULL == value) {
 			LOGGER.warn("No field for key {}", key);
 			return -1;
 		}
@@ -101,7 +101,7 @@ public abstract class BaseB2Response {
 	 */
 	protected long readLong(String key) {
 		final Object value = response.remove(key);
-		if (JSONObject.NULL == value) {
+		if (null == value || JSONObject.NULL == value) {
 			LOGGER.warn("No field for key {}", key);
 			return -1L;
 		}
@@ -114,7 +114,7 @@ public abstract class BaseB2Response {
 
 	protected JSONObject readObject(JSONObject response, String key) {
 		final Object value = response.remove(key);
-		if (JSONObject.NULL == value) {
+		if (null == value || JSONObject.NULL == value) {
 			LOGGER.warn("No field for key {}", key);
 			return null;
 		}
@@ -126,7 +126,7 @@ public abstract class BaseB2Response {
 	 */
 	protected JSONArray readObjects(String key) {
 		final Object value = response.remove(key);
-		if (JSONObject.NULL == value) {
+		if (null == value || JSONObject.NULL == value) {
 			LOGGER.warn("No field for key {}", key);
 			return null;
 		}
