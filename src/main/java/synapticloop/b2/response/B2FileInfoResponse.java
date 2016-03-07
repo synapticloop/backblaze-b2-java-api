@@ -54,7 +54,7 @@ public class B2FileInfoResponse extends BaseB2Response {
 
 		this.fileId = this.readString(B2ResponseProperties.KEY_FILE_ID);
 		this.fileName = this.readString(B2ResponseProperties.KEY_FILE_NAME);
-		this.contentLength = response.optLong(B2ResponseProperties.KEY_CONTENT_LENGTH, -1L);
+		this.contentLength = this.readLong(B2ResponseProperties.KEY_CONTENT_LENGTH);
 		this.contentSha1 = this.readString(B2ResponseProperties.KEY_CONTENT_SHA1);
 		this.fileInfo = new HashMap<String, String>();
 
@@ -63,7 +63,7 @@ public class B2FileInfoResponse extends BaseB2Response {
 			Iterator keys = fileInfoObject.keys();
 			while (keys.hasNext()) {
 				String key = (String) keys.next();
-				fileInfo.put(key, fileInfoObject.optString(key, null));
+				fileInfo.put(key, this.readString(fileInfoObject, key));
 			}
 		}
 
