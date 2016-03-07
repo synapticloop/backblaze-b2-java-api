@@ -109,11 +109,6 @@ public abstract class BaseB2Request {
 
 	protected BaseB2Request(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String url, Map<String, String> headers) {
 		this(client, url);
-<<<<<<< HEAD
-
-		this.requestHeaders.put(HttpHeaders.CONTENT_TYPE, VALUE_APPLICATION_X_WWW_FORM_URLENCODED);
-		this.requestHeaders.put(HttpHeaders.AUTHORIZATION, b2AuthorizeAccountResponse.getAuthorizationToken());
-=======
 		this.addHeader(HttpHeaders.CONTENT_TYPE, VALUE_APPLICATION_X_WWW_FORM_URLENCODED);
 		this.addHeader(HttpHeaders.AUTHORIZATION, b2AuthorizeAccountResponse.getAuthorizationToken());
 	}
@@ -137,7 +132,6 @@ public abstract class BaseB2Request {
 	 */
 	protected void addProperty(String key, Object value) {
 		requestBodyData.put(key, value);
->>>>>>> pr/8
 	}
 
 	/**
