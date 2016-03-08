@@ -24,6 +24,7 @@ import synapticloop.b2.exception.B2ApiException;
 import synapticloop.b2.response.B2AuthorizeAccountResponse;
 import synapticloop.b2.response.B2GetUploadPartUrlResponse;
 import synapticloop.b2.response.B2ResponseHeaders;
+import synapticloop.b2.response.B2UploadPartResponse;
 
 import java.io.IOException;
 
@@ -37,29 +38,27 @@ public class B2UploadPartRequest extends BaseB2Request {
 	 * @param b2AuthorizeAccountResponse The authorize account response
 	 * @param b2GetUploadUrlResponse     An upload authorization token, from b2_start_large_file
 	 * @param partNumber                 A number from 1 to 10000. The parts uploaded for one file must have contiguous numbers, starting with 1.
+	 * @param entity                     the http entity to upload
 	 * @param sha1Checksum               The SHA1 checksum of the this part of the file. B2 will check this when the part is
 	 *                                   uploaded, to make sure that the data arrived correctly.
-	 * @param contentLength              The number of bytes in the file being uploaded. Note that this header is required; you cannot leave it out and just use chunked encoding.
-	 *                                   The minimum size of every part but the last one is 100MB.
-	 * @param entity                     the http entity to upload
 	 */
 	public B2UploadPartRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse,
 							   B2GetUploadPartUrlResponse b2GetUploadUrlResponse,
-							   int partNumber, String sha1Checksum, Long contentLength, HttpEntity entity) {
+							   int partNumber, HttpEntity entity, String sha1Checksum) {
 		super(client, b2AuthorizeAccountResponse, b2GetUploadUrlResponse.getUploadUrl());
 		this.entity = entity;
 
 		this.addHeader(B2ResponseHeaders.HEADER_X_BZ_PART_NUMBER, String.valueOf(partNumber));
 		this.addHeader(B2ResponseHeaders.HEADER_X_BZ_CONTENT_SHA1, sha1Checksum);
-		this.addHeader(B2ResponseHeaders.HEADER_CONTENT_LENGTH, String.valueOf(contentLength));
+		this.addHeader(B2ResponseHeaders.HEADER_CONTENT_LENGTH, String.valueOf(entity.getContentLength()));
 
 		// Override generic authorization header
 		this.addHeader(HttpHeaders.AUTHORIZATION, b2GetUploadUrlResponse.getAuthorizationToken());
 	}
 
-	public B2GetUploadPartUrlResponse getResponse() throws B2ApiException {
+	public B2UploadPartResponse getResponse() throws B2ApiException {
 		try {
-			return new B2GetUploadPartUrlResponse(EntityUtils.toString(executePost(entity).getEntity()));
+			return new B2UploadPartResponse(EntityUtils.toString(executePost(entity).getEntity()));
 		} catch (IOException e) {
 			throw new B2ApiException(e);
 		}

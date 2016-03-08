@@ -46,9 +46,9 @@ public class B2StartLargeFileRequest extends BaseB2Request {
 	 * @param fileInfo                   the file info map which are passed through as key value
 	 *                                   pairs in a jsonObject named 'fileInfo'
 	 */
-	protected B2StartLargeFileRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse,
-									  String bucketId, String fileName,
-									  String mimeType, Map<String, String> fileInfo) throws B2ApiException {
+	public B2StartLargeFileRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse,
+								   String bucketId, String fileName,
+								   String mimeType, Map<String, String> fileInfo) throws B2ApiException {
 		super(client, b2AuthorizeAccountResponse, b2AuthorizeAccountResponse.getApiUrl() + B2_START_LARGE_FILE);
 
 		this.addProperty(B2RequestProperties.KEY_BUCKET_ID, bucketId);

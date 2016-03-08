@@ -20,7 +20,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.util.EntityUtils;
 import synapticloop.b2.exception.B2ApiException;
 import synapticloop.b2.response.B2AuthorizeAccountResponse;
-import synapticloop.b2.response.B2GetUploadUrlResponse;
+import synapticloop.b2.response.B2GetUploadPartUrlResponse;
 
 import java.io.IOException;
 
@@ -48,9 +48,9 @@ public class B2GetUploadPartUrlRequest extends BaseB2Request {
 	 * 
 	 * @throws B2ApiException if something went wrong
 	 */
-	public B2GetUploadUrlResponse getResponse() throws B2ApiException {
+	public B2GetUploadPartUrlResponse getResponse() throws B2ApiException {
 		try {
-			return(new B2GetUploadUrlResponse(EntityUtils.toString(executePost().getEntity())));
+			return (new B2GetUploadPartUrlResponse(EntityUtils.toString(executePost().getEntity())));
 		} catch(IOException e) {
 			throw new B2ApiException(e);
 		}
