@@ -36,7 +36,7 @@ public class B2UploadPartResponse extends BaseB2Response {
 		this.contentLength = this.readLong(B2ResponseProperties.KEY_CONTENT_LENGTH);
 		this.contentSha1 = this.readString(B2ResponseProperties.KEY_CONTENT_SHA1);
 
-		this.warnOnMissedKeys(LOGGER);
+		this.warnOnMissedKeys();
 	}
 
 	public String getFileId() {
@@ -54,6 +54,9 @@ public class B2UploadPartResponse extends BaseB2Response {
 	public String getContentSha1() {
 		return contentSha1;
 	}
+
+	@Override
+	protected Logger getLogger() { return LOGGER; }
 
 	@Override
 	public String toString() {
