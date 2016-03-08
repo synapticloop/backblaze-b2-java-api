@@ -1,5 +1,12 @@
 package synapticloop.b2.request;
 
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
 /*
  * Copyright (c) 2016 synapticloop.
  * 
@@ -20,7 +27,11 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpHeaders;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpResponseException;
-import org.apache.http.client.methods.*;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpHead;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -29,15 +40,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import synapticloop.b2.exception.B2ApiException;
 import synapticloop.b2.response.B2AuthorizeAccountResponse;
-
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 
 public abstract class BaseB2Request {
 	private static final Logger LOGGER = LoggerFactory.getLogger(BaseB2Request.class);
@@ -142,6 +147,7 @@ public abstract class BaseB2Request {
 	 * @return the response object
 	 * 
 	 * @throws B2ApiException if something went wrong with the call
+	 * @throws IOException if there was an error communicating with the API service
 	 */
 	protected CloseableHttpResponse executeHead() throws B2ApiException, IOException {
 		URI uri = this.buildUri();
@@ -153,9 +159,10 @@ public abstract class BaseB2Request {
 		CloseableHttpResponse httpResponse = this.execute(httpHead);
 
 		switch(httpResponse.getStatusLine().getStatusCode()) {
-			case HttpStatus.SC_OK:
-				return httpResponse;
+		case HttpStatus.SC_OK:
+			return httpResponse;
 		}
+
 		throw new B2ApiException(EntityUtils.toString(httpResponse.getEntity()), new HttpResponseException(
 				httpResponse.getStatusLine().getStatusCode(), httpResponse.getStatusLine().getReasonPhrase()));
 	}
@@ -166,6 +173,7 @@ public abstract class BaseB2Request {
 	 * @return The response from the GET request
 	 *
 	 * @throws B2ApiException if there was an error with the request
+	 * @throws IOException if there was an error communicating with the API service
 	 */
 	protected CloseableHttpResponse executeGet() throws B2ApiException, IOException {
 		URI uri = this.buildUri();
@@ -176,10 +184,11 @@ public abstract class BaseB2Request {
 
 		// you will either get an OK or a partial content
 		switch(httpResponse.getStatusLine().getStatusCode()) {
-			case HttpStatus.SC_OK:
-			case HttpStatus.SC_PARTIAL_CONTENT:
-				return httpResponse;
+		case HttpStatus.SC_OK:
+		case HttpStatus.SC_PARTIAL_CONTENT:
+			return httpResponse;
 		}
+
 		throw new B2ApiException(EntityUtils.toString(httpResponse.getEntity()), new HttpResponseException(
 				httpResponse.getStatusLine().getStatusCode(), httpResponse.getStatusLine().getReasonPhrase()));
 	}
@@ -191,6 +200,7 @@ public abstract class BaseB2Request {
 	 * 
 	 * @throws B2ApiException if there was an error with the call, most notably
 	 *     a non OK status code (i.e. not 200)
+	 * @throws IOException if there was an error communicating with the API service
 	 */
 	protected CloseableHttpResponse executePost() throws B2ApiException, IOException {
 		URI uri = this.buildUri();
@@ -202,9 +212,10 @@ public abstract class BaseB2Request {
 		CloseableHttpResponse httpResponse = this.execute(httpPost);
 
 		switch(httpResponse.getStatusLine().getStatusCode()) {
-			case HttpStatus.SC_OK:
-				return httpResponse;
+		case HttpStatus.SC_OK:
+			return httpResponse;
 		}
+
 		throw new B2ApiException(EntityUtils.toString(httpResponse.getEntity()), new HttpResponseException(
 				httpResponse.getStatusLine().getStatusCode(), httpResponse.getStatusLine().getReasonPhrase()));
 	}
@@ -218,6 +229,7 @@ public abstract class BaseB2Request {
 	 * 
 	 * @throws B2ApiException if there was an error with the call, most notably
 	 *     a non OK status code (i.e. not 200)
+	 * @throws IOException if there was an error communicating with the API service
 	 */
 	protected CloseableHttpResponse executePost(HttpEntity entity) throws B2ApiException, IOException {
 		URI uri = this.buildUri();
@@ -228,9 +240,10 @@ public abstract class BaseB2Request {
 		CloseableHttpResponse httpResponse = this.execute(httpPost);
 
 		switch(httpResponse.getStatusLine().getStatusCode()) {
-			case HttpStatus.SC_OK:
-				return httpResponse;
+		case HttpStatus.SC_OK:
+			return httpResponse;
 		}
+
 		throw new B2ApiException(EntityUtils.toString(httpResponse.getEntity()), new HttpResponseException(
 				httpResponse.getStatusLine().getStatusCode(), httpResponse.getStatusLine().getReasonPhrase()));
 	}
@@ -330,5 +343,4 @@ public abstract class BaseB2Request {
 		}
 		return(data);
 	}
-
 }

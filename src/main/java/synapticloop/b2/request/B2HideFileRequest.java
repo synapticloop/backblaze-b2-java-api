@@ -1,5 +1,7 @@
 package synapticloop.b2.request;
 
+import java.io.IOException;
+
 /*
  * Copyright (c) 2016 synapticloop.
  * 
@@ -18,11 +20,10 @@ package synapticloop.b2.request;
 
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.util.EntityUtils;
+
 import synapticloop.b2.exception.B2ApiException;
 import synapticloop.b2.response.B2AuthorizeAccountResponse;
 import synapticloop.b2.response.B2HideFileResponse;
-
-import java.io.IOException;
 
 /**
  * <p>Hides a file so that downloading by name will not find the file, but previous versions of the file are still stored. See File Versions about what it means to hide a file.</p>
@@ -58,6 +59,7 @@ public class B2HideFileRequest extends BaseB2Request {
 	 * @return the hide file response
 	 * 
 	 * @throws B2ApiException if something went wrong
+	 * @throws IOException if there was an error communicating with the API service
 	 */
 	public B2HideFileResponse getResponse() throws B2ApiException, IOException {
 		return new B2HideFileResponse(EntityUtils.toString(executePost().getEntity()));

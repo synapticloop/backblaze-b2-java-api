@@ -60,6 +60,7 @@ public class B2DeleteBucketRequest extends BaseB2Request {
 	 * 
 	 * @throws B2ApiException if there was an error with the call, or if you are
 	 *     trying to delete a bucket which is not empty
+	 * @throws IOException if there was an error communicating with the API service
 	 */
 	public B2BucketResponse getResponse() throws B2ApiException, IOException {
 		return new B2BucketResponse(EntityUtils.toString(executePost().getEntity()));

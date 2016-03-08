@@ -1,5 +1,7 @@
 package synapticloop.b2.request;
 
+import java.io.IOException;
+
 /*
  * Copyright (c) 2016 synapticloop.
  * 
@@ -22,8 +24,6 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import synapticloop.b2.exception.B2ApiException;
 import synapticloop.b2.response.B2AuthorizeAccountResponse;
 import synapticloop.b2.response.B2DownloadFileResponse;
-
-import java.io.IOException;
 
 /**
  * <p>Downloads one file from B2.</p>
@@ -112,7 +112,9 @@ public class B2DownloadFileByIdRequest extends BaseB2Request {
 	 * Execute the request and return the response
 	 *
 	 * @return The download file response
+	 * 
 	 * @throws B2ApiException If there was an error with the call
+	 * @throws IOException if there was an error communicating with the API service
 	 */
 	public B2DownloadFileResponse getResponse() throws B2ApiException, IOException {
 		return new B2DownloadFileResponse(executeGet());

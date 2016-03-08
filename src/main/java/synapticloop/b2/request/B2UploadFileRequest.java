@@ -203,6 +203,7 @@ public class B2UploadFileRequest extends BaseB2Request {
 	 * @return the file response
 	 * 
 	 * @throws B2ApiException if something went wrong
+	 * @throws IOException if there was an error communicating with the API service
 	 */
 
 	public B2FileResponse getResponse() throws B2ApiException, IOException {

@@ -73,7 +73,9 @@ public class B2ApiClient {
 	 * 
 	 * @param accountId The account id
 	 * @param applicationKey the application key
+	 * 
 	 * @throws B2ApiException if there was an error authenticating the account
+	 * @throws IOException if there was an error communicating with the API service
 	 */
 	public B2ApiClient(String accountId, String applicationKey) throws B2ApiException, IOException {
 		this();
@@ -108,7 +110,9 @@ public class B2ApiClient {
 	 * @param applicationKey the application key
 	 *
 	 * @return the authorize account response
+	 * 
 	 * @throws B2ApiException if there was an error authenticating
+	 * @throws IOException if there was an error communicating with the API service
 	 */
 	public B2AuthorizeAccountResponse authenticate(String accountId, String applicationKey) throws B2ApiException, IOException {
 		return b2AuthorizeAccountResponse = new B2AuthorizeAccountRequest(client, accountId, applicationKey).getResponse();
@@ -158,6 +162,7 @@ public class B2ApiClient {
 	 *
 	 * @throws B2ApiException if the bucket could not be created, of there was an
 	 *     error with the authentication
+	 * @throws IOException if there was an error communicating with the API service
 	 */
 	public B2BucketResponse createBucket(String bucketName, BucketType bucketType) throws B2ApiException, IOException {
 		return new B2CreateBucketRequest(client, b2AuthorizeAccountResponse, bucketName, bucketType).getResponse();
@@ -171,6 +176,7 @@ public class B2ApiClient {
 	 * @return the delete bucket response
 	 *
 	 * @throws B2ApiException if something went wrong with the call, or the bucket was not empty
+	 * @throws IOException if there was an error communicating with the API service
 	 */
 	public B2BucketResponse deleteBucket(String bucketId) throws B2ApiException, IOException {
 		return new B2DeleteBucketRequest(client, b2AuthorizeAccountResponse, bucketId).getResponse();
@@ -188,6 +194,7 @@ public class B2ApiClient {
 	 *
 	 * @throws B2ApiException if there was an error deleting the bucket, or any
 	 *     of the enclosed files
+	 * @throws IOException if there was an error communicating with the API service
 	 */
 	public B2BucketResponse deleteBucketFully(String bucketId) throws B2ApiException, IOException {
 		B2ListFilesResponse b2ListFilesResponse = new B2ListFileVersionsRequest(client, b2AuthorizeAccountResponse, bucketId,
@@ -224,6 +231,7 @@ public class B2ApiClient {
 	 * @return the bucket response
 	 *
 	 * @throws B2ApiException if there was an error updating the bucket
+	 * @throws IOException if there was an error communicating with the API service
 	 */
 	public B2BucketResponse updateBucket(String bucketId, BucketType bucketType) throws B2ApiException, IOException {
 		return new B2UpdateBucketRequest(client, b2AuthorizeAccountResponse, bucketId, bucketType).getResponse();
@@ -235,6 +243,7 @@ public class B2ApiClient {
 	 * @return the list of buckets for the account
 	 *
 	 * @throws B2ApiException if something went wrong
+	 * @throws IOException if there was an error communicating with the API service
 	 */
 	public List<B2BucketResponse> listBuckets() throws B2ApiException, IOException {
 		return new B2ListBucketsRequest(client, b2AuthorizeAccountResponse).getResponse().getBuckets();
@@ -256,7 +265,9 @@ public class B2ApiClient {
 	 * @param fileId the file ID to retrieve the information on
 	 *
 	 * @return the File Response
+	 * 
 	 * @throws B2ApiException if something went wrong
+	 * @throws IOException if there was an error communicating with the API service
 	 */
 	public B2FileResponse getFileInfo(String fileId) throws B2ApiException, IOException {
 		return new B2GetFileInfoRequest(client, b2AuthorizeAccountResponse, fileId).getResponse();
@@ -271,6 +282,7 @@ public class B2ApiClient {
 	 * @return the download file response
 	 *
 	 * @throws B2ApiException if there was an error with the call
+	 * @throws IOException if there was an error communicating with the API service
 	 */
 
 	public B2DownloadFileResponse headFileById(String fileId) throws B2ApiException, IOException {
@@ -301,6 +313,7 @@ public class B2ApiClient {
 	 * @return the uploaded file response
 	 *
 	 * @throws B2ApiException if there was an error uploading the file
+	 * @throws IOException if there was an error communicating with the API service
 	 */
 	public B2FileResponse uploadFile(String bucketId, String fileName, HttpEntity entity, String sha1Checksum, String mimeType, Map<String, String> fileInfo) throws B2ApiException, IOException {
 		B2GetUploadUrlResponse b2GetUploadUrlResponse = new B2GetUploadUrlRequest(client, b2AuthorizeAccountResponse, bucketId).getResponse();
@@ -323,6 +336,7 @@ public class B2ApiClient {
 	 * @return the uploaded file response
 	 *
 	 * @throws B2ApiException if there was an error uploading the file
+	 * @throws IOException if there was an error communicating with the API service
 	 */
 	public B2FileResponse uploadFile(String bucketId, String fileName, File file, String mimeType, Map<String, String> fileInfo) throws B2ApiException, IOException {
 		B2GetUploadUrlResponse b2GetUploadUrlResponse = new B2GetUploadUrlRequest(client, b2AuthorizeAccountResponse, bucketId).getResponse();
@@ -342,6 +356,7 @@ public class B2ApiClient {
 	 * @return the uploaded file response
 	 *
 	 * @throws B2ApiException if there was an error uploading the file
+	 * @throws IOException if there was an error communicating with the API service
 	 */
 
 	public B2FileResponse uploadFile(String bucketId, String fileName, File file, Map<String, String> fileInfo) throws B2ApiException, IOException {
@@ -365,6 +380,7 @@ public class B2ApiClient {
 	 * @return the uploaded file response
 	 *
 	 * @throws B2ApiException if there was an error uploading the file
+	 * @throws IOException if there was an error communicating with the API service
 	 */
 	public B2FileResponse uploadFile(String bucketId, String fileName, File file, String mimeType) throws B2ApiException, IOException {
 		B2GetUploadUrlResponse b2GetUploadUrlResponse = new B2GetUploadUrlRequest(client, b2AuthorizeAccountResponse, bucketId).getResponse();
@@ -384,6 +400,7 @@ public class B2ApiClient {
 	 * @return the uploaded file response
 	 *
 	 * @throws B2ApiException if there was an error uploading the file
+	 * @throws IOException if there was an error communicating with the API service
 	 */
 	public B2FileResponse uploadFile(String bucketId, String fileName, File file) throws B2ApiException, IOException {
 		B2GetUploadUrlResponse b2GetUploadUrlResponse = new B2GetUploadUrlRequest(client, b2AuthorizeAccountResponse, bucketId).getResponse();
@@ -407,6 +424,7 @@ public class B2ApiClient {
 	 * @return the deleted file response
 	 *
 	 * @throws B2ApiException if there was an error deleting the file
+	 * @throws IOException if there was an error communicating with the API service
 	 */
 	public B2DeleteFileVersionResponse deleteFileVersion(String fileName, String fileId) throws B2ApiException, IOException {
 		return new B2DeleteFileVersionRequest(client, b2AuthorizeAccountResponse, fileName, fileId).getResponse();
@@ -421,6 +439,7 @@ public class B2ApiClient {
 	 * @return The hide response
 	 *
 	 * @throws B2ApiException if there was an error hiding the file
+	 * @throws IOException if there was an error communicating with the API service
 	 */
 	public B2HideFileResponse hideFile(String bucketId, String fileName) throws B2ApiException, IOException {
 		return new B2HideFileRequest(client, b2AuthorizeAccountResponse, bucketId, fileName).getResponse();
@@ -441,6 +460,7 @@ public class B2ApiClient {
 	 * @return the list files response
 	 *
 	 * @throws B2ApiException if there was an error with the call
+	 * @throws IOException if there was an error communicating with the API service
 	 */
 	public B2ListFilesResponse listFileNames(String bucketId) throws B2ApiException, IOException {
 		return new B2ListFileNamesRequest(client, b2AuthorizeAccountResponse, bucketId).getResponse();
@@ -458,6 +478,7 @@ public class B2ApiClient {
 	 * @return the list of files response
 	 *
 	 * @throws B2ApiException if there was an error with the call,
+	 * @throws IOException if there was an error communicating with the API service
 	 */
 	public B2ListFilesResponse listFileNames(String bucketId, String startFileName, Integer maxFileCount) throws B2ApiException, IOException {
 		return new B2ListFileNamesRequest(client, b2AuthorizeAccountResponse, bucketId, startFileName, maxFileCount).getResponse();
@@ -471,6 +492,7 @@ public class B2ApiClient {
 	 * @return the list file response
 	 *
 	 * @throws B2ApiException if there was an error with the call
+	 * @throws IOException if there was an error communicating with the API service
 	 */
 	public B2ListFilesResponse listFileVersions(String bucketId) throws B2ApiException, IOException {
 		return new B2ListFileVersionsRequest(client, b2AuthorizeAccountResponse, bucketId, 1000).getResponse();
@@ -485,6 +507,7 @@ public class B2ApiClient {
 	 * @return the list file response
 	 *
 	 * @throws B2ApiException if there was an error with the call
+	 * @throws IOException if there was an error communicating with the API service
 	 */
 	public B2ListFilesResponse listFileVersions(String bucketId, String startFileName) throws B2ApiException, IOException {
 		return new B2ListFileVersionsRequest(client, b2AuthorizeAccountResponse, bucketId, null, startFileName, null).getResponse();
@@ -502,6 +525,7 @@ public class B2ApiClient {
 	 * @return the list files response
 	 *
 	 * @throws B2ApiException if there was an error with the call
+	 * @throws IOException if there was an error communicating with the API service
 	 */
 	public B2ListFilesResponse listFileVersions(String bucketId, String startFileName, String startFileId, Integer maxFileCount) throws B2ApiException, IOException {
 		return new B2ListFileVersionsRequest(client, b2AuthorizeAccountResponse, bucketId, maxFileCount, startFileName, startFileId).getResponse();
@@ -526,6 +550,7 @@ public class B2ApiClient {
 	 * @param file the file to write out the data to
 	 *
 	 * @throws B2ApiException if there was an error with the call
+	 * @throws IOException if there was an error communicating with the API service
 	 */
 	public void downloadFileByNameToFile(String bucketName, String fileName, File file) throws B2ApiException, IOException {
 		FileUtils.copyInputStreamToFile(new B2DownloadFileByNameRequest(client, b2AuthorizeAccountResponse, bucketName, fileName)
@@ -552,6 +577,7 @@ public class B2ApiClient {
 	 * @param rangeEnd the end range (byte) offset for the content (inclusive)
 	 *
 	 * @throws B2ApiException if there was an error with the call
+	 * @throws IOException if there was an error communicating with the API service
 	 */
 	public void downloadFileRangeByNameToFile(String bucketName, String fileName, File file, long rangeStart, long rangeEnd) throws B2ApiException, IOException {
 		FileUtils.copyInputStreamToFile(new B2DownloadFileByNameRequest(client, b2AuthorizeAccountResponse, bucketName, fileName)
@@ -573,6 +599,7 @@ public class B2ApiClient {
 	 * @return the array of bytes from the download
 	 *
 	 * @throws B2ApiException if there was an error with the call
+	 * @throws IOException if there was an error communicating with the API service
 	 */
 	public byte[] downloadFileByNameToBytes(String bucketName, String fileName) throws B2ApiException, IOException {
 		return IOUtils.toByteArray(new B2DownloadFileByNameRequest(client, b2AuthorizeAccountResponse, bucketName, fileName).getResponse().getContent());
@@ -598,6 +625,7 @@ public class B2ApiClient {
 	 * @return the array of bytes from the download
 	 *
 	 * @throws B2ApiException if there was an error with the call
+	 * @throws IOException if there was an error communicating with the API service
 	 */
 	public byte[] downloadFileRangeByNameToBytes(String bucketName, String fileName, long rangeStart, long rangeEnd) throws B2ApiException, IOException {
 		return IOUtils.toByteArray(new B2DownloadFileByNameRequest(client, b2AuthorizeAccountResponse, bucketName, fileName, rangeStart, rangeEnd).getResponse().getContent());
@@ -618,6 +646,7 @@ public class B2ApiClient {
 	 * @return the input stream
 	 *
 	 * @throws B2ApiException if there was an error with the call
+	 * @throws IOException if there was an error communicating with the API service
 	 */
 	public InputStream downloadFileByNameToStream(String bucketName, String fileName) throws B2ApiException, IOException {
 		return new B2DownloadFileByNameRequest(client, b2AuthorizeAccountResponse, bucketName, fileName).getResponse().getContent();
@@ -643,6 +672,7 @@ public class B2ApiClient {
 	 * @return the input stream
 	 *
 	 * @throws B2ApiException if there was an error with the call
+	 * @throws IOException if there was an error communicating with the API service
 	 */
 	public InputStream downloadFileRangeByNameToStream(String bucketName, String fileName, long rangeStart, long rangeEnd) throws B2ApiException, IOException {
 		return new B2DownloadFileByNameRequest(client, b2AuthorizeAccountResponse, bucketName, fileName).getResponse().getContent();
@@ -660,6 +690,7 @@ public class B2ApiClient {
 	 * @return the download file response
 	 *
 	 * @throws B2ApiException if there was an error with the call
+	 * @throws IOException if there was an error communicating with the API service
 	 */
 	public B2DownloadFileResponse downloadFileByName(String bucketName, String fileName) throws B2ApiException, IOException {
 		return new B2DownloadFileByNameRequest(client, b2AuthorizeAccountResponse, bucketName, fileName).getResponse();
@@ -680,6 +711,7 @@ public class B2ApiClient {
 	 * @return the download file response
 	 *
 	 * @throws B2ApiException if there was an error with the call
+	 * @throws IOException if there was an error communicating with the API service
 	 */
 	public B2DownloadFileResponse downloadFileRangeByName(String bucketName, String fileName, long rangeStart, long rangeEnd) throws B2ApiException, IOException {
 		return new B2DownloadFileByNameRequest(client, b2AuthorizeAccountResponse, bucketName, fileName, rangeStart, rangeEnd).getResponse();
@@ -693,6 +725,7 @@ public class B2ApiClient {
 	 * @return the download file response
 	 *
 	 * @throws B2ApiException if there was an error with the call
+	 * @throws IOException if there was an error communicating with the API service
 	 */
 	public B2DownloadFileResponse downloadFileById(String fileId) throws B2ApiException, IOException {
 		return new B2DownloadFileByIdRequest(client, b2AuthorizeAccountResponse, fileId).getResponse();
@@ -711,6 +744,7 @@ public class B2ApiClient {
 	 * @return the download file response
 	 *
 	 * @throws B2ApiException if there was an error with the call
+	 * @throws IOException if there was an error communicating with the API service
 	 */
 	public B2DownloadFileResponse downloadFileRangeById(String fileId, long rangeStart, long rangeEnd) throws B2ApiException, IOException {
 		return new B2DownloadFileByIdRequest(client, b2AuthorizeAccountResponse, fileId, rangeStart, rangeEnd).getResponse();
@@ -728,6 +762,7 @@ public class B2ApiClient {
 	 * @return the array of bytes for the file
 	 *
 	 * @throws B2ApiException if there was an error with the call
+	 * @throws IOException if there was an error communicating with the API service
 	 */
 	public byte[] downloadFileByIdToBytes(String fileId) throws B2ApiException, IOException {
 		return IOUtils.toByteArray(new B2DownloadFileByIdRequest(client, b2AuthorizeAccountResponse, fileId).getResponse().getContent());
@@ -750,6 +785,7 @@ public class B2ApiClient {
 	 * @return the array of bytes for the file
 	 *
 	 * @throws B2ApiException if there was an error with the call
+	 * @throws IOException if there was an error communicating with the API service
 	 */
 	public byte[] downloadFileRangeByIdToBytes(String fileId, long rangeStart, long rangeEnd) throws B2ApiException, IOException {
 		return IOUtils.toByteArray(new B2DownloadFileByIdRequest(client, b2AuthorizeAccountResponse, fileId, rangeStart, rangeEnd)
@@ -763,6 +799,7 @@ public class B2ApiClient {
 	 * @param file The file to download to
 	 *
 	 * @throws B2ApiException if there was an error downloading the file
+	 * @throws IOException if there was an error communicating with the API service
 	 */
 	public void downloadFileByIdToFile(String fileId, File file) throws B2ApiException, IOException {
 		FileUtils.copyInputStreamToFile(new B2DownloadFileByIdRequest(client, b2AuthorizeAccountResponse, fileId).getResponse().getContent(), file);
@@ -780,6 +817,7 @@ public class B2ApiClient {
 	 * @param rangeEnd the end range (byte) offset for the content (inclusive)
 	 *
 	 * @throws B2ApiException if there was an error downloading the file
+	 * @throws IOException if there was an error communicating with the API service
 	 */
 	public void downloadFileRangeByIdToFile(String fileId, File file, long rangeStart, long rangeEnd) throws B2ApiException, IOException {
 		FileUtils.copyInputStreamToFile(new B2DownloadFileByIdRequest(client, b2AuthorizeAccountResponse, fileId, rangeStart, rangeEnd)
@@ -798,6 +836,7 @@ public class B2ApiClient {
 	 * @return the input stream for the file
 	 *
 	 * @throws B2ApiException if there was an error with the call
+	 * @throws IOException if there was an error communicating with the API service
 	 */
 	public InputStream downloadFileByIdToStream(String fileId) throws B2ApiException, IOException {
 		return new B2DownloadFileByIdRequest(client, b2AuthorizeAccountResponse, fileId).getResponse().getContent();
@@ -820,6 +859,7 @@ public class B2ApiClient {
 	 * @return the input stream for the file
 	 *
 	 * @throws B2ApiException if there was an error with the call
+	 * @throws IOException if there was an error communicating with the API service
 	 */
 	public InputStream downloadFileRangeByIdToStream(String fileId, long rangeStart, long rangeEnd) throws B2ApiException, IOException {
 		return new B2DownloadFileByIdRequest(client, b2AuthorizeAccountResponse, fileId, rangeStart, rangeEnd)

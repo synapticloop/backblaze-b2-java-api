@@ -1,5 +1,7 @@
 package synapticloop.b2.request;
 
+import java.io.IOException;
+
 /*
  * Copyright (c) 2016 synapticloop.
  * 
@@ -18,11 +20,10 @@ package synapticloop.b2.request;
 
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.util.EntityUtils;
+
 import synapticloop.b2.exception.B2ApiException;
 import synapticloop.b2.response.B2AuthorizeAccountResponse;
 import synapticloop.b2.response.B2DeleteFileVersionResponse;
-
-import java.io.IOException;
 
 /**
  * <p>Deletes one version of a file from B2.</p>
@@ -65,6 +66,7 @@ public class B2DeleteFileVersionRequest extends BaseB2Request {
 	 * @return the delete file version response
 	 * 
 	 * @throws B2ApiException if there was an error with the call
+	 * @throws IOException if there was an error communicating with the API service
 	 */
 	public B2DeleteFileVersionResponse getResponse() throws B2ApiException, IOException {
 		return new B2DeleteFileVersionResponse(EntityUtils.toString(executePost().getEntity()));

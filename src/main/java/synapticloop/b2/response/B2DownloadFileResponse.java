@@ -73,6 +73,7 @@ public class B2DownloadFileResponse {
 	 * @param response The HTTP response object
 	 * 
 	 * @throws B2ApiException if there was an error parsing the response
+	 * @throws IOException if there was an error communicating with the API service
 	 */
 	public B2DownloadFileResponse(CloseableHttpResponse response) throws B2ApiException, IOException {
 		if(null != response.getEntity()) {

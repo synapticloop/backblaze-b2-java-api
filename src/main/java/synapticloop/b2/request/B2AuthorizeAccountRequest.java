@@ -71,6 +71,7 @@ public class B2AuthorizeAccountRequest extends BaseB2Request {
 	 * @return the authorize response
 	 * 
 	 * @throws B2ApiException if there was an error with the call
+	 * @throws IOException if there was an error communicating with the API service
 	 */
 	public B2AuthorizeAccountResponse getResponse() throws B2ApiException, IOException {
 		final CloseableHttpResponse httpResponse = executeGet();
