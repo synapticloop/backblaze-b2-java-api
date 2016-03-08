@@ -20,7 +20,7 @@ public class B2AuthorizeAccountRequestTest {
 	}
 
 	@Test
-	public void testCorrectCredentials() throws B2ApiException {
+	public void testCorrectCredentials() throws Exception {
 		boolean isOK = true;
 		String b2AccountId = System.getenv(B2_ACCOUNT_ID);
 		String b2ApplicationKey = System.getenv(B2_APPLICATION_KEY);
@@ -48,7 +48,7 @@ public class B2AuthorizeAccountRequestTest {
 	}
 
 	@Test (expected=B2ApiException.class)
-	public void testIncorrectCredentials() throws B2ApiException {
+	public void testIncorrectCredentials() throws Exception {
 		B2AuthorizeAccountRequest b2AuthorizeAccountRequest = new B2AuthorizeAccountRequest(HttpClients.createDefault(), "bad", "value");
 		b2AuthorizeAccountRequest.getResponse();
 	}

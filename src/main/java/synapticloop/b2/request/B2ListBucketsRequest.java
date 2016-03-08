@@ -56,13 +56,9 @@ public class B2ListBucketsRequest extends BaseB2Request {
 	 * @return the list buckets response
 	 * 
 	 * @throws B2ApiException if something went wrong
+	 * @throws IOException if there was an error communicating with the API service
 	 */
-	public B2ListBucketsResponse getResponse() throws B2ApiException {
-		try {
-			return new B2ListBucketsResponse(EntityUtils.toString(executePost().getEntity()));
-		} catch(IOException e) {
-			throw new B2ApiException(e);
-		}
+	public B2ListBucketsResponse getResponse() throws B2ApiException, IOException {
+		return new B2ListBucketsResponse(EntityUtils.toString(executePost().getEntity()));
 	}
-
 }

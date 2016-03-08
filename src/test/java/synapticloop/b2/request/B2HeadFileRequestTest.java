@@ -17,7 +17,7 @@ import synapticloop.b2.response.B2FileResponse;
 public class B2HeadFileRequestTest {
 
 	@Test
-	public void testHeadFileById() throws B2ApiException, IOException {
+	public void testHeadFileById() throws Exception {
 		final B2BucketResponse randomPrivateBucket = B2TestHelper.createRandomPrivateBucket();
 
 		Map<String, String> fileInfo = new HashMap<String, String>();

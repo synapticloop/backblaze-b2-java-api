@@ -13,7 +13,7 @@ import static org.junit.Assert.assertNull;
 public class B2ListFileNamesRequestTest {
 
 	@Test
-	public void testListEmptyBucket() throws B2ApiException {
+	public void testListEmptyBucket() throws Exception {
 		B2AuthorizeAccountResponse b2AuthorizeAccountResponse = B2TestHelper.getB2AuthorizeAccountResponse();
 		B2BucketResponse b2BucketResponse = B2TestHelper.createRandomPrivateBucket();
 

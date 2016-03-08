@@ -20,7 +20,11 @@
 
 		{ "type":"inbuilt", "value":"logging-slf4j" },
 
-		{ "type":"inbuilt", "value":"dependency-management" },
+		{ "type":"inbuilt", "value":"publishing-github" },
+
+		{ "type":"inbuilt", "value":"publishing-maven" },
+
+		{ "type":"inbuilt", "value":"dependencies" },
 
 		{ "type":"inbuilt", "value":"license-mit" },
 

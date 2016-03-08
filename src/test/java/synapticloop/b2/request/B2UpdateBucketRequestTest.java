@@ -15,7 +15,7 @@ import synapticloop.b2.response.B2BucketResponse;
 public class B2UpdateBucketRequestTest {
 
 	@Test
-	public void testUpdateBucket() throws B2ApiException {
+	public void testUpdateBucket() throws Exception {
 		B2AuthorizeAccountResponse b2AuthorizeAccountResponse = B2TestHelper.getB2AuthorizeAccountResponse();
 
 		B2BucketResponse privateBucket = B2TestHelper.createRandomPrivateBucket();

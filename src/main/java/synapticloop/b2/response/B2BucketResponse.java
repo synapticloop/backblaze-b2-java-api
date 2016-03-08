@@ -36,6 +36,7 @@ public class B2BucketResponse extends BaseB2Response {
 	 * the API call.  This response is then parsed into the relevant fields.
 	 *
 	 * @param json The response (in JSON format)
+	 * 
 	 * @throws B2ApiException if there was an error parsing the response
 	 */
 	public B2BucketResponse(String json) throws B2ApiException {
@@ -54,6 +55,7 @@ public class B2BucketResponse extends BaseB2Response {
 	 * the API call.  This response is then parsed into the relevant fields.
 	 *
 	 * @param response The pre-parsed jsonObject
+	 * 
 	 * @throws B2ApiException if there was an error parsing the response
 	 */
 	public B2BucketResponse(final JSONObject response) throws B2ApiException {

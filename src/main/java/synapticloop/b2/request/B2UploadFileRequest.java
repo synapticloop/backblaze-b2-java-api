@@ -181,7 +181,6 @@ public class B2UploadFileRequest extends BaseB2Request {
 
 		// Add 'X-Bz-Info-*' headers
 		if(null != fileInfo) {
-			int fileInfoSize = fileInfo.size();
 			for(final String key : fileInfo.keySet()) {
 				this.addHeader(B2ResponseHeaders.HEADER_X_BZ_INFO_PREFIX + URLEncoder.encode(key), URLEncoder.encode(fileInfo.get(key)));
 			}
@@ -204,13 +203,10 @@ public class B2UploadFileRequest extends BaseB2Request {
 	 * @return the file response
 	 * 
 	 * @throws B2ApiException if something went wrong
+	 * @throws IOException if there was an error communicating with the API service
 	 */
 
-	public B2FileResponse getResponse() throws B2ApiException {
-		try {
-			return new B2FileResponse(EntityUtils.toString(executePost(entity).getEntity()));
-		} catch(IOException e) {
-			throw new B2ApiException(e);
-		}
+	public B2FileResponse getResponse() throws B2ApiException, IOException {
+		return new B2FileResponse(EntityUtils.toString(executePost(entity).getEntity()));
 	}
 }

@@ -1,5 +1,7 @@
 package synapticloop.b2.request;
 
+import java.io.IOException;
+
 /*
  * Copyright (c) 2016 synapticloop.
  * 
@@ -16,15 +18,12 @@ package synapticloop.b2.request;
  * this source code or binaries.
  */
 
-import java.io.IOException;
-
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.util.EntityUtils;
 
 import synapticloop.b2.exception.B2ApiException;
 import synapticloop.b2.response.B2AuthorizeAccountResponse;
 import synapticloop.b2.response.B2DeleteFileVersionResponse;
-import synapticloop.b2.util.URLEncoder;
 
 /**
  * <p>Deletes one version of a file from B2.</p>
@@ -57,7 +56,7 @@ public class B2DeleteFileVersionRequest extends BaseB2Request {
 	public B2DeleteFileVersionRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String fileName, String fileId) {
 		super(client, b2AuthorizeAccountResponse, b2AuthorizeAccountResponse.getApiUrl() + B2_DELETE_FILE_VERSION);
 
-		this.addProperty(B2RequestProperties.KEY_FILE_NAME, URLEncoder.encode(fileName));
+		this.addProperty(B2RequestProperties.KEY_FILE_NAME, fileName);
 		this.addProperty(B2RequestProperties.KEY_FILE_ID, fileId);
 	}
 
@@ -67,12 +66,9 @@ public class B2DeleteFileVersionRequest extends BaseB2Request {
 	 * @return the delete file version response
 	 * 
 	 * @throws B2ApiException if there was an error with the call
+	 * @throws IOException if there was an error communicating with the API service
 	 */
-	public B2DeleteFileVersionResponse getResponse() throws B2ApiException {
-		try {
-			return(new B2DeleteFileVersionResponse(EntityUtils.toString(executePost().getEntity())));
-		} catch(IOException e) {
-			throw new B2ApiException(e);
-		}
+	public B2DeleteFileVersionResponse getResponse() throws B2ApiException, IOException {
+		return new B2DeleteFileVersionResponse(EntityUtils.toString(executePost().getEntity()));
 	}
 }

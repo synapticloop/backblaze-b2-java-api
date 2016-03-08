@@ -1,5 +1,7 @@
 package synapticloop.b2.request;
 
+import java.io.IOException;
+
 /*
  * Copyright (c) 2016 synapticloop.
  * 
@@ -75,8 +77,9 @@ public class B2HeadFileByIdRequest extends BaseB2Request {
 	 * @return the download file response - note that this does not contain any body content
 	 * 
 	 * @throws B2ApiException if something went wrong
+	 * @throws IOException if there was an error communicating with the API service
 	 */
-	public B2DownloadFileResponse getResponse() throws B2ApiException {
-		return(new B2DownloadFileResponse(this.executeHead()));
+	public B2DownloadFileResponse getResponse() throws B2ApiException, IOException {
+		return new B2DownloadFileResponse(this.executeHead());
 	}
 }
