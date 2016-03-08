@@ -27,8 +27,8 @@ import java.io.IOException;
 public class B2CancelLargeFileRequest extends BaseB2Request {
 	private static final String B2_CANCEL_LARGE_FILE = BASE_API + "b2_cancel_large_file";
 
-	protected B2CancelLargeFileRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse,
-									   String fileId) {
+	public B2CancelLargeFileRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse,
+									String fileId) {
 		super(client, b2AuthorizeAccountResponse, b2AuthorizeAccountResponse.getApiUrl() + B2_CANCEL_LARGE_FILE);
 
 		this.addProperty(B2RequestProperties.KEY_FILE_ID, fileId);
