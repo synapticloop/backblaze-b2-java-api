@@ -13,7 +13,7 @@ import synapticloop.b2.response.B2GetUploadUrlResponse;
 public class B2GetUploadUrlRequestTest {
 
 	@Test
-	public void testGetUploadUrl() throws B2ApiException {
+	public void testGetUploadUrl() throws Exception {
 		B2BucketResponse privateBucket = B2TestHelper.createRandomPrivateBucket();
 
 		B2GetUploadUrlResponse response = new B2GetUploadUrlRequest(HttpClients.createDefault(), B2TestHelper.getB2AuthorizeAccountResponse(), privateBucket.getBucketId()).getResponse();

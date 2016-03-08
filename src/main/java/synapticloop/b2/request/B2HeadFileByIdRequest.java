@@ -22,6 +22,8 @@ import synapticloop.b2.exception.B2ApiException;
 import synapticloop.b2.response.B2AuthorizeAccountResponse;
 import synapticloop.b2.response.B2DownloadFileResponse;
 
+import java.io.IOException;
+
 /**
  * <p>Gets information on one file from B2.</p>
  * 
@@ -76,7 +78,7 @@ public class B2HeadFileByIdRequest extends BaseB2Request {
 	 * 
 	 * @throws B2ApiException if something went wrong
 	 */
-	public B2DownloadFileResponse getResponse() throws B2ApiException {
-		return(new B2DownloadFileResponse(this.executeHead()));
+	public B2DownloadFileResponse getResponse() throws B2ApiException, IOException {
+		return new B2DownloadFileResponse(this.executeHead());
 	}
 }

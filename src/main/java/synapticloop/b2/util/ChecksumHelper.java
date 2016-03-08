@@ -32,14 +32,14 @@ public class ChecksumHelper {
 	 *
 	 * @return the sha1 of the file
 	 *
-	 * @throws B2ApiException if something went wrong with the calculation
+	 * @throws IOException if something went wrong with the calculation
 	 */
-	public static String calculateSha1(File file) throws B2ApiException {
+	public static String calculateSha1(File file) throws IOException {
 		try {
 			return calculateSha1(new FileInputStream(file));
 		}
 		catch(FileNotFoundException e) {
-			throw new B2ApiException(e);
+			throw new IOException(e);
 		}
 	}
 
@@ -50,9 +50,9 @@ public class ChecksumHelper {
 	 *
 	 * @return the sha1 sum
 	 *
-	 * @throws B2ApiException if there was an error calculating the sha1 sum
+	 * @throws IOException if there was an error calculating the sha1 sum
 	 */
-	public static String calculateSha1(InputStream in) throws B2ApiException {
+	public static String calculateSha1(InputStream in) throws IOException {
 
 		MessageDigest messageDigest;
 		InputStream inputStream = null;
@@ -68,8 +68,8 @@ public class ChecksumHelper {
 			}
 
 			return(new HexBinaryAdapter().marshal(messageDigest.digest()));
-		} catch (NoSuchAlgorithmException | IOException ex) {
-			throw new B2ApiException(ex);
+		} catch (NoSuchAlgorithmException ex) {
+			throw new IOException(ex);
 		} finally {
 			IOUtils.closeQuietly(inputStream);
 		}

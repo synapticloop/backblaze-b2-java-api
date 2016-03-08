@@ -26,7 +26,7 @@ public class B2HideFileRequestTest {
 	}
 
 	@Test
-	public void testHideFileWithPath() throws B2ApiException {
+	public void testHideFileWithPath() throws Exception {
 		randomPrivateBucket = B2TestHelper.createRandomPrivateBucket();
 		String bucketId = randomPrivateBucket.getBucketId();
 		b2FileResponseWithPath = B2TestHelper.uploadTemporaryFileToBucket(bucketId);
@@ -53,7 +53,7 @@ public class B2HideFileRequestTest {
 	}
 
 	@After
-	public void tearDown() throws B2ApiException {
+	public void tearDown() throws Exception {
 		B2TestHelper.deleteFile(b2HideFileResponse.getFileName(), b2HideFileResponse.getFileId());
 		B2TestHelper.deleteFile(b2FileResponseWithPath.getFileName(), b2FileResponseWithPath.getFileId());
 		B2TestHelper.deleteBucket(randomPrivateBucket.getBucketId());

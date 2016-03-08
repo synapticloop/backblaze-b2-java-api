@@ -9,7 +9,7 @@ import synapticloop.b2.response.B2FileInfoResponse;
 
 public class DeleteTestBuckets {
 
-	public static void main(String[] args) throws B2ApiException {
+	public static void main(String[] args) throws Exception {
 		String b2AccountId = System.getenv(B2TestHelper.B2_ACCOUNT_ID);
 		String b2ApplicationKey = System.getenv(B2TestHelper.B2_APPLICATION_KEY);
 

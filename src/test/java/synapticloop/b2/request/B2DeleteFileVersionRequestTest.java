@@ -18,7 +18,7 @@ import static org.junit.Assert.assertNotNull;
 public class B2DeleteFileVersionRequestTest {
 
 	@Test
-	public void testDeleteFileVersion() throws B2ApiException {
+	public void testDeleteFileVersion() throws Exception {
 		B2AuthorizeAccountResponse b2AuthorizeAccountResponse = B2TestHelper.getB2AuthorizeAccountResponse();
 		B2BucketResponse b2BucketResponse = B2TestHelper.createRandomPrivateBucket();
 		B2FileResponse b2FileResponseIn = B2TestHelper.uploadTemporaryFileToBucket(b2BucketResponse.getBucketId());
@@ -33,22 +33,18 @@ public class B2DeleteFileVersionRequestTest {
 	}
 
 	@Test
-	public void testDeleteFileVersionWithWhitespace() throws B2ApiException {
+	public void testDeleteFileVersionWithWhitespace() throws Exception {
 		B2AuthorizeAccountResponse b2AuthorizeAccountResponse = B2TestHelper.getB2AuthorizeAccountResponse();
 		B2BucketResponse b2BucketResponse = B2TestHelper.createRandomPrivateBucket();
 
 		B2GetUploadUrlResponse b2GetUploadUrlResponse = B2TestHelper.getUploadUrl(b2BucketResponse.getBucketId());
 		File file;
-		try {
-			file = File.createTempFile("test/path/backblaze-api-test whitespace", ".txt");
-			FileWriter fileWriter = new FileWriter(file);
-			fileWriter.write("hello whitespace!");
-			fileWriter.flush();
-			fileWriter.close();
-			file.deleteOnExit();
-		} catch(IOException ioex) {
-			throw new B2ApiException("Could not create temporary file", ioex);
-		}
+		file = File.createTempFile("test/path/backblaze-api-test whitespace", ".txt");
+		FileWriter fileWriter = new FileWriter(file);
+		fileWriter.write("hello whitespace!");
+		fileWriter.flush();
+		fileWriter.close();
+		file.deleteOnExit();
 		final CloseableHttpClient client = HttpClients.createDefault();
 		final B2FileResponse b2FileResponseIn = new B2UploadFileRequest(client, b2AuthorizeAccountResponse,
 				b2GetUploadUrlResponse, file.getName(), file, ChecksumHelper.calculateSha1(file)).getResponse();

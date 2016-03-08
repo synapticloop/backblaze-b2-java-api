@@ -56,7 +56,7 @@ public class B2DownloadFileRequestTest {
 	}
 
 	@Test
-	public void testDownloadFileBy() throws B2ApiException, IOException {
+	public void testDownloadFileBy() throws Exception {
 		randomPrivateBucket = B2TestHelper.createRandomPrivateBucket();
 		b2FileResponse = B2TestHelper.uploadTemporaryFileToBucket(randomPrivateBucket.getBucketId());
 
@@ -71,7 +71,7 @@ public class B2DownloadFileRequestTest {
 	}
 
 	@Test
-	public void testDownloadFileByRange() throws B2ApiException, IOException {
+	public void testDownloadFileByRange() throws Exception {
 		randomPrivateBucket = B2TestHelper.createRandomPrivateBucket();
 		b2FileResponse = B2TestHelper.uploadTemporaryFileToBucket(randomPrivateBucket.getBucketId());
 

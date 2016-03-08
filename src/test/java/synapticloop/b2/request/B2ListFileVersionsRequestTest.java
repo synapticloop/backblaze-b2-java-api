@@ -27,7 +27,7 @@ public class B2ListFileVersionsRequestTest {
 	private static String bucketId = null;
 
 	@BeforeClass
-	public static void setupBeforeClass() throws B2ApiException {
+	public static void setupBeforeClass() throws Exception {
 		b2AuthorizeAccountResponse = B2TestHelper.getB2AuthorizeAccountResponse();
 		B2BucketResponse randomPrivateBucket = B2TestHelper.createRandomPrivateBucket();
 		bucketId = randomPrivateBucket.getBucketId();
@@ -38,14 +38,14 @@ public class B2ListFileVersionsRequestTest {
 	}
 
 	@Test
-	public void listFileVersions() throws B2ApiException {
+	public void listFileVersions() throws Exception {
 		B2ListFilesResponse b2ListFileVersionsResponse = new B2ListFileVersionsRequest(HttpClients.createDefault(), b2AuthorizeAccountResponse, bucketId, 1000).getResponse();
 		List<B2FileInfoResponse> files = b2ListFileVersionsResponse.getFiles();
 		assertEquals(4, files.size());
 	}
 
 	@Test
-	public void listFileVersionByName() throws B2ApiException {
+	public void listFileVersionByName() throws Exception {
 		B2ListFilesResponse b2ListFileVersionsResponse = new B2ListFileVersionsRequest(HttpClients.createDefault(), b2AuthorizeAccountResponse, bucketId, 1, tempFileOne.getFileName(), null).getResponse();
 		List<B2FileInfoResponse> files = b2ListFileVersionsResponse.getFiles();
 		assertEquals(1, files.size());
@@ -55,7 +55,7 @@ public class B2ListFileVersionsRequestTest {
 	}
 
 	@Test
-	public void listFileVersionByNameAndId() throws B2ApiException {
+	public void listFileVersionByNameAndId() throws Exception {
 		B2ListFilesResponse b2ListFileVersionsResponse = new B2ListFileVersionsRequest(HttpClients.createDefault(),  b2AuthorizeAccountResponse, bucketId, 1, tempFileTwo.getFileName(), tempFileTwo.getFileId()).getResponse();
 		List<B2FileInfoResponse> files = b2ListFileVersionsResponse.getFiles();
 		assertEquals(1, files.size());
@@ -65,7 +65,7 @@ public class B2ListFileVersionsRequestTest {
 	}
 
 	@Test(expected = B2ApiException.class)
-	public void listFileVersionIncorrect() throws B2ApiException {
+	public void listFileVersionIncorrect() throws Exception {
 		B2ListFilesResponse b2ListFileVersionsResponse = new B2ListFileVersionsRequest(HttpClients.createDefault(), b2AuthorizeAccountResponse, bucketId, 1, null, tempFileTwo.getFileId()).getResponse();
 		List<B2FileInfoResponse> files = b2ListFileVersionsResponse.getFiles();
 		assertEquals(1, files.size());
@@ -76,7 +76,7 @@ public class B2ListFileVersionsRequestTest {
 	}
 
 	@Test
-	public void listFiles() throws B2ApiException {
+	public void listFiles() throws Exception {
 		CloseableHttpClient client = HttpClients.createDefault();
 		B2ListFilesResponse b2ListFileVersionsResponse = new B2ListFileVersionsRequest(client, b2AuthorizeAccountResponse, bucketId, 1, tempFileOne.getFileName(), null).getResponse();
 		assertEquals(1, b2ListFileVersionsResponse.getFiles().size());
@@ -92,7 +92,7 @@ public class B2ListFileVersionsRequestTest {
 	}
 
 	@AfterClass
-	public static void tearDownAfterClass() throws B2ApiException {
+	public static void tearDownAfterClass() throws Exception {
 		CloseableHttpClient client = HttpClients.createDefault();
 		new B2DeleteFileVersionRequest(client, b2AuthorizeAccountResponse, tempFileOne.getFileName(), tempFileOne.getFileId()).getResponse();
 		new B2DeleteFileVersionRequest(client, b2AuthorizeAccountResponse, tempFileTwo.getFileName(), tempFileTwo.getFileId()).getResponse();

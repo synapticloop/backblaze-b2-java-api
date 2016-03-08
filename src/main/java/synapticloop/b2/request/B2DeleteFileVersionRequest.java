@@ -66,11 +66,7 @@ public class B2DeleteFileVersionRequest extends BaseB2Request {
 	 * 
 	 * @throws B2ApiException if there was an error with the call
 	 */
-	public B2DeleteFileVersionResponse getResponse() throws B2ApiException {
-		try {
-			return(new B2DeleteFileVersionResponse(EntityUtils.toString(executePost().getEntity())));
-		} catch(IOException e) {
-			throw new B2ApiException(e);
-		}
+	public B2DeleteFileVersionResponse getResponse() throws B2ApiException, IOException {
+		return new B2DeleteFileVersionResponse(EntityUtils.toString(executePost().getEntity()));
 	}
 }

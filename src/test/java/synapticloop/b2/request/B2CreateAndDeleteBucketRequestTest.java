@@ -20,13 +20,13 @@ public class B2CreateAndDeleteBucketRequestTest {
 	private static String bucketName = null;
 
 	@BeforeClass
-	public static void setupBeforClass() throws B2ApiException {
+	public static void setupBeforClass() throws Exception {
 		b2AuthorizeAccountResponse = B2TestHelper.getB2AuthorizeAccountResponse();
 		bucketName = UUID.randomUUID().toString();
 	}
 
 	@Test
-	public void testBucketCreationAndDeletion() throws B2ApiException {
+	public void testBucketCreationAndDeletion() throws Exception {
 
 		b2CreateBucketRequest = new B2CreateBucketRequest(HttpClients.createDefault(), b2AuthorizeAccountResponse, bucketName, BucketType.allPrivate);
 		B2BucketResponse b2BucketResponse = b2CreateBucketRequest.getResponse();

@@ -205,11 +205,7 @@ public class B2UploadFileRequest extends BaseB2Request {
 	 * @throws B2ApiException if something went wrong
 	 */
 
-	public B2FileResponse getResponse() throws B2ApiException {
-		try {
-			return new B2FileResponse(EntityUtils.toString(executePost(entity).getEntity()));
-		} catch(IOException e) {
-			throw new B2ApiException(e);
-		}
+	public B2FileResponse getResponse() throws B2ApiException, IOException {
+		return new B2FileResponse(EntityUtils.toString(executePost(entity).getEntity()));
 	}
 }
