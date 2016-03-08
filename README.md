@@ -1,4 +1,4 @@
-
+[![Build Status](https://travis-ci.org/synapticloop/backblaze-b2-java-api.svg?branch=master)](https://travis-ci.org/synapticloop/backblaze-b2-java-api)[![Download](https://api.bintray.com/packages/synapticloop/maven/backblaze-b2-java-api/images/download.svg)](https://bintray.com/synapticloop/maven/backblaze-b2-java-api/_latestVersion)[![GitHub Release](https://img.shields.io/github/release/synapticloop/backblaze-b2-java-api.svg)](https://github.com/synapticloop/backblaze-b2-java-api/releases)
 
 # backblaze-b2-java-api
 
@@ -190,7 +190,7 @@ As such, this is not a repository, but a location to download files from.
 
 This project publishes artefacts to [Maven Central](https://search.maven.org/)
 
-> Note that the latest version can be found [mvn central](http://search.maven.org/#artifactdetails|synapticloop|backblaze-b2-java-api|v1.2.8|jar)
+> Note that the latest version can be found [mvn central](http://search.maven.org/#artifactdetails|synapticloop|backblaze-b2-java-api|1.2.8|jar)
 
 ## maven setup
 
@@ -210,9 +210,9 @@ repositories {
 
 ```
 dependencies {
-	runtime(group: 'synapticloop', name: 'backblaze-b2-java-api', version: 'v1.2.8', ext: 'jar')
+	runtime(group: 'synapticloop', name: 'backblaze-b2-java-api', version: '1.2.8', ext: 'jar')
 
-	compile(group: 'synapticloop', name: 'backblaze-b2-java-api', version: 'v1.2.8', ext: 'jar')
+	compile(group: 'synapticloop', name: 'backblaze-b2-java-api', version: '1.2.8', ext: 'jar')
 }
 ```
 
@@ -220,9 +220,9 @@ or, more simply for versions of gradle greater than 2.4
 
 ```
 dependencies {
-	runtime 'synapticloop:backblaze-b2-java-api:v1.2.8'
+	runtime 'synapticloop:backblaze-b2-java-api:1.2.8'
 
-	compile 'synapticloop:backblaze-b2-java-api:v1.2.8'
+	compile 'synapticloop:backblaze-b2-java-api:1.2.8'
 }
 ```
 
@@ -232,7 +232,7 @@ dependencies {
 <dependency>
 	<groupId>synapticloop</groupId>
 	<artifactId>backblaze-b2-java-api</artifactId>
-	<version>v1.2.8</version>
+	<version>1.2.8</version>
 	<type>jar</type>
 </dependency>
 ```
