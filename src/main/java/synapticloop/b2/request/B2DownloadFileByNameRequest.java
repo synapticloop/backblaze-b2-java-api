@@ -24,6 +24,8 @@ import synapticloop.b2.response.B2AuthorizeAccountResponse;
 import synapticloop.b2.response.B2DownloadFileResponse;
 import synapticloop.b2.util.URLEncoder;
 
+import java.io.IOException;
+
 /**
  * <p>Downloads one file by providing the name of the bucket and the name of the file.</p>
  * 
@@ -91,7 +93,7 @@ public class B2DownloadFileByNameRequest extends BaseB2Request {
 	 * 
 	 * @throws B2ApiException If there was an error with the call
 	 */
-	public B2DownloadFileResponse getResponse() throws B2ApiException {
-		return(new B2DownloadFileResponse(executeGet()));
+	public B2DownloadFileResponse getResponse() throws B2ApiException, IOException {
+		return new B2DownloadFileResponse(executeGet());
 	}
 }

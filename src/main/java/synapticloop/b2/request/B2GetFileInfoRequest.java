@@ -62,11 +62,7 @@ public class B2GetFileInfoRequest extends BaseB2Request {
 	 * 
 	 * @throws B2ApiException if there was an error with the call
 	 */
-	public B2FileResponse getResponse() throws B2ApiException {
-		try {
-			return(new B2FileResponse(EntityUtils.toString(executePost().getEntity())));
-		} catch(IOException e) {
-			throw new B2ApiException(e);
-		}
+	public B2FileResponse getResponse() throws B2ApiException, IOException {
+		return new B2FileResponse(EntityUtils.toString(executePost().getEntity()));
 	}
 }

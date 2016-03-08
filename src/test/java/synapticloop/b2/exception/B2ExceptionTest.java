@@ -7,22 +7,22 @@ import org.junit.Test;
 
 
 public class B2ExceptionTest {
-	private B2ApiException b2Exception = null;
-
-	@Before
-	public void setup() {
-		b2Exception = new B2ApiException();
-	}
 
 	@Test
 	public void testEmptyException() {
-		b2Exception = new B2ApiException("");
+		B2ApiException b2Exception = new B2ApiException("");
 		assertEquals("", b2Exception.getMessage());
 	}
 
 	@Test
+	public void testNullResponseException() {
+		B2ApiException b2Exception = new B2ApiException((String)null);
+		assertEquals(null, b2Exception.getMessage());
+	}
+
+	@Test
 	public void testJsonException() {
-		b2Exception = new B2ApiException("{\n" +
+		B2ApiException b2Exception = new B2ApiException("{\n" +
 				"      \"code\": \"bad_json\",\n" + 
 				"      \"message\": \"unknown field in com.backblaze.modules.b2.data.FileNameAndId: accountId\",\n" + 
 				"      \"status\": 400\n" + 

@@ -25,14 +25,8 @@ public class B2ApiException extends Exception {
 	private String code;
 	private String message;
 	private int status = -1;
-	private String originalMessage;
 
-	/**
-	 * Create a new B2Api Exception
-	 */
-	public B2ApiException() {
-		super();
-	}
+	private final String json;
 
 	/**
 	 * Create a new B2 Exception with a message.  If the message is in JSON (as 
@@ -45,11 +39,12 @@ public class B2ApiException extends Exception {
 	 *   <li>message - A human-readable message, in English, saying what went wrong.</li>
 	 * </ul>
 	 * 
-	 * @param message The message of the exception
+	 * @param json The message of the exception
 	 */
-	public B2ApiException(String message) {
-		super(message);
-		parseMessage(message);
+	public B2ApiException(String json) {
+		super(json);
+		this.json = json;
+		this.parse(json);
 	}
 
 	/**
@@ -63,44 +58,28 @@ public class B2ApiException extends Exception {
 	 *   <li>message - A human-readable message, in English, saying what went wrong.</li>
 	 * </ul>
 	 * 
-	 * @param message The message of the exception
+	 * @param json The message of the exception
 	 * @param cause the root cause of the exception
 	 */
-	public B2ApiException(String message, Throwable cause) {
-		super(message, cause);
-		parseMessage(message);
+	public B2ApiException(String json, Throwable cause) {
+		super(json, cause);
+		this.json = json;
+		this.parse(json);
 	}
 
-	/**
-	 * Create a new B2Api Exception with a root cause
-	 * 
-	 * @param cause The root cause of the exception
-	 */
-	public B2ApiException(Throwable cause) {
-		super(cause);
-	}
 
-	private void parseMessage(String json) {
-		this.originalMessage = json;
+	private void parse(String json) {
+		if (null != json) {
+			try {
+				JSONObject jsonObject = new JSONObject(json);
+				this.message = jsonObject.optString("message", null);
+				this.status = jsonObject.optInt("status", -1);
+				this.code = jsonObject.optString("code", null);
 
-		if(null == json) {
-			return;
-		}
-
-		try {
-			JSONObject jsonObject = new JSONObject(json);
-
-			String tempMessage = jsonObject.getString("message");
-			if(null != tempMessage) {
-				this.message = tempMessage;
+			} catch (JSONException ex) {
+				// Ignore
+				this.message = json;
 			}
-
-			this.status = jsonObject.optInt("status");
-			this.code = jsonObject.optString("code", null);
-
-		} catch (JSONException ex) {
-			this.code = "not_json";
-			this.message = json;
 		}
 	}
 
@@ -129,8 +108,8 @@ public class B2ApiException extends Exception {
 	 * 
 	 * @return the original message text
 	 */
-	public String getOriginalMessage() { 
-		return this.originalMessage; 
+	public String getJson() {
+		return this.json;
 	}
 
 	/**

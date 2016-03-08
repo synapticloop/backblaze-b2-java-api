@@ -74,38 +74,34 @@ public class B2DownloadFileResponse {
 	 * 
 	 * @throws B2ApiException if there was an error parsing the response
 	 */
-	public B2DownloadFileResponse(CloseableHttpResponse response) throws B2ApiException {
-		try {
-			if(null != response.getEntity()) {
-				stream = new HttpMethodReleaseInputStream(response);
+	public B2DownloadFileResponse(CloseableHttpResponse response) throws B2ApiException, IOException {
+		if(null != response.getEntity()) {
+			stream = new HttpMethodReleaseInputStream(response);
+		} else {
+			// HEAD responses do not have an entity
+			stream = new NullInputStream(0L);
+			EntityUtils.consume(response.getEntity());
+		}
+
+		contentLength = Integer.parseInt(response.getFirstHeader(HttpHeaders.CONTENT_LENGTH).getValue());
+		contentType = response.getFirstHeader(HttpHeaders.CONTENT_TYPE).getValue();
+		contentSha1 = response.getFirstHeader(B2ResponseHeaders.HEADER_X_BZ_CONTENT_SHA1).getValue();
+		fileId = response.getFirstHeader(B2ResponseHeaders.HEADER_X_BZ_FILE_ID).getValue();
+		fileName = response.getFirstHeader(B2ResponseHeaders.HEADER_X_BZ_FILE_NAME).getValue();
+
+		for (Header header : response.getAllHeaders()) {
+			String headerName = header.getName();
+			String headerValue = header.getValue();
+
+			String headerNameLowerCase = headerName.toLowerCase(Locale.ENGLISH);
+
+			if(headerNameLowerCase.startsWith(B2ResponseHeaders.HEADER_X_BZ_INFO_PREFIX.toLowerCase(Locale.ENGLISH))) {
+				fileInfo.put(headerName.substring(B2ResponseHeaders.HEADER_X_BZ_INFO_PREFIX.length()), headerValue);
 			} else {
-				// HEAD responses do not have an entity
-				stream = new NullInputStream(0L);
-				EntityUtils.consume(response.getEntity());
-			}
-
-			contentLength = Integer.parseInt(response.getFirstHeader(HttpHeaders.CONTENT_LENGTH).getValue());
-			contentType = response.getFirstHeader(HttpHeaders.CONTENT_TYPE).getValue();
-			contentSha1 = response.getFirstHeader(B2ResponseHeaders.HEADER_X_BZ_CONTENT_SHA1).getValue();
-			fileId = response.getFirstHeader(B2ResponseHeaders.HEADER_X_BZ_FILE_ID).getValue();
-			fileName = response.getFirstHeader(B2ResponseHeaders.HEADER_X_BZ_FILE_NAME).getValue();
-
-			for (Header header : response.getAllHeaders()) {
-				String headerName = header.getName();
-				String headerValue = header.getValue();
-
-				String headerNameLowerCase = headerName.toLowerCase(Locale.ENGLISH);
-
-				if(headerNameLowerCase.startsWith(B2ResponseHeaders.HEADER_X_BZ_INFO_PREFIX.toLowerCase(Locale.ENGLISH))) {
-					fileInfo.put(headerName.substring(B2ResponseHeaders.HEADER_X_BZ_INFO_PREFIX.length()), headerValue);
-				} else {
-					if(!ignoredHeaders.contains(headerNameLowerCase)) {
-						LOGGER.warn("Found a header named '{}' with value '{}', that was not mapped", headerName, headerValue);
-					}
+				if(!ignoredHeaders.contains(headerNameLowerCase)) {
+					LOGGER.warn("Found a header named '{}' with value '{}', that was not mapped", headerName, headerValue);
 				}
 			}
-		} catch (IllegalStateException | IOException ex) {
-			throw new B2ApiException("Could not retrieve response", ex);
 		}
 	}
 

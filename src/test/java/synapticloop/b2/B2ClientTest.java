@@ -41,7 +41,7 @@ public class B2ClientTest {
 	}
 
 	@Test
-	public void testPrivateBuckets() throws B2ApiException {
+	public void testPrivateBuckets() throws Exception {
 		B2BucketResponse createPrivateBucket = client.createBucket(B2TestHelper.B2_BUCKET_PREFIX + UUID.randomUUID().toString(), BucketType.allPrivate);
 
 		B2BucketResponse updateBucket = client.updateBucket(createPrivateBucket.getBucketId(), BucketType.allPublic);
@@ -51,7 +51,7 @@ public class B2ClientTest {
 	}
 
 	@Test
-	public void testPublicBuckets() throws B2ApiException {
+	public void testPublicBuckets() throws Exception {
 		B2BucketResponse createPublicBucket = client.createBucket(B2TestHelper.B2_BUCKET_PREFIX + UUID.randomUUID().toString(), BucketType.allPublic);
 		client.deleteBucket(createPublicBucket.getBucketId());
 	}

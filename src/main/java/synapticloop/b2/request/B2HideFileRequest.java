@@ -59,11 +59,7 @@ public class B2HideFileRequest extends BaseB2Request {
 	 * 
 	 * @throws B2ApiException if something went wrong
 	 */
-	public B2HideFileResponse getResponse() throws B2ApiException {
-		try {
-			return(new B2HideFileResponse(EntityUtils.toString(executePost().getEntity())));
-		} catch(IOException e) {
-			throw new B2ApiException(e);
-		}
+	public B2HideFileResponse getResponse() throws B2ApiException, IOException {
+		return new B2HideFileResponse(EntityUtils.toString(executePost().getEntity()));
 	}
 }

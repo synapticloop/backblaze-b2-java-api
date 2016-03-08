@@ -22,7 +22,7 @@ public class B2TestHelper {
 
 	private static B2AuthorizeAccountResponse response = null;
 
-	public static B2AuthorizeAccountResponse getB2AuthorizeAccountResponse() throws B2ApiException {
+	public static B2AuthorizeAccountResponse getB2AuthorizeAccountResponse() throws Exception {
 
 		if(null == response) {
 			boolean isOK = true;
@@ -57,7 +57,7 @@ public class B2TestHelper {
 	 * 
 	 * @throws B2ApiException if there was an error with the creation of the bucket
 	 */
-	public static B2BucketResponse createRandomPrivateBucket() throws B2ApiException {
+	public static B2BucketResponse createRandomPrivateBucket() throws Exception {
 		B2CreateBucketRequest b2CreateBucketRequest = new B2CreateBucketRequest(HttpClients.createDefault(), getB2AuthorizeAccountResponse(), B2_BUCKET_PREFIX + UUID.randomUUID().toString(), BucketType.allPrivate);
 		return(b2CreateBucketRequest.getResponse());
 	}
@@ -71,7 +71,7 @@ public class B2TestHelper {
 	 * 
 	 * @throws B2ApiException if there was an error with the creation of the bucket
 	 */
-	public static B2BucketResponse createRandomPublicBucket() throws B2ApiException {
+	public static B2BucketResponse createRandomPublicBucket() throws Exception {
 		B2CreateBucketRequest b2CreateBucketRequest = new B2CreateBucketRequest(HttpClients.createDefault(), getB2AuthorizeAccountResponse(), B2_BUCKET_PREFIX + UUID.randomUUID().toString(), BucketType.allPublic);
 		return(b2CreateBucketRequest.getResponse());
 	}
@@ -85,16 +85,16 @@ public class B2TestHelper {
 	 * 
 	 * @throws B2ApiException if something went wrong
 	 */
-	public static B2BucketResponse deleteBucket(String bucketId) throws B2ApiException {
+	public static B2BucketResponse deleteBucket(String bucketId) throws Exception {
 		B2DeleteBucketRequest b2DeleteBucketRequest = new B2DeleteBucketRequest(HttpClients.createDefault(), getB2AuthorizeAccountResponse(), bucketId);
 		return(b2DeleteBucketRequest.getResponse());
 	}
 
-	public static B2GetUploadUrlResponse getUploadUrl(String bucketId) throws B2ApiException {
+	public static B2GetUploadUrlResponse getUploadUrl(String bucketId) throws Exception {
 		return(new B2GetUploadUrlRequest(HttpClients.createDefault(), B2TestHelper.getB2AuthorizeAccountResponse(), bucketId).getResponse());
 	}
 
-	public static B2DeleteFileVersionResponse deleteFile(String fileName, String fileId) throws B2ApiException {
+	public static B2DeleteFileVersionResponse deleteFile(String fileName, String fileId) throws Exception {
 		return(new B2DeleteFileVersionRequest(HttpClients.createDefault(), getB2AuthorizeAccountResponse(), fileName, fileId).getResponse());
 	}
 
@@ -107,19 +107,15 @@ public class B2TestHelper {
 	 * 
 	 * @throws B2ApiException if something went wrong
 	 */
-	public static B2FileResponse uploadTemporaryFileToBucket(String bucketId) throws B2ApiException {
+	public static B2FileResponse uploadTemporaryFileToBucket(String bucketId) throws Exception {
 		B2GetUploadUrlResponse b2GetUploadUrlResponse = getUploadUrl(bucketId);
-		File file = null;
-		try {
-			file = File.createTempFile("test/path/backblaze-api-test", ".txt");
-			FileWriter fileWriter = new FileWriter(file);
-			fileWriter.write(DUMMY_FILE_CONTENT);
-			fileWriter.flush();
-			fileWriter.close();
-			file.deleteOnExit();
-		} catch(IOException ioex) {
-			throw new B2ApiException("Could not create temporary file", ioex);
-		}
+		File file;
+		file = File.createTempFile("test/path/backblaze-api-test", ".txt");
+		FileWriter fileWriter = new FileWriter(file);
+		fileWriter.write(DUMMY_FILE_CONTENT);
+		fileWriter.flush();
+		fileWriter.close();
+		file.deleteOnExit();
 		return(new B2UploadFileRequest(HttpClients.createDefault(), getB2AuthorizeAccountResponse(),
 				b2GetUploadUrlResponse, file.getName(), file, ChecksumHelper.calculateSha1(file)).getResponse());
 	}
@@ -149,19 +145,15 @@ public class B2TestHelper {
 	 * 
 	 * @throws B2ApiException if something went wrong
 	 */
-	public static B2FileResponse uploadTemporaryFileToBucket(String bucketId, Map<String, String> fileInfo) throws B2ApiException {
+	public static B2FileResponse uploadTemporaryFileToBucket(String bucketId, Map<String, String> fileInfo) throws Exception {
 		B2GetUploadUrlResponse b2GetUploadUrlResponse = getUploadUrl(bucketId);
-		File file = null;
-		try {
-			file = File.createTempFile("backblaze-api-test", ".txt");
-			FileWriter fileWriter = new FileWriter(file);
-			fileWriter.write(DUMMY_FILE_CONTENT);
-			fileWriter.flush();
-			fileWriter.close();
-			file.deleteOnExit();
-		} catch(IOException ioex) {
-			throw new B2ApiException("Could not create temporary file", ioex);
-		}
+		File file;
+		file = File.createTempFile("backblaze-api-test", ".txt");
+		FileWriter fileWriter = new FileWriter(file);
+		fileWriter.write(DUMMY_FILE_CONTENT);
+		fileWriter.flush();
+		fileWriter.close();
+		file.deleteOnExit();
 		return(new B2UploadFileRequest(HttpClients.createDefault(), getB2AuthorizeAccountResponse(), b2GetUploadUrlResponse, file.getName(), file,
 				ChecksumHelper.calculateSha1(file), fileInfo).getResponse());
 	}

@@ -61,11 +61,7 @@ public class B2GetUploadUrlRequest extends BaseB2Request {
 	 * 
 	 * @throws B2ApiException if something went wrong
 	 */
-	public B2GetUploadUrlResponse getResponse() throws B2ApiException {
-		try {
-			return(new B2GetUploadUrlResponse(EntityUtils.toString(executePost().getEntity())));
-		} catch(IOException e) {
-			throw new B2ApiException(e);
-		}
+	public B2GetUploadUrlResponse getResponse() throws B2ApiException, IOException {
+		return new B2GetUploadUrlResponse(EntityUtils.toString(executePost().getEntity()));
 	}
 }

@@ -1,5 +1,6 @@
 package synapticloop.b2.response;
 
+import java.io.IOException;
 import java.util.Iterator;
 
 /*
@@ -61,7 +62,7 @@ public abstract class BaseB2Response {
 		try {
 			jsonObject = new JSONObject(json);
 		} catch (JSONException ex) {
-			throw new B2ApiException(ex);
+			throw new B2ApiException(json, ex);
 		}
 		return jsonObject;
 	}
