@@ -16,45 +16,21 @@ package synapticloop.b2;
  * this source code or binaries.
  */
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.List;
-import java.util.Map;
-
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
-
 import synapticloop.b2.exception.B2ApiException;
-import synapticloop.b2.request.B2AuthorizeAccountRequest;
-import synapticloop.b2.request.B2CreateBucketRequest;
-import synapticloop.b2.request.B2DeleteBucketRequest;
-import synapticloop.b2.request.B2DeleteFileVersionRequest;
-import synapticloop.b2.request.B2DownloadFileByIdRequest;
-import synapticloop.b2.request.B2DownloadFileByNameRequest;
-import synapticloop.b2.request.B2GetFileInfoRequest;
-import synapticloop.b2.request.B2GetUploadUrlRequest;
-import synapticloop.b2.request.B2HeadFileByIdRequest;
-import synapticloop.b2.request.B2HideFileRequest;
-import synapticloop.b2.request.B2ListBucketsRequest;
-import synapticloop.b2.request.B2ListFileNamesRequest;
-import synapticloop.b2.request.B2ListFileVersionsRequest;
-import synapticloop.b2.request.B2RequestProperties;
-import synapticloop.b2.request.B2UpdateBucketRequest;
-import synapticloop.b2.request.B2UploadFileRequest;
-import synapticloop.b2.response.B2AuthorizeAccountResponse;
-import synapticloop.b2.response.B2BucketResponse;
-import synapticloop.b2.response.B2DeleteFileVersionResponse;
-import synapticloop.b2.response.B2DownloadFileResponse;
-import synapticloop.b2.response.B2FileInfoResponse;
-import synapticloop.b2.response.B2FileResponse;
-import synapticloop.b2.response.B2GetUploadUrlResponse;
-import synapticloop.b2.response.B2HideFileResponse;
-import synapticloop.b2.response.B2ListFilesResponse;
+import synapticloop.b2.request.*;
+import synapticloop.b2.response.*;
 import synapticloop.b2.util.ChecksumHelper;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
+import java.util.Map;
 
 /**
  * This is a wrapper class for the underlying calls to the request/response
@@ -352,6 +328,54 @@ public class B2ApiClient {
 				file, ChecksumHelper.calculateSha1(file)).getResponse();
 	}
 
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	 *
+	 *   LARGE FILE UPLOAD API ACTIONS
+	 *
+	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+	/**
+	 * Start large file upload
+	 *
+	 * @param bucketId the id of the bucket
+	 * @param fileName the name of the file that will be placed in the bucket
+	 * @param mimeType the mime type of the file, if null, then the mime type
+	 *                 will be attempted to be automatically mapped by the backblaze B2 API
+	 *                 see <a href="https://www.backblaze.com/b2/docs/content-types.html">https://www.backblaze.com/b2/docs/content-types.html</a>
+	 *                 for a list of content type mappings.
+	 * @param fileInfo the file info map which will be set as 'X-Bz-Info-' headers
+	 * @return The unique identifier for the file
+	 * @throws B2ApiException if there was an error uploading the file
+	 */
+	public B2StartLargeFileResponse startLargeFileUpload(String bucketId, String fileName, String mimeType, Map<String, String> fileInfo) throws B2ApiException {
+		return new B2StartLargeFileRequest(client, b2AuthorizeAccountResponse, bucketId, fileName, mimeType, fileInfo).getResponse();
+	}
+
+	/**
+	 * Cancel large file upload
+	 *
+	 * @param fileId the id of the file to cancel
+	 * @return File resopnse
+	 * @throws B2ApiException if there was an error canceling the upload
+	 */
+	public B2FileResponse cancelLargeFileUpload(String fileId) throws B2ApiException {
+		return new B2CancelLargeFileRequest(client, b2AuthorizeAccountResponse, fileId).getResponse();
+	}
+
+	/**
+	 * Upload large file upload part
+	 *
+	 * @param fileId       the id of the file to upload
+	 * @param partNumber   A number from 1 to 10000. The parts uploaded for one file must have contiguous numbers, starting with 1.
+	 * @param entity       Part content body
+	 * @param sha1Checksum the checksum for the part
+	 * @return Upload response
+	 * @throws B2ApiException if there was an error uploading the file
+	 */
+	public B2UploadPartResponse uploadPart(String fileId, int partNumber, HttpEntity entity, String sha1Checksum) throws B2ApiException {
+		final B2GetUploadPartUrlResponse b2GetUploadUrlResponse = new B2GetUploadPartUrlRequest(client, b2AuthorizeAccountResponse, fileId).getResponse();
+		return new B2UploadPartRequest(client, b2AuthorizeAccountResponse, b2GetUploadUrlResponse, partNumber, entity, sha1Checksum).getResponse();
+	}
 
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 	 *
