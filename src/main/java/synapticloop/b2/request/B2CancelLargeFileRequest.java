@@ -34,11 +34,7 @@ public class B2CancelLargeFileRequest extends BaseB2Request {
 		this.addProperty(B2RequestProperties.KEY_FILE_ID, fileId);
 	}
 
-	public B2FileResponse getResponse() throws B2ApiException {
-		try {
-			return (new B2FileResponse(EntityUtils.toString(executePost().getEntity())));
-		} catch (IOException e) {
-			throw new B2ApiException(e);
-		}
+	public B2FileResponse getResponse() throws B2ApiException, IOException {
+		return new B2FileResponse(EntityUtils.toString(executePost().getEntity()));
 	}
 }

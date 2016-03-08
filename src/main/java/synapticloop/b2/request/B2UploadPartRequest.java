@@ -56,11 +56,7 @@ public class B2UploadPartRequest extends BaseB2Request {
 		this.addHeader(HttpHeaders.AUTHORIZATION, b2GetUploadUrlResponse.getAuthorizationToken());
 	}
 
-	public B2UploadPartResponse getResponse() throws B2ApiException {
-		try {
-			return new B2UploadPartResponse(EntityUtils.toString(executePost(entity).getEntity()));
-		} catch (IOException e) {
-			throw new B2ApiException(e);
-		}
+	public B2UploadPartResponse getResponse() throws B2ApiException, IOException {
+		return new B2UploadPartResponse(EntityUtils.toString(executePost(entity).getEntity()));
 	}
 }

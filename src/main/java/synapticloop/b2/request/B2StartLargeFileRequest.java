@@ -62,11 +62,7 @@ public class B2StartLargeFileRequest extends BaseB2Request {
 		}
 	}
 
-	public B2StartLargeFileResponse getResponse() throws B2ApiException {
-		try {
-			return new B2StartLargeFileResponse(EntityUtils.toString(executePost().getEntity()));
-		} catch (IOException e) {
-			throw new B2ApiException(e);
-		}
+	public B2StartLargeFileResponse getResponse() throws B2ApiException, IOException {
+		return new B2StartLargeFileResponse(EntityUtils.toString(executePost().getEntity()));
 	}
 }

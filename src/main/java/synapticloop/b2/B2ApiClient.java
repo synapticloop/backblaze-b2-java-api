@@ -363,7 +363,7 @@ public class B2ApiClient {
 	 * @return The unique identifier for the file
 	 * @throws B2ApiException if there was an error uploading the file
 	 */
-	public B2StartLargeFileResponse startLargeFileUpload(String bucketId, String fileName, String mimeType, Map<String, String> fileInfo) throws B2ApiException {
+	public B2StartLargeFileResponse startLargeFileUpload(String bucketId, String fileName, String mimeType, Map<String, String> fileInfo) throws B2ApiException, IOException {
 		return new B2StartLargeFileRequest(client, b2AuthorizeAccountResponse, bucketId, fileName, mimeType, fileInfo).getResponse();
 	}
 
@@ -374,7 +374,7 @@ public class B2ApiClient {
 	 * @return File resopnse
 	 * @throws B2ApiException if there was an error canceling the upload
 	 */
-	public B2FileResponse cancelLargeFileUpload(String fileId) throws B2ApiException {
+	public B2FileResponse cancelLargeFileUpload(String fileId) throws B2ApiException, IOException {
 		return new B2CancelLargeFileRequest(client, b2AuthorizeAccountResponse, fileId).getResponse();
 	}
 
@@ -388,7 +388,7 @@ public class B2ApiClient {
 	 * @return Upload response
 	 * @throws B2ApiException if there was an error uploading the file
 	 */
-	public B2UploadPartResponse uploadPart(String fileId, int partNumber, HttpEntity entity, String sha1Checksum) throws B2ApiException {
+	public B2UploadPartResponse uploadPart(String fileId, int partNumber, HttpEntity entity, String sha1Checksum) throws B2ApiException, IOException {
 		final B2GetUploadPartUrlResponse b2GetUploadUrlResponse = new B2GetUploadPartUrlRequest(client, b2AuthorizeAccountResponse, fileId).getResponse();
 		return new B2UploadPartRequest(client, b2AuthorizeAccountResponse, b2GetUploadUrlResponse, partNumber, entity, sha1Checksum).getResponse();
 	}
