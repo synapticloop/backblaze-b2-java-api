@@ -88,7 +88,7 @@ public class B2ListFileNamesRequest extends BaseB2Request {
 		this.addProperty(B2RequestProperties.KEY_BUCKET_ID, bucketId);
 
 		if(null != startFileName) {
-			this.addProperty(B2RequestProperties.KEY_START_FILE_NAME, URLEncoder.encode(startFileName));
+			this.addProperty(B2RequestProperties.KEY_START_FILE_NAME, startFileName);
 		}
 
 		this.addProperty(B2RequestProperties.KEY_MAX_FILE_COUNT, maxFileCount);

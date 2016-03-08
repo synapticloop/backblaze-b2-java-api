@@ -95,7 +95,7 @@ public class B2ListFileVersionsRequest extends BaseB2Request {
 		this.addProperty(B2RequestProperties.KEY_BUCKET_ID, bucketId);
 		this.addProperty(B2RequestProperties.KEY_MAX_FILE_COUNT, maxFileCount);
 		if(null != startFileName) {
-			this.addProperty(B2RequestProperties.KEY_START_FILE_NAME, URLEncoder.encode(startFileName));
+			this.addProperty(B2RequestProperties.KEY_START_FILE_NAME, startFileName);
 		}
 		if(null != startFileId) {
 			this.addProperty(B2RequestProperties.KEY_START_FILE_ID, startFileId);
