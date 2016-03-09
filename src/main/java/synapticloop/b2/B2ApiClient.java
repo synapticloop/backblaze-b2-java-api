@@ -17,7 +17,6 @@ package synapticloop.b2;
  */
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
@@ -569,53 +568,6 @@ public class B2ApiClient {
 	}
 
 	/**
-	 * Download a named file from a named bucket to an byte[].  This is a
-	 * utility method which will automatically convert the response stream to a
-	 * byte[].
-	 *
-	 * Note: This will not return any of the headers that accompanied the download.
-	 * See downloadFileByName to retrieve the complete response including sha1,
-	 * content length, content type and all headers.
-	 *
-	 * @param bucketName The name of the bucket to download the file from
-	 * @param fileName the name of the file to download
-	 *
-	 * @return the array of bytes from the download
-	 *
-	 * @throws B2ApiException if there was an error with the call
-	 * @throws IOException if there was an error communicating with the API service
-	 */
-	public byte[] downloadFileByNameToBytes(String bucketName, String fileName) throws B2ApiException, IOException {
-		return IOUtils.toByteArray(new B2DownloadFileByNameRequest(client, b2AuthorizeAccountResponse, bucketName, fileName).getResponse().getContent());
-	}
-
-	/**
-	 * Download a range of bytes from a named file from a named bucket to an
-	 * byte[].  This is a utility method which will automatically convert the
-	 * response stream to a byte[].The range starts at 0 (zero) and  goes up
-	 * to the end.  Both are inclusive - e.g. a range of 0-5 will return 6
-	 * (six) bytes.   If the range values are not correct, the complete file
-	 * will be downloaded
-	 *
-	 * Note: This will not return any of the headers that accompanied the download.
-	 * See downloadFileByName to retrieve the complete response including sha1,
-	 * content length, content type and all headers.
-	 *
-	 * @param bucketName The name of the bucket to download the file from
-	 * @param fileName the name of the file to download
-	 * @param rangeStart the start range (byte) offset for the content (inclusive)
-	 * @param rangeEnd the end range (byte) offset for the content (inclusive)
-	 *
-	 * @return the array of bytes from the download
-	 *
-	 * @throws B2ApiException if there was an error with the call
-	 * @throws IOException if there was an error communicating with the API service
-	 */
-	public byte[] downloadFileRangeByNameToBytes(String bucketName, String fileName, long rangeStart, long rangeEnd) throws B2ApiException, IOException {
-		return IOUtils.toByteArray(new B2DownloadFileByNameRequest(client, b2AuthorizeAccountResponse, bucketName, fileName, rangeStart, rangeEnd).getResponse().getContent());
-	}
-
-	/**
 	 * Download a named file from a named bucket and return the input stream from
 	 * the HTTP response.  This is a utility method which will automatically return
 	 * the response stream.
@@ -732,48 +684,6 @@ public class B2ApiClient {
 	 */
 	public B2DownloadFileResponse downloadFileRangeById(String fileId, long rangeStart, long rangeEnd) throws B2ApiException, IOException {
 		return new B2DownloadFileByIdRequest(client, b2AuthorizeAccountResponse, fileId, rangeStart, rangeEnd).getResponse();
-	}
-
-	/**
-	 * Download a file to a byte[]
-	 *
-	 * Note: This will not return any of the headers that accompanied the download.
-	 * See downloadFileByName to retrieve the complete response including sha1,
-	 * content length, content type and all headers.
-	 *
-	 * @param fileId the id of the file to download
-	 *
-	 * @return the array of bytes for the file
-	 *
-	 * @throws B2ApiException if there was an error with the call
-	 * @throws IOException if there was an error communicating with the API service
-	 */
-	public byte[] downloadFileByIdToBytes(String fileId) throws B2ApiException, IOException {
-		return IOUtils.toByteArray(new B2DownloadFileByIdRequest(client, b2AuthorizeAccountResponse, fileId).getResponse().getContent());
-	}
-
-	/**
-	 * Download a partial range of file data to a byte[], the range starts at 0
-	 * (zero) and goes up to the end.  Both are inclusive - e.g. a range of 0-5
-	 * will return 6 (six) bytes.  If the range values are not correct, the
-	 * complete file will be downloaded
-	 *
-	 * Note: This will not return any of the headers that accompanied the download.
-	 * See downloadFileByName to retrieve the complete response including sha1,
-	 * content length, content type and all headers.
-	 *
-	 * @param fileId the id of the file to download
-	 * @param rangeStart the start range (byte) offset for the content (inclusive)
-	 * @param rangeEnd the end range (byte) offset for the content (inclusive)
-	 *
-	 * @return the array of bytes for the file
-	 *
-	 * @throws B2ApiException if there was an error with the call
-	 * @throws IOException if there was an error communicating with the API service
-	 */
-	public byte[] downloadFileRangeByIdToBytes(String fileId, long rangeStart, long rangeEnd) throws B2ApiException, IOException {
-		return IOUtils.toByteArray(new B2DownloadFileByIdRequest(client, b2AuthorizeAccountResponse, fileId, rangeStart, rangeEnd)
-				.getResponse().getContent());
 	}
 
 	/**
