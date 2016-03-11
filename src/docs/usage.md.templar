@@ -47,25 +47,21 @@ deleteFileVersion(String, String){\n}
 {\n}
 // download the full file by id, returning a variety of objects{\n}
 downloadFileById(String){\n}
-downloadFileByIdToBytes(String){\n}
 downloadFileByIdToFile(String, File){\n}
 downloadFileByIdToStream(String){\n}
 {\n}
 // download the full file by name, returning a variety of objects{\n}
 downloadFileByName(String, String){\n}
-downloadFileByNameToBytes(String, String){\n}
 downloadFileByNameToFile(String, String, File){\n}
 downloadFileByNameToStream(String, String){\n}
 {\n}
 // download partial content of a file by id, returning a variety of objects{\n}
 downloadFileRangeById(String, long, long){\n}
-downloadFileRangeByIdToBytes(String, long, long){\n}
 downloadFileRangeByIdToFile(String, File, long, long){\n}
 downloadFileRangeByIdToStream(String, long, long){\n}
 {\n}
 // download partial content of a file by name, returning a variety of objects{\n}
 downloadFileRangeByName(String, String, long, long){\n}
-downloadFileRangeByNameToBytes(String, String, long, long){\n}
 downloadFileRangeByNameToFile(String, String, File, long, long){\n}
 downloadFileRangeByNameToStream(String, String, long, long){\n}
 {\n}
