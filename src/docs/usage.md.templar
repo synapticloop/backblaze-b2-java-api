@@ -1,6 +1,13 @@
 # Usage{\n}
 {\n}
 ```{\n}
+// required imports{\n}
+import synapticloop.b2.B2ApiClient;{\n}
+import synapticloop.b2.exception.B2ApiException;{\n}
+import synapticloop.b2.request.*;{\n}
+import synapticloop.b2.response.*;{\n}
+{\n}
+{\n}
 String b2AccountId = ""; // your b2 account ID{\n}
 String b2ApplicationKey = ""; // your b2 application Key{\n}
 {\n}
