@@ -31,8 +31,6 @@ import java.io.IOException;
 public class B2UploadPartRequest extends BaseB2Request {
 	private final HttpEntity entity;
 
-	private static final String CONTENT_TYPE_VALUE_B2_X_AUTO = "b2/x-auto";
-
 	/**
 	 * @param client                     Shared HTTP client instance
 	 * @param b2AuthorizeAccountResponse The authorize account response
@@ -50,7 +48,6 @@ public class B2UploadPartRequest extends BaseB2Request {
 
 		this.addHeader(B2ResponseHeaders.HEADER_X_BZ_PART_NUMBER, String.valueOf(partNumber));
 		this.addHeader(B2ResponseHeaders.HEADER_X_BZ_CONTENT_SHA1, sha1Checksum);
-		this.addHeader(B2ResponseHeaders.HEADER_CONTENT_LENGTH, String.valueOf(entity.getContentLength()));
 
 		// Override generic authorization header
 		this.addHeader(HttpHeaders.AUTHORIZATION, b2GetUploadUrlResponse.getAuthorizationToken());
