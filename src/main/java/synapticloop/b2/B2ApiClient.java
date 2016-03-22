@@ -369,12 +369,23 @@ public class B2ApiClient {
 	/**
 	 * Cancel large file upload
 	 *
-	 * @param fileId the id of the file to cancel
-	 * @return File resopnse
+	 * @param fileId The ID returned by b2_start_large_file.
+	 * @return File response
 	 * @throws B2ApiException if there was an error canceling the upload
 	 */
 	public B2FileResponse cancelLargeFileUpload(String fileId) throws B2ApiException, IOException {
 		return new B2CancelLargeFileRequest(client, b2AuthorizeAccountResponse, fileId).getResponse();
+	}
+
+	/**
+	 * Finish large file upload. Converts the parts that have been uploaded into a single B2 file.
+	 *
+	 * @param fileId The ID returned by b2_start_large_file.
+	 * @return File response
+	 * @throws B2ApiException if there was an error finishing the upload
+	 */
+	public B2FinishLargeFileResponse finishLargeFileUpload(String fileId, String[] partSha1Array) throws B2ApiException, IOException {
+		return new B2FinishLargeFileRequest(client, b2AuthorizeAccountResponse, fileId, partSha1Array).getResponse();
 	}
 
 	/**
