@@ -36,7 +36,7 @@ public class B2FileInfoResponse extends BaseB2Response {
 	private final Long contentLength;
 
 	private final Map<String, String> fileInfo;
-	private final Action action;
+	private Action action;
 	private final int size;
 	private final long uploadTimestamp;
 
@@ -70,7 +70,13 @@ public class B2FileInfoResponse extends BaseB2Response {
 
 		String action = this.readString(B2ResponseProperties.KEY_ACTION);
 		if(null != action) {
-			this.action = Action.valueOf(action);
+			try {
+				this.action = Action.valueOf(action);
+			}
+			catch(IllegalArgumentException e) {
+				LOGGER.warn("Unknown action value " + action);
+				this.action = null;
+			}
 		} else {
 			// Default
 			this.action = Action.upload;
