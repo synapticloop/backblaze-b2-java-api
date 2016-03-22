@@ -80,6 +80,14 @@ public class B2FinishLargeFileResponse extends BaseB2Response {
 		return fileName;
 	}
 
+	public String getAccountId() {
+		return accountId;
+	}
+
+	public String getBucketId() {
+		return bucketId;
+	}
+
 	public Long getContentLength() {
 		return contentLength;
 	}
