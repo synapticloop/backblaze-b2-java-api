@@ -32,7 +32,7 @@ import java.util.Map;
 public class B2StartLargeFileRequest extends BaseB2Request {
 	private static final Logger LOGGER = LoggerFactory.getLogger(B2StartLargeFileRequest.class);
 
-	private static final String B2_START_LARGE_FILE = BASE_API + "b2_start_large_file";
+	private static final String B2_START_LARGE_FILE = BASE_API_VERSION + "b2_start_large_file";
 	protected static final String CONTENT_TYPE_VALUE_B2_X_AUTO = "b2/x-auto";
 
 	/**
