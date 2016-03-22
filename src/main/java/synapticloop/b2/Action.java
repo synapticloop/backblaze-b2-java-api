@@ -29,5 +29,8 @@ package synapticloop.b2;
 public enum Action {
 	hide,
 	upload,
+	/**
+	 * Pending multipart upload
+	 */
 	start
 }
