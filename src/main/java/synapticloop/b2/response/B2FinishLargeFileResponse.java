@@ -92,6 +92,10 @@ public class B2FinishLargeFileResponse extends BaseB2Response {
 		return contentLength;
 	}
 
+	/**
+	 * Large files do not have a SHA1 checksum. The value will always be "none".
+	 * @return "none"
+	 */
 	public String getContentSha1() {
 		return contentSha1;
 	}
