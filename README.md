@@ -10,7 +10,7 @@
 # Usage
 
 ```
-// import the API Client
+// required imports
 import synapticloop.b2.B2ApiClient;
 import synapticloop.b2.exception.B2ApiException;
 import synapticloop.b2.request.*;
@@ -56,25 +56,21 @@ deleteFileVersion(String, String)
 
 // download the full file by id, returning a variety of objects
 downloadFileById(String)
-downloadFileByIdToBytes(String)
 downloadFileByIdToFile(String, File)
 downloadFileByIdToStream(String)
 
 // download the full file by name, returning a variety of objects
 downloadFileByName(String, String)
-downloadFileByNameToBytes(String, String)
 downloadFileByNameToFile(String, String, File)
 downloadFileByNameToStream(String, String)
 
 // download partial content of a file by id, returning a variety of objects
 downloadFileRangeById(String, long, long)
-downloadFileRangeByIdToBytes(String, long, long)
 downloadFileRangeByIdToFile(String, File, long, long)
 downloadFileRangeByIdToStream(String, long, long)
 
 // download partial content of a file by name, returning a variety of objects
 downloadFileRangeByName(String, String, long, long)
-downloadFileRangeByNameToBytes(String, String, long, long)
 downloadFileRangeByNameToFile(String, String, File, long, long)
 downloadFileRangeByNameToStream(String, String, long, long)
 
@@ -245,7 +241,7 @@ As such, this is not a repository, but a location to download files from.
 
 This project publishes artefacts to [Maven Central](https://search.maven.org/)
 
-> Note that the latest version can be found [mvn central](http://search.maven.org/#artifactdetails|synapticloop|backblaze-b2-java-api|1.3.1|jar)
+> Note that the latest version can be found [mvn central](http://search.maven.org/#artifactdetails|synapticloop|backblaze-b2-java-api|1.3.2|jar)
 
 ## maven setup
 
@@ -265,9 +261,9 @@ repositories {
 
 ```
 dependencies {
-	runtime(group: 'synapticloop', name: 'backblaze-b2-java-api', version: '1.3.1', ext: 'jar')
+	runtime(group: 'synapticloop', name: 'backblaze-b2-java-api', version: '1.3.2', ext: 'jar')
 
-	compile(group: 'synapticloop', name: 'backblaze-b2-java-api', version: '1.3.1', ext: 'jar')
+	compile(group: 'synapticloop', name: 'backblaze-b2-java-api', version: '1.3.2', ext: 'jar')
 }
 ```
 
@@ -275,9 +271,9 @@ or, more simply for versions of gradle greater than 2.1
 
 ```
 dependencies {
-	runtime 'synapticloop:backblaze-b2-java-api:1.3.1'
+	runtime 'synapticloop:backblaze-b2-java-api:1.3.2'
 
-	compile 'synapticloop:backblaze-b2-java-api:1.3.1'
+	compile 'synapticloop:backblaze-b2-java-api:1.3.2'
 }
 ```
 
@@ -287,7 +283,7 @@ dependencies {
 <dependency>
 	<groupId>synapticloop</groupId>
 	<artifactId>backblaze-b2-java-api</artifactId>
-	<version>1.3.1</version>
+	<version>1.3.2</version>
 	<type>jar</type>
 </dependency>
 ```
