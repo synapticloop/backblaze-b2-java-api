@@ -6,7 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 
-public class B2ExceptionTest {
+public class B2ApiExceptionTest {
 
 	@Test
 	public void testEmptyException() {

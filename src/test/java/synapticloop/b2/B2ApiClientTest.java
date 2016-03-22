@@ -7,11 +7,10 @@ import java.util.UUID;
 import org.junit.Before;
 import org.junit.Test;
 
-import synapticloop.b2.exception.B2ApiException;
 import synapticloop.b2.helper.B2TestHelper;
 import synapticloop.b2.response.B2BucketResponse;
 
-public class B2ClientTest {
+public class B2ApiClientTest {
 	public static final String B2_ACCOUNT_ID = "B2_ACCOUNT_ID";
 	public static final String B2_APPLICATION_KEY = "B2_APPLICATION_KEY";
 	private B2ApiClient client;
