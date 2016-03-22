@@ -26,6 +26,7 @@ public final class B2RequestProperties {
 	public static final String KEY_MAX_FILE_COUNT = "maxFileCount";
 	public static final String KEY_START_FILE_ID = "startFileId";
 	public static final String KEY_START_FILE_NAME = "startFileName";
+	public static final String KEY_PART_SHA1_ARRAY = "partSha1Array";
 	public static final String REQUEST_PROPERTY_CONTENT_TYPE = "Content-Type";
 	public static final String REQUEST_PROPERTY_AUTHORIZATION = "Authorization";
 }
