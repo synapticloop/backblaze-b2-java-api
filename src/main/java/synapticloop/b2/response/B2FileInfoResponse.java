@@ -16,22 +16,22 @@ package synapticloop.b2.response;
  * this source code or binaries.
  */
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import synapticloop.b2.Action;
 import synapticloop.b2.exception.B2ApiException;
+
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 public class B2FileInfoResponse extends BaseB2Response {
 	private static final Logger LOGGER = LoggerFactory.getLogger(B2FileInfoResponse.class);
 
 	private final String fileId;
 	private final String fileName;
+	private final String contentType;
 	private final String contentSha1;
 	private final Long contentLength;
 
@@ -55,10 +55,11 @@ public class B2FileInfoResponse extends BaseB2Response {
 		this.fileId = this.readString(B2ResponseProperties.KEY_FILE_ID);
 		this.fileName = this.readString(B2ResponseProperties.KEY_FILE_NAME);
 		this.contentLength = this.readLong(B2ResponseProperties.KEY_CONTENT_LENGTH);
+		this.contentType = this.readString(B2ResponseProperties.KEY_CONTENT_TYPE);
 		this.contentSha1 = this.readString(B2ResponseProperties.KEY_CONTENT_SHA1);
 		this.fileInfo = new HashMap<String, String>();
 
-		JSONObject fileInfoObject = response.optJSONObject(B2ResponseProperties.KEY_FILE_INFO);
+		JSONObject fileInfoObject = this.readObject(B2ResponseProperties.KEY_FILE_INFO);
 		if(null != fileInfoObject) {
 			Iterator keys = fileInfoObject.keys();
 			while (keys.hasNext()) {
@@ -101,7 +102,12 @@ public class B2FileInfoResponse extends BaseB2Response {
 	 * @return the length of content for this file
 	 */
 	public long getContentLength() { return this.contentLength; }
-	
+
+	/**
+	 * @return the MIME type of the file
+	 */
+	public String getContentType() { return contentType; }
+
 	/**
 	 * Get the sha1 hash of the content - this can be used to verify the 
 	 * integrity of the downloaded file
@@ -147,6 +153,7 @@ public class B2FileInfoResponse extends BaseB2Response {
 		sb.append("fileId='").append(fileId).append('\'');
 		sb.append(", fileName='").append(fileName).append('\'');
 		sb.append(", contentLength=").append(contentLength);
+		sb.append(", contentType=").append(contentType);
 		sb.append(", contentSha1='").append(contentSha1).append('\'');
 		sb.append(", fileInfo=").append(fileInfo);
 		sb.append(", size=").append(size);
