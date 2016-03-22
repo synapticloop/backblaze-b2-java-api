@@ -34,9 +34,28 @@ public class B2ListUnfinishedLargeFilesRequest extends BaseB2Request {
 	 */
 	public B2ListUnfinishedLargeFilesRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse,
 											 String bucketId) {
+		this(client, b2AuthorizeAccountResponse, bucketId, null, null);
+	}
+
+	/**
+	 * @param client                     The http client to use
+	 * @param b2AuthorizeAccountResponse the authorize account response
+	 * @param bucketId                   The ID of the bucket
+	 * @param startFileId                The first upload to return. If there is an upload with this ID, it will be returned in
+	 *                                   the list. If not, the first upload after this the first one after this ID.
+	 * @param maxFileCount               The maximum number of files to return
+	 */
+	public B2ListUnfinishedLargeFilesRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse,
+											 String bucketId, String startFileId, Integer maxFileCount) {
 		super(client, b2AuthorizeAccountResponse, b2AuthorizeAccountResponse.getApiUrl() + B2_LIST_UNFINISHED_LARGE_FILES);
 
 		this.addProperty(B2RequestProperties.KEY_BUCKET_ID, bucketId);
+		if (null != startFileId) {
+			this.addProperty(B2RequestProperties.KEY_START_FILE_ID, startFileId);
+		}
+		if (maxFileCount != null) {
+			this.addProperty(B2RequestProperties.KEY_MAX_FILE_COUNT, maxFileCount);
+		}
 	}
 
 	public B2ListFilesResponse getResponse() throws B2ApiException, IOException {

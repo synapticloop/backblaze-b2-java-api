@@ -45,7 +45,7 @@ public class B2ApiClient {
 
 	/**
 	 * Create a B2ApiClient and authenticate
-	 * 
+	 *
 	 * @param accountId The account id
 	 * @param applicationKey the application key
 	 *
@@ -59,7 +59,7 @@ public class B2ApiClient {
 
 	/**
 	 * Must authenticate first before API actions are available. Using default HTTP client configuration
-	 * 
+	 *
 	 * @see #authenticate(String, String)
 	 */
 	public B2ApiClient() {
@@ -68,9 +68,9 @@ public class B2ApiClient {
 
 	/**
 	 * Must authenticate first before API actions are available
-	 * 
+	 *
 	 * @param client Shared HTTP client
-	 * 
+	 *
 	 * @see #authenticate(String, String)
 	 */
 	public B2ApiClient(CloseableHttpClient client) {
@@ -95,7 +95,7 @@ public class B2ApiClient {
 
 	/**
 	 * Get the download URL for the authorized response
-	 * 
+	 *
 	 * @return the download URL for the authorized response
 	 */
 	public String getDownloadUrl() {
@@ -103,8 +103,8 @@ public class B2ApiClient {
 	}
 
 	/**
-	 * Get the API url 
-	 * 
+	 * Get the API url
+	 *
 	 * @return the API URL for backblaze
 	 */
 	public String getApiUrl() {
@@ -113,7 +113,7 @@ public class B2ApiClient {
 
 	/**
 	 * Release all resources from the connection pool.
-	 * 
+	 *
 	 * @throws IOException if the client could not be closed
 	 */
 	public void close() throws IOException {
@@ -411,8 +411,8 @@ public class B2ApiClient {
 	 * @throws B2ApiException if there was an error listing the files
 	 * @throws IOException    if there was an error communicating with the API service
 	 */
-	public B2ListFilesResponse listUnfinishedLargeFiles(String bucketId) throws B2ApiException, IOException {
-		return new B2ListUnfinishedLargeFilesRequest(client, b2AuthorizeAccountResponse, bucketId).getResponse();
+	public B2ListFilesResponse listUnfinishedLargeFiles(String bucketId, String startFileId, Integer maxFileCount) throws B2ApiException, IOException {
+		return new B2ListUnfinishedLargeFilesRequest(client, b2AuthorizeAccountResponse, bucketId, startFileId, maxFileCount).getResponse();
 	}
 
 	/**
