@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /*
- * Copyright (c) 2016 synapticloop.
+ * Copyright (c) 2016 Synapticloop.
  * 
  * All rights reserved.
  * 

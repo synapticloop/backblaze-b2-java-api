@@ -3,7 +3,7 @@ package synapticloop.b2.request;
 import java.io.IOException;
 
 /*
- * Copyright (c) 2016 synapticloop.
+ * Copyright (c) 2016 Synapticloop.
  * 
  * All rights reserved.
  * 

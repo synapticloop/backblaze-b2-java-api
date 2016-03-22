@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.Iterator;
 
 /*
- * Copyright (c) 2016 synapticloop.
+ * Copyright (c) 2016 Synapticloop.
  * 
  * All rights reserved.
  * 

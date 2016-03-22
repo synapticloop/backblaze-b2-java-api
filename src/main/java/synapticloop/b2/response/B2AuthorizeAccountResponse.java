@@ -1,7 +1,7 @@
 package synapticloop.b2.response;
 
 /*
- * Copyright (c) 2016 synapticloop.
+ * Copyright (c) 2016 Synapticloop.
  * 
  * All rights reserved.
  * 
@@ -20,7 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /*
- * Copyright (c) 2016 synapticloop.
+ * Copyright (c) 2016 Synapticloop.
  * 
  * All rights reserved.
  * 

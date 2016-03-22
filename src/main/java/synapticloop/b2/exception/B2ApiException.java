@@ -1,7 +1,7 @@
 package synapticloop.b2.exception;
 
 /*
- * Copyright (c) 2016 synapticloop.
+ * Copyright (c) 2016 Synapticloop.
  * 
  * All rights reserved.
  * 
