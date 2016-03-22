@@ -25,7 +25,7 @@ import synapticloop.b2.response.B2FileResponse;
 import java.io.IOException;
 
 public class B2CancelLargeFileRequest extends BaseB2Request {
-	private static final String B2_CANCEL_LARGE_FILE = BASE_API + "b2_cancel_large_file";
+	private static final String B2_CANCEL_LARGE_FILE = BASE_API_VERSION + "b2_cancel_large_file";
 
 	/**
 	 * @param client                     The http client to use
