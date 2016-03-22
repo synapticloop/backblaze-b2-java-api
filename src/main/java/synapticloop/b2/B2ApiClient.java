@@ -387,7 +387,7 @@ public class B2ApiClient {
 	 * @return Upload response
 	 * @throws B2ApiException if there was an error uploading the file
 	 */
-	public B2UploadPartResponse uploadPart(String fileId, int partNumber, HttpEntity entity, String sha1Checksum) throws B2ApiException, IOException {
+	public B2UploadPartResponse uploadLargeFilePart(String fileId, int partNumber, HttpEntity entity, String sha1Checksum) throws B2ApiException, IOException {
 		final B2GetUploadPartUrlResponse b2GetUploadUrlResponse = new B2GetUploadPartUrlRequest(client, b2AuthorizeAccountResponse, fileId).getResponse();
 		return new B2UploadPartRequest(client, b2AuthorizeAccountResponse, b2GetUploadUrlResponse, partNumber, entity, sha1Checksum).getResponse();
 	}
