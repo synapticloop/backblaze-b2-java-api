@@ -53,6 +53,11 @@ public class B2StartLargeFileRequest extends BaseB2Request {
 
 		this.addProperty(B2RequestProperties.KEY_BUCKET_ID, bucketId);
 		this.addProperty(B2RequestProperties.KEY_FILE_NAME, fileName);
+		if(null == mimeType) {
+			this.addProperty(B2RequestProperties.KEY_CONTENT_TYPE, CONTENT_TYPE_VALUE_B2_X_AUTO);
+		} else {
+			this.addProperty(B2RequestProperties.KEY_CONTENT_TYPE, mimeType);
+		}
 		// Add 'X-Bz-Info-*' headers
 		if (null != fileInfo) {
 			int fileInfoSize = fileInfo.size();
