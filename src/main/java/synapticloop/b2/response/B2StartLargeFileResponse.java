@@ -34,7 +34,6 @@ public class B2StartLargeFileResponse extends BaseB2Response {
 	private final String bucketId;
 	private final String contentType;
 	private final Map<String, Object> fileInfo;
-	private final String uploadAuthToken;
 
 	public B2StartLargeFileResponse(String json) throws B2ApiException {
 		super(json);
@@ -53,7 +52,6 @@ public class B2StartLargeFileResponse extends BaseB2Response {
 				fileInfo.put(key, fileInfoObject.opt(key));
 			}
 		}
-		this.uploadAuthToken = this.readString(B2ResponseProperties.KEY_UPLOAD_AUTH_TOKEN);
 
 		this.warnOnMissedKeys();
 	}
@@ -70,8 +68,6 @@ public class B2StartLargeFileResponse extends BaseB2Response {
 
 	public Map<String, Object> getFileInfo() { return this.fileInfo; }
 
-	public String getUploadAuthToken() { return this.uploadAuthToken; }
-
 	@Override
 	protected Logger getLogger() { return LOGGER; }
 
@@ -83,7 +79,6 @@ public class B2StartLargeFileResponse extends BaseB2Response {
 		sb.append(", bucketId='").append(bucketId).append('\'');
 		sb.append(", contentType='").append(contentType).append('\'');
 		sb.append(", fileInfo=").append(fileInfo);
-		sb.append(", uploadAuthToken='").append(uploadAuthToken).append('\'');
 		sb.append('}');
 		return sb.toString();
 	}
