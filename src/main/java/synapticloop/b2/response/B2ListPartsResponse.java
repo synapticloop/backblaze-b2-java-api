@@ -28,7 +28,7 @@ public class B2ListPartsResponse extends BaseB2Response {
 	private static final Logger LOGGER = LoggerFactory.getLogger(B2ListPartsResponse.class);
 
 	private final String nextPartNumber;
-	private final List<B2PartInfoResponse> files;
+	private final List<B2UploadPartResponse> files;
 
 	public B2ListPartsResponse(String json) throws B2ApiException {
 		super(json);
@@ -37,9 +37,9 @@ public class B2ListPartsResponse extends BaseB2Response {
 
 		JSONArray filesArray = this.readObjects(B2ResponseProperties.KEY_PARTS);
 
-		files = new ArrayList<B2PartInfoResponse>();
+		files = new ArrayList<B2UploadPartResponse>();
 		for(int i = 0; i < filesArray.length(); i ++) {
-			files.add(new B2PartInfoResponse(filesArray.optJSONObject(i)));
+			files.add(new B2UploadPartResponse(filesArray.optJSONObject(i)));
 		}
 
 		this.warnOnMissedKeys();
@@ -49,7 +49,7 @@ public class B2ListPartsResponse extends BaseB2Response {
 		return nextPartNumber;
 	}
 
-	public List<B2PartInfoResponse> getFiles() {
+	public List<B2UploadPartResponse> getFiles() {
 		return files;
 	}
 

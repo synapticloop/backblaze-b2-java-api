@@ -16,6 +16,7 @@ package synapticloop.b2.response;
  * this source code or binaries.
  */
 
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import synapticloop.b2.exception.B2ApiException;
@@ -30,6 +31,17 @@ public class B2UploadPartResponse extends BaseB2Response {
 
 	public B2UploadPartResponse(String json) throws B2ApiException {
 		super(json);
+
+		this.fileId = this.readString(B2ResponseProperties.KEY_FILE_ID);
+		this.partNumber = this.readInt(B2ResponseProperties.KEY_PART_NUMBER);
+		this.contentLength = this.readLong(B2ResponseProperties.KEY_CONTENT_LENGTH);
+		this.contentSha1 = this.readString(B2ResponseProperties.KEY_CONTENT_SHA1);
+
+		this.warnOnMissedKeys();
+	}
+
+	public B2UploadPartResponse(final JSONObject response) throws B2ApiException {
+		super(response);
 
 		this.fileId = this.readString(B2ResponseProperties.KEY_FILE_ID);
 		this.partNumber = this.readInt(B2ResponseProperties.KEY_PART_NUMBER);
