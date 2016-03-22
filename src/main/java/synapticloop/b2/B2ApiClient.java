@@ -405,6 +405,7 @@ public class B2ApiClient {
 
 	/**
 	 * Lists information about large file uploads that have been started, but have not been finished or canceled.
+	 * Uploads are listed in the order they were started, with the oldest one first
 	 *
 	 * @param bucketId the id of the bucket
 	 * @return An array of objects, each one describing one unfinished file
