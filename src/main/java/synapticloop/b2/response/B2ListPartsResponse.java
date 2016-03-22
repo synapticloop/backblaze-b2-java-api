@@ -27,25 +27,25 @@ import java.util.List;
 public class B2ListPartsResponse extends BaseB2Response {
 	private static final Logger LOGGER = LoggerFactory.getLogger(B2ListPartsResponse.class);
 
-	private final String nextPartNumber;
+	private final Integer nextPartNumber;
 	private final List<B2UploadPartResponse> files;
 
 	public B2ListPartsResponse(String json) throws B2ApiException {
 		super(json);
 
-		this.nextPartNumber = this.readString(B2ResponseProperties.KEY_NEXT_FILE_ID);
+		this.nextPartNumber = this.readInt(B2ResponseProperties.KEY_NEXT_FILE_ID);
 
 		JSONArray filesArray = this.readObjects(B2ResponseProperties.KEY_PARTS);
 
 		files = new ArrayList<B2UploadPartResponse>();
-		for(int i = 0; i < filesArray.length(); i ++) {
+		for (int i = 0; i < filesArray.length(); i++) {
 			files.add(new B2UploadPartResponse(filesArray.optJSONObject(i)));
 		}
 
 		this.warnOnMissedKeys();
 	}
 
-	public String getNextPartNumber() {
+	public Integer getNextPartNumber() {
 		return nextPartNumber;
 	}
 
