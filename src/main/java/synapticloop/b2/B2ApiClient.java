@@ -403,6 +403,30 @@ public class B2ApiClient {
 		return new B2UploadPartRequest(client, b2AuthorizeAccountResponse, b2GetUploadUrlResponse, partNumber, entity, sha1Checksum).getResponse();
 	}
 
+	/**
+	 * Lists information about large file uploads that have been started, but have not been finished or canceled.
+	 *
+	 * @param bucketId the id of the bucket
+	 * @return An array of objects, each one describing one unfinished file
+	 * @throws B2ApiException if there was an error listing the files
+	 * @throws IOException    if there was an error communicating with the API service
+	 */
+	public B2ListFilesResponse listUnfinishedLargeFiles(String bucketId) throws B2ApiException, IOException {
+		return new B2ListUnfinishedLargeFilesRequest(client, b2AuthorizeAccountResponse, bucketId).getResponse();
+	}
+
+	/**
+	 * @param fileId          The ID returned by b2_start_large_file. This is the file whose parts will be listed.
+	 * @param startPartNumber Null to start
+	 * @param maxPartCount    The maximum number of parts to return
+	 * @return This call returns at most 1000 entries, but it can be called repeatedly to scan through all of the parts for an upload.
+	 * @throws B2ApiException if there was an error listing the parts
+	 * @throws IOException    if there was an error communicating with the API service
+	 */
+	public B2ListPartsResponse listParts(String fileId, Integer startPartNumber, Integer maxPartCount) throws B2ApiException, IOException {
+		return new B2ListPartsRequest(client, b2AuthorizeAccountResponse, fileId, startPartNumber, maxPartCount).getResponse();
+	}
+
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 	 *
 	 *   DELETE FILE API ACTIONS
