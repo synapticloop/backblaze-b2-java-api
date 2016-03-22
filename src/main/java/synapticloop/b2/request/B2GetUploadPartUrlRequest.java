@@ -25,7 +25,7 @@ import synapticloop.b2.response.B2GetUploadPartUrlResponse;
 import java.io.IOException;
 
 public class B2GetUploadPartUrlRequest extends BaseB2Request {
-	private static final String B2_GET_UPLOAD_URL = BASE_API_VERSION + "b2_get_upload_url";
+	private static final String B2_GET_UPLOAD_URL = BASE_API_VERSION + "b2_get_upload_part_url";
 
 	/**
 	 * Instantiate a get upload URL request
