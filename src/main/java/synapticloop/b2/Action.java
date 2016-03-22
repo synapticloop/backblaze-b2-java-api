@@ -28,5 +28,6 @@ package synapticloop.b2;
  */
 public enum Action {
 	hide,
-	upload
+	upload,
+	start
 }
