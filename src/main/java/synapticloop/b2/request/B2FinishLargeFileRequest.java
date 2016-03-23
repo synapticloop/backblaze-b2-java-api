@@ -47,7 +47,7 @@ public class B2FinishLargeFileRequest extends BaseB2Request {
 		for (String part : partSha1Array) {
 			checksums.put(part);
 		}
-		this.addProperty(B2RequestProperties.KEY_PART_SHA1_ARRAY, fileId);
+		this.addProperty(B2RequestProperties.KEY_PART_SHA1_ARRAY, checksums);
 	}
 
 	public B2FinishLargeFileResponse getResponse() throws B2ApiException, IOException {
