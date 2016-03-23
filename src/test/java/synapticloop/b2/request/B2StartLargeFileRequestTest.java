@@ -4,6 +4,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.junit.Test;
 import synapticloop.b2.BucketType;
+import synapticloop.b2.exception.B2ApiException;
 import synapticloop.b2.helper.B2TestHelper;
 import synapticloop.b2.response.*;
 
@@ -34,6 +35,16 @@ public class B2StartLargeFileRequestTest {
 		final B2ListPartsResponse b2ListPartsResponse = new B2ListPartsRequest(client, b2AuthorizeAccountResponse,
 				b2StartLargeFileResponse.getFileId()).getResponse();
 		assertTrue(b2ListPartsResponse.getFiles().isEmpty());
+
+		try {
+			final B2FinishLargeFileResponse b2FinishLargeFileResponse = new B2FinishLargeFileRequest(client, b2AuthorizeAccountResponse,
+					b2StartLargeFileResponse.getFileId(), new String[0]).getResponse();
+			fail();
+		}
+		catch(B2ApiException e) {
+			assertEquals(400, e.getStatus());
+			assertEquals("large files must have at least 2 parts", e.getMessage());
+		}
 
 		final B2FileResponse b2FileResponse = new B2CancelLargeFileRequest(client, b2AuthorizeAccountResponse,
 				b2StartLargeFileResponse.getFileId()).getResponse();
