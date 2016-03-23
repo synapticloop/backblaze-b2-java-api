@@ -8,6 +8,7 @@ import synapticloop.b2.response.B2BucketResponse;
 import synapticloop.b2.response.B2ListFilesResponse;
 
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 public class B2ListUnfinishedLargeFilesRequestTest {
 
@@ -21,6 +22,7 @@ public class B2ListUnfinishedLargeFilesRequestTest {
 		final B2ListFilesResponse b2ListFilesResponse = new B2ListUnfinishedLargeFilesRequest(HttpClients.createDefault(),
 				b2AuthorizeAccountResponse, privateBucketId).getResponse();
 		assertNull(b2ListFilesResponse.getNextFileId());
+		assertTrue(b2ListFilesResponse.getFiles().isEmpty());
 
 		B2TestHelper.deleteBucket(privateBucketId);
 	}

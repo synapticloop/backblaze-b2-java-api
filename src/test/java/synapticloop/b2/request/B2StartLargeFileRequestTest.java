@@ -28,6 +28,11 @@ public class B2StartLargeFileRequestTest {
 				privateBucketId, UUID.randomUUID().toString(), null, Collections.<String, String>emptyMap()).getResponse();
 		assertNotNull(b2StartLargeFileResponse.getFileId());
 
+		final B2ListFilesResponse b2ListFilesResponse = new B2ListUnfinishedLargeFilesRequest(HttpClients.createDefault(),
+				b2AuthorizeAccountResponse, privateBucketId).getResponse();
+		assertNull(b2ListFilesResponse.getNextFileId());
+		assertEquals(1, b2ListFilesResponse.getFiles().size());
+
 		final B2GetUploadPartUrlRequest b2GetUploadPartUrlRequest = new B2GetUploadPartUrlRequest(client,
 				b2AuthorizeAccountResponse, b2StartLargeFileResponse.getFileId());
 		assertNotNull(b2GetUploadPartUrlRequest.getResponse().getUploadUrl());
