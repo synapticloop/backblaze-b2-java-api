@@ -27,10 +27,16 @@ package synapticloop.b2;
  * @author synapticloop
  */
 public enum Action {
+	/**
+	 * "hide" means a file version marking the file as hidden, so that it will not show up in b2_list_file_names.
+	 */
 	hide,
+	/**
+	 * "upload" means a file that was uploaded.
+	 */
 	upload,
 	/**
-	 * Pending multipart upload
+	 * Pending multipart upload. "start" means that a large file has been started, but not finished or canceled.
 	 */
 	start
 }
