@@ -37,7 +37,7 @@ public class B2FileInfoResponse extends BaseB2Response {
 
 	private final Map<String, String> fileInfo;
 	private final Action action;
-	private final Integer size;
+	private final Long size;
 	private final Long uploadTimestamp;
 
 	/**
@@ -76,7 +76,7 @@ public class B2FileInfoResponse extends BaseB2Response {
 			this.action = Action.upload;
 		}
 
-		this.size = this.readInt(B2ResponseProperties.KEY_SIZE);
+		this.size = this.readLong(B2ResponseProperties.KEY_SIZE);
 		this.uploadTimestamp = this.readLong(B2ResponseProperties.KEY_UPLOAD_TIMESTAMP);
 
 		this.warnOnMissedKeys();
@@ -101,7 +101,7 @@ public class B2FileInfoResponse extends BaseB2Response {
 	 * 
 	 * @return the length of content for this file
 	 */
-	public Long getContentLength() { return this.contentLength; }
+	public long getContentLength() { return this.contentLength; }
 
 	/**
 	 * @return the MIME type of the file
@@ -135,7 +135,7 @@ public class B2FileInfoResponse extends BaseB2Response {
 	/**
 	 * @return The number of bytes in the file.
 	 */
-	public Integer getSize() { return this.size; }
+	public Long getSize() { return this.size; }
 
 	/**
 	 * Return the timestamp that the file was uploaded
