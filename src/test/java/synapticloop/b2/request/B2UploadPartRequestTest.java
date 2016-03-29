@@ -1,21 +1,30 @@
 package synapticloop.b2.request;
 
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.junit.Test;
-import synapticloop.b2.exception.B2ApiException;
-import synapticloop.b2.helper.B2TestHelper;
-import synapticloop.b2.response.*;
+import static org.junit.Assert.*;
 
 import java.util.Collections;
 import java.util.UUID;
 
-import static org.junit.Assert.*;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.junit.Test;
+
+import synapticloop.b2.exception.B2ApiException;
+import synapticloop.b2.helper.B2TestHelper;
+import synapticloop.b2.response.B2AuthorizeAccountResponse;
+import synapticloop.b2.response.B2BucketResponse;
+import synapticloop.b2.response.B2FileResponse;
+import synapticloop.b2.response.B2FinishLargeFileResponse;
+import synapticloop.b2.response.B2GetUploadPartUrlResponse;
+import synapticloop.b2.response.B2ListPartsResponse;
+import synapticloop.b2.response.B2StartLargeFileResponse;
+import synapticloop.b2.response.B2UploadPartResponse;
 
 public class B2UploadPartRequestTest {
 
-	@Test
+	// this is expected until the large file support goes live
+	@Test(expected=B2ApiException.class)
 	public void getResponse() throws Exception {
 		B2AuthorizeAccountResponse b2AuthorizeAccountResponse = B2TestHelper.getB2AuthorizeAccountResponse();
 

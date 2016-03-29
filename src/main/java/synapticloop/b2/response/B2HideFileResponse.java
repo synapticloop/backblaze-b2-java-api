@@ -44,8 +44,8 @@ public class B2HideFileResponse extends BaseB2Response {
 	private final String fileId;
 	private final String fileName;
 	private Action action;
-	private final int size;
-	private final long uploadTimestamp;
+	private final Integer size;
+	private final Long uploadTimestamp;
 
 	/**
 	 * Instantiate a hide file response with the JSON response as a string from 
