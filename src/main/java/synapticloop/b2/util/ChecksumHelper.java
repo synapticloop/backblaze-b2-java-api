@@ -16,13 +16,18 @@ package synapticloop.b2.util;
  * this source code or binaries.
  */
 
-import org.apache.commons.io.IOUtils;
-import synapticloop.b2.exception.B2ApiException;
-
-import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+
+import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
+
+import org.apache.commons.io.IOUtils;
 
 public class ChecksumHelper {
 	/**

@@ -1,8 +1,5 @@
 package synapticloop.b2.response;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /*
  * Copyright (c) 2016 Synapticloop.
  * 
@@ -18,6 +15,9 @@ import java.util.List;
  * A copy of the Licence is available in the file named LICENSE.txt shipped with 
  * this source code or binaries.
  */
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.json.JSONArray;
 import org.slf4j.Logger;

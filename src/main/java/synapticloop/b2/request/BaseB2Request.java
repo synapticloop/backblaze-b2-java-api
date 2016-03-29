@@ -1,12 +1,5 @@
 package synapticloop.b2.request;
 
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-
 /*
  * Copyright (c) 2016 Synapticloop.
  * 
@@ -22,6 +15,13 @@ import java.util.Map;
  * A copy of the Licence is available in the file named LICENSE.txt shipped with 
  * this source code or binaries.
  */
+
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHeaders;

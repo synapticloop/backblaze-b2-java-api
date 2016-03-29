@@ -71,6 +71,8 @@ public class B2ApiException extends Exception {
 
 	/**
 	 * @param retry Value in seconds
+	 * 
+	 * @return the exception with retry
 	 */
 	public B2ApiException withRetry(Integer retry) {
 		this.retry = retry;
@@ -118,6 +120,7 @@ public class B2ApiException extends Exception {
 
 	/**
 	 * Retry-After header value (in seconds)
+	 * 
 	 * @return Value in seconds or null if not Retry-After header in response
 	 */
 	public Integer getRetry() {

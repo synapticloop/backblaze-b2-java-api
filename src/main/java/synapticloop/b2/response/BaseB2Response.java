@@ -1,8 +1,5 @@
 package synapticloop.b2.response;
 
-import java.io.IOException;
-import java.util.Iterator;
-
 /*
  * Copyright (c) 2016 Synapticloop.
  * 
@@ -18,6 +15,8 @@ import java.util.Iterator;
  * A copy of the Licence is available in the file named LICENSE.txt shipped with 
  * this source code or binaries.
  */
+
+import java.util.Iterator;
 
 import org.json.JSONArray;
 import org.json.JSONException;

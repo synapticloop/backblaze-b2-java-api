@@ -1,5 +1,8 @@
 package synapticloop.b2.request;
 
+import java.io.IOException;
+import java.util.Map;
+
 /*
  * Copyright (c) 2016 iterate GmbH.
  *
@@ -20,14 +23,12 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import synapticloop.b2.exception.B2ApiException;
 import synapticloop.b2.response.B2AuthorizeAccountResponse;
 import synapticloop.b2.response.B2ResponseHeaders;
 import synapticloop.b2.response.B2StartLargeFileResponse;
 import synapticloop.b2.util.URLEncoder;
-
-import java.io.IOException;
-import java.util.Map;
 
 public class B2StartLargeFileRequest extends BaseB2Request {
 	private static final Logger LOGGER = LoggerFactory.getLogger(B2StartLargeFileRequest.class);
@@ -38,6 +39,7 @@ public class B2StartLargeFileRequest extends BaseB2Request {
 	/**
 	 * Create a new B2 Start large file request
 	 *
+	 * @param client the HTTP client to use
 	 * @param b2AuthorizeAccountResponse the authorise account response
 	 * @param bucketId                   the id of the bucket to upload to
 	 * @param fileName                   the name of the file
@@ -45,6 +47,8 @@ public class B2StartLargeFileRequest extends BaseB2Request {
 	 *                                   backblaze will attempt to determine automatically)
 	 * @param fileInfo                   the file info map which are passed through as key value
 	 *                                   pairs in a jsonObject named 'fileInfo'
+	 *
+	 * @throws B2ApiException if something went wrong
 	 */
 	public B2StartLargeFileRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse,
 								   String bucketId, String fileName,
@@ -58,15 +62,23 @@ public class B2StartLargeFileRequest extends BaseB2Request {
 		} else {
 			this.addProperty(B2RequestProperties.KEY_CONTENT_TYPE, mimeType);
 		}
+
 		// Add 'X-Bz-Info-*' headers
 		if (null != fileInfo) {
-			int fileInfoSize = fileInfo.size();
 			for (final String key : fileInfo.keySet()) {
 				this.addHeader(B2ResponseHeaders.HEADER_X_BZ_INFO_PREFIX + URLEncoder.encode(key), URLEncoder.encode(fileInfo.get(key)));
 			}
 		}
 	}
 
+	/**
+	 * Return the start large file response 
+	 * 
+	 * @return the start large file response
+	 * 
+	 * @throws B2ApiException if something went wrong
+	 * @throws IOException    if there was an error communicating with the API service
+	 */
 	public B2StartLargeFileResponse getResponse() throws B2ApiException, IOException {
 		return new B2StartLargeFileResponse(EntityUtils.toString(executePost().getEntity()));
 	}

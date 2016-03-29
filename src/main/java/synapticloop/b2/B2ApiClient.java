@@ -1,5 +1,11 @@
 package synapticloop.b2;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
+import java.util.Map;
+
 /*
  * Copyright (c) 2016 Synapticloop.
  * 
@@ -20,16 +26,44 @@ import org.apache.commons.io.FileUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
-import synapticloop.b2.exception.B2ApiException;
-import synapticloop.b2.request.*;
-import synapticloop.b2.response.*;
-import synapticloop.b2.util.ChecksumHelper;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.List;
-import java.util.Map;
+import synapticloop.b2.exception.B2ApiException;
+import synapticloop.b2.request.B2AuthorizeAccountRequest;
+import synapticloop.b2.request.B2CancelLargeFileRequest;
+import synapticloop.b2.request.B2CreateBucketRequest;
+import synapticloop.b2.request.B2DeleteBucketRequest;
+import synapticloop.b2.request.B2DeleteFileVersionRequest;
+import synapticloop.b2.request.B2DownloadFileByIdRequest;
+import synapticloop.b2.request.B2DownloadFileByNameRequest;
+import synapticloop.b2.request.B2FinishLargeFileRequest;
+import synapticloop.b2.request.B2GetFileInfoRequest;
+import synapticloop.b2.request.B2GetUploadPartUrlRequest;
+import synapticloop.b2.request.B2GetUploadUrlRequest;
+import synapticloop.b2.request.B2HeadFileByIdRequest;
+import synapticloop.b2.request.B2HideFileRequest;
+import synapticloop.b2.request.B2ListBucketsRequest;
+import synapticloop.b2.request.B2ListFileNamesRequest;
+import synapticloop.b2.request.B2ListFileVersionsRequest;
+import synapticloop.b2.request.B2ListPartsRequest;
+import synapticloop.b2.request.B2ListUnfinishedLargeFilesRequest;
+import synapticloop.b2.request.B2StartLargeFileRequest;
+import synapticloop.b2.request.B2UpdateBucketRequest;
+import synapticloop.b2.request.B2UploadFileRequest;
+import synapticloop.b2.request.B2UploadPartRequest;
+import synapticloop.b2.response.B2AuthorizeAccountResponse;
+import synapticloop.b2.response.B2BucketResponse;
+import synapticloop.b2.response.B2DeleteFileVersionResponse;
+import synapticloop.b2.response.B2DownloadFileResponse;
+import synapticloop.b2.response.B2FileResponse;
+import synapticloop.b2.response.B2FinishLargeFileResponse;
+import synapticloop.b2.response.B2GetUploadPartUrlResponse;
+import synapticloop.b2.response.B2GetUploadUrlResponse;
+import synapticloop.b2.response.B2HideFileResponse;
+import synapticloop.b2.response.B2ListFilesResponse;
+import synapticloop.b2.response.B2ListPartsResponse;
+import synapticloop.b2.response.B2StartLargeFileResponse;
+import synapticloop.b2.response.B2UploadPartResponse;
+import synapticloop.b2.util.ChecksumHelper;
 
 /**
  * This is a wrapper class for the underlying calls to the request/response
@@ -359,8 +393,11 @@ public class B2ApiClient {
 	 *                 see <a href="https://www.backblaze.com/b2/docs/content-types.html">https://www.backblaze.com/b2/docs/content-types.html</a>
 	 *                 for a list of content type mappings.
 	 * @param fileInfo the file info map which will be set as 'X-Bz-Info-' headers
+	 * 
 	 * @return The unique identifier for the file
+	 * 
 	 * @throws B2ApiException if there was an error uploading the file
+	 * @throws IOException if there was an error with the underlying transport
 	 */
 	public B2StartLargeFileResponse startLargeFileUpload(String bucketId, String fileName, String mimeType, Map<String, String> fileInfo) throws B2ApiException, IOException {
 		return new B2StartLargeFileRequest(client, b2AuthorizeAccountResponse, bucketId, fileName, mimeType, fileInfo).getResponse();
@@ -370,8 +407,11 @@ public class B2ApiClient {
 	 * Cancel large file upload
 	 *
 	 * @param fileId The ID returned by b2_start_large_file.
+	 * 
 	 * @return File response
+	 * 
 	 * @throws B2ApiException if there was an error canceling the upload
+	 * @throws IOException if there was an error with the underlying transport
 	 */
 	public B2FileResponse cancelLargeFileUpload(String fileId) throws B2ApiException, IOException {
 		return new B2CancelLargeFileRequest(client, b2AuthorizeAccountResponse, fileId).getResponse();
@@ -381,8 +421,12 @@ public class B2ApiClient {
 	 * Finish large file upload. Converts the parts that have been uploaded into a single B2 file.
 	 *
 	 * @param fileId The ID returned by b2_start_large_file.
+	 * @param partSha1Array the array of sha1 sums for each of the parts in order
+	 * 
 	 * @return File response
+	 * 
 	 * @throws B2ApiException if there was an error finishing the upload
+	 * @throws IOException    if there was an error communicating with the API service
 	 */
 	public B2FinishLargeFileResponse finishLargeFileUpload(String fileId, String[] partSha1Array) throws B2ApiException, IOException {
 		return new B2FinishLargeFileRequest(client, b2AuthorizeAccountResponse, fileId, partSha1Array).getResponse();
@@ -395,8 +439,11 @@ public class B2ApiClient {
 	 * @param partNumber   A number from 1 to 10000. The parts uploaded for one file must have contiguous numbers, starting with 1.
 	 * @param entity       Part content body
 	 * @param sha1Checksum the checksum for the part
+	 * 
 	 * @return Upload response
+	 * 
 	 * @throws B2ApiException if there was an error uploading the file
+	 * @throws IOException    if there was an error communicating with the API service
 	 */
 	public B2UploadPartResponse uploadLargeFilePart(String fileId, int partNumber, HttpEntity entity, String sha1Checksum) throws B2ApiException, IOException {
 		final B2GetUploadPartUrlResponse b2GetUploadUrlResponse = new B2GetUploadPartUrlRequest(client, b2AuthorizeAccountResponse, fileId).getResponse();
@@ -404,11 +451,15 @@ public class B2ApiClient {
 	}
 
 	/**
-	 * Lists information about large file uploads that have been started, but have not been finished or canceled.
+	 * Lists information about large file uploads that have been started, but have not been finished or cancelled.
 	 * Uploads are listed in the order they were started, with the oldest one first
 	 *
 	 * @param bucketId the id of the bucket
+	 * @param startFileId the start fileId to list from
+	 * @param maxFileCount the maximum number of files to return
+	 * 
 	 * @return An array of objects, each one describing one unfinished file
+	 * 
 	 * @throws B2ApiException if there was an error listing the files
 	 * @throws IOException    if there was an error communicating with the API service
 	 */
@@ -420,7 +471,9 @@ public class B2ApiClient {
 	 * @param fileId          The ID returned by b2_start_large_file. This is the file whose parts will be listed.
 	 * @param startPartNumber Null to start
 	 * @param maxPartCount    The maximum number of parts to return
+	 * 
 	 * @return This call returns at most 1000 entries, but it can be called repeatedly to scan through all of the parts for an upload.
+	 * 
 	 * @throws B2ApiException if there was an error listing the parts
 	 * @throws IOException    if there was an error communicating with the API service
 	 */

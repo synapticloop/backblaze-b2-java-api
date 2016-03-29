@@ -1,11 +1,7 @@
 package synapticloop.b2.response;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-
 /*
- * Copyright (c) 2016 synapticloop.
+ * Copyright (c) 2016 Synapticloop.
  * 
  * All rights reserved.
  * 
@@ -19,6 +15,10 @@ import java.util.Map;
  * A copy of the Licence is available in the file named LICENSE.txt shipped with 
  * this source code or binaries.
  */
+
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 import org.json.JSONObject;
 import org.slf4j.Logger;

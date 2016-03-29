@@ -1,7 +1,5 @@
 package synapticloop.b2.request;
 
-import java.io.IOException;
-
 /*
  * Copyright (c) 2016 Synapticloop.
  * 
@@ -17,6 +15,8 @@ import java.io.IOException;
  * A copy of the Licence is available in the file named LICENSE.txt shipped with 
  * this source code or binaries.
  */
+
+import java.io.IOException;
 
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.util.EntityUtils;
