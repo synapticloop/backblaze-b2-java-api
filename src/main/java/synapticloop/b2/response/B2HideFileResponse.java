@@ -44,8 +44,8 @@ public class B2HideFileResponse extends BaseB2Response {
 	private final String fileId;
 	private final String fileName;
 	private final Action action;
-	private final int size;
-	private final long uploadTimestamp;
+	private final Integer size;
+	private final Long uploadTimestamp;
 
 	/**
 	 * Instantiate a hide file response with the JSON response as a string from 
@@ -80,9 +80,9 @@ public class B2HideFileResponse extends BaseB2Response {
 
 	public Action getAction() { return this.action; }
 
-	public int getSize() { return this.size; }
+	public Integer getSize() { return this.size; }
 
-	public long getUploadTimestamp() { return this.uploadTimestamp; }
+	public Long getUploadTimestamp() { return this.uploadTimestamp; }
 
 	@Override
 	protected Logger getLogger() { return LOGGER; }

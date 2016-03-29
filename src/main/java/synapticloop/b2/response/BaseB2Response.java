@@ -100,13 +100,13 @@ public abstract class BaseB2Response {
 	 * 
 	 * @param key the key to read as an int and remove
 	 * 
-	 * @return the read key (or -1 if it doesn't exist)
+	 * @return the read key (or null if it doesn't exist)
 	 */
-	protected int readInt(String key) {
+	protected Integer readInt(String key) {
 		final Object value = response.remove(key);
 		if (null == value || JSONObject.NULL == value) {
 			getLogger().warn("No field for key {}", key);
-			return -1;
+			return null;
 		}
 		return value instanceof Number ? ((Number) value).intValue() : Integer.parseInt(value.toString());
 	}
@@ -116,13 +116,13 @@ public abstract class BaseB2Response {
 	 * 
 	 * @param key the key to read as a long and remove
 	 * 
-	 * @return the read key (or -1L if it doesn't exist)
+	 * @return the read key (or null if it doesn't exist)
 	 */
-	protected long readLong(String key) {
+	protected Long readLong(String key) {
 		final Object value = response.remove(key);
 		if (null == value || JSONObject.NULL == value) {
 			getLogger().warn("No field for key {}", key);
-			return -1L;
+			return null;
 		}
 		return value instanceof Number ? ((Number) value).longValue() : Long.parseLong(value.toString());
 	}
