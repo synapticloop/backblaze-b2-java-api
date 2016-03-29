@@ -58,7 +58,7 @@ public class B2DownloadFileResponse {
 	}
 
 	private final InputStream stream;
-	private final Integer contentLength;
+	private final Long contentLength;
 	private final String contentType;
 	private final String fileId;
 	private final String fileName;
@@ -84,7 +84,7 @@ public class B2DownloadFileResponse {
 			EntityUtils.consume(response.getEntity());
 		}
 
-		contentLength = Integer.parseInt(response.getFirstHeader(HttpHeaders.CONTENT_LENGTH).getValue());
+		contentLength = Long.parseLong(response.getFirstHeader(HttpHeaders.CONTENT_LENGTH).getValue());
 		contentType = response.getFirstHeader(HttpHeaders.CONTENT_TYPE).getValue();
 		contentSha1 = response.getFirstHeader(B2ResponseHeaders.HEADER_X_BZ_CONTENT_SHA1).getValue();
 		fileId = response.getFirstHeader(B2ResponseHeaders.HEADER_X_BZ_FILE_ID).getValue();
@@ -119,7 +119,7 @@ public class B2DownloadFileResponse {
 	 * 
 	 * @return the length of the content
 	 */
-	public Integer getContentLength() { return this.contentLength; }
+	public Long getContentLength() { return this.contentLength; }
 
 	/**
 	 * Get the content type of the downloaded file

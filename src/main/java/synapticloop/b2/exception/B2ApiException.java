@@ -24,40 +24,26 @@ public class B2ApiException extends Exception {
 
 	private String code;
 	private String message;
-	private int status = -1;
+	private int status;
+
+	/**
+	 * Retry-After header value (in seconds)
+	 */
+	private Integer retry;
 
 	private final String json;
 
 	/**
-	 * Create a new B2 Exception with a message.  If the message is in JSON (as 
-	 * returned by the backblaze B2 api) format, this message will be parsed 
-	 * and the following information extracted:
-	 * 
-	 * <ul>
-	 *   <li>status - The numeric HTTP status code. Always matches the status in the HTTP response.</li>
-	 *   <li>code - A single-identifier code that identifies the error.</li>
-	 *   <li>message - A human-readable message, in English, saying what went wrong.</li>
-	 * </ul>
-	 * 
-	 * @param json The message of the exception
-	 */
-	public B2ApiException(String json) {
-		super(json);
-		this.json = json;
-		this.parse(json);
-	}
-
-	/**
-	 * Create a new B2Api Exception with a message and root cause.  If the message 
-	 * is in JSON (as returned by the backblaze B2 api) format, this message will 
+	 * Create a new B2Api Exception with a message and root cause.  If the message
+	 * is in JSON (as returned by the backblaze B2 api) format, this message will
 	 * be parsed and the following information extracted:
-	 * 
+	 *
 	 * <ul>
 	 *   <li>status - The numeric HTTP status code. Always matches the status in the HTTP response.</li>
 	 *   <li>code - A single-identifier code that identifies the error.</li>
 	 *   <li>message - A human-readable message, in English, saying what went wrong.</li>
 	 * </ul>
-	 * 
+	 *
 	 * @param json The message of the exception
 	 * @param cause the root cause of the exception
 	 */
@@ -84,28 +70,36 @@ public class B2ApiException extends Exception {
 	}
 
 	/**
+	 * @param retry Value in seconds
+	 */
+	public B2ApiException withRetry(Integer retry) {
+		this.retry = retry;
+		return this;
+	}
+
+	/**
 	 * Return the backblaze error code
-	 * 
+	 *
 	 * @return the backblaze error code
 	 */
-	public String getCode() { 
+	public String getCode() {
 		return this.code;
 	}
 
 	/**
-	 * If the original message was in valid JSON format, return the 'message' 
+	 * If the original message was in valid JSON format, return the 'message'
 	 * part, else the message for the exception.
-	 * 
+	 *
 	 * @return the message
 	 */
-	public String getMessage() { 
-		return this.message; 
+	public String getMessage() {
+		return this.message;
 	}
 
 	/**
-	 * Return the original message for the exception, which is a JSON formatted 
+	 * Return the original message for the exception, which is a JSON formatted
 	 * string
-	 * 
+	 *
 	 * @return the original message text
 	 */
 	public String getJson() {
@@ -113,12 +107,20 @@ public class B2ApiException extends Exception {
 	}
 
 	/**
-	 * Return the HTTP status of the returned call, or -1 if the exception was 
+	 * Return the HTTP status of the returned call, or null if the exception was
 	 * not generated through an HTTP call.
-	 * 
+	 *
 	 * @return the HTTP status code
 	 */
 	public int getStatus() {
 		return this.status;
+	}
+
+	/**
+	 * Retry-After header value (in seconds)
+	 * @return Value in seconds or null if not Retry-After header in response
+	 */
+	public Integer getRetry() {
+		return retry;
 	}
 }
