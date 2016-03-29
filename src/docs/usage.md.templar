@@ -93,3 +93,10 @@ uploadFile(String, String, File, String){\n}
 uploadFile(String, String, File, String, Map<String, String>){\n}
 ```{\n}
 {\n}
+
+{\n}
+{\n}
+## Large File Support{\n}
+{\n}
+Large file support is currently in 'Sneak Peek' mode, which means that it is not available for public consumption yet...{\n}
+{\n}
