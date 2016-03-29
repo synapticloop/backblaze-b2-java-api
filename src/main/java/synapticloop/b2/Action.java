@@ -32,11 +32,8 @@ public enum Action {
 	 */
 	hide,
 	/**
-	 * "upload" means a file that was uploaded.
-	 */
-	upload,
-	/**
 	 * Pending multipart upload. "start" means that a large file has been started, but not finished or canceled.
 	 */
+	upload,
 	start
 }

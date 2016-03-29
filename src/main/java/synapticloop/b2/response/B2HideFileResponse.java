@@ -43,9 +43,9 @@ public class B2HideFileResponse extends BaseB2Response {
 
 	private final String fileId;
 	private final String fileName;
-	private final Action action;
-	private final Integer size;
-	private final Long uploadTimestamp;
+	private Action action;
+	private final int size;
+	private final long uploadTimestamp;
 
 	/**
 	 * Instantiate a hide file response with the JSON response as a string from 
@@ -61,9 +61,15 @@ public class B2HideFileResponse extends BaseB2Response {
 		this.fileId = this.readString(B2ResponseProperties.KEY_FILE_ID);
 		this.fileName = this.readString(B2ResponseProperties.KEY_FILE_NAME);
 
-		final String actionValue = this.readString(B2ResponseProperties.KEY_ACTION);
-		if(null != actionValue) {
-			this.action = Action.valueOf(actionValue);
+		final String action = this.readString(B2ResponseProperties.KEY_ACTION);
+		if(null != action) {
+			try {
+				this.action = Action.valueOf(action);
+			}
+			catch(IllegalArgumentException e) {
+				LOGGER.warn("Unknown action value " + action);
+				this.action = null;
+			}
 		} else {
 			this.action = null;
 		}
