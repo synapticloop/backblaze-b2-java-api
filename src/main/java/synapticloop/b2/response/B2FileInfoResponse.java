@@ -58,14 +58,7 @@ public class B2FileInfoResponse extends BaseB2Response {
 		this.contentLength = this.readLong(B2ResponseProperties.KEY_CONTENT_LENGTH);
 		this.contentType = this.readString(B2ResponseProperties.KEY_CONTENT_TYPE);
 		this.contentSha1 = this.readString(B2ResponseProperties.KEY_CONTENT_SHA1);
-		this.fileInfo = new HashMap<String, String>();
-		JSONObject fileInfoObject = this.readObject(B2ResponseProperties.KEY_FILE_INFO);
-		if(null != fileInfoObject) {
-			for (String key:  fileInfoObject.keySet().toArray(new String[fileInfoObject.keySet().size()])) {
-				fileInfo.put(key, this.readString(fileInfoObject, key));
-			}
-		}
-
+		this.fileInfo = this.readMap(B2ResponseProperties.KEY_FILE_INFO);
 		String action = this.readString(B2ResponseProperties.KEY_ACTION);
 		if(null != action) {
 			try {
