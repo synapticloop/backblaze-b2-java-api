@@ -46,9 +46,7 @@ public class B2StartLargeFileResponse extends BaseB2Response {
 		this.fileInfo = new HashMap<String, Object>();
 		JSONObject fileInfoObject = this.readObject(B2ResponseProperties.KEY_FILE_INFO);
 		if (null != fileInfoObject) {
-			Iterator keys = fileInfoObject.keys();
-			while (keys.hasNext()) {
-				String key = (String) keys.next();
+			for (String key:  fileInfoObject.keySet().toArray(new String[fileInfoObject.keySet().size()])) {
 				fileInfo.put(key, fileInfoObject.opt(key));
 			}
 		}
