@@ -232,26 +232,59 @@ public class B2ApiClient {
 	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 	/**
+	 * An uploadUrl and upload authorizationToken are valid for 24 hours or until the endpoint rejects an upload, see b2_upload_file.
+	 * You can upload as many files to this URL as you need. To achieve faster upload speeds, request multiple uploadUrls and
+	 * upload your files to these different endpoints in parallel.
+	 *
+	 * @param bucketId the id of the bucket to upload to
+	 * @return Upload URL. Not be shared between threads but can be used for multiple parts
+	 * @throws B2ApiException if there was an error with the request
+	 * @throws IOException    if there was an error communicating with the API service
+	 */
+	public B2GetUploadUrlResponse getUploadUrl(String bucketId) throws B2ApiException, IOException {
+		return new B2GetUploadUrlRequest(client, b2AuthorizeAccountResponse, bucketId).getResponse();
+	}
+
+	/**
 	 * Upload a file to a bucket
 	 *
-	 * @param bucketId the id of the bucket
-	 * @param fileName the name of the file that will be placed in the bucket
-	 *     (including any path separators '/')
-	 * @param entity the file content to upload
+	 * @param bucketId     the id of the bucket
+	 * @param fileName     the name of the file that will be placed in the bucket
+	 *                     (including any path separators '/')
+	 * @param entity       the file content to upload
 	 * @param sha1Checksum the checksum for the file
-	 * @param mimeType the mime type of the file, if null, then the mime type
-	 *     will be attempted to be automatically mapped by the backblaze B2 API
-	 *     see <a href="https://www.backblaze.com/b2/docs/content-types.html">https://www.backblaze.com/b2/docs/content-types.html</a>
-	 *     for a list of content type mappings.
-	 * @param fileInfo the file info map which will be set as 'X-Bz-Info-' headers
-	 *
+	 * @param mimeType     the mime type of the file, if null, then the mime type
+	 *                     will be attempted to be automatically mapped by the backblaze B2 API
+	 *                     see <a href="https://www.backblaze.com/b2/docs/content-types.html">https://www.backblaze.com/b2/docs/content-types.html</a>
+	 *                     for a list of content type mappings.
+	 * @param fileInfo     the file info map which will be set as 'X-Bz-Info-' headers
 	 * @return the uploaded file response
-	 *
 	 * @throws B2ApiException if there was an error uploading the file
-	 * @throws IOException if there was an error communicating with the API service
+	 * @throws IOException    if there was an error communicating with the API service
 	 */
 	public B2FileResponse uploadFile(String bucketId, String fileName, HttpEntity entity, String sha1Checksum, String mimeType, Map<String, String> fileInfo) throws B2ApiException, IOException {
-		B2GetUploadUrlResponse b2GetUploadUrlResponse = new B2GetUploadUrlRequest(client, b2AuthorizeAccountResponse, bucketId).getResponse();
+		B2GetUploadUrlResponse b2GetUploadUrlResponse = this.getUploadUrl(bucketId);
+		return this.uploadFile(b2GetUploadUrlResponse, fileName, entity, sha1Checksum, mimeType, fileInfo);
+	}
+
+	/**
+	 * Upload a file to a bucket
+	 *
+	 * @param b2GetUploadUrlResponse Upload URL.
+	 * @param fileName               the name of the file that will be placed in the bucket
+	 *                               (including any path separators '/')
+	 * @param entity                 the file content to upload
+	 * @param sha1Checksum           the checksum for the file
+	 * @param mimeType               the mime type of the file, if null, then the mime type
+	 *                               will be attempted to be automatically mapped by the backblaze B2 API
+	 *                               see <a href="https://www.backblaze.com/b2/docs/content-types.html">https://www.backblaze.com/b2/docs/content-types.html</a>
+	 *                               for a list of content type mappings.
+	 * @param fileInfo               the file info map which will be set as 'X-Bz-Info-' headers
+	 * @return the uploaded file response
+	 * @throws B2ApiException if there was an error uploading the file
+	 * @throws IOException    if there was an error communicating with the API service
+	 */
+	public B2FileResponse uploadFile(B2GetUploadUrlResponse b2GetUploadUrlResponse, String fileName, HttpEntity entity, String sha1Checksum, String mimeType, Map<String, String> fileInfo) throws B2ApiException, IOException {
 		return new B2UploadFileRequest(client, b2AuthorizeAccountResponse, b2GetUploadUrlResponse, fileName, entity, sha1Checksum, mimeType, fileInfo).getResponse();
 	}
 
@@ -260,21 +293,39 @@ public class B2ApiClient {
 	 *
 	 * @param bucketId the id of the bucket
 	 * @param fileName the name of the file that will be placed in the bucket
-	 *     (including any path separators '/')
-	 * @param file the file to upload
+	 *                 (including any path separators '/')
+	 * @param file     the file to upload
 	 * @param mimeType the mime type of the file, if null, then the mime type
-	 *     will be attempted to be automatically mapped by the backblaze B2 API
-	 *     see <a href="https://www.backblaze.com/b2/docs/content-types.html">https://www.backblaze.com/b2/docs/content-types.html</a>
-	 *     for a list of content type mappings.
+	 *                 will be attempted to be automatically mapped by the backblaze B2 API
+	 *                 see <a href="https://www.backblaze.com/b2/docs/content-types.html">https://www.backblaze.com/b2/docs/content-types.html</a>
+	 *                 for a list of content type mappings.
 	 * @param fileInfo the file info map which will be set as 'X-Bz-Info-' headers
-	 *
 	 * @return the uploaded file response
-	 *
 	 * @throws B2ApiException if there was an error uploading the file
-	 * @throws IOException if there was an error communicating with the API service
+	 * @throws IOException    if there was an error communicating with the API service
 	 */
 	public B2FileResponse uploadFile(String bucketId, String fileName, File file, String mimeType, Map<String, String> fileInfo) throws B2ApiException, IOException {
-		B2GetUploadUrlResponse b2GetUploadUrlResponse = new B2GetUploadUrlRequest(client, b2AuthorizeAccountResponse, bucketId).getResponse();
+		B2GetUploadUrlResponse b2GetUploadUrlResponse = this.getUploadUrl(bucketId);
+		return this.uploadFile(b2GetUploadUrlResponse, fileName, file, mimeType, fileInfo);
+	}
+
+	/**
+	 * Upload a file to a bucket
+	 *
+	 * @param b2GetUploadUrlResponse Upload URL.
+	 * @param fileName               the name of the file that will be placed in the bucket
+	 *                               (including any path separators '/')
+	 * @param file                   the file to upload
+	 * @param mimeType               the mime type of the file, if null, then the mime type
+	 *                               will be attempted to be automatically mapped by the backblaze B2 API
+	 *                               see <a href="https://www.backblaze.com/b2/docs/content-types.html">https://www.backblaze.com/b2/docs/content-types.html</a>
+	 *                               for a list of content type mappings.
+	 * @param fileInfo               the file info map which will be set as 'X-Bz-Info-' headers
+	 * @return the uploaded file response
+	 * @throws B2ApiException if there was an error uploading the file
+	 * @throws IOException    if there was an error communicating with the API service
+	 */
+	public B2FileResponse uploadFile(B2GetUploadUrlResponse b2GetUploadUrlResponse, String fileName, File file, String mimeType, Map<String, String> fileInfo) throws B2ApiException, IOException {
 		return new B2UploadFileRequest(client, b2AuthorizeAccountResponse, b2GetUploadUrlResponse, fileName, file,
 				ChecksumHelper.calculateSha1(file), mimeType, fileInfo).getResponse();
 	}
@@ -284,18 +335,31 @@ public class B2ApiClient {
 	 *
 	 * @param bucketId the id of the bucket
 	 * @param fileName the name of the file that will be placed in the bucket
-	 *     (including any path separators '/')
-	 * @param file the file to upload
+	 *                 (including any path separators '/')
+	 * @param file     the file to upload
 	 * @param fileInfo the file info map which will be set as 'X-Bz-Info-' headers
-	 *
 	 * @return the uploaded file response
-	 *
 	 * @throws B2ApiException if there was an error uploading the file
-	 * @throws IOException if there was an error communicating with the API service
+	 * @throws IOException    if there was an error communicating with the API service
 	 */
-
 	public B2FileResponse uploadFile(String bucketId, String fileName, File file, Map<String, String> fileInfo) throws B2ApiException, IOException {
-		B2GetUploadUrlResponse b2GetUploadUrlResponse = new B2GetUploadUrlRequest(client, b2AuthorizeAccountResponse, bucketId).getResponse();
+		B2GetUploadUrlResponse b2GetUploadUrlResponse = this.getUploadUrl(bucketId);
+		return this.uploadFile(b2GetUploadUrlResponse, fileName, file, fileInfo);
+	}
+
+	/**
+	 * Upload a file to a bucket
+	 *
+	 * @param b2GetUploadUrlResponse Upload URL.
+	 * @param fileName               the name of the file that will be placed in the bucket
+	 *                               (including any path separators '/')
+	 * @param file                   the file to upload
+	 * @param fileInfo               the file info map which will be set as 'X-Bz-Info-' headers
+	 * @return the uploaded file response
+	 * @throws B2ApiException if there was an error uploading the file
+	 * @throws IOException    if there was an error communicating with the API service
+	 */
+	public B2FileResponse uploadFile(B2GetUploadUrlResponse b2GetUploadUrlResponse, String fileName, File file, Map<String, String> fileInfo) throws B2ApiException, IOException {
 		return new B2UploadFileRequest(client, b2AuthorizeAccountResponse, b2GetUploadUrlResponse, fileName, file,
 				ChecksumHelper.calculateSha1(file), fileInfo).getResponse();
 	}
@@ -305,20 +369,37 @@ public class B2ApiClient {
 	 *
 	 * @param bucketId the id of the bucket
 	 * @param fileName the name of the file that will be placed in the bucket
-	 *     (including any path separators '/')
-	 * @param file the file to upload
+	 *                 (including any path separators '/')
+	 * @param file     the file to upload
 	 * @param mimeType the mime type of the file, if null, then the mime type
-	 *     will be attempted to be automatically mapped by the backblaze B2 API
-	 *     see <a href="https://www.backblaze.com/b2/docs/content-types.html">https://www.backblaze.com/b2/docs/content-types.html</a>
-	 *     for a list of content type mappings.
-	 *
+	 *                 will be attempted to be automatically mapped by the backblaze B2 API
+	 *                 see <a href="https://www.backblaze.com/b2/docs/content-types.html">https://www.backblaze.com/b2/docs/content-types.html</a>
+	 *                 for a list of content type mappings.
 	 * @return the uploaded file response
-	 *
 	 * @throws B2ApiException if there was an error uploading the file
-	 * @throws IOException if there was an error communicating with the API service
+	 * @throws IOException    if there was an error communicating with the API service
 	 */
 	public B2FileResponse uploadFile(String bucketId, String fileName, File file, String mimeType) throws B2ApiException, IOException {
-		B2GetUploadUrlResponse b2GetUploadUrlResponse = new B2GetUploadUrlRequest(client, b2AuthorizeAccountResponse, bucketId).getResponse();
+		B2GetUploadUrlResponse b2GetUploadUrlResponse = this.getUploadUrl(bucketId);
+		return this.uploadFile(b2GetUploadUrlResponse, fileName, file, mimeType);
+	}
+
+	/**
+	 * Upload a file to a bucket
+	 *
+	 * @param b2GetUploadUrlResponse Upload URL.
+	 * @param fileName               the name of the file that will be placed in the bucket
+	 *                               (including any path separators '/')
+	 * @param file                   the file to upload
+	 * @param mimeType               the mime type of the file, if null, then the mime type
+	 *                               will be attempted to be automatically mapped by the backblaze B2 API
+	 *                               see <a href="https://www.backblaze.com/b2/docs/content-types.html">https://www.backblaze.com/b2/docs/content-types.html</a>
+	 *                               for a list of content type mappings.
+	 * @return the uploaded file response
+	 * @throws B2ApiException if there was an error uploading the file
+	 * @throws IOException    if there was an error communicating with the API service
+	 */
+	public B2FileResponse uploadFile(B2GetUploadUrlResponse b2GetUploadUrlResponse, String fileName, File file, String mimeType) throws B2ApiException, IOException {
 		return new B2UploadFileRequest(client, b2AuthorizeAccountResponse, b2GetUploadUrlResponse, fileName, file,
 				ChecksumHelper.calculateSha1(file), mimeType).getResponse();
 	}
@@ -329,16 +410,30 @@ public class B2ApiClient {
 	 *
 	 * @param bucketId the id of the bucket
 	 * @param fileName the name of the file that will be placed in the bucket
-	 *     (including any path separators '/')
-	 * @param file the file to upload
-	 *
+	 *                 (including any path separators '/')
+	 * @param file     the file to upload
 	 * @return the uploaded file response
-	 *
 	 * @throws B2ApiException if there was an error uploading the file
-	 * @throws IOException if there was an error communicating with the API service
+	 * @throws IOException    if there was an error communicating with the API service
 	 */
 	public B2FileResponse uploadFile(String bucketId, String fileName, File file) throws B2ApiException, IOException {
-		B2GetUploadUrlResponse b2GetUploadUrlResponse = new B2GetUploadUrlRequest(client, b2AuthorizeAccountResponse, bucketId).getResponse();
+		B2GetUploadUrlResponse b2GetUploadUrlResponse = this.getUploadUrl(bucketId);
+		return this.uploadFile(b2GetUploadUrlResponse, fileName, file);
+	}
+
+	/**
+	 * Upload a file to a bucket, the mimetype will be automatically set by the
+	 * back-end B2 API system
+	 *
+	 * @param b2GetUploadUrlResponse Upload URL.
+	 * @param fileName               the name of the file that will be placed in the bucket
+	 *                               (including any path separators '/')
+	 * @param file                   the file to upload
+	 * @return the uploaded file response
+	 * @throws B2ApiException if there was an error uploading the file
+	 * @throws IOException    if there was an error communicating with the API service
+	 */
+	public B2FileResponse uploadFile(B2GetUploadUrlResponse b2GetUploadUrlResponse, String fileName, File file) throws B2ApiException, IOException {
 		return new B2UploadFileRequest(client, b2AuthorizeAccountResponse, b2GetUploadUrlResponse, fileName,
 				file, ChecksumHelper.calculateSha1(file)).getResponse();
 	}
@@ -348,6 +443,19 @@ public class B2ApiClient {
 	 *   LARGE FILE UPLOAD API ACTIONS
 	 *
 	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+	/**
+	 * When you upload part of a large file to B2, you must call b2_get_upload_part_url first to get the URL for uploading.
+	 * Then, you use b2_upload_part on this URL to upload your data.
+	 *
+	 * @param fileId the id of the file to upload
+	 * @return Upload URL. Not be shared between threads but can be used for multiple parts
+	 * @throws B2ApiException if there was an error with the request
+	 * @throws IOException    if there was an error communicating with the API service
+	 */
+	public B2GetUploadPartUrlResponse getUploadPartUrl(String fileId) throws B2ApiException, IOException {
+		return new B2GetUploadPartUrlRequest(client, b2AuthorizeAccountResponse, fileId).getResponse();
+	}
 
 	/**
 	 * Start large file upload
@@ -399,7 +507,21 @@ public class B2ApiClient {
 	 * @throws B2ApiException if there was an error uploading the file
 	 */
 	public B2UploadPartResponse uploadLargeFilePart(String fileId, int partNumber, HttpEntity entity, String sha1Checksum) throws B2ApiException, IOException {
-		final B2GetUploadPartUrlResponse b2GetUploadUrlResponse = new B2GetUploadPartUrlRequest(client, b2AuthorizeAccountResponse, fileId).getResponse();
+		final B2GetUploadPartUrlResponse b2GetUploadUrlResponse = this.getUploadPartUrl(fileId);
+		return this.uploadLargeFilePart(b2GetUploadUrlResponse, partNumber, entity, sha1Checksum);
+	}
+
+	/**
+	 * Upload large file upload part
+	 *
+	 * @param b2GetUploadUrlResponse Upload URL.
+	 * @param partNumber             A number from 1 to 10000. The parts uploaded for one file must have contiguous numbers, starting with 1.
+	 * @param entity                 Part content body
+	 * @param sha1Checksum           the checksum for the part
+	 * @return Upload response
+	 * @throws B2ApiException if there was an error uploading the file
+	 */
+	public B2UploadPartResponse uploadLargeFilePart(B2GetUploadPartUrlResponse b2GetUploadUrlResponse, int partNumber, HttpEntity entity, String sha1Checksum) throws B2ApiException, IOException {
 		return new B2UploadPartRequest(client, b2AuthorizeAccountResponse, b2GetUploadUrlResponse, partNumber, entity, sha1Checksum).getResponse();
 	}
 
