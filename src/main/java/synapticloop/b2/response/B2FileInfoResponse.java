@@ -76,11 +76,7 @@ public class B2FileInfoResponse extends BaseB2Response {
 			}
 			catch(IllegalArgumentException e) {
 				LOGGER.warn("Unknown action value " + action);
-				this.action = null;
 			}
-		} else {
-			// Default
-			this.action = Action.upload;
 		}
 
 		this.size = this.readLong(B2ResponseProperties.KEY_SIZE);

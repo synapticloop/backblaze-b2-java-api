@@ -38,7 +38,7 @@ public class B2FinishLargeFileResponse extends BaseB2Response {
 	private final String contentType;
 
 	private final Map<String, String> fileInfo;
-	private final Action action;
+	private Action action;
 
 	public B2FinishLargeFileResponse(final String json) throws B2ApiException {
 		super(json);
@@ -63,10 +63,12 @@ public class B2FinishLargeFileResponse extends BaseB2Response {
 
 		String action = this.readString(B2ResponseProperties.KEY_ACTION);
 		if(null != action) {
-			this.action = Action.valueOf(action);
-		} else {
-			// Default
-			this.action = Action.upload;
+			try {
+				this.action = Action.valueOf(action);
+			}
+			catch(IllegalArgumentException e) {
+				LOGGER.warn("Unknown action value " + action);
+			}
 		}
 
 		this.warnOnMissedKeys();
