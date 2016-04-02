@@ -95,7 +95,14 @@ public class B2BucketResponse extends BaseB2Response {
 	 *
 	 * @return The bucket type
 	 */
-	public BucketType getBucketType() { return BucketType.valueOf(this.bucketType); }
+	public BucketType getBucketType() {
+		try {
+			return BucketType.valueOf(this.bucketType);
+		}
+		catch(IllegalArgumentException e) {
+			return null;
+		}
+	}
 
 	@Override
 	protected Logger getLogger() { return LOGGER; }
