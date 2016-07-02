@@ -21,8 +21,7 @@ import synapticloop.b2.response.B2StartLargeFileResponse;
 
 public class B2StartLargeFileRequestTest {
 
-	// this is expected until the large file support goes live
-	@Test(expected=B2ApiException.class)
+	@Test
 	public void getResponse() throws Exception {
 		B2AuthorizeAccountResponse b2AuthorizeAccountResponse = B2TestHelper.getB2AuthorizeAccountResponse();
 
