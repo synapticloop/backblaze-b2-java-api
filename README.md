@@ -7,6 +7,9 @@
 > A java api for the truly excellent backblaze b2 storage service
 
 
+# Just looking for a GUI?
+
+We thoroughly recommend either [cyberduck](https://cyberduck.io/) or [mountainduck](https://mountainduck.io/) which includes this code for the awesome BackBlaze storage service.
 # Usage
 
 ```
@@ -100,13 +103,26 @@ uploadFile(String, String, File)
 uploadFile(String, String, File, Map<String, String>)
 uploadFile(String, String, File, String)
 uploadFile(String, String, File, String, Map<String, String>)
-```
 
+
+```
 
 
 ## Large File Support
 
-Large file support is currently in 'Sneak Peek' mode, which means that it is not available for public consumption yet...
+Large files can range in size from 100MB to 10TB.
+
+Each large file must consist of at least 2 parts, and all of the parts except the last one must be at least 100MB in size. The last part must contain at least one byte.
+
+```
+startLargeFileUpload(String bucketId, String fileName, String mimeType, Map<String, String> fileInfo)
+getUploadPartUrl(String fileId)
+uploadLargeFilePart(String fileId, int partNumber, HttpEntity entity, String sha1Checksum)
+finishLargeFileUpload(String fileId, String[] partSha1Array)
+
+// you can list the parts that are not yet finished
+listUnfinishedLargeFiles(String bucketId, String startFileId, Integer maxFileCount)
+```
 
 
 
@@ -243,15 +259,49 @@ This project publishes artefacts to [GitHib](https://github.com/)
 
 As such, this is not a repository, but a location to download files from.
 
-# Dependency Management Maven
+# Artefact Publishing - Bintray
 
-This project publishes artefacts to [Maven Central](https://search.maven.org/)
+This project publishes artefacts to [bintray](https://bintray.com/)
 
-> Note that the latest version can be found [mvn central](http://search.maven.org/#artifactdetails|synapticloop|backblaze-b2-java-api|1.3.4|jar)
+> Note that the latest version can be found [https://bintray.com/synapticloop/maven/backblaze-b2-java-api/view](https://bintray.com/synapticloop/maven/backblaze-b2-java-api/view)
 
 ## maven setup
 
-No setup is required
+this comes from the jcenter bintray, to set up your repository:
+
+```
+<?xml version="1.0" encoding="UTF-8" ?>
+<settings xsi:schemaLocation='http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd' xmlns='http://maven.apache.org/SETTINGS/1.0.0' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'>
+  <profiles>
+    <profile>
+      <repositories>
+        <repository>
+          <snapshots>
+            <enabled>false</enabled>
+          </snapshots>
+          <id>central</id>
+          <name>bintray</name>
+          <url>http://jcenter.bintray.com</url>
+        </repository>
+      </repositories>
+      <pluginRepositories>
+        <pluginRepository>
+          <snapshots>
+            <enabled>false</enabled>
+          </snapshots>
+          <id>central</id>
+          <name>bintray-plugins</name>
+          <url>http://jcenter.bintray.com</url>
+        </pluginRepository>
+      </pluginRepositories>
+      <id>bintray</id>
+    </profile>
+  </profiles>
+  <activeProfiles>
+    <activeProfile>bintray</activeProfile>
+  </activeProfiles>
+</settings>
+```
 
 ## gradle setup
 
@@ -259,7 +309,17 @@ Repository
 
 ```
 repositories {
-	mavenCentral()
+	maven {
+		url  "http://jcenter.bintray.com" 
+	}
+}
+```
+
+or just
+
+```
+repositories {
+	jcenter()
 }
 ```
 
@@ -267,9 +327,9 @@ repositories {
 
 ```
 dependencies {
-	runtime(group: 'synapticloop', name: 'backblaze-b2-java-api', version: '1.3.4', ext: 'jar')
+	runtime(group: 'synapticloop', name: 'backblaze-b2-java-api', version: '2.0.0', ext: 'jar')
 
-	compile(group: 'synapticloop', name: 'backblaze-b2-java-api', version: '1.3.4', ext: 'jar')
+	compile(group: 'synapticloop', name: 'backblaze-b2-java-api', version: '2.0.0', ext: 'jar')
 }
 ```
 
@@ -277,9 +337,9 @@ or, more simply for versions of gradle greater than 2.1
 
 ```
 dependencies {
-	runtime 'synapticloop:backblaze-b2-java-api:1.3.4'
+	runtime 'synapticloop:backblaze-b2-java-api:2.0.0'
 
-	compile 'synapticloop:backblaze-b2-java-api:1.3.4'
+	compile 'synapticloop:backblaze-b2-java-api:2.0.0'
 }
 ```
 
@@ -289,7 +349,7 @@ dependencies {
 <dependency>
 	<groupId>synapticloop</groupId>
 	<artifactId>backblaze-b2-java-api</artifactId>
-	<version>1.3.4</version>
+	<version>2.0.0</version>
 	<type>jar</type>
 </dependency>
 ```

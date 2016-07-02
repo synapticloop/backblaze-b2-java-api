@@ -567,6 +567,7 @@ public class B2ApiClient {
 	 * @param sha1Checksum           the checksum for the part
 	 * @return Upload response
 	 * @throws B2ApiException if there was an error uploading the file
+	 * @throws IOException    if there was an error communicating with the API service
 	 */
 	public B2UploadPartResponse uploadLargeFilePart(B2GetUploadPartUrlResponse b2GetUploadUrlResponse, int partNumber, HttpEntity entity, String sha1Checksum) throws B2ApiException, IOException {
 		return new B2UploadPartRequest(client, b2AuthorizeAccountResponse, b2GetUploadUrlResponse, partNumber, entity, sha1Checksum).getResponse();
