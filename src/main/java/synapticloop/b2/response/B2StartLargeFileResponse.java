@@ -33,7 +33,7 @@ public class B2StartLargeFileResponse extends BaseB2Response {
 	private final String accountId;
 	private final String bucketId;
 	private final String contentType;
-	private final Map<String, Object> fileInfo;
+	private final Map<String, String> fileInfo;
 
 	public B2StartLargeFileResponse(String json) throws B2ApiException {
 		super(json);
@@ -43,15 +43,7 @@ public class B2StartLargeFileResponse extends BaseB2Response {
 		this.accountId = this.readString(B2ResponseProperties.KEY_ACCOUNT_ID);
 		this.bucketId = this.readString(B2ResponseProperties.KEY_BUCKET_ID);
 		this.contentType = this.readString(B2ResponseProperties.KEY_CONTENT_TYPE);
-		this.fileInfo = new HashMap<String, Object>();
-		JSONObject fileInfoObject = this.readObject(B2ResponseProperties.KEY_FILE_INFO);
-		if (null != fileInfoObject) {
-			Iterator keys = fileInfoObject.keys();
-			while (keys.hasNext()) {
-				String key = (String) keys.next();
-				fileInfo.put(key, fileInfoObject.opt(key));
-			}
-		}
+		this.fileInfo = this.readMap(B2ResponseProperties.KEY_FILE_INFO);
 
 		this.warnOnMissedKeys();
 	}
@@ -66,7 +58,7 @@ public class B2StartLargeFileResponse extends BaseB2Response {
 
 	public String getContentType() { return this.contentType; }
 
-	public Map<String, Object> getFileInfo() { return this.fileInfo; }
+	public Map<String, String> getFileInfo() { return this.fileInfo; }
 
 	@Override
 	protected Logger getLogger() { return LOGGER; }

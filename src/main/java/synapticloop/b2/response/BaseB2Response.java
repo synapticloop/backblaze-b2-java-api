@@ -22,7 +22,9 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import synapticloop.b2.exception.B2ApiException;
 
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 public abstract class BaseB2Response {
 	private final JSONObject response;
@@ -169,6 +171,25 @@ public abstract class BaseB2Response {
 		return value instanceof JSONArray ? (JSONArray) value : null;
 	}
 
+	/**
+	 * Read and remove JSONObject with key from JSON object
+	 *
+	 * @param key the key to read as a JSONObject and put keys and values into map
+	 *
+	 * @return the read keys and values (or null if it doesn't exist)
+	 */
+	protected Map<String, String> readMap(String key) {
+		final Map<String, String> map = new HashMap<String, String>();
+		JSONObject value = this.readObject(key);
+		if (null == value || JSONObject.NULL == value) {
+			getLogger().warn("No field for key {}", key);
+			return null;
+		}
+		for (String k:  value.keySet().toArray(new String[value.keySet().size()])) {
+			map.put(k, this.readString(value, k));
+		}
+		return map;
+	}
 
 	/**
 	 * Parse through the expected keys to determine whether any of the keys in
