@@ -24,6 +24,7 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import synapticloop.b2.Action;
 import synapticloop.b2.exception.B2ApiException;
 
 public class B2FileResponse extends BaseB2Response {
@@ -37,6 +38,7 @@ public class B2FileResponse extends BaseB2Response {
 	private final String contentSha1;
 	private final String contentType;
 	private final Map<String, String> fileInfo;
+	private Action action;
 
 	/**
 	 * Instantiate a file response with the JSON response as a string from 
@@ -57,15 +59,15 @@ public class B2FileResponse extends BaseB2Response {
 		this.contentLength = this.readLong(B2ResponseProperties.KEY_CONTENT_LENGTH);
 		this.contentSha1 = this.readString(B2ResponseProperties.KEY_CONTENT_SHA1);
 		this.contentType = this.readString(B2ResponseProperties.KEY_CONTENT_TYPE);
+		this.fileInfo = this.readMap(B2ResponseProperties.KEY_FILE_INFO);
 
-		this.fileInfo = new HashMap<String, String>();
-
-		JSONObject fileInfoObject = this.readObject(B2ResponseProperties.KEY_FILE_INFO);
-		if(null != fileInfoObject) {
-			Iterator keys = fileInfoObject.keys();
-			while (keys.hasNext()) {
-				String key = (String) keys.next();
-				fileInfo.put(key, this.readString(fileInfoObject, key));
+		String action = this.readString(B2ResponseProperties.KEY_ACTION);
+		if(null != action) {
+			try {
+				this.action = Action.valueOf(action);
+			}
+			catch(IllegalArgumentException e) {
+				LOGGER.warn("Unknown action value " + action);
 			}
 		}
 

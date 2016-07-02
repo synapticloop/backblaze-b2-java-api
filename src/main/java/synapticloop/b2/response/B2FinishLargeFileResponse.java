@@ -38,7 +38,7 @@ public class B2FinishLargeFileResponse extends BaseB2Response {
 	private final String contentType;
 
 	private final Map<String, String> fileInfo;
-	private final Action action;
+	private Action action;
 
 	public B2FinishLargeFileResponse(final String json) throws B2ApiException {
 		super(json);
@@ -50,23 +50,15 @@ public class B2FinishLargeFileResponse extends BaseB2Response {
 		this.contentLength = this.readLong(B2ResponseProperties.KEY_CONTENT_LENGTH);
 		this.contentType = this.readString(B2ResponseProperties.KEY_CONTENT_TYPE);
 		this.contentSha1 = this.readString(B2ResponseProperties.KEY_CONTENT_SHA1);
-		this.fileInfo = new HashMap<String, String>();
-
-		JSONObject fileInfoObject = this.readObject(B2ResponseProperties.KEY_FILE_INFO);
-		if(null != fileInfoObject) {
-			Iterator keys = fileInfoObject.keys();
-			while (keys.hasNext()) {
-				String key = (String) keys.next();
-				fileInfo.put(key, this.readString(fileInfoObject, key));
-			}
-		}
-
+		this.fileInfo = this.readMap(B2ResponseProperties.KEY_FILE_INFO);
 		String action = this.readString(B2ResponseProperties.KEY_ACTION);
 		if(null != action) {
-			this.action = Action.valueOf(action);
-		} else {
-			// Default
-			this.action = Action.upload;
+			try {
+				this.action = Action.valueOf(action);
+			}
+			catch(IllegalArgumentException e) {
+				LOGGER.warn("Unknown action value " + action);
+			}
 		}
 
 		this.warnOnMissedKeys();

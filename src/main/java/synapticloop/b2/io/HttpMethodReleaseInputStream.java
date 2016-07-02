@@ -16,17 +16,17 @@ package synapticloop.b2.io;
  * this source code or binaries.
  */
 
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import org.apache.commons.io.input.CountingInputStream;
 import org.apache.http.HttpConnection;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.CloseableHttpResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
 
 public class HttpMethodReleaseInputStream extends CountingInputStream {
-	private static final Logger LOGGER = Logger.getLogger(HttpMethodReleaseInputStream.class.getName());
+	private static final Logger LOGGER = LoggerFactory.getLogger(HttpMethodReleaseInputStream.class);
 
 	private HttpResponse response;
 
@@ -58,10 +58,7 @@ public class HttpMethodReleaseInputStream extends CountingInputStream {
 				// Fully consumed
 				super.close();
 			} else {
-				if(LOGGER.isLoggable(Level.WARNING)) {
-					LOGGER.warning(String.format("Abort connection for response '{}'", response));
-				}
-
+				LOGGER.warn("Abort connection for response '{}'", response);
 				// Close an HTTP response as quickly as possible, avoiding consuming
 				// response data unnecessarily though at the expense of making underlying
 				// connections unavailable for reuse.
