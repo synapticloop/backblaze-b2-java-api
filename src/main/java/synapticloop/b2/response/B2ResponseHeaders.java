@@ -27,4 +27,5 @@ public final class B2ResponseHeaders {
 	public static final String HEADER_X_BZ_FILE_ID = "X-Bz-File-Id";
 	public static final String HEADER_X_BZ_INFO_PREFIX = "X-Bz-Info-";
 	public static final String HEADER_X_BZ_PART_NUMBER = "X-Bz-Part-Number";
+	public static final String HEADER_X_BZ_UPLOAD_TIMESTAMP = "X-Bz-Upload-Timestamp";
 }

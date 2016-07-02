@@ -16,11 +16,8 @@ package synapticloop.b2.response;
  * this source code or binaries.
  */
 
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,6 +36,7 @@ public class B2FileResponse extends BaseB2Response {
 	private final String contentType;
 	private final Map<String, String> fileInfo;
 	private Action action;
+	private final Long uploadTimestamp;
 
 	/**
 	 * Instantiate a file response with the JSON response as a string from 
@@ -48,7 +46,6 @@ public class B2FileResponse extends BaseB2Response {
 	 * 
 	 * @throws B2ApiException if there was an error parsing the response
 	 */
-	@SuppressWarnings("rawtypes")
 	public B2FileResponse(String json) throws B2ApiException {
 		super(json);
 
@@ -60,6 +57,7 @@ public class B2FileResponse extends BaseB2Response {
 		this.contentSha1 = this.readString(B2ResponseProperties.KEY_CONTENT_SHA1);
 		this.contentType = this.readString(B2ResponseProperties.KEY_CONTENT_TYPE);
 		this.fileInfo = this.readMap(B2ResponseProperties.KEY_FILE_INFO);
+		this.uploadTimestamp = this.readLong(B2ResponseProperties.KEY_UPLOAD_TIMESTAMP);
 
 		String action = this.readString(B2ResponseProperties.KEY_ACTION);
 		if(null != action) {
@@ -134,6 +132,13 @@ public class B2FileResponse extends BaseB2Response {
 	 */
 	public Map<String, String> getFileInfo() { return this.fileInfo; }
 
+	/**
+	 * Return the upload timestamp for this file
+	 * 
+	 * @return the upload timestamp fot this file
+	 */
+	public Long getUploadTimestamp() { return this.uploadTimestamp; }
+
 	@Override
 	protected Logger getLogger() { return LOGGER; }
 
@@ -150,5 +155,14 @@ public class B2FileResponse extends BaseB2Response {
 		sb.append(", fileInfo=").append(fileInfo);
 		sb.append('}');
 		return sb.toString();
+	}
+
+	/**
+	 * Get the action that was performed on the 
+	 * 
+	 * @return the action that was performed
+	 */
+	public Action getAction() {
+		return action;
 	}
 }

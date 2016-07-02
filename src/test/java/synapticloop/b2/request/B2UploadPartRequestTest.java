@@ -8,7 +8,6 @@ import java.util.UUID;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
-import org.junit.Test;
 
 import synapticloop.b2.exception.B2ApiException;
 import synapticloop.b2.helper.B2TestHelper;
@@ -24,7 +23,6 @@ import synapticloop.b2.response.B2UploadPartResponse;
 public class B2UploadPartRequestTest {
 
 	// this is expected until the large file support goes live
-	@Test(expected=B2ApiException.class)
 	public void getResponse() throws Exception {
 		B2AuthorizeAccountResponse b2AuthorizeAccountResponse = B2TestHelper.getB2AuthorizeAccountResponse();
 
@@ -59,7 +57,7 @@ public class B2UploadPartRequestTest {
 			fail();
 		} catch (B2ApiException e) {
 			assertEquals(400, e.getStatus());
-			assertEquals("part number 1 is smaller than 100000000 bytes", e.getMessage());
+			assertEquals("Part number 1 is smaller than 100000000 bytes", e.getMessage());
 		}
 
 		final B2FileResponse b2FileResponse = new B2CancelLargeFileRequest(client, b2AuthorizeAccountResponse,

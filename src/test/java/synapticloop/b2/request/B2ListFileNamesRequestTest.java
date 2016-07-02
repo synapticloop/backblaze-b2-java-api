@@ -1,14 +1,14 @@
 package synapticloop.b2.request;
 
+import static org.junit.Assert.*;
+
 import org.apache.http.impl.client.HttpClients;
 import org.junit.Test;
-import synapticloop.b2.exception.B2ApiException;
+
 import synapticloop.b2.helper.B2TestHelper;
 import synapticloop.b2.response.B2AuthorizeAccountResponse;
 import synapticloop.b2.response.B2BucketResponse;
 import synapticloop.b2.response.B2ListFilesResponse;
-
-import static org.junit.Assert.assertNull;
 
 public class B2ListFileNamesRequestTest {
 
@@ -21,8 +21,6 @@ public class B2ListFileNamesRequestTest {
 
 		assertNull(b2ListFilesResponse.getNextFileId());
 		assertNull(b2ListFilesResponse.getNextFileName());
-
-		new B2DeleteBucketRequest(HttpClients.createDefault(), b2AuthorizeAccountResponse, b2BucketResponse.getBucketId()).getResponse();
 
 		B2TestHelper.deleteBucket(b2BucketResponse.getBucketId());
 	}

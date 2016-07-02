@@ -16,17 +16,16 @@ package synapticloop.b2.response;
  * this source code or binaries.
  */
 
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
-import synapticloop.b2.exception.B2ApiException;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import synapticloop.b2.exception.B2ApiException;
 
 public abstract class BaseB2Response {
 	private final JSONObject response;
@@ -214,7 +213,7 @@ public abstract class BaseB2Response {
 			Iterator keys = response.keys();
 			while (keys.hasNext()) {
 				String key = (String) keys.next();
-				getLogger().warn("Found an unexpected key of '{}' in JSON that is not mapped to a field.", key);
+				getLogger().warn("Found an unexpected key of '{}' in JSON that is not mapped to a field, with value '{}'.", key, response.get(key));
 			}
 		}
 	}

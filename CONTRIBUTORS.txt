@@ -1,0 +1,1 @@
+iterate GmbH (https://github.com/iterate-ch/backblaze-b2-java-api/)

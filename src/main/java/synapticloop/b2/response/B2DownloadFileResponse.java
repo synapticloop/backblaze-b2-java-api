@@ -55,6 +55,7 @@ public class B2DownloadFileResponse {
 		ignoredHeaders.add(B2ResponseHeaders.HEADER_X_BZ_CONTENT_SHA1.toLowerCase(Locale.ENGLISH));
 		ignoredHeaders.add(B2ResponseHeaders.HEADER_X_BZ_FILE_ID.toLowerCase(Locale.ENGLISH));
 		ignoredHeaders.add(B2ResponseHeaders.HEADER_X_BZ_FILE_NAME.toLowerCase(Locale.ENGLISH));
+		ignoredHeaders.add(B2ResponseHeaders.HEADER_X_BZ_UPLOAD_TIMESTAMP.toLowerCase(Locale.ENGLISH));
 	}
 
 	private final InputStream stream;
@@ -63,6 +64,7 @@ public class B2DownloadFileResponse {
 	private final String fileId;
 	private final String fileName;
 	private final String contentSha1;
+	private final String uploadTimestamp;
 
 	private final Map<String, String> fileInfo = new HashMap<>();
 
@@ -89,6 +91,7 @@ public class B2DownloadFileResponse {
 		contentSha1 = response.getFirstHeader(B2ResponseHeaders.HEADER_X_BZ_CONTENT_SHA1).getValue();
 		fileId = response.getFirstHeader(B2ResponseHeaders.HEADER_X_BZ_FILE_ID).getValue();
 		fileName = response.getFirstHeader(B2ResponseHeaders.HEADER_X_BZ_FILE_NAME).getValue();
+		uploadTimestamp = response.getFirstHeader(B2ResponseHeaders.HEADER_X_BZ_UPLOAD_TIMESTAMP).getValue();
 
 		for (Header header : response.getAllHeaders()) {
 			String headerName = header.getName();
@@ -148,6 +151,13 @@ public class B2DownloadFileResponse {
 	 * @return the SHA1 of the returned content
 	 */
 	public String getContentSha1() { return this.contentSha1; }
+
+	/**
+	 * Get the upload timestamp of the file
+	 * 
+	 * @return the upload timestamp of the file
+	 */
+	public String getUploadTimestamp() { return this.uploadTimestamp; }
 
 	/**
 	 * Get the file info for the file, this is stored as x-bz-info-* headers when 

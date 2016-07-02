@@ -1,17 +1,26 @@
 package synapticloop.b2.helper;
 
-import org.apache.http.impl.client.HttpClients;
-import synapticloop.b2.BucketType;
-import synapticloop.b2.exception.B2ApiException;
-import synapticloop.b2.request.*;
-import synapticloop.b2.response.*;
-import synapticloop.b2.util.ChecksumHelper;
-
 import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.util.Map;
 import java.util.UUID;
+
+import org.apache.http.impl.client.HttpClients;
+
+import synapticloop.b2.BucketType;
+import synapticloop.b2.exception.B2ApiException;
+import synapticloop.b2.request.B2AuthorizeAccountRequest;
+import synapticloop.b2.request.B2CreateBucketRequest;
+import synapticloop.b2.request.B2DeleteBucketRequest;
+import synapticloop.b2.request.B2DeleteFileVersionRequest;
+import synapticloop.b2.request.B2GetUploadUrlRequest;
+import synapticloop.b2.request.B2UploadFileRequest;
+import synapticloop.b2.response.B2AuthorizeAccountResponse;
+import synapticloop.b2.response.B2BucketResponse;
+import synapticloop.b2.response.B2DeleteFileVersionResponse;
+import synapticloop.b2.response.B2FileResponse;
+import synapticloop.b2.response.B2GetUploadUrlResponse;
+import synapticloop.b2.util.ChecksumHelper;
 
 public class B2TestHelper {
 	public static final String B2_BUCKET_PREFIX = "b2api-test-";

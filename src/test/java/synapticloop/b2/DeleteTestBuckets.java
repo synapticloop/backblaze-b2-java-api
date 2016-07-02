@@ -1,12 +1,34 @@
 package synapticloop.b2;
 
+/*
+ * Copyright (c) 2016 Synapticloop.
+ * 
+ * All rights reserved.
+ * 
+ * This code may contain contributions from other parties which, where 
+ * applicable, will be listed in the default build file for the project 
+ * ~and/or~ in a file named CONTRIBUTORS.txt in the root of the project.
+ * 
+ * This source code and any derived binaries are covered by the terms and 
+ * conditions of the Licence agreement ("the Licence").  You may not use this 
+ * source code or any derived binaries except in compliance with the Licence.  
+ * A copy of the Licence is available in the file named LICENSE.txt shipped with 
+ * this source code or binaries.
+ */
+
 import java.util.List;
 
-import synapticloop.b2.exception.B2ApiException;
 import synapticloop.b2.helper.B2TestHelper;
 import synapticloop.b2.response.B2BucketResponse;
 import synapticloop.b2.response.B2FileInfoResponse;
 
+/**
+ * This is a utility class to delete all of the test buckets in the backblaze
+ * service - this will delete all buckets that start with the prefix:
+ *   b2api-test-
+ * 
+ *
+ */
 public class DeleteTestBuckets {
 
 	public static void main(String[] args) throws Exception {
@@ -32,6 +54,7 @@ public class DeleteTestBuckets {
 		B2ApiClient client = new B2ApiClient();
 		client.authenticate(b2AccountId, b2ApplicationKey);
 		List<B2BucketResponse> listBuckets = client.listBuckets();
+		System.out.println("Found " + listBuckets.size() + " buckets.");
 		for (B2BucketResponse b2BucketResponse : listBuckets) {
 			if(b2BucketResponse.getBucketName().startsWith(B2TestHelper.B2_BUCKET_PREFIX)) {
 				// go through and delete all of the files

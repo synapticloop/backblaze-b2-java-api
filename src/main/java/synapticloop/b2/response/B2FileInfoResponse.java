@@ -16,8 +16,6 @@ package synapticloop.b2.response;
  * this source code or binaries.
  */
 
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 import org.json.JSONObject;
@@ -49,7 +47,6 @@ public class B2FileInfoResponse extends BaseB2Response {
 	 * 
 	 * @throws B2ApiException if there was an error parsing the response
 	 */
-	@SuppressWarnings("rawtypes")
 	public B2FileInfoResponse(final JSONObject response) throws B2ApiException {
 		super(response);
 

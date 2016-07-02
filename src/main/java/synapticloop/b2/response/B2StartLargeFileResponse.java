@@ -16,14 +16,13 @@ package synapticloop.b2.response;
  * this source code or binaries.
  */
 
-import org.json.JSONObject;
+
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import synapticloop.b2.exception.B2ApiException;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import synapticloop.b2.exception.B2ApiException;
 
 public class B2StartLargeFileResponse extends BaseB2Response {
 	private static final Logger LOGGER = LoggerFactory.getLogger(B2StartLargeFileResponse.class);
