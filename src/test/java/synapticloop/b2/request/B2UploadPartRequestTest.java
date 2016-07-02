@@ -14,7 +14,6 @@ import synapticloop.b2.helper.B2TestHelper;
 import synapticloop.b2.response.B2AuthorizeAccountResponse;
 import synapticloop.b2.response.B2BucketResponse;
 import synapticloop.b2.response.B2FileResponse;
-import synapticloop.b2.response.B2FinishLargeFileResponse;
 import synapticloop.b2.response.B2GetUploadPartUrlResponse;
 import synapticloop.b2.response.B2ListPartsResponse;
 import synapticloop.b2.response.B2StartLargeFileResponse;
@@ -52,7 +51,7 @@ public class B2UploadPartRequestTest {
 		assertEquals(2, b2ListPartsResponse.getFiles().size());
 
 		try {
-			final B2FinishLargeFileResponse b2FinishLargeFileResponse = new B2FinishLargeFileRequest(client, b2AuthorizeAccountResponse,
+			new B2FinishLargeFileRequest(client, b2AuthorizeAccountResponse,
 					b2StartLargeFileResponse.getFileId(), new String[]{"430ce34d020724ed75a196dfc2ad67c77772d169", "430ce34d020724ed75a196dfc2ad67c77772d169"}).getResponse();
 			fail();
 		} catch (B2ApiException e) {

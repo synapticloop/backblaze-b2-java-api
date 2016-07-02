@@ -1,5 +1,7 @@
 package synapticloop.b2.request;
 
+import static org.apache.http.entity.ContentType.*;
+
 /*
  * Copyright (c) 2016 Synapticloop.
  * 
@@ -216,7 +218,7 @@ public abstract class BaseB2Request {
 		String postData = convertPostData();
 		HttpPost httpPost = new HttpPost(uri);
 
-		httpPost.setEntity(new StringEntity(postData));
+		httpPost.setEntity(new StringEntity(postData, APPLICATION_JSON));
 		CloseableHttpResponse httpResponse = this.execute(httpPost);
 
 		switch(httpResponse.getStatusLine().getStatusCode()) {

@@ -14,7 +14,6 @@ import synapticloop.b2.helper.B2TestHelper;
 import synapticloop.b2.response.B2AuthorizeAccountResponse;
 import synapticloop.b2.response.B2BucketResponse;
 import synapticloop.b2.response.B2FileResponse;
-import synapticloop.b2.response.B2FinishLargeFileResponse;
 import synapticloop.b2.response.B2ListFilesResponse;
 import synapticloop.b2.response.B2ListPartsResponse;
 import synapticloop.b2.response.B2StartLargeFileResponse;
@@ -48,7 +47,7 @@ public class B2StartLargeFileRequestTest {
 		assertTrue(b2ListPartsResponse.getFiles().isEmpty());
 
 		try {
-			final B2FinishLargeFileResponse b2FinishLargeFileResponse = new B2FinishLargeFileRequest(client, b2AuthorizeAccountResponse,
+			new B2FinishLargeFileRequest(client, b2AuthorizeAccountResponse,
 					b2StartLargeFileResponse.getFileId(), new String[0]).getResponse();
 			fail();
 		}

@@ -6,7 +6,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import synapticloop.b2.exception.B2ApiException;
 import synapticloop.b2.helper.B2TestHelper;
 import synapticloop.b2.response.B2BucketResponse;
 import synapticloop.b2.response.B2FileResponse;
@@ -17,7 +16,6 @@ import synapticloop.b2.response.B2ListFilesResponse;
 public class B2HideFileRequestTest {
 
 	private B2BucketResponse randomPrivateBucket = null;
-	private B2FileResponse b2FileResponse = null;
 	private B2FileResponse b2FileResponseWithPath = null;
 	private B2HideFileResponse b2HideFileResponse = null;
 

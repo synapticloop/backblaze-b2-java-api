@@ -2,9 +2,7 @@ package synapticloop.b2.exception;
 
 import static org.junit.Assert.*;
 
-import org.junit.Before;
 import org.junit.Test;
-
 
 public class B2ApiExceptionTest {
 
