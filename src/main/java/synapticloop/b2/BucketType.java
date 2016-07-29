@@ -23,5 +23,6 @@ package synapticloop.b2;
  */
 public enum BucketType {
 	allPublic,
-	allPrivate
+	allPrivate,
+	snapshot
 }
