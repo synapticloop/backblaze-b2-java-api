@@ -28,6 +28,7 @@ public class B2UploadPartResponse extends BaseB2Response {
 	private final Integer partNumber;
 	private final Long contentLength;
 	private final String contentSha1;
+	private final Long uploadTimestamp;
 
 	public B2UploadPartResponse(String json) throws B2ApiException {
 		super(json);
@@ -36,6 +37,7 @@ public class B2UploadPartResponse extends BaseB2Response {
 		this.partNumber = this.readInt(B2ResponseProperties.KEY_PART_NUMBER);
 		this.contentLength = this.readLong(B2ResponseProperties.KEY_CONTENT_LENGTH);
 		this.contentSha1 = this.readString(B2ResponseProperties.KEY_CONTENT_SHA1);
+		this.uploadTimestamp = this.readLong(B2ResponseProperties.KEY_UPLOAD_TIMESTAMP);
 
 		this.warnOnMissedKeys();
 	}
@@ -47,6 +49,7 @@ public class B2UploadPartResponse extends BaseB2Response {
 		this.partNumber = this.readInt(B2ResponseProperties.KEY_PART_NUMBER);
 		this.contentLength = this.readLong(B2ResponseProperties.KEY_CONTENT_LENGTH);
 		this.contentSha1 = this.readString(B2ResponseProperties.KEY_CONTENT_SHA1);
+		this.uploadTimestamp = this.readLong(B2ResponseProperties.KEY_UPLOAD_TIMESTAMP);
 
 		this.warnOnMissedKeys();
 	}
@@ -66,6 +69,13 @@ public class B2UploadPartResponse extends BaseB2Response {
 	public String getContentSha1() {
 		return contentSha1;
 	}
+
+	/**
+	 * Return the timestamp that the part was uploaded
+	 *
+	 * @return the timestamp for when the part was uploaded
+	 */
+	public Long getUploadTimestamp() { return this.uploadTimestamp; }
 
 	@Override
 	protected Logger getLogger() { return LOGGER; }
