@@ -4,17 +4,17 @@ import static org.apache.http.entity.ContentType.*;
 
 /*
  * Copyright (c) 2016 Synapticloop.
- * 
+ *
  * All rights reserved.
- * 
- * This code may contain contributions from other parties which, where 
- * applicable, will be listed in the default build file for the project 
+ *
+ * This code may contain contributions from other parties which, where
+ * applicable, will be listed in the default build file for the project
  * ~and/or~ in a file named CONTRIBUTORS.txt in the root of the project.
- * 
- * This source code and any derived binaries are covered by the terms and 
- * conditions of the Licence agreement ("the Licence").  You may not use this 
- * source code or any derived binaries except in compliance with the Licence.  
- * A copy of the Licence is available in the file named LICENSE.txt shipped with 
+ *
+ * This source code and any derived binaries are covered by the terms and
+ * conditions of the Licence agreement ("the Licence").  You may not use this
+ * source code or any derived binaries except in compliance with the Licence.
+ * A copy of the Licence is available in the file named LICENSE.txt shipped with
  * this source code or binaries.
  */
 
@@ -45,6 +45,8 @@ import org.slf4j.LoggerFactory;
 
 import synapticloop.b2.exception.B2ApiException;
 import synapticloop.b2.response.B2AuthorizeAccountResponse;
+
+import static org.apache.http.entity.ContentType.APPLICATION_JSON;
 
 public abstract class BaseB2Request {
 	private static final Logger LOGGER = LoggerFactory.getLogger(BaseB2Request.class);
@@ -87,7 +89,7 @@ public abstract class BaseB2Request {
 	/**
 	 * Instantiate the base B2 request which adds headers with the authorization
 	 * token.
-	 * 
+	 *
 	 * @param client Shared HTTP client
 	 * @param b2AuthorizeAccountResponse the authorize account response
 	 * @param url Fully qualified request URI
@@ -99,7 +101,7 @@ public abstract class BaseB2Request {
 	/**
 	 * Instantiate the base B2 request which adds headers with the authorization
 	 * token.
-	 * 
+	 *
 	 * @param client Shared HTTP client
 	 * @param b2AuthorizeAccountResponse the authorize account response
 	 * @param url Fully qualified request URI
@@ -115,7 +117,7 @@ public abstract class BaseB2Request {
 
 	/**
 	 * Add header to request replacing previous if any
-	 * 
+	 *
 	 * @param key the key to add
 	 * @param value the value to add
 	 */
@@ -125,7 +127,7 @@ public abstract class BaseB2Request {
 
 	/**
 	 * Add query parameter to request replacing previous if any
-	 * 
+	 *
 	 * @param key the key to add
 	 * @param value the value to add
 	 */
@@ -135,7 +137,7 @@ public abstract class BaseB2Request {
 
 	/**
 	 * Add property to JSON request body
-	 * 
+	 *
 	 * @param key the key to add
 	 * @param value the value to add
 	 */
@@ -145,9 +147,9 @@ public abstract class BaseB2Request {
 
 	/**
 	 * Execute an HTTP HEAD request and return the response for further parsing
-	 * 
+	 *
 	 * @return the response object
-	 * 
+	 *
 	 * @throws B2ApiException if something went wrong with the call
 	 * @throws IOException if there was an error communicating with the API service
 	 */
@@ -175,7 +177,7 @@ public abstract class BaseB2Request {
 
 	/**
 	 * Execute a GET request, returning the data stream from the response.
-	 * 
+	 *
 	 * @return The response from the GET request
 	 *
 	 * @throws B2ApiException if there was an error with the request
@@ -205,9 +207,9 @@ public abstract class BaseB2Request {
 
 	/**
 	 * Execute a POST request returning the response data as a String
-	 * 
+	 *
 	 * @return the response data as a string
-	 * 
+	 *
 	 * @throws B2ApiException if there was an error with the call, most notably
 	 *     a non OK status code (i.e. not 200)
 	 * @throws IOException if there was an error communicating with the API service
@@ -236,11 +238,11 @@ public abstract class BaseB2Request {
 
 	/**
 	 * Execute a POST request with the contents of a file.
-	 * 
+	 *
 	 * @param entity Content to write
-	 * 
+	 *
 	 * @return the string representation of the response
-	 * 
+	 *
 	 * @throws B2ApiException if there was an error with the call, most notably
 	 *     a non OK status code (i.e. not 200)
 	 * @throws IOException if there was an error communicating with the API service
@@ -265,9 +267,9 @@ public abstract class BaseB2Request {
 	/**
 	 * Convert the stringData and integerData Maps to JSON format, to be included
 	 * in the POST body of the request.
-	 * 
+	 *
 	 * @return the JSON string of the data
-	 * 
+	 *
 	 * @throws IOException if there was an error converting the data.
 	 */
 	protected String convertPostData() throws IOException {
@@ -285,11 +287,11 @@ public abstract class BaseB2Request {
 	}
 
 	/**
-	 * Return the URI for this request, which adds any parameters found in the 
+	 * Return the URI for this request, which adds any parameters found in the
 	 * 'parameters' data structure
-	 * 
+	 *
 	 * @return The URI for this request, with properly encoded parameters
-	 * 
+	 *
 	 * @throws IOException If there was an error building the URI
 	 */
 	protected URI buildUri() throws IOException {
@@ -308,15 +310,15 @@ public abstract class BaseB2Request {
 	}
 
 	/**
-	 * Set the headers safely, go through the headers Map and add them to the http 
-	 * request with properly encode values.  If they already exist on the http 
+	 * Set the headers safely, go through the headers Map and add them to the http
+	 * request with properly encode values.  If they already exist on the http
 	 * request, it will be ignored.
-	 * 
+	 *
 	 * To override what headers are set, this should be done in the constructor
 	 * of the base request object.
-	 * 
+	 *
 	 * @param request The HTTP request to set the headers on
-	 * 
+	 *
 	 * @throws B2ApiException if there was an error setting the headers
 	 */
 	protected void setHeaders(HttpUriRequest request) throws B2ApiException {
@@ -344,9 +346,9 @@ public abstract class BaseB2Request {
 	/**
 	 * Obfuscate the data by removing the accountId and replacing it with the
 	 * string "[redacted]"
-	 * 
+	 *
 	 * @param data the data to obfuscate
-	 * 
+	 *
 	 * @return the obfuscated data
 	 */
 	private Object obfuscateData(String key, Object data) {
