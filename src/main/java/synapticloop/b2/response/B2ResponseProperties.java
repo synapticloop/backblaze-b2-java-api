@@ -40,5 +40,6 @@ public final class B2ResponseProperties {
 	public static final String KEY_BUCKETS = "buckets";
 	public static final String KEY_PARTS = "parts";
 	public static final String KEY_PART_NUMBER = "partNumber";
+	public static final String KEY_NEXT_PART_NUMBER = "nextPartNumber";
 	public static final String KEY_MINIMUM_PART_SIZE = "minimumPartSize";
 }

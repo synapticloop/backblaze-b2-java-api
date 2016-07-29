@@ -33,7 +33,7 @@ public class B2ListPartsResponse extends BaseB2Response {
 	public B2ListPartsResponse(String json) throws B2ApiException {
 		super(json);
 
-		this.nextPartNumber = this.readInt(B2ResponseProperties.KEY_NEXT_FILE_ID);
+		this.nextPartNumber = this.readInt(B2ResponseProperties.KEY_NEXT_PART_NUMBER);
 
 		JSONArray filesArray = this.readObjects(B2ResponseProperties.KEY_PARTS);
 
