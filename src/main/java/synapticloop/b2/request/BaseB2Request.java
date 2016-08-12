@@ -51,7 +51,7 @@ import static org.apache.http.entity.ContentType.APPLICATION_JSON;
 public abstract class BaseB2Request {
 	private static final Logger LOGGER = LoggerFactory.getLogger(BaseB2Request.class);
 
-	protected static final String BASE_API_HOST = "https://api.backblaze.com";
+	protected static final String BASE_API_HOST = "https://api.backblazeb2.com";
 	protected static final String BASE_API_VERSION = "/b2api/v1/";
 	protected static final String BASE_API = BASE_API_HOST + BASE_API_VERSION;
 
