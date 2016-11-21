@@ -676,7 +676,25 @@ public class B2ApiClient {
 	 * @throws IOException if there was an error communicating with the API service
 	 */
 	public B2ListFilesResponse listFileNames(String bucketId, String startFileName, Integer maxFileCount) throws B2ApiException, IOException {
-		return new B2ListFileNamesRequest(client, b2AuthorizeAccountResponse, bucketId, startFileName, maxFileCount).getResponse();
+		return new B2ListFileNamesRequest(client, b2AuthorizeAccountResponse, bucketId, startFileName, maxFileCount, null, null).getResponse();
+	}
+
+	/**
+	 * Return a list of all of the files within a bucket with the specified ID,
+	 * by default a maximum of 100 files are returned with this request.
+	 *
+	 * @param bucketId the id of the bucket to list
+	 * @param startFileName the start file name, or if null, this will be the first file
+	 * @param maxFileCount (optional) if null, the default is 100, the maximum number to be returned is 1000
+	 * @param prefix Files returned will be limited to those with the given prefix. Defaults to the empty string, which matches all files.
+	 * @param delimiter Files returned will be limited to those within the top folder, or any one subfolder. Defaults to NULL. Folder names will also be returned. The delimiter character will be used to "break" file names into folders.
+	 * @return the list of files response
+	 *
+	 * @throws B2ApiException if there was an error with the call,
+	 * @throws IOException if there was an error communicating with the API service
+	 */
+	public B2ListFilesResponse listFileNames(String bucketId, String startFileName, Integer maxFileCount, String prefix, String delimiter) throws B2ApiException, IOException {
+		return new B2ListFileNamesRequest(client, b2AuthorizeAccountResponse, bucketId, startFileName, maxFileCount, prefix, delimiter).getResponse();
 	}
 
 	/**
@@ -705,7 +723,7 @@ public class B2ApiClient {
 	 * @throws IOException if there was an error communicating with the API service
 	 */
 	public B2ListFilesResponse listFileVersions(String bucketId, String startFileName) throws B2ApiException, IOException {
-		return new B2ListFileVersionsRequest(client, b2AuthorizeAccountResponse, bucketId, null, startFileName, null).getResponse();
+		return new B2ListFileVersionsRequest(client, b2AuthorizeAccountResponse, bucketId, null, startFileName, null, null, null).getResponse();
 	}
 
 	/**
@@ -723,7 +741,26 @@ public class B2ApiClient {
 	 * @throws IOException if there was an error communicating with the API service
 	 */
 	public B2ListFilesResponse listFileVersions(String bucketId, String startFileName, String startFileId, Integer maxFileCount) throws B2ApiException, IOException {
-		return new B2ListFileVersionsRequest(client, b2AuthorizeAccountResponse, bucketId, maxFileCount, startFileName, startFileId).getResponse();
+		return new B2ListFileVersionsRequest(client, b2AuthorizeAccountResponse, bucketId, maxFileCount, startFileName, startFileId, null, null).getResponse();
+	}
+
+	/**
+	 * List the file versions in a bucket starting at a specific file name and file id
+	 *
+	 * @param bucketId the id of the bucket
+	 * @param startFileName the file name to start with
+	 * @param startFileId the id of the file to start with
+	 * @param maxFileCount the maximum number of files to return (must be less than or equal to 1000, else an error is thrown)
+	 * @param prefix Files returned will be limited to those with the given prefix. Defaults to the empty string, which matches all files.
+	 * @param delimiter Files returned will be limited to those within the top folder, or any one subfolder. Defaults to NULL. Folder names will also be returned. The delimiter character will be used to "break" file names into folders.
+	 *
+	 * @return the list files response
+	 *
+	 * @throws B2ApiException if there was an error with the call
+	 * @throws IOException if there was an error communicating with the API service
+	 */
+	public B2ListFilesResponse listFileVersions(String bucketId, String startFileName, String startFileId, Integer maxFileCount, String prefix, String delimiter) throws B2ApiException, IOException {
+		return new B2ListFileVersionsRequest(client, b2AuthorizeAccountResponse, bucketId, maxFileCount, startFileName, startFileId, prefix, delimiter).getResponse();
 	}
 
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
