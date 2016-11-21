@@ -30,6 +30,8 @@ public final class B2RequestProperties {
 	public static final String KEY_PART_SHA1_ARRAY = "partSha1Array";
 	public static final String KEY_START_PART_NUMBER = "startPartNumber";
 	public static final String KEY_MAX_PART_COUNT = "maxPartCount";
+	public static final String KEY_PREFIX = "prefix";
+	public static final String KEY_DELIMITER = "delimiter";
 	public static final String REQUEST_PROPERTY_CONTENT_TYPE = "Content-Type";
 	public static final String REQUEST_PROPERTY_AUTHORIZATION = "Authorization";
 }

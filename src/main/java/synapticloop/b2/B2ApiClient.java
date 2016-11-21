@@ -676,7 +676,7 @@ public class B2ApiClient {
 	 * @throws IOException if there was an error communicating with the API service
 	 */
 	public B2ListFilesResponse listFileNames(String bucketId, String startFileName, Integer maxFileCount) throws B2ApiException, IOException {
-		return new B2ListFileNamesRequest(client, b2AuthorizeAccountResponse, bucketId, startFileName, maxFileCount).getResponse();
+		return new B2ListFileNamesRequest(client, b2AuthorizeAccountResponse, bucketId, startFileName, maxFileCount, null, null).getResponse();
 	}
 
 	/**
@@ -705,7 +705,7 @@ public class B2ApiClient {
 	 * @throws IOException if there was an error communicating with the API service
 	 */
 	public B2ListFilesResponse listFileVersions(String bucketId, String startFileName) throws B2ApiException, IOException {
-		return new B2ListFileVersionsRequest(client, b2AuthorizeAccountResponse, bucketId, null, startFileName, null).getResponse();
+		return new B2ListFileVersionsRequest(client, b2AuthorizeAccountResponse, bucketId, null, startFileName, null, null, null).getResponse();
 	}
 
 	/**
@@ -723,7 +723,7 @@ public class B2ApiClient {
 	 * @throws IOException if there was an error communicating with the API service
 	 */
 	public B2ListFilesResponse listFileVersions(String bucketId, String startFileName, String startFileId, Integer maxFileCount) throws B2ApiException, IOException {
-		return new B2ListFileVersionsRequest(client, b2AuthorizeAccountResponse, bucketId, maxFileCount, startFileName, startFileId).getResponse();
+		return new B2ListFileVersionsRequest(client, b2AuthorizeAccountResponse, bucketId, maxFileCount, startFileName, startFileId, null, null).getResponse();
 	}
 
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
