@@ -34,7 +34,7 @@ public abstract class BaseB2Response {
 	 * Create a new B2 Response object by parsing the passed in String
 	 *
 	 * @param json the Response (in json format)
-	 * @throws B2ApiException if there was an error in the parsing of the reponse
+	 * @throws B2ApiException if there was an error in the parsing of the response
 	 */
 	public BaseB2Response(final String json) throws B2ApiException {
 		this(parse(json));

@@ -1,27 +1,4 @@
-# Usage
 
-```
-// required imports
-import synapticloop.b2.B2ApiClient;
-import synapticloop.b2.exception.B2ApiException;
-import synapticloop.b2.request.*;
-import synapticloop.b2.response.*;
-
-
-String b2AccountId = ""; // your b2 account ID
-String b2ApplicationKey = ""; // your b2 application Key
-
-B2ApiClient b2ApiClient = new B2ApiClient();
-b2ApiClient.authorize(b2AccountId, b2ApplicationKey);
-
-// now create a private bucket
-B2BucketResponse createPrivateBucket = b2ApiClient.createBucket("super-secret-bucket" , BucketType.ALL_PRIVATE);
-
-// or a public one
-B2BucketResponse createPublicBucket = b2ApiClient.createBucket("everyone-has-access" , BucketType.ALL_PUBLIC);
-
-// upload a file
-b2ApiClient.uploadFile(createPrivateBucket.getBucketId(), "myfile.txt", new File("/tmp/temporary-file.txt"));
 ```
 
 see [B2ApiClient.java](https://github.com/synapticloop/backblaze-b2-java-api/blob/master/src/main/java/synapticloop/b2/B2ApiClient.java) for a complete list of relatively self-explanatory methods.
@@ -30,17 +7,14 @@ see [B2ApiClient.java](https://github.com/synapticloop/backblaze-b2-java-api/blo
 // create a new B2ApiClient
 B2ApiClient()
 
-// authorize the client
-authorize(String, String)
+// authenticate the client
+authenticate(String, String)
 
 // create a bucket
 createBucket(String, BucketType)
 
 // delete bucket
 deleteBucket(String)
-
-// delete bucket and all containing files
-deleteBucketFully(String)
 
 // delete a version of a file
 deleteFileVersion(String, String)
