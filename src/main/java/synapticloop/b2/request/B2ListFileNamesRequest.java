@@ -1,5 +1,7 @@
 package synapticloop.b2.request;
 
+import java.io.IOException;
+
 /*
  * Copyright (c) 2016 Synapticloop.
  * 
@@ -19,22 +21,19 @@ package synapticloop.b2.request;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.util.EntityUtils;
 
-import java.io.IOException;
-
 import synapticloop.b2.exception.B2ApiException;
 import synapticloop.b2.response.B2AuthorizeAccountResponse;
 import synapticloop.b2.response.B2ListFilesResponse;
 
 /**
  * <p>Lists the names of all files in a bucket, starting at a given name.</p>
- * <p>
+ * 
  * <p>This call returns at most 1000 file names, but it can be called repeatedly to scan through all of the file names in a bucket. Each time you call, it returns an "endFileName" that can be used as the starting point for the next call.</p>
  * <p>There may be many file versions for the same name, but this call will return each name only once. If you want all of the versions, use b2_list_file_versions instead.</p>
- * <p>
- * <p>
- * This is the interaction class for the <strong>b2_list_file_names</strong> api calls, this was
- * generated from the backblaze api documentation - which can be found here:
- * <p>
+ * 
+ * <p>This is the interaction class for the <strong>b2_list_file_names</strong> api calls, this was
+ * generated from the backblaze api documentation - which can be found here:</p>
+ * 
  * <a href="http://www.backblaze.com/b2/docs/b2_list_file_names.html">http://www.backblaze.com/b2/docs/b2_list_file_names.html</a>
  *
  * @author synapticloop

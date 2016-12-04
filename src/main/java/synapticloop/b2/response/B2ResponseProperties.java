@@ -22,8 +22,10 @@ public final class B2ResponseProperties {
 	public static final String KEY_API_URL = "apiUrl";
 	public static final String KEY_AUTHORIZATION_TOKEN = "authorizationToken";
 	public static final String KEY_BUCKET_ID = "bucketId";
+	public static final String KEY_BUCKET_INFO = "bucketInfo";
 	public static final String KEY_BUCKET_NAME = "bucketName";
 	public static final String KEY_BUCKET_TYPE = "bucketType";
+	public static final String KEY_BUCKETS = "buckets";
 	public static final String KEY_CONTENT_LENGTH = "contentLength";
 	public static final String KEY_CONTENT_SHA1 = "contentSha1";
 	public static final String KEY_CONTENT_TYPE = "contentType";
@@ -32,14 +34,15 @@ public final class B2ResponseProperties {
 	public static final String KEY_FILE_INFO = "fileInfo";
 	public static final String KEY_FILE_NAME = "fileName";
 	public static final String KEY_FILES = "files";
+	public static final String KEY_LIFECYCLE_RULES = "lifecycleRules";
+	public static final String KEY_MINIMUM_PART_SIZE = "minimumPartSize";
 	public static final String KEY_NEXT_FILE_ID = "nextFileId";
 	public static final String KEY_NEXT_FILE_NAME = "nextFileName";
+	public static final String KEY_NEXT_PART_NUMBER = "nextPartNumber";
+	public static final String KEY_PART_NUMBER = "partNumber";
+	public static final String KEY_PARTS = "parts";
+	public static final String KEY_REVISION = "revision";
 	public static final String KEY_SIZE = "size";
 	public static final String KEY_UPLOAD_TIMESTAMP = "uploadTimestamp";
 	public static final String KEY_UPLOAD_URL = "uploadUrl";
-	public static final String KEY_BUCKETS = "buckets";
-	public static final String KEY_PARTS = "parts";
-	public static final String KEY_PART_NUMBER = "partNumber";
-	public static final String KEY_NEXT_PART_NUMBER = "nextPartNumber";
-	public static final String KEY_MINIMUM_PART_SIZE = "minimumPartSize";
 }

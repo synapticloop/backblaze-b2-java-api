@@ -85,14 +85,14 @@ public class B2DownloadFileRequestTest {
 				0, 
 				5).getResponse();
 
-		assertEquals(B2TestHelper.DUMMY_FILE_CONTENT.substring(0, 6), IOUtils.toString(b2DownloadFileResponse.getContent()));
+		assertEquals(B2TestHelper.DUMMY_FILE_CONTENT.substring(0, 6), IOUtils.toString(b2DownloadFileResponse.getContent(), Charset.defaultCharset()));
 
 		b2DownloadFileResponse = new B2DownloadFileByIdRequest(HttpClients.createDefault(), B2TestHelper.getB2AuthorizeAccountResponse(),
 				b2FileResponse.getFileId(), 
 				0, 
 				5).getResponse();
 
-		assertEquals(B2TestHelper.DUMMY_FILE_CONTENT.substring(0, 6), IOUtils.toString(b2DownloadFileResponse.getContent()));
+		assertEquals(B2TestHelper.DUMMY_FILE_CONTENT.substring(0, 6), IOUtils.toString(b2DownloadFileResponse.getContent(), Charset.defaultCharset()));
 
 		B2TestHelper.deleteFile(b2FileResponse.getFileName(), b2FileResponse.getFileId());
 		B2TestHelper.deleteBucket(randomPrivateBucket.getBucketId());
