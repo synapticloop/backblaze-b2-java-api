@@ -213,7 +213,11 @@ public abstract class BaseB2Response {
 			Iterator keys = response.keys();
 			while (keys.hasNext()) {
 				String key = (String) keys.next();
-				getLogger().warn("Found an unexpected key of '{}' in JSON that is not mapped to a field, with value '{}'.", key, response.get(key));
+				if(B2ResponseProperties.KEY_ACCOUNT_ID.equals(key)) {
+					getLogger().warn("Found an unexpected key of '{}' in JSON that is not mapped to a field, with value '{}'.", key, "[redacted]");
+				} else {
+					getLogger().warn("Found an unexpected key of '{}' in JSON that is not mapped to a field, with value '{}'.", key, response.get(key));
+				}
 			}
 		}
 	}

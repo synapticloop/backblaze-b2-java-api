@@ -33,6 +33,8 @@ public class B2FileInfoResponse extends BaseB2Response {
 	private final String contentType;
 	private final String contentSha1;
 	private final Long contentLength;
+	private final String accountId;
+	private final String bucketId;
 
 	private final Map<String, String> fileInfo;
 	private Action action;
@@ -68,6 +70,8 @@ public class B2FileInfoResponse extends BaseB2Response {
 
 		this.size = this.readLong(B2ResponseProperties.KEY_SIZE);
 		this.uploadTimestamp = this.readLong(B2ResponseProperties.KEY_UPLOAD_TIMESTAMP);
+		this.accountId = this.readString(B2ResponseProperties.KEY_ACCOUNT_ID);
+		this.bucketId = this.readString(B2ResponseProperties.KEY_BUCKET_ID);
 
 		this.warnOnMissedKeys();
 	}
@@ -105,14 +109,14 @@ public class B2FileInfoResponse extends BaseB2Response {
 	 * @return the sha1 has of the content
 	 */
 	public String getContentSha1() { return this.contentSha1; }
-	
+
 	/**
 	 * Get the file info for the downloaded file - which is a map of key value
 	 * pairs with both the key and value being strings
 	 * 
 	 * @return the file info map of key:value strings
 	 */
-	
+
 	public Map<String, String> getFileInfo() { return this.fileInfo; }
 
 	/**
@@ -134,21 +138,37 @@ public class B2FileInfoResponse extends BaseB2Response {
 	 */
 	public Long getUploadTimestamp() { return this.uploadTimestamp; }
 
+	/**
+	 * Return the account ID used to authorize this account
+	 * 
+	 * @return the account ID
+	 */
+	public String getAccountId() { return this.accountId; }
+
+	/**
+	 * Return the bucket ID that this file belongs in
+	 * 
+	 * @return the bucket ID
+	 */
+	public String getBucketId() { return this.bucketId; }
+
 	@Override
 	protected Logger getLogger() { return LOGGER; }
 
 	@Override
 	public String toString() {
-		final StringBuilder sb = new StringBuilder("B2FileInfoResponse{");
-		sb.append("fileId='").append(fileId).append('\'');
-		sb.append(", fileName='").append(fileName).append('\'');
-		sb.append(", contentLength=").append(contentLength);
-		sb.append(", contentType=").append(contentType);
-		sb.append(", contentSha1='").append(contentSha1).append('\'');
-		sb.append(", fileInfo=").append(fileInfo);
-		sb.append(", size=").append(size);
-		sb.append(", uploadTimestamp=").append(uploadTimestamp);
-		sb.append('}');
-		return sb.toString();
+		return "B2FileInfoResponse " +
+				"[fileId=" + this.fileId + 
+				", fileName=" + this.fileName + 
+				", contentType=" + this.contentType + 
+				", contentSha1=" + this.contentSha1 + 
+				", contentLength=" + this.contentLength + 
+				", accountId=" + this.accountId + 
+				", bucketId=" + this.bucketId + 
+				", fileInfo=" + this.fileInfo + 
+				", action=" + this.action + 
+				", size=" + this.size + 
+				", uploadTimestamp=" + this.uploadTimestamp + 
+				"]";
 	}
 }

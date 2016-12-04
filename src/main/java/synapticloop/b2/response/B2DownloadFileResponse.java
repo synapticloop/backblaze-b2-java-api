@@ -66,7 +66,7 @@ public class B2DownloadFileResponse {
 	private final String contentSha1;
 	private final String uploadTimestamp;
 
-	private final Map<String, String> fileInfo = new HashMap<>();
+	private final Map<String, String> fileInfo = new HashMap<String, String>();
 
 	/**
 	 * Instantiate a bucket response with the JSON response as a string from 

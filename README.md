@@ -480,9 +480,9 @@ repositories {
 
 ```
 dependencies {
-	runtime(group: 'synapticloop', name: 'backblaze-b2-java-api', version: '2.1.1', ext: 'jar')
+	runtime(group: 'synapticloop', name: 'backblaze-b2-java-api', version: '2.1.2', ext: 'jar')
 
-	compile(group: 'synapticloop', name: 'backblaze-b2-java-api', version: '2.1.1', ext: 'jar')
+	compile(group: 'synapticloop', name: 'backblaze-b2-java-api', version: '2.1.2', ext: 'jar')
 }
 ```
 
@@ -494,9 +494,9 @@ or, more simply for versions of gradle greater than 2.1
 
 ```
 dependencies {
-	runtime 'synapticloop:backblaze-b2-java-api:2.1.1'
+	runtime 'synapticloop:backblaze-b2-java-api:2.1.2'
 
-	compile 'synapticloop:backblaze-b2-java-api:2.1.1'
+	compile 'synapticloop:backblaze-b2-java-api:2.1.2'
 }
 ```
 
@@ -514,7 +514,7 @@ dependencies {
 <dependency>
 	<groupId>synapticloop</groupId>
 	<artifactId>backblaze-b2-java-api</artifactId>
-	<version>2.1.1</version>
+	<version>2.1.2</version>
 	<type>jar</type>
 </dependency>
 ```

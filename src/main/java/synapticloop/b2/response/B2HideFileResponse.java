@@ -1,5 +1,7 @@
 package synapticloop.b2.response;
 
+import java.util.Map;
+
 /*
  * Copyright (c) 2016 Synapticloop.
  * 
@@ -31,7 +33,12 @@ public class B2HideFileResponse extends BaseB2Response {
 	private final Integer size;
 	private final Long uploadTimestamp;
 
-	/**
+	private final Long contentLength;
+	private final String contentType;
+	private final String contentSha1;
+	private final Map<String, String> fileInfo;
+
+  /**
 	 * Instantiate a hide file response with the JSON response as a string from 
 	 * the API call.  This response is then parsed into the relevant fields.
 	 * 
@@ -60,6 +67,10 @@ public class B2HideFileResponse extends BaseB2Response {
 
 		this.size = this.readInt(B2ResponseProperties.KEY_SIZE);
 		this.uploadTimestamp = this.readLong(B2ResponseProperties.KEY_UPLOAD_TIMESTAMP);
+		this.contentLength = this.readLong(B2ResponseProperties.KEY_CONTENT_LENGTH);
+		this.contentType =this.readString(B2ResponseProperties.KEY_CONTENT_TYPE);
+		this.contentSha1 =this.readString(B2ResponseProperties.KEY_CONTENT_SHA1);
+		this.fileInfo = this.readMap(B2ResponseProperties.KEY_FILE_INFO);
 
 		this.warnOnMissedKeys();
 	}
@@ -87,5 +98,34 @@ public class B2HideFileResponse extends BaseB2Response {
 		sb.append('}');
 		return sb.toString();
 	}
+
+	/**
+	 * Get the content length of the downloaded file
+	 * 
+	 * @return the length of the content
+	 */
+	public Long getContentLength() { return this.contentLength; }
+
+	/**
+	 * Get the content type of the downloaded file
+	 * 
+	 * @return the content type of the downloaded file
+	 */
+	public String getContentType() { return this.contentType; }
+
+	/**
+	 * Get the SHA1 of the returned content
+	 * 
+	 * @return the SHA1 of the returned content
+	 */
+	public String getContentSha1() { return this.contentSha1; }
+
+	/**
+	 * Get the file info for the file, this will be returned in the map as 
+	 * key(tag), value (super-secret-tag)
+	 * 
+	 * @return The map of the file info 
+	 */
+	public Map<String, String> getFileInfo() { return this.fileInfo; }
 
 }
