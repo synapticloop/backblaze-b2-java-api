@@ -323,10 +323,14 @@ public abstract class BaseB2Request {
 		for (String headerKey : requestHeaders.keySet()) {
 			if(!request.containsHeader(headerKey)) {
 				final String headerValue = requestHeaders.get(headerKey);
-				LOGGER.trace("Setting header '" + headerKey + "' to '" + headerValue + "'.");
+				if(!HttpHeaders.AUTHORIZATION.equalsIgnoreCase(headerKey)) {
+					LOGGER.trace("Setting header '" + headerKey + "' to '" + headerValue + "'.");
+				} else {
+					LOGGER.trace("Setting header '" + headerKey + "' to '[redacted]'.");
+				}
 				request.setHeader(headerKey, headerValue);
 			} else {
-				LOGGER.warn("Ignore duplicate header " + headerKey);
+				LOGGER.warn("Ignored duplicate header " + headerKey);
 			}
 		}
 	}
