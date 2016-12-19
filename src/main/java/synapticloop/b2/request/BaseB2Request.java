@@ -1,7 +1,5 @@
 package synapticloop.b2.request;
 
-import static org.apache.http.entity.ContentType.*;
-
 /*
  * Copyright (c) 2016 Synapticloop.
  *
@@ -17,6 +15,8 @@ import static org.apache.http.entity.ContentType.*;
  * A copy of the Licence is available in the file named LICENSE.txt shipped with
  * this source code or binaries.
  */
+
+import static org.apache.http.entity.ContentType.*;
 
 import java.io.IOException;
 import java.net.URI;
@@ -45,8 +45,6 @@ import org.slf4j.LoggerFactory;
 
 import synapticloop.b2.exception.B2ApiException;
 import synapticloop.b2.response.B2AuthorizeAccountResponse;
-
-import static org.apache.http.entity.ContentType.APPLICATION_JSON;
 
 public abstract class BaseB2Request {
 	private static final Logger LOGGER = LoggerFactory.getLogger(BaseB2Request.class);
@@ -325,10 +323,14 @@ public abstract class BaseB2Request {
 		for (String headerKey : requestHeaders.keySet()) {
 			if(!request.containsHeader(headerKey)) {
 				final String headerValue = requestHeaders.get(headerKey);
-				LOGGER.trace("Setting header '" + headerKey + "' to '" + headerValue + "'.");
+				if(!HttpHeaders.AUTHORIZATION.equalsIgnoreCase(headerKey)) {
+					LOGGER.trace("Setting header '" + headerKey + "' to '" + headerValue + "'.");
+				} else {
+					LOGGER.trace("Setting header '" + headerKey + "' to '[redacted]'.");
+				}
 				request.setHeader(headerKey, headerValue);
 			} else {
-				LOGGER.warn("Ignore duplicate header " + headerKey);
+				LOGGER.warn("Ignored duplicate header " + headerKey);
 			}
 		}
 	}
@@ -353,7 +355,7 @@ public abstract class BaseB2Request {
 	 */
 	private Object obfuscateData(String key, Object data) {
 		if(LOGGER.isDebugEnabled()) {
-			if("accountId".equals(key)) {
+			if(B2RequestProperties.KEY_ACCOUNT_ID.equals(key)) {
 				return("[redacted]");
 			}
 		}

@@ -32,6 +32,8 @@ public class B2StartLargeFileResponse extends BaseB2Response {
 	private final String accountId;
 	private final String bucketId;
 	private final String contentType;
+	private final String uploadTimestamp;
+
 	private final Map<String, String> fileInfo;
 
 	public B2StartLargeFileResponse(String json) throws B2ApiException {
@@ -43,6 +45,7 @@ public class B2StartLargeFileResponse extends BaseB2Response {
 		this.bucketId = this.readString(B2ResponseProperties.KEY_BUCKET_ID);
 		this.contentType = this.readString(B2ResponseProperties.KEY_CONTENT_TYPE);
 		this.fileInfo = this.readMap(B2ResponseProperties.KEY_FILE_INFO);
+		this.uploadTimestamp = this.readString(B2ResponseProperties.KEY_UPLOAD_TIMESTAMP);
 
 		this.warnOnMissedKeys();
 	}
@@ -56,6 +59,13 @@ public class B2StartLargeFileResponse extends BaseB2Response {
 	public String getAccountId() { return this.accountId; }
 
 	public String getContentType() { return this.contentType; }
+
+	/**
+	 * Get the upload timestamp of the file
+	 * 
+	 * @return the upload timestamp of the file
+	 */
+	public String getUploadTimestamp() { return this.uploadTimestamp; }
 
 	public Map<String, String> getFileInfo() { return this.fileInfo; }
 

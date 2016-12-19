@@ -1,5 +1,11 @@
 package synapticloop.b2.response;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import org.json.JSONArray;
+
 /*
  * Copyright (c) 2016 Synapticloop.
  * 
@@ -21,6 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import synapticloop.b2.BucketType;
+import synapticloop.b2.LifecycleRule;
 import synapticloop.b2.exception.B2ApiException;
 
 public class B2BucketResponse extends BaseB2Response {
@@ -30,6 +37,9 @@ public class B2BucketResponse extends BaseB2Response {
 	private final String accountId;
 	private final String bucketName;
 	private final String bucketType;
+	private final Long revision;
+	private final Map<String, String> bucketInfo;
+	private final List<LifecycleRule> lifecycleRules = new ArrayList<LifecycleRule>();
 
 	/**
 	 * Instantiate a bucket response with the JSON response as a string from
@@ -46,6 +56,13 @@ public class B2BucketResponse extends BaseB2Response {
 		this.accountId = this.readString(B2ResponseProperties.KEY_ACCOUNT_ID);
 		this.bucketName = this.readString(B2ResponseProperties.KEY_BUCKET_NAME);
 		this.bucketType = this.readString(B2ResponseProperties.KEY_BUCKET_TYPE);
+		this.revision = this.readLong(B2ResponseProperties.KEY_REVISION);
+		this.bucketInfo = this.readMap(B2ResponseProperties.KEY_BUCKET_INFO);
+
+		JSONArray lifecycleObjects = this.readObjects(B2ResponseProperties.KEY_LIFECYCLE_RULES);
+		for (Object object : lifecycleObjects) {
+			lifecycleRules.add(new LifecycleRule((JSONObject)object));
+		}
 
 		this.warnOnMissedKeys();
 	}
@@ -65,6 +82,13 @@ public class B2BucketResponse extends BaseB2Response {
 		this.accountId = this.readString(B2ResponseProperties.KEY_ACCOUNT_ID);
 		this.bucketName = this.readString(B2ResponseProperties.KEY_BUCKET_NAME);
 		this.bucketType = this.readString(B2ResponseProperties.KEY_BUCKET_TYPE);
+		this.revision = this.readLong(B2ResponseProperties.KEY_REVISION);
+		this.bucketInfo = this.readMap(B2ResponseProperties.KEY_BUCKET_INFO);
+
+		JSONArray lifecycleObjects = this.readObjects(B2ResponseProperties.KEY_LIFECYCLE_RULES);
+		for (Object object : lifecycleObjects) {
+			lifecycleRules.add(new LifecycleRule((JSONObject)object));
+		}
 
 		this.warnOnMissedKeys();
 	}
@@ -104,6 +128,28 @@ public class B2BucketResponse extends BaseB2Response {
 		}
 	}
 
+	/**
+	 * Get the map of the bucket info for the bucket that was operated on, or an 
+	 * empty map if not set.
+	 * 
+	 * @return the map of the file info for the file that was operated on
+	 */
+	public Map<String, String> getBucketInfo() { return this.bucketInfo; }
+
+	/**
+	 * Get the revision number for the bucket
+	 * 
+	 * @return the revision number for the bucket
+	 */
+	public long getRevision() { return this.revision; }
+
+	/**
+	 * Return the list of all of the lifecycle rules that apply to this bucket
+	 * 
+	 * @return the list of all lifecycle rules
+	 */
+	public List<LifecycleRule> getLifecycleRules() { return lifecycleRules; }
+
 	@Override
 	protected Logger getLogger() { return LOGGER; }
 
@@ -117,4 +163,5 @@ public class B2BucketResponse extends BaseB2Response {
 		sb.append('}');
 		return sb.toString();
 	}
+
 }

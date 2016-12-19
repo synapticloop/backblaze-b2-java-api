@@ -1,58 +1,115 @@
-[![Build Status](https://travis-ci.org/synapticloop/backblaze-b2-java-api.svg?branch=master)](https://travis-ci.org/synapticloop/backblaze-b2-java-api) [![Download](https://api.bintray.com/packages/synapticloop/maven/backblaze-b2-java-api/images/download.svg)](https://bintray.com/synapticloop/maven/backblaze-b2-java-api/_latestVersion) [![GitHub Release](https://img.shields.io/github/release/synapticloop/backblaze-b2-java-api.svg)](https://github.com/synapticloop/backblaze-b2-java-api/releases) 
+ <a name="#documentr_top"></a>[![Build Status](https://travis-ci.org/synapticloop/backblaze-b2-java-api.svg?branch=master)](https://travis-ci.org/synapticloop/backblaze-b2-java-api) [![Download](https://api.bintray.com/packages/synapticloop/maven/backblaze-b2-java-api/images/download.svg)](https://bintray.com/synapticloop/maven/backblaze-b2-java-api/_latestVersion) [![GitHub Release](https://img.shields.io/github/release/synapticloop/backblaze-b2-java-api.svg)](https://github.com/synapticloop/backblaze-b2-java-api/releases) 
 
-# backblaze-b2-java-api
+
+
+<a name="documentr_heading_0"></a>
+
+# backblaze-b2-java-api <sup><sup>[top](#documentr_top)</sup></sup>
 
 
 
 > A java api for the truly excellent backblaze b2 storage service
 
 
+
+
+
+
+<a name="documentr_heading_1"></a>
+
+# Table of Contents <sup><sup>[top](#documentr_top)</sup></sup>
+
+
+
+ - [backblaze-b2-java-api](#documentr_heading_0)
+ - [Table of Contents](#documentr_heading_1)
+ - [Usage](#documentr_heading_2)
+   - [Large File Support](#documentr_heading_3)
+ - [Building the Package](#documentr_heading_4)
+   - [*NIX/Mac OS X](#documentr_heading_5)
+   - [Windows](#documentr_heading_6)
+ - [Running the Tests](#documentr_heading_7)
+   - [*NIX/Mac OS X](#documentr_heading_8)
+   - [Windows](#documentr_heading_9)
+ - [Logging - slf4j](#documentr_heading_10)
+   - [Log4j](#documentr_heading_11)
+ - [Artefact Publishing - Github](#documentr_heading_16)
+ - [Artefact Publishing - Bintray](#documentr_heading_17)
+   - [maven setup](#documentr_heading_18)
+   - [gradle setup](#documentr_heading_19)
+   - [Dependencies - Gradle](#documentr_heading_20)
+   - [Dependencies - Maven](#documentr_heading_21)
+   - [Dependencies - Downloads](#documentr_heading_22)
+ - [License](#documentr_heading_28)
+
+
 # Just looking for a GUI?
 
 We thoroughly recommend either [cyberduck](https://cyberduck.io/) or [mountainduck](https://mountainduck.io/) which includes this code for the awesome BackBlaze storage service.
-# Usage
+
+
+<a name="documentr_heading_2"></a>
+
+# Usage <sup><sup>[top](#documentr_top)</sup></sup>
+
+
 
 ```
-// required imports
-import synapticloop.b2.B2ApiClient;
+
+
+package synapticloop.b2;
+
+import java.io.File;
+import java.io.IOException;
+
 import synapticloop.b2.exception.B2ApiException;
-import synapticloop.b2.request.*;
-import synapticloop.b2.response.*;
+import synapticloop.b2.response.B2BucketResponse;
 
+public class QuickExampleMain {
 
-String b2AccountId = ""; // your b2 account ID
-String b2ApplicationKey = ""; // your b2 application Key
+	public static void main(String[] args) throws B2ApiException, IOException {
+		String b2AccountId = ""; // your b2 account ID
+		String b2ApplicationKey = ""; // your b2 application Key
 
-B2ApiClient b2ApiClient = new B2ApiClient();
-b2ApiClient.authorize(b2AccountId, b2ApplicationKey);
+		try {
+			B2ApiClient b2ApiClient = new B2ApiClient();
+			b2ApiClient.authenticate(b2AccountId, b2ApplicationKey);
 
-// now create a private bucket
-B2BucketResponse createPrivateBucket = b2ApiClient.createBucket("super-secret-bucket" , BucketType.ALL_PRIVATE);
+			// now create a private bucket
+			B2BucketResponse createPrivateBucket = b2ApiClient.createBucket("super-secret-bucket" , BucketType.allPrivate);
 
-// or a public one
-B2BucketResponse createPublicBucket = b2ApiClient.createBucket("everyone-has-access" , BucketType.ALL_PUBLIC);
+			// or a public one
+			B2BucketResponse createPublicBucket = b2ApiClient.createBucket("everyone-has-access" , BucketType.allPublic);
 
-// upload a file
-b2ApiClient.uploadFile(createPrivateBucket.getBucketId(), "myfile.txt", new File("/tmp/temporary-file.txt"));
+			// upload a file
+			b2ApiClient.uploadFile(createPrivateBucket.getBucketId(), "myfile.txt", new File("/tmp/temporary-file.txt"));
+		} catch(B2ApiException | IOException ex) {
+			ex.printStackTrace();
+		}
+	}
+
+}
+
 ```
+
+
 
 see [B2ApiClient.java](https://github.com/synapticloop/backblaze-b2-java-api/blob/master/src/main/java/synapticloop/b2/B2ApiClient.java) for a complete list of relatively self-explanatory methods.
+
+
 
 ```
 // create a new B2ApiClient
 B2ApiClient()
 
-// authorize the client
-authorize(String, String)
+// authenticate the client
+authenticate(String, String)
 
 // create a bucket
 createBucket(String, BucketType)
 
 // delete bucket
 deleteBucket(String)
-
-// delete bucket and all containing files
-deleteBucketFully(String)
 
 // delete a version of a file
 deleteFileVersion(String, String)
@@ -108,11 +165,19 @@ uploadFile(String, String, File, String, Map<String, String>)
 ```
 
 
-## Large File Support
+
+
+
+
+<a name="documentr_heading_3"></a>
+
+## Large File Support <sup><sup>[top](#documentr_top)</sup></sup>
 
 Large files can range in size from 100MB to 10TB.
 
 Each large file must consist of at least 2 parts, and all of the parts except the last one must be at least 100MB in size. The last part must contain at least one byte.
+
+
 
 ```
 startLargeFileUpload(String bucketId, String fileName, String mimeType, Map<String, String> fileInfo)
@@ -126,16 +191,30 @@ listUnfinishedLargeFiles(String bucketId, String startFileId, Integer maxFileCou
 
 
 
-# Building the Package
 
-## *NIX/Mac OS X
+
+
+
+<a name="documentr_heading_4"></a>
+
+# Building the Package <sup><sup>[top](#documentr_top)</sup></sup>
+
+
+
+<a name="documentr_heading_5"></a>
+
+## *NIX/Mac OS X <sup><sup>[top](#documentr_top)</sup></sup>
 
 From the root of the project, simply run
 
 `./gradlew build`
 
 
-## Windows
+
+
+<a name="documentr_heading_6"></a>
+
+## Windows <sup><sup>[top](#documentr_top)</sup></sup>
 
 `./gradlew.bat build`
 
@@ -144,9 +223,17 @@ This will compile and assemble the artefacts into the `build/libs/` directory.
 
 Note that this may also run tests (if applicable see the Testing notes)
 
-# Running the Tests
 
-## *NIX/Mac OS X
+
+<a name="documentr_heading_7"></a>
+
+# Running the Tests <sup><sup>[top](#documentr_top)</sup></sup>
+
+
+
+<a name="documentr_heading_8"></a>
+
+## *NIX/Mac OS X <sup><sup>[top](#documentr_top)</sup></sup>
 
 From the root of the project, simply run
 
@@ -156,7 +243,11 @@ if you do not have gradle installed, try:
 
 `gradlew --info test`
 
-## Windows
+
+
+<a name="documentr_heading_9"></a>
+
+## Windows <sup><sup>[top](#documentr_top)</sup></sup>
 
 From the root of the project, simply run
 
@@ -177,21 +268,35 @@ The `--info` switch will also output logging for the tests
 
 You **MUST** have the following environment variables set:
 
+
+
 ```
 export B2_ACCOUNT_ID="your-account-id"
 export B2_APPLICATION_KEY="your-application-key"
 ```
 
-# Logging - slf4j
+
+
+
+
+<a name="documentr_heading_10"></a>
+
+# Logging - slf4j <sup><sup>[top](#documentr_top)</sup></sup>
 
 slf4j is the logging framework used for this project.  In order to set up a logging framework with this project, sample configurations are below:
 
-## Log4j
+
+
+<a name="documentr_heading_11"></a>
+
+## Log4j <sup><sup>[top](#documentr_top)</sup></sup>
 
 
 You will need to include dependencies for this - note that the versions may need to be updated.
 
 ### Maven
+
+
 
 ```
 <dependency>
@@ -210,7 +315,11 @@ You will need to include dependencies for this - note that the versions may need
 
 ```
 
+
+
 ### Gradle &lt; 2.1
+
+
 
 ```
 dependencies {
@@ -220,7 +329,11 @@ dependencies {
 	...
 }
 ```
+
+
 ### Gradle &gt;= 2.1
+
+
 
 ```
 dependencies {
@@ -232,9 +345,13 @@ dependencies {
 ```
 
 
+
+
 ### Setting up the logging:
 
 A sample `log4j2.xml` is below:
+
+
 
 ```
 <Configuration status="WARN">
@@ -251,23 +368,39 @@ A sample `log4j2.xml` is below:
 </Configuration>
 ```
 
-# Artefact Publishing - Github
 
-This project publishes artefacts to [GitHib](https://github.com/)
+
+
+
+<a name="documentr_heading_16"></a>
+
+# Artefact Publishing - Github <sup><sup>[top](#documentr_top)</sup></sup>
+
+This project publishes artefacts to [GitHub](https://github.com/)
 
 > Note that the latest version can be found [https://github.com/synapticloop/backblaze-b2-java-api/releases](https://github.com/synapticloop/backblaze-b2-java-api/releases)
 
 As such, this is not a repository, but a location to download files from.
 
-# Artefact Publishing - Bintray
+
+
+<a name="documentr_heading_17"></a>
+
+# Artefact Publishing - Bintray <sup><sup>[top](#documentr_top)</sup></sup>
 
 This project publishes artefacts to [bintray](https://bintray.com/)
 
 > Note that the latest version can be found [https://bintray.com/synapticloop/maven/backblaze-b2-java-api/view](https://bintray.com/synapticloop/maven/backblaze-b2-java-api/view)
 
-## maven setup
+
+
+<a name="documentr_heading_18"></a>
+
+## maven setup <sup><sup>[top](#documentr_top)</sup></sup>
 
 this comes from the jcenter bintray, to set up your repository:
+
+
 
 ```
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -303,9 +436,17 @@ this comes from the jcenter bintray, to set up your repository:
 </settings>
 ```
 
-## gradle setup
+
+
+
+
+<a name="documentr_heading_19"></a>
+
+## gradle setup <sup><sup>[top](#documentr_top)</sup></sup>
 
 Repository
+
+
 
 ```
 repositories {
@@ -315,7 +456,11 @@ repositories {
 }
 ```
 
+
+
 or just
+
+
 
 ```
 repositories {
@@ -323,38 +468,64 @@ repositories {
 }
 ```
 
-## Dependencies - Gradle
+
+
+
+
+<a name="documentr_heading_20"></a>
+
+## Dependencies - Gradle <sup><sup>[top](#documentr_top)</sup></sup>
+
+
 
 ```
 dependencies {
-	runtime(group: 'synapticloop', name: 'backblaze-b2-java-api', version: '2.0.2', ext: 'jar')
+	runtime(group: 'synapticloop', name: 'backblaze-b2-java-api', version: '2.1.3', ext: 'jar')
 
-	compile(group: 'synapticloop', name: 'backblaze-b2-java-api', version: '2.0.2', ext: 'jar')
+	compile(group: 'synapticloop', name: 'backblaze-b2-java-api', version: '2.1.3', ext: 'jar')
 }
 ```
+
+
 
 or, more simply for versions of gradle greater than 2.1
 
+
+
 ```
 dependencies {
-	runtime 'synapticloop:backblaze-b2-java-api:2.0.2'
+	runtime 'synapticloop:backblaze-b2-java-api:2.1.3'
 
-	compile 'synapticloop:backblaze-b2-java-api:2.0.2'
+	compile 'synapticloop:backblaze-b2-java-api:2.1.3'
 }
 ```
 
-## Dependencies - Maven
+
+
+
+
+<a name="documentr_heading_21"></a>
+
+## Dependencies - Maven <sup><sup>[top](#documentr_top)</sup></sup>
+
+
 
 ```
 <dependency>
 	<groupId>synapticloop</groupId>
 	<artifactId>backblaze-b2-java-api</artifactId>
-	<version>2.0.2</version>
+	<version>2.1.3</version>
 	<type>jar</type>
 </dependency>
 ```
 
-## Dependencies - Downloads
+
+
+
+
+<a name="documentr_heading_22"></a>
+
+## Dependencies - Downloads <sup><sup>[top](#documentr_top)</sup></sup>
 
 
 You will also need to download the following dependencies:
@@ -368,38 +539,44 @@ You will also need to download the following dependencies:
 
 ### compile dependencies
 
-  - org.apache.httpcomponents:httpclient:4.5.1: (It may be available on one of: [bintray](https://bintray.com/org.apache.httpcomponents/maven/httpclient/4.5.1/view#files/org.apache.httpcomponents/httpclient/4.5.1) [mvn central](http://search.maven.org/#artifactdetails|org.apache.httpcomponents|httpclient|4.5.1|jar))
-  - commons-io:commons-io:2.4: (It may be available on one of: [bintray](https://bintray.com/commons-io/maven/commons-io/2.4/view#files/commons-io/commons-io/2.4) [mvn central](http://search.maven.org/#artifactdetails|commons-io|commons-io|2.4|jar))
-  - org.json:json:20160212: (It may be available on one of: [bintray](https://bintray.com/org.json/maven/json/20160212/view#files/org.json/json/20160212) [mvn central](http://search.maven.org/#artifactdetails|org.json|json|20160212|jar))
+  - org.apache.httpcomponents:httpclient:4.5.2: (It may be available on one of: [bintray](https://bintray.com/org.apache.httpcomponents/maven/httpclient/4.5.2/view#files/org.apache.httpcomponents/httpclient/4.5.2) [mvn central](http://search.maven.org/#artifactdetails|org.apache.httpcomponents|httpclient|4.5.2|jar))
+  - commons-io:commons-io:2.5: (It may be available on one of: [bintray](https://bintray.com/commons-io/maven/commons-io/2.5/view#files/commons-io/commons-io/2.5) [mvn central](http://search.maven.org/#artifactdetails|commons-io|commons-io|2.5|jar))
+  - org.json:json:20160810: (It may be available on one of: [bintray](https://bintray.com/org.json/maven/json/20160810/view#files/org.json/json/20160810) [mvn central](http://search.maven.org/#artifactdetails|org.json|json|20160810|jar))
   - org.slf4j:slf4j-api:1.7.13: (It may be available on one of: [bintray](https://bintray.com/org.slf4j/maven/slf4j-api/1.7.13/view#files/org.slf4j/slf4j-api/1.7.13) [mvn central](http://search.maven.org/#artifactdetails|org.slf4j|slf4j-api|1.7.13|jar))
 
 
 ### runtime dependencies
 
-  - org.apache.httpcomponents:httpclient:4.5.1: (It may be available on one of: [bintray](https://bintray.com/org.apache.httpcomponents/maven/httpclient/4.5.1/view#files/org.apache.httpcomponents/httpclient/4.5.1) [mvn central](http://search.maven.org/#artifactdetails|org.apache.httpcomponents|httpclient|4.5.1|jar))
-  - commons-io:commons-io:2.4: (It may be available on one of: [bintray](https://bintray.com/commons-io/maven/commons-io/2.4/view#files/commons-io/commons-io/2.4) [mvn central](http://search.maven.org/#artifactdetails|commons-io|commons-io|2.4|jar))
-  - org.json:json:20160212: (It may be available on one of: [bintray](https://bintray.com/org.json/maven/json/20160212/view#files/org.json/json/20160212) [mvn central](http://search.maven.org/#artifactdetails|org.json|json|20160212|jar))
+  - org.apache.httpcomponents:httpclient:4.5.2: (It may be available on one of: [bintray](https://bintray.com/org.apache.httpcomponents/maven/httpclient/4.5.2/view#files/org.apache.httpcomponents/httpclient/4.5.2) [mvn central](http://search.maven.org/#artifactdetails|org.apache.httpcomponents|httpclient|4.5.2|jar))
+  - commons-io:commons-io:2.5: (It may be available on one of: [bintray](https://bintray.com/commons-io/maven/commons-io/2.5/view#files/commons-io/commons-io/2.5) [mvn central](http://search.maven.org/#artifactdetails|commons-io|commons-io|2.5|jar))
+  - org.json:json:20160810: (It may be available on one of: [bintray](https://bintray.com/org.json/maven/json/20160810/view#files/org.json/json/20160810) [mvn central](http://search.maven.org/#artifactdetails|org.json|json|20160810|jar))
   - org.slf4j:slf4j-api:1.7.13: (It may be available on one of: [bintray](https://bintray.com/org.slf4j/maven/slf4j-api/1.7.13/view#files/org.slf4j/slf4j-api/1.7.13) [mvn central](http://search.maven.org/#artifactdetails|org.slf4j|slf4j-api|1.7.13|jar))
 
 
 ### testCompile dependencies
 
   - junit:junit:4.12: (It may be available on one of: [bintray](https://bintray.com/junit/maven/junit/4.12/view#files/junit/junit/4.12) [mvn central](http://search.maven.org/#artifactdetails|junit|junit|4.12|jar))
-  - org.apache.logging.log4j:log4j-slf4j-impl:2.5: (It may be available on one of: [bintray](https://bintray.com/org.apache.logging.log4j/maven/log4j-slf4j-impl/2.5/view#files/org.apache.logging.log4j/log4j-slf4j-impl/2.5) [mvn central](http://search.maven.org/#artifactdetails|org.apache.logging.log4j|log4j-slf4j-impl|2.5|jar))
-  - org.apache.logging.log4j:log4j-core:2.5: (It may be available on one of: [bintray](https://bintray.com/org.apache.logging.log4j/maven/log4j-core/2.5/view#files/org.apache.logging.log4j/log4j-core/2.5) [mvn central](http://search.maven.org/#artifactdetails|org.apache.logging.log4j|log4j-core|2.5|jar))
-  - org.json:json:20160212: (It may be available on one of: [bintray](https://bintray.com/org.json/maven/json/20160212/view#files/org.json/json/20160212) [mvn central](http://search.maven.org/#artifactdetails|org.json|json|20160212|jar))
+  - org.apache.logging.log4j:log4j-slf4j-impl:2.7: (It may be available on one of: [bintray](https://bintray.com/org.apache.logging.log4j/maven/log4j-slf4j-impl/2.7/view#files/org.apache.logging.log4j/log4j-slf4j-impl/2.7) [mvn central](http://search.maven.org/#artifactdetails|org.apache.logging.log4j|log4j-slf4j-impl|2.7|jar))
+  - org.apache.logging.log4j:log4j-core:2.7: (It may be available on one of: [bintray](https://bintray.com/org.apache.logging.log4j/maven/log4j-core/2.7/view#files/org.apache.logging.log4j/log4j-core/2.7) [mvn central](http://search.maven.org/#artifactdetails|org.apache.logging.log4j|log4j-core|2.7|jar))
+  - org.json:json:20160810: (It may be available on one of: [bintray](https://bintray.com/org.json/maven/json/20160810/view#files/org.json/json/20160810) [mvn central](http://search.maven.org/#artifactdetails|org.json|json|20160810|jar))
 
 
 ### testRuntime dependencies
 
   - junit:junit:4.12: (It may be available on one of: [bintray](https://bintray.com/junit/maven/junit/4.12/view#files/junit/junit/4.12) [mvn central](http://search.maven.org/#artifactdetails|junit|junit|4.12|jar))
-  - org.apache.logging.log4j:log4j-slf4j-impl:2.5: (It may be available on one of: [bintray](https://bintray.com/org.apache.logging.log4j/maven/log4j-slf4j-impl/2.5/view#files/org.apache.logging.log4j/log4j-slf4j-impl/2.5) [mvn central](http://search.maven.org/#artifactdetails|org.apache.logging.log4j|log4j-slf4j-impl|2.5|jar))
-  - org.apache.logging.log4j:log4j-core:2.5: (It may be available on one of: [bintray](https://bintray.com/org.apache.logging.log4j/maven/log4j-core/2.5/view#files/org.apache.logging.log4j/log4j-core/2.5) [mvn central](http://search.maven.org/#artifactdetails|org.apache.logging.log4j|log4j-core|2.5|jar))
-  - org.json:json:20160212: (It may be available on one of: [bintray](https://bintray.com/org.json/maven/json/20160212/view#files/org.json/json/20160212) [mvn central](http://search.maven.org/#artifactdetails|org.json|json|20160212|jar))
+  - org.apache.logging.log4j:log4j-slf4j-impl:2.7: (It may be available on one of: [bintray](https://bintray.com/org.apache.logging.log4j/maven/log4j-slf4j-impl/2.7/view#files/org.apache.logging.log4j/log4j-slf4j-impl/2.7) [mvn central](http://search.maven.org/#artifactdetails|org.apache.logging.log4j|log4j-slf4j-impl|2.7|jar))
+  - org.apache.logging.log4j:log4j-core:2.7: (It may be available on one of: [bintray](https://bintray.com/org.apache.logging.log4j/maven/log4j-core/2.7/view#files/org.apache.logging.log4j/log4j-core/2.7) [mvn central](http://search.maven.org/#artifactdetails|org.apache.logging.log4j|log4j-core|2.7|jar))
+  - org.json:json:20160810: (It may be available on one of: [bintray](https://bintray.com/org.json/maven/json/20160810/view#files/org.json/json/20160810) [mvn central](http://search.maven.org/#artifactdetails|org.json|json|20160810|jar))
 
 **NOTE:** You may need to download any dependencies of the above dependencies in turn (i.e. the transitive dependencies)
 
-# License
+
+
+<a name="documentr_heading_28"></a>
+
+# License <sup><sup>[top](#documentr_top)</sup></sup>
+
+
 
 ```
 The MIT License (MIT)
@@ -426,9 +603,10 @@ SOFTWARE.
 ```
 
 
+
+
 --
 
 > `This README.md file was hand-crafted with care utilising synapticloop`[`templar`](https://github.com/synapticloop/templar/)`->`[`documentr`](https://github.com/synapticloop/documentr/)
 
 --
-

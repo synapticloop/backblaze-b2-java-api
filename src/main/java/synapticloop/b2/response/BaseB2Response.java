@@ -34,7 +34,7 @@ public abstract class BaseB2Response {
 	 * Create a new B2 Response object by parsing the passed in String
 	 *
 	 * @param json the Response (in json format)
-	 * @throws B2ApiException if there was an error in the parsing of the reponse
+	 * @throws B2ApiException if there was an error in the parsing of the response
 	 */
 	public BaseB2Response(final String json) throws B2ApiException {
 		this(parse(json));
@@ -213,7 +213,11 @@ public abstract class BaseB2Response {
 			Iterator keys = response.keys();
 			while (keys.hasNext()) {
 				String key = (String) keys.next();
-				getLogger().warn("Found an unexpected key of '{}' in JSON that is not mapped to a field, with value '{}'.", key, response.get(key));
+				if(B2ResponseProperties.KEY_ACCOUNT_ID.equals(key)) {
+					getLogger().warn("Found an unexpected key of '{}' in JSON that is not mapped to a field, with value '{}'.", key, "[redacted]");
+				} else {
+					getLogger().warn("Found an unexpected key of '{}' in JSON that is not mapped to a field, with value '{}'.", key, response.get(key));
+				}
 			}
 		}
 	}
