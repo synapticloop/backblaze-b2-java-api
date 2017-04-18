@@ -6,8 +6,11 @@ plugins {
 	id 'net.saliman.cobertura' version '2.3.2'
 	id "com.jfrog.bintray" version "1.7"
 	id 'co.riiid.gradle' version '0.4.2'
-	id 'synapticloop.documentr' version '2.6.1'
+
 	id 'com.github.ben-manes.versions' version '0.13.0'
+
+	id 'synapticloop.documentr' version '2.6.1'
+	id "synapticloop.copyrightr" version "1.1.1"
 }
 
 group = 'synapticloop'

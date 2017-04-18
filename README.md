@@ -81,8 +81,9 @@ public class QuickExampleMain {
 			// or a public one
 			B2BucketResponse createPublicBucket = b2ApiClient.createBucket("everyone-has-access" , BucketType.allPublic);
 
-			// upload a file
+			// upload a file to the private bucket
 			b2ApiClient.uploadFile(createPrivateBucket.getBucketId(), "myfile.txt", new File("/tmp/temporary-file.txt"));
+
 		} catch(B2ApiException | IOException ex) {
 			ex.printStackTrace();
 		}
@@ -581,7 +582,7 @@ You will also need to download the following dependencies:
 ```
 The MIT License (MIT)
 
-Copyright (c) 2016 synapticloop
+Copyright (c) 2017 synapticloop
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

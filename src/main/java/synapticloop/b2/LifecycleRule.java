@@ -1,7 +1,5 @@
 package synapticloop.b2;
 
-import org.json.JSONObject;
-
 /*
  * Copyright (c) 2016 Synapticloop.
  * 
@@ -17,6 +15,8 @@ import org.json.JSONObject;
  * A copy of the Licence is available in the file named LICENSE.txt shipped with 
  * this source code or binaries.
  */
+
+import org.json.JSONObject;
 
 /**
  * <p>Lifecycle rules instruct the B2 service to automatically hide and/or delete 
