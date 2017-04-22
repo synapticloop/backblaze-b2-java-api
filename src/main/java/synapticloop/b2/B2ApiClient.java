@@ -28,28 +28,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 
 import synapticloop.b2.exception.B2ApiException;
-import synapticloop.b2.request.B2AuthorizeAccountRequest;
-import synapticloop.b2.request.B2CancelLargeFileRequest;
-import synapticloop.b2.request.B2CreateBucketRequest;
-import synapticloop.b2.request.B2DeleteBucketRequest;
-import synapticloop.b2.request.B2DeleteFileVersionRequest;
-import synapticloop.b2.request.B2DownloadFileByIdRequest;
-import synapticloop.b2.request.B2DownloadFileByNameRequest;
-import synapticloop.b2.request.B2FinishLargeFileRequest;
-import synapticloop.b2.request.B2GetFileInfoRequest;
-import synapticloop.b2.request.B2GetUploadPartUrlRequest;
-import synapticloop.b2.request.B2GetUploadUrlRequest;
-import synapticloop.b2.request.B2HeadFileByIdRequest;
-import synapticloop.b2.request.B2HideFileRequest;
-import synapticloop.b2.request.B2ListBucketsRequest;
-import synapticloop.b2.request.B2ListFileNamesRequest;
-import synapticloop.b2.request.B2ListFileVersionsRequest;
-import synapticloop.b2.request.B2ListPartsRequest;
-import synapticloop.b2.request.B2ListUnfinishedLargeFilesRequest;
-import synapticloop.b2.request.B2StartLargeFileRequest;
-import synapticloop.b2.request.B2UpdateBucketRequest;
-import synapticloop.b2.request.B2UploadFileRequest;
-import synapticloop.b2.request.B2UploadPartRequest;
+import synapticloop.b2.request.*;
 import synapticloop.b2.response.B2AuthorizeAccountResponse;
 import synapticloop.b2.response.B2BucketResponse;
 import synapticloop.b2.response.B2DeleteFileVersionResponse;
@@ -768,6 +747,25 @@ public class B2ApiClient {
 	 *   DOWNLOAD FILE API ACTIONS
 	 *
 	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+	/**
+	 * Used to generate an authorization token that can be used to download files with the specified prefix
+	 * from a private B2 bucket. Returns an authorization token that can be passed to b2_download_file_by_name
+	 * in the Authorization header or as an Authorization parameter.
+	 *
+	 * @param bucketId the id of the bucket
+	 * @param fileNamePrefix The file name prefix of files the download authorization token will allow b2_download_file_by_name to access.
+	 * @param validDurationInSeconds The number of seconds before the authorization token will expire.
+	 *                                  The maximum value is 604800 which is one week in seconds
+	 * @return The authorization token that can be passed in the Authorization header or as an Authorization
+	 * parameter to b2_download_file_by_name to access files beginning with the file name prefix.
+	 *
+	 * @throws B2ApiException if there was an error with the call
+	 * @throws IOException if there was an error communicating with the API service
+	 */
+	public String getDownloadAuthorization(String bucketId, String fileNamePrefix, Integer validDurationInSeconds) throws B2ApiException, IOException {
+		return new B2GetDownloadAuthorizationRequest(client, b2AuthorizeAccountResponse, bucketId, fileNamePrefix, validDurationInSeconds).getResponse().getAuthorizationToken();
+	}
 
 	/**
 	 * Download a named file from a named bucket to an output file.  This is a
