@@ -71,7 +71,15 @@ configurations.all {
 
 copyrightr {
 	dryRun = false
+
 	copyrightHolder = "Synapticloop"
+
+	excludes = [ 
+		"**/*Test.java",
+		"**/package-info.java",
+		"**/B2TestHelper.java",
+		"**/QuickExampleMain.java"
+	]
 
 	onlyReplaceFirst = true
 
