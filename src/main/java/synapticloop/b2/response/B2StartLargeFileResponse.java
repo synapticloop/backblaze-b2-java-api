@@ -1,6 +1,7 @@
 package synapticloop.b2.response;
 
 /*
+ * Copyright (c) 2016 - 2017 Synapticloop.
  * Copyright (c) 2016 iterate GmbH.
  *
  * All rights reserved.

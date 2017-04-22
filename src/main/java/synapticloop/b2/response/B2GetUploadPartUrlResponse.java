@@ -1,6 +1,7 @@
 package synapticloop.b2.response;
 
 /*
+ * Copyright (c) 2016 - 2017 Synapticloop.
  * Copyright (c) 2016 iterate GmbH.
  *
  * All rights reserved.
@@ -18,6 +19,7 @@ package synapticloop.b2.response;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import synapticloop.b2.exception.B2ApiException;
 
 public class B2GetUploadPartUrlResponse extends BaseB2Response {

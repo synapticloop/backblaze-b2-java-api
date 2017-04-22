@@ -1,11 +1,5 @@
 package synapticloop.b2;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.List;
-import java.util.Map;
-
 /*
  * Copyright (c) 2016 - 2017 Synapticloop.
  * 
@@ -22,13 +16,41 @@ import java.util.Map;
  * this source code or binaries.
  */
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 
 import synapticloop.b2.exception.B2ApiException;
-import synapticloop.b2.request.*;
+import synapticloop.b2.request.B2AuthorizeAccountRequest;
+import synapticloop.b2.request.B2CancelLargeFileRequest;
+import synapticloop.b2.request.B2CreateBucketRequest;
+import synapticloop.b2.request.B2DeleteBucketRequest;
+import synapticloop.b2.request.B2DeleteFileVersionRequest;
+import synapticloop.b2.request.B2DownloadFileByIdRequest;
+import synapticloop.b2.request.B2DownloadFileByNameRequest;
+import synapticloop.b2.request.B2FinishLargeFileRequest;
+import synapticloop.b2.request.B2GetDownloadAuthorizationRequest;
+import synapticloop.b2.request.B2GetFileInfoRequest;
+import synapticloop.b2.request.B2GetUploadPartUrlRequest;
+import synapticloop.b2.request.B2GetUploadUrlRequest;
+import synapticloop.b2.request.B2HeadFileByIdRequest;
+import synapticloop.b2.request.B2HideFileRequest;
+import synapticloop.b2.request.B2ListBucketsRequest;
+import synapticloop.b2.request.B2ListFileNamesRequest;
+import synapticloop.b2.request.B2ListFileVersionsRequest;
+import synapticloop.b2.request.B2ListPartsRequest;
+import synapticloop.b2.request.B2ListUnfinishedLargeFilesRequest;
+import synapticloop.b2.request.B2StartLargeFileRequest;
+import synapticloop.b2.request.B2UpdateBucketRequest;
+import synapticloop.b2.request.B2UploadFileRequest;
+import synapticloop.b2.request.B2UploadPartRequest;
 import synapticloop.b2.response.B2AuthorizeAccountResponse;
 import synapticloop.b2.response.B2BucketResponse;
 import synapticloop.b2.response.B2DeleteFileVersionResponse;
