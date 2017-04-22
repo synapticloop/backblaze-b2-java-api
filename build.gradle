@@ -10,7 +10,7 @@ plugins {
 	id 'com.github.ben-manes.versions' version '0.13.0'
 
 	id 'synapticloop.documentr' version '2.6.1'
-	id "synapticloop.copyrightr" version "1.1.1"
+	id "synapticloop.copyrightr" version "1.1.2"
 }
 
 group = 'synapticloop'
@@ -69,6 +69,17 @@ configurations.all {
 	}
 }
 
+copyrightr {
+	dryRun = false
+	copyrightHolder = "Synapticloop"
+
+	onlyReplaceFirst = true
+
+	yearSeparator = " - "
+
+	failOnMissing = false
+
+}
 /*
  * COBERTURA
  */
