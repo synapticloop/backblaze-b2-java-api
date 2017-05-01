@@ -21,6 +21,7 @@ public final class B2RequestProperties {
 	public static final String KEY_BUCKET_ID = "bucketId";
 	public static final String KEY_BUCKET_NAME = "bucketName";
 	public static final String KEY_BUCKET_TYPE = "bucketType";
+	public static final String KEY_LIFECYCLE_RULES = "lifecycleRules";
 	public static final String KEY_FILE_ID = "fileId";
 	public static final String KEY_FILE_NAME = "fileName";
 	public static final String KEY_FILE_NAME_PREFIX = "fileNamePrefix";
