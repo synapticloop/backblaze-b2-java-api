@@ -203,8 +203,8 @@ public class B2ApiClient {
 	 * @throws B2ApiException if there was an error updating the bucket
 	 * @throws IOException if there was an error communicating with the API service
 	 */
-	public B2BucketResponse updateBucket(String bucketId, BucketType bucketType) throws B2ApiException, IOException {
-		return new B2UpdateBucketRequest(client, b2AuthorizeAccountResponse, bucketId, bucketType).getResponse();
+	public B2BucketResponse updateBucket(String bucketId, BucketType bucketType, LifecycleRule... lifecycleRules) throws B2ApiException, IOException {
+		return new B2UpdateBucketRequest(client, b2AuthorizeAccountResponse, bucketId, bucketType, lifecycleRules).getResponse();
 	}
 
 	/**
