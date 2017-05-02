@@ -20,8 +20,10 @@ import java.io.IOException;
 
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
 
 import synapticloop.b2.BucketType;
+import synapticloop.b2.LifecycleRule;
 import synapticloop.b2.exception.B2ApiException;
 import synapticloop.b2.response.B2AuthorizeAccountResponse;
 import synapticloop.b2.response.B2BucketResponse;
@@ -50,12 +52,13 @@ public class B2UpdateBucketRequest extends BaseB2Request {
 	 * @param bucketId the id of the bucket to change
 	 * @param bucketType the type of bucket to change to
 	 */
-	public B2UpdateBucketRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String bucketId, BucketType bucketType) {
+	public B2UpdateBucketRequest(CloseableHttpClient client, B2AuthorizeAccountResponse b2AuthorizeAccountResponse, String bucketId, BucketType bucketType, LifecycleRule... lifecycleRules) {
 		super(client, b2AuthorizeAccountResponse, b2AuthorizeAccountResponse.getApiUrl() + B2_UPDATE_BUCKET);
 
 		this.addProperty(B2RequestProperties.KEY_ACCOUNT_ID, b2AuthorizeAccountResponse.getAccountId());
 		this.addProperty(B2RequestProperties.KEY_BUCKET_ID, bucketId);
 		this.addProperty(B2RequestProperties.KEY_BUCKET_TYPE, bucketType.toString());
+		this.addProperty(B2RequestProperties.KEY_LIFECYCLE_RULES, new JSONArray(lifecycleRules));
 	}
 
 	/**
