@@ -3,11 +3,11 @@ plugins {
 	id 'eclipse'
 	id "maven"
 	id "maven-publish"
-	id 'net.saliman.cobertura' version '2.3.2'
-	id "com.jfrog.bintray" version "1.7"
+	id 'net.saliman.cobertura' version '2.4.0'
+	id "com.jfrog.bintray" version "1.7.3"
 	id 'co.riiid.gradle' version '0.4.2'
 
-	id 'com.github.ben-manes.versions' version '0.13.0'
+	id 'com.github.ben-manes.versions' version '0.14.0'
 
 	id 'synapticloop.documentr' version '2.6.1'
 	id "synapticloop.copyrightr" version "1.1.2"
@@ -31,24 +31,24 @@ repositories {
 }
 
 dependencies {
-	runtime 'org.apache.httpcomponents:httpclient:4.5.2'
+	runtime 'org.apache.httpcomponents:httpclient:4.5.3'
 	runtime 'commons-io:commons-io:2.5'
 	runtime 'org.json:json:20160810'
 	runtime 'org.slf4j:slf4j-api:1.7.13'
 
-	compile 'org.apache.httpcomponents:httpclient:4.5.2'
+	compile 'org.apache.httpcomponents:httpclient:4.5.3'
 	compile 'commons-io:commons-io:2.5'
 	compile 'org.json:json:20160810'
 	compile 'org.slf4j:slf4j-api:1.7.13'
 
 	testCompile 'junit:junit:4.12'
-	testCompile 'org.apache.logging.log4j:log4j-slf4j-impl:2.7'
-	testCompile 'org.apache.logging.log4j:log4j-core:2.7'
+	testCompile 'org.apache.logging.log4j:log4j-slf4j-impl:2.8.2'
+	testCompile 'org.apache.logging.log4j:log4j-core:2.8.2'
 	testCompile 'org.json:json:20160810'
 
 	testRuntime 'junit:junit:4.12'
-	testRuntime 'org.apache.logging.log4j:log4j-slf4j-impl:2.7'
-	testRuntime 'org.apache.logging.log4j:log4j-core:2.7'
+	testRuntime 'org.apache.logging.log4j:log4j-slf4j-impl:2.8.2'
+	testRuntime 'org.apache.logging.log4j:log4j-core:2.8.2'
 	testRuntime 'org.json:json:20160810'
 }
 
