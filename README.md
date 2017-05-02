@@ -31,16 +31,17 @@
  - [Running the Tests](#documentr_heading_7)
    - [*NIX/Mac OS X](#documentr_heading_8)
    - [Windows](#documentr_heading_9)
- - [Logging - slf4j](#documentr_heading_10)
-   - [Log4j](#documentr_heading_11)
- - [Artefact Publishing - Github](#documentr_heading_16)
- - [Artefact Publishing - Bintray](#documentr_heading_17)
-   - [maven setup](#documentr_heading_18)
-   - [gradle setup](#documentr_heading_19)
-   - [Dependencies - Gradle](#documentr_heading_20)
-   - [Dependencies - Maven](#documentr_heading_21)
-   - [Dependencies - Downloads](#documentr_heading_22)
- - [License](#documentr_heading_28)
+ - [!!IMPORTANT!! WARNING ABOUT RUNNING THE TESTS](#documentr_heading_10)
+ - [Logging - slf4j](#documentr_heading_11)
+   - [Log4j](#documentr_heading_12)
+ - [Artefact Publishing - Github](#documentr_heading_17)
+ - [Artefact Publishing - Bintray](#documentr_heading_18)
+   - [maven setup](#documentr_heading_19)
+   - [gradle setup](#documentr_heading_20)
+   - [Dependencies - Gradle](#documentr_heading_21)
+   - [Dependencies - Maven](#documentr_heading_22)
+   - [Dependencies - Downloads](#documentr_heading_23)
+ - [License](#documentr_heading_29)
 
 
 # Just looking for a GUI?
@@ -262,7 +263,13 @@ if you do not have gradle installed, try:
 The `--info` switch will also output logging for the tests
 
 
-**WARNING:** These tests make calls against resources (either API calls to a service provider, or consumption of resources from a service provider) which may contribute to your limits, which may lead to a cost.
+
+
+<a name="documentr_heading_10"></a>
+
+# !!IMPORTANT!! WARNING ABOUT RUNNING THE TESTS <sup><sup>[top](#documentr_top)</sup></sup>
+
+> **WARNING:** These tests make calls against resources (either API calls to a service provider, or consumption of resources from a service provider) which may contribute to your limits, which may lead to a cost.
 
 
 **!!!   IMPORTANT   !!!** 
@@ -280,7 +287,7 @@ export B2_APPLICATION_KEY="your-application-key"
 
 
 
-<a name="documentr_heading_10"></a>
+<a name="documentr_heading_11"></a>
 
 # Logging - slf4j <sup><sup>[top](#documentr_top)</sup></sup>
 
@@ -288,7 +295,7 @@ slf4j is the logging framework used for this project.  In order to set up a logg
 
 
 
-<a name="documentr_heading_11"></a>
+<a name="documentr_heading_12"></a>
 
 ## Log4j <sup><sup>[top](#documentr_top)</sup></sup>
 
@@ -373,7 +380,7 @@ A sample `log4j2.xml` is below:
 
 
 
-<a name="documentr_heading_16"></a>
+<a name="documentr_heading_17"></a>
 
 # Artefact Publishing - Github <sup><sup>[top](#documentr_top)</sup></sup>
 
@@ -385,7 +392,7 @@ As such, this is not a repository, but a location to download files from.
 
 
 
-<a name="documentr_heading_17"></a>
+<a name="documentr_heading_18"></a>
 
 # Artefact Publishing - Bintray <sup><sup>[top](#documentr_top)</sup></sup>
 
@@ -395,7 +402,7 @@ This project publishes artefacts to [bintray](https://bintray.com/)
 
 
 
-<a name="documentr_heading_18"></a>
+<a name="documentr_heading_19"></a>
 
 ## maven setup <sup><sup>[top](#documentr_top)</sup></sup>
 
@@ -441,7 +448,7 @@ this comes from the jcenter bintray, to set up your repository:
 
 
 
-<a name="documentr_heading_19"></a>
+<a name="documentr_heading_20"></a>
 
 ## gradle setup <sup><sup>[top](#documentr_top)</sup></sup>
 
@@ -473,7 +480,7 @@ repositories {
 
 
 
-<a name="documentr_heading_20"></a>
+<a name="documentr_heading_21"></a>
 
 ## Dependencies - Gradle <sup><sup>[top](#documentr_top)</sup></sup>
 
@@ -505,7 +512,7 @@ dependencies {
 
 
 
-<a name="documentr_heading_21"></a>
+<a name="documentr_heading_22"></a>
 
 ## Dependencies - Maven <sup><sup>[top](#documentr_top)</sup></sup>
 
@@ -524,7 +531,7 @@ dependencies {
 
 
 
-<a name="documentr_heading_22"></a>
+<a name="documentr_heading_23"></a>
 
 ## Dependencies - Downloads <sup><sup>[top](#documentr_top)</sup></sup>
 
@@ -535,45 +542,45 @@ You will also need to download the following dependencies:
 
 ### cobertura dependencies
 
-  - net.sourceforge.cobertura:cobertura:2.1.1: (It may be available on one of: [bintray](https://bintray.com/net.sourceforge.cobertura/maven/cobertura/2.1.1/view#files/net.sourceforge.cobertura/cobertura/2.1.1) [mvn central](http://search.maven.org/#artifactdetails|net.sourceforge.cobertura|cobertura|2.1.1|jar))
+  - `net.sourceforge.cobertura:cobertura:2.1.1`: (It may be available on one of: [bintray](https://bintray.com/net.sourceforge.cobertura/maven/cobertura/2.1.1/view#files/net.sourceforge.cobertura/cobertura/2.1.1) [mvn central](http://search.maven.org/#artifactdetails|net.sourceforge.cobertura|cobertura|2.1.1|jar))
 
 
 ### compile dependencies
 
-  - org.apache.httpcomponents:httpclient:4.5.3: (It may be available on one of: [bintray](https://bintray.com/org.apache.httpcomponents/maven/httpclient/4.5.3/view#files/org.apache.httpcomponents/httpclient/4.5.3) [mvn central](http://search.maven.org/#artifactdetails|org.apache.httpcomponents|httpclient|4.5.3|jar))
-  - commons-io:commons-io:2.5: (It may be available on one of: [bintray](https://bintray.com/commons-io/maven/commons-io/2.5/view#files/commons-io/commons-io/2.5) [mvn central](http://search.maven.org/#artifactdetails|commons-io|commons-io|2.5|jar))
-  - org.json:json:20160810: (It may be available on one of: [bintray](https://bintray.com/org.json/maven/json/20160810/view#files/org.json/json/20160810) [mvn central](http://search.maven.org/#artifactdetails|org.json|json|20160810|jar))
-  - org.slf4j:slf4j-api:1.7.13: (It may be available on one of: [bintray](https://bintray.com/org.slf4j/maven/slf4j-api/1.7.13/view#files/org.slf4j/slf4j-api/1.7.13) [mvn central](http://search.maven.org/#artifactdetails|org.slf4j|slf4j-api|1.7.13|jar))
+  - `org.apache.httpcomponents:httpclient:4.5.3`: (It may be available on one of: [bintray](https://bintray.com/org.apache.httpcomponents/maven/httpclient/4.5.3/view#files/org.apache.httpcomponents/httpclient/4.5.3) [mvn central](http://search.maven.org/#artifactdetails|org.apache.httpcomponents|httpclient|4.5.3|jar))
+  - `commons-io:commons-io:2.5`: (It may be available on one of: [bintray](https://bintray.com/commons-io/maven/commons-io/2.5/view#files/commons-io/commons-io/2.5) [mvn central](http://search.maven.org/#artifactdetails|commons-io|commons-io|2.5|jar))
+  - `org.json:json:20160810`: (It may be available on one of: [bintray](https://bintray.com/org.json/maven/json/20160810/view#files/org.json/json/20160810) [mvn central](http://search.maven.org/#artifactdetails|org.json|json|20160810|jar))
+  - `org.slf4j:slf4j-api:1.7.13`: (It may be available on one of: [bintray](https://bintray.com/org.slf4j/maven/slf4j-api/1.7.13/view#files/org.slf4j/slf4j-api/1.7.13) [mvn central](http://search.maven.org/#artifactdetails|org.slf4j|slf4j-api|1.7.13|jar))
 
 
 ### runtime dependencies
 
-  - org.apache.httpcomponents:httpclient:4.5.3: (It may be available on one of: [bintray](https://bintray.com/org.apache.httpcomponents/maven/httpclient/4.5.3/view#files/org.apache.httpcomponents/httpclient/4.5.3) [mvn central](http://search.maven.org/#artifactdetails|org.apache.httpcomponents|httpclient|4.5.3|jar))
-  - commons-io:commons-io:2.5: (It may be available on one of: [bintray](https://bintray.com/commons-io/maven/commons-io/2.5/view#files/commons-io/commons-io/2.5) [mvn central](http://search.maven.org/#artifactdetails|commons-io|commons-io|2.5|jar))
-  - org.json:json:20160810: (It may be available on one of: [bintray](https://bintray.com/org.json/maven/json/20160810/view#files/org.json/json/20160810) [mvn central](http://search.maven.org/#artifactdetails|org.json|json|20160810|jar))
-  - org.slf4j:slf4j-api:1.7.13: (It may be available on one of: [bintray](https://bintray.com/org.slf4j/maven/slf4j-api/1.7.13/view#files/org.slf4j/slf4j-api/1.7.13) [mvn central](http://search.maven.org/#artifactdetails|org.slf4j|slf4j-api|1.7.13|jar))
+  - `org.apache.httpcomponents:httpclient:4.5.3`: (It may be available on one of: [bintray](https://bintray.com/org.apache.httpcomponents/maven/httpclient/4.5.3/view#files/org.apache.httpcomponents/httpclient/4.5.3) [mvn central](http://search.maven.org/#artifactdetails|org.apache.httpcomponents|httpclient|4.5.3|jar))
+  - `commons-io:commons-io:2.5`: (It may be available on one of: [bintray](https://bintray.com/commons-io/maven/commons-io/2.5/view#files/commons-io/commons-io/2.5) [mvn central](http://search.maven.org/#artifactdetails|commons-io|commons-io|2.5|jar))
+  - `org.json:json:20160810`: (It may be available on one of: [bintray](https://bintray.com/org.json/maven/json/20160810/view#files/org.json/json/20160810) [mvn central](http://search.maven.org/#artifactdetails|org.json|json|20160810|jar))
+  - `org.slf4j:slf4j-api:1.7.13`: (It may be available on one of: [bintray](https://bintray.com/org.slf4j/maven/slf4j-api/1.7.13/view#files/org.slf4j/slf4j-api/1.7.13) [mvn central](http://search.maven.org/#artifactdetails|org.slf4j|slf4j-api|1.7.13|jar))
 
 
 ### testCompile dependencies
 
-  - junit:junit:4.12: (It may be available on one of: [bintray](https://bintray.com/junit/maven/junit/4.12/view#files/junit/junit/4.12) [mvn central](http://search.maven.org/#artifactdetails|junit|junit|4.12|jar))
-  - org.apache.logging.log4j:log4j-slf4j-impl:2.8.2: (It may be available on one of: [bintray](https://bintray.com/org.apache.logging.log4j/maven/log4j-slf4j-impl/2.8.2/view#files/org.apache.logging.log4j/log4j-slf4j-impl/2.8.2) [mvn central](http://search.maven.org/#artifactdetails|org.apache.logging.log4j|log4j-slf4j-impl|2.8.2|jar))
-  - org.apache.logging.log4j:log4j-core:2.8.2: (It may be available on one of: [bintray](https://bintray.com/org.apache.logging.log4j/maven/log4j-core/2.8.2/view#files/org.apache.logging.log4j/log4j-core/2.8.2) [mvn central](http://search.maven.org/#artifactdetails|org.apache.logging.log4j|log4j-core|2.8.2|jar))
-  - org.json:json:20160810: (It may be available on one of: [bintray](https://bintray.com/org.json/maven/json/20160810/view#files/org.json/json/20160810) [mvn central](http://search.maven.org/#artifactdetails|org.json|json|20160810|jar))
+  - `junit:junit:4.12`: (It may be available on one of: [bintray](https://bintray.com/junit/maven/junit/4.12/view#files/junit/junit/4.12) [mvn central](http://search.maven.org/#artifactdetails|junit|junit|4.12|jar))
+  - `org.apache.logging.log4j:log4j-slf4j-impl:2.8.2`: (It may be available on one of: [bintray](https://bintray.com/org.apache.logging.log4j/maven/log4j-slf4j-impl/2.8.2/view#files/org.apache.logging.log4j/log4j-slf4j-impl/2.8.2) [mvn central](http://search.maven.org/#artifactdetails|org.apache.logging.log4j|log4j-slf4j-impl|2.8.2|jar))
+  - `org.apache.logging.log4j:log4j-core:2.8.2`: (It may be available on one of: [bintray](https://bintray.com/org.apache.logging.log4j/maven/log4j-core/2.8.2/view#files/org.apache.logging.log4j/log4j-core/2.8.2) [mvn central](http://search.maven.org/#artifactdetails|org.apache.logging.log4j|log4j-core|2.8.2|jar))
+  - `org.json:json:20160810`: (It may be available on one of: [bintray](https://bintray.com/org.json/maven/json/20160810/view#files/org.json/json/20160810) [mvn central](http://search.maven.org/#artifactdetails|org.json|json|20160810|jar))
 
 
 ### testRuntime dependencies
 
-  - junit:junit:4.12: (It may be available on one of: [bintray](https://bintray.com/junit/maven/junit/4.12/view#files/junit/junit/4.12) [mvn central](http://search.maven.org/#artifactdetails|junit|junit|4.12|jar))
-  - org.apache.logging.log4j:log4j-slf4j-impl:2.8.2: (It may be available on one of: [bintray](https://bintray.com/org.apache.logging.log4j/maven/log4j-slf4j-impl/2.8.2/view#files/org.apache.logging.log4j/log4j-slf4j-impl/2.8.2) [mvn central](http://search.maven.org/#artifactdetails|org.apache.logging.log4j|log4j-slf4j-impl|2.8.2|jar))
-  - org.apache.logging.log4j:log4j-core:2.8.2: (It may be available on one of: [bintray](https://bintray.com/org.apache.logging.log4j/maven/log4j-core/2.8.2/view#files/org.apache.logging.log4j/log4j-core/2.8.2) [mvn central](http://search.maven.org/#artifactdetails|org.apache.logging.log4j|log4j-core|2.8.2|jar))
-  - org.json:json:20160810: (It may be available on one of: [bintray](https://bintray.com/org.json/maven/json/20160810/view#files/org.json/json/20160810) [mvn central](http://search.maven.org/#artifactdetails|org.json|json|20160810|jar))
+  - `junit:junit:4.12`: (It may be available on one of: [bintray](https://bintray.com/junit/maven/junit/4.12/view#files/junit/junit/4.12) [mvn central](http://search.maven.org/#artifactdetails|junit|junit|4.12|jar))
+  - `org.apache.logging.log4j:log4j-slf4j-impl:2.8.2`: (It may be available on one of: [bintray](https://bintray.com/org.apache.logging.log4j/maven/log4j-slf4j-impl/2.8.2/view#files/org.apache.logging.log4j/log4j-slf4j-impl/2.8.2) [mvn central](http://search.maven.org/#artifactdetails|org.apache.logging.log4j|log4j-slf4j-impl|2.8.2|jar))
+  - `org.apache.logging.log4j:log4j-core:2.8.2`: (It may be available on one of: [bintray](https://bintray.com/org.apache.logging.log4j/maven/log4j-core/2.8.2/view#files/org.apache.logging.log4j/log4j-core/2.8.2) [mvn central](http://search.maven.org/#artifactdetails|org.apache.logging.log4j|log4j-core|2.8.2|jar))
+  - `org.json:json:20160810`: (It may be available on one of: [bintray](https://bintray.com/org.json/maven/json/20160810/view#files/org.json/json/20160810) [mvn central](http://search.maven.org/#artifactdetails|org.json|json|20160810|jar))
 
 **NOTE:** You may need to download any dependencies of the above dependencies in turn (i.e. the transitive dependencies)
 
 
 
-<a name="documentr_heading_28"></a>
+<a name="documentr_heading_29"></a>
 
 # License <sup><sup>[top](#documentr_top)</sup></sup>
 

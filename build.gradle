@@ -9,7 +9,7 @@ plugins {
 
 	id 'com.github.ben-manes.versions' version '0.14.0'
 
-	id 'synapticloop.documentr' version '2.6.1'
+	id 'synapticloop.documentr' version '2.9.0'
 	id "synapticloop.copyrightr" version "1.1.2"
 }
 
