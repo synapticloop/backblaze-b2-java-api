@@ -30,6 +30,7 @@ public class B2AuthorizeAccountResponse extends BaseB2Response {
 	private final String downloadUrl;
 	private final int minimumPartSize;
 	private final int recommendedPartSize;
+	@Deprecated
 	private final int absoluteMinimumPartSize;
 	/**
 	 * Instantiate an authorize account response with the JSON response as a 
@@ -106,8 +107,14 @@ public class B2AuthorizeAccountResponse extends BaseB2Response {
 	 * This is smaller than the recommendedPartSize. If you use it, you may find 
 	 * that it takes longer overall to upload a large file.
 	 * 
+	 * <strong>This field will always have the same value as <code>recommendedPartSize</code>. 
+	 * Use <code>recommendedPartSize/code> instead.</strong>
+	 * 
+	 * {@link B2AuthorizeAccountResponse#getRecommendedPartSize()}
+	 * 
 	 * @return the absolute minimum part size for downloads
 	 */
+	@Deprecated
 	public int getAbsoluteMinimumPartSize() { return absoluteMinimumPartSize; }
 
 	@Override
