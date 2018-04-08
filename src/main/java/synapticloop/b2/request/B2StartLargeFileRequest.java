@@ -42,9 +42,7 @@ import org.slf4j.LoggerFactory;
 
 import synapticloop.b2.exception.B2ApiException;
 import synapticloop.b2.response.B2AuthorizeAccountResponse;
-import synapticloop.b2.response.B2ResponseHeaders;
 import synapticloop.b2.response.B2StartLargeFileResponse;
-import synapticloop.b2.util.URLEncoder;
 
 public class B2StartLargeFileRequest extends BaseB2Request {
 	private static final Logger LOGGER = LoggerFactory.getLogger(B2StartLargeFileRequest.class);
@@ -78,12 +76,8 @@ public class B2StartLargeFileRequest extends BaseB2Request {
 		} else {
 			this.addProperty(B2RequestProperties.KEY_CONTENT_TYPE, mimeType);
 		}
-
-		// Add 'X-Bz-Info-*' headers
 		if (null != fileInfo) {
-			for (final String key : fileInfo.keySet()) {
-				this.addHeader(B2ResponseHeaders.HEADER_X_BZ_INFO_PREFIX + URLEncoder.encode(key), URLEncoder.encode(fileInfo.get(key)));
-			}
+			this.addProperty(B2RequestProperties.KEY_FILE_INFO, fileInfo);
 		}
 	}
 
