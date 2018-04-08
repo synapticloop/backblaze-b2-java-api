@@ -30,8 +30,8 @@ public class B2AuthorizeAccountResponse extends BaseB2Response {
 	private final String downloadUrl;
 	private final int minimumPartSize;
 	private final int recommendedPartSize;
-	@Deprecated
-	private final int absoluteMinimumPartSize;
+	@Deprecated private final int absoluteMinimumPartSize;
+
 	/**
 	 * Instantiate an authorize account response with the JSON response as a 
 	 * string from the API call.  This response is then parsed into the 
