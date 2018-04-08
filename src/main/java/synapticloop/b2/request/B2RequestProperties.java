@@ -27,6 +27,7 @@ public final class B2RequestProperties {
 	public static final String KEY_FILE_NAME_PREFIX = "fileNamePrefix";
 	public static final String KEY_VALID_DURATION_INSECONDS = "validDurationInSeconds";
 	public static final String KEY_CONTENT_TYPE = "contentType";
+	public static final String KEY_FILE_INFO = "fileInfo";
 	public static final String KEY_MAX_FILE_COUNT = "maxFileCount";
 	public static final String KEY_START_FILE_ID = "startFileId";
 	public static final String KEY_START_FILE_NAME = "startFileName";
